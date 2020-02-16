@@ -83,7 +83,55 @@
                 <div class="title m-b-md">
                     Laravel
                 </div>
+                <?php 
+            /*$config = [
+                // Mandatory Configuration Options
+                'hosts'            => ['10.0.2.53'],
+                'base_dn'          => 'dc=una,dc=ac,dc=cr',
+                'username'         => '',
+                'password'         => '',
 
+                // Optional Configuration Options
+                'schema'           => Adldap\Schemas\ActiveDirectory::class,
+                'account_prefix'   => '',
+                'account_suffix'   => '',
+                'port'             => 389,
+                'follow_referrals' => false,
+                'use_ssl'          => false,
+                'use_tls'          => false,
+                'version'          => 3,
+                'timeout'          => 5,
+
+                // Custom LDAP Options
+                'custom_options'   => [
+                    // See: http://php.net/ldap_set_option
+                    LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_HARD
+                ]
+            ];
+
+            $ad = new Adldap\Adldap();
+
+                $connectionName = 'my-connection';
+
+                $ad->addProvider($config, $connectionName);
+                $username = '402340420';
+                $checkdn='uid='.$username.', ou=People, dc=una,dc=ac,dc=cr';
+                $password = '931997dm';
+                //uid=402340420, ou=People, dc=una,dc=ac,dc=cr;
+                try {
+                    $provider = $ad->connect($connectionName);
+
+                    echo "Great, we're connected!";
+                    if($provider->auth()->attempt($checkdn, $password)){
+                        echo "login";
+                    }
+                } catch (Adldap\Auth\BindException $e) {
+                    echo "Failed to connect";
+                }
+               // xdebug_break();   */          
+              
+               
+            ?>
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>

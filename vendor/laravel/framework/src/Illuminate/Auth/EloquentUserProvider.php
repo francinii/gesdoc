@@ -145,6 +145,56 @@ class EloquentUserProvider implements UserProvider
         return $this->hasher->check($plain, $user->getAuthPassword());
     }
 
+    public function validateCredentialsLdap(UserContract $user, array $credentials)
+    {
+        $config = [
+            // Mandatory Configuration Options
+            'hosts'            => ['10.0.2.53'],
+            'base_dn'          => 'dc=una,dc=ac,dc=cr',
+            'username'         => '',
+            'password'         => '',
+
+            // Optional Configuration Options
+            'schema'           => \Adldap\Schemas\ActiveDirectory::class,
+            'account_prefix'   => '',
+            'account_suffix'   => '',
+            'port'             => 389,
+            'follow_referrals' => false,
+            'use_ssl'          => false,
+            'use_tls'          => false,
+            'version'          => 3,
+            'timeout'          => 5,
+
+            // Custom LDAP Options
+            'custom_options'   => [
+                // See: http://php.net/ldap_set_option
+                LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_HARD
+            ]
+        ];
+
+        $ad = new \Adldap\Adldap();
+
+            $connectionName = 'my-connection';
+
+            $ad->addProvider($config, $connectionName);
+            $username = $user->getattribute('username');
+            $checkdn='uid='.$username.', ou=People, dc=una,dc=ac,dc=cr';
+            $password = $credentials['password'];
+            //uid=402340420, ou=People, dc=una,dc=ac,dc=cr;
+            try {
+                $provider = $ad->connect($connectionName);
+
+                
+                if($provider->auth()->attempt($checkdn, $password)){
+                    return true;
+                }
+            } catch (Adldap\Auth\BindException $e) {
+                return false;
+            }
+           
+        return false;
+    }
+
     /**
      * Get a new query builder for the model instance.
      *

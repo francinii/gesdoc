@@ -1,0 +1,32 @@
+laravel new mi-autenticacion // crear proyecto
+use Illuminate\Support\Facades\Schema;
+Schema::defaultStringLength(191);
+
+php artisan serve // iniciar proyecto
+php artisan make:model Cliente // crear modelo
+php artisan make:model Persona -m // crear modelo y en la base
+php artisan migrate // crear tabla en la base con base al modelo
+php artisan make:controller PersonaController // crear controlador
+php artisan make:controller ldapController --resource// crear controlador con funciones por defecto
+php artisan ui:auth // crear autentificacion
+
+//antes de esto de la autentificacion
+composer require laravel/ui --dev
+php artisan ui vue --auth
+
+
+debug blade.php
+<?php xdebug_break(); ?>
+10.0.2.53
+$username = '402340420';
+$checkdn='uid='.$username.', ou=People, dc=una,dc=ac,dc=cr';
+$password = '931997dm';
+cn = nombre 
+uid contrase;a
+
+libreria de login aqui cree los archivos para check con ladp  en el metodo 
+hasValidCredentials 
+en la configuracion de ambiente use_LDAP se pone 1 para usarlo y 0 para no 
+
+C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\SessionGuard.php
+C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\EloquentUserProvider.php
