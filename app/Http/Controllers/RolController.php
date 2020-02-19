@@ -62,9 +62,10 @@ class RolController extends Controller
      * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rol $rol)
+    public function edit($id)
     {
-        //
+        $rol = Rol::findOrFail($id); //regresa toda la info que tiene ese id
+        return view('rols.edit', compact('rol'));
     }
 
     /**
@@ -74,9 +75,11 @@ class RolController extends Controller
      * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rol $rol)
+    public function update(Request $request, $id)
     {
-        //
+        $datoRol = request()->except(['_token', '_method']);
+        Rol::where('id', '=', $id)->update($datoRol);
+        return redirect('rols');
     }
 
     /**
@@ -85,8 +88,9 @@ class RolController extends Controller
      * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rol $rol)
+    public function destroy($id)
     {
-        //
+        Rol::destroy($id);
+        return redirect('rols');
     }
 }
