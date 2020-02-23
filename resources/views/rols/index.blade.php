@@ -1,11 +1,10 @@
 @extends('layouts.template')
 
+
+
 @section('title', 'Roles')
-
-
 @section('header')
-    @include('layouts.header') 
-
+@include('layouts.header') 
 
 @section('content')
 <div class="container-fluid">

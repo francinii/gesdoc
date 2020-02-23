@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 
 class ldapController extends Controller
 {
-
+   /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -92,9 +100,9 @@ class ldapController extends Controller
             $mail = $user->getAttribute('mail')[0];
             
         } catch (Adldap\Auth\BindException $e) {
-            
+            return response()->json(['encontrado'=>false]);
         }
-        return response()->json(['cn'=>$cn,'mail'=>$mail]);
+        return response()->json(['encontrado'=>true,'cn'=>$cn,'mail'=>$mail]);
     }
 
     /**

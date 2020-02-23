@@ -1,9 +1,14 @@
-@extends('layouts.app')
+@extends('layouts.template')
+
+
+
+@section('title', 'Roles')
+@section('header')
+@include('layouts.header') 
 
 @section('content')
 <script src="{{ asset('../resources/js/register.js') }}" defer></script>
 
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -17,7 +22,7 @@
                             <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('username') }}</label>
 
                             <div class="col-md-6">
-                                <input id="username" type="text" onchange="obtenerDatos()" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
+                                <input id="username" type="text" onchange="obtenerDatos()" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
 
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
@@ -30,7 +35,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" Disabled>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -43,7 +48,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" Disabled>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -87,5 +92,45 @@
             </div>
         </div>
     </div>
+</div>
+<!-- modal error -->
+
+<!-- Button trigger modal -->
+
+<div class="modal fade" id="error" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       Usuario no encontrado.
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal Buscando -->
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="buscando" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Espere</h5>
+      </div>
+      <div class="modal-body">
+       Buscando...
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+  </div>
 </div>
 @endsection

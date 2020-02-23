@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@include('layouts.template')
 
 @section('title', 'Crear Rol')
 @section('header')

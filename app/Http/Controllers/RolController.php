@@ -9,6 +9,17 @@ use Illuminate\Http\Request;
 class RolController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+       // $this->middleware('guest');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -33,6 +44,7 @@ class RolController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,8 +53,7 @@ class RolController extends Controller
        // $datos = $request->all();
         $datos = $request->except('_token');
         Rol::insert($datos);
-        //return response()->json($datos);
-      // return view('rols.index');
+        return redirect('rols');
     }
 
     /**
