@@ -7,7 +7,7 @@
 @include('layouts.header') 
 
 @section('content')
-<script src="{{ asset('../resources/js/register.js') }}" defer></script>
+<script src="{{ asset('../resources/js/auth/register.js') }}" defer></script>
 
 <div class="container">
     <div class="row justify-content-center">

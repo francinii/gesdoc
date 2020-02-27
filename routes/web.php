@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('ldap/obtenerUsuario', 'ldapController@ldapObtenerUsuario' );
+Route::get('ldap/obtenerUsuario', 'Auth\RegisterController@ldapObtenerUsuario' );
 
 //Route::get('/rols', 'RolController@index');
 //Accede a todas las rutas necesarioas para obtener los metodos del RolController

@@ -8,13 +8,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{url('/rols/'.$rol->id)}}" method="POST">
+        <form action="" method="POST">
           {{csrf_field()}}
           {{method_field('PATCH')}}
            <div class="form-group">
             <input name="id" type="hidden">
              <label for="rol">Nombre del rol</label>
-             <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="{{$rol->description}}">
+             <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
            </div> 
 
            <button type="button" id="submit" class="btn btn-success">Actualizar</button>

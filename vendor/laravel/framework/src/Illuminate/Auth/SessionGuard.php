@@ -392,7 +392,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      */
     protected function hasValidCredentials($user, $credentials)
     {
-        $ldap=env("use_LDAP");
+        
        if (env("use_LDAP")){
         return ! is_null($user) && $this->provider->validateCredentialsLdap($user, $credentials);
 
