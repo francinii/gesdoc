@@ -31,7 +31,7 @@ Route::get('ldap/obtenerUsuario', 'ldapController@ldapObtenerUsuario' );
 //Accede a todas las rutas necesarioas para obtener los metodos del RolController
 Route::resource('rols', 'RolController');
 
-
+//Route::post('rols', 'RolController@update');
 
 // Por confirmar la ruta de post es necesaria cuando de un formulario se usa un metodo post
 // Fue la unica manera en que me funco el formulario cuando hacia la redirección

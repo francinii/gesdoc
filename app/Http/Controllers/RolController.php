@@ -51,6 +51,7 @@ class RolController extends Controller
     {
        // echo  response()->json($request->all());
        // $datos = $request->all();
+        
         $datos = $request->except('_token');
         Rol::insert($datos);
         return redirect('rols');
@@ -86,10 +87,12 @@ class RolController extends Controller
      * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
+   // public function update(Request $request, $id)
     {
-        $datoRol = request()->except(['_token', '_method']);
-        Rol::where('id', '=', $id)->update($datoRol);
+        $dato = request()->except(['_token', '_method']);
+        $id = $dato[0]['id'];
+        Rol::where('id', '=', $id)->update($dato);
         return redirect('rols');
     }
 
