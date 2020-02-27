@@ -9,6 +9,17 @@ use Illuminate\Http\Request;
 class RolController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+       // $this->middleware('guest');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -33,16 +44,17 @@ class RolController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
        // echo  response()->json($request->all());
        // $datos = $request->all();
+        
         $datos = $request->except('_token');
         Rol::insert($datos);
-        //return response()->json($datos);
-      // return view('rols.index');
+        return redirect('rols');
     }
 
     /**
@@ -75,10 +87,12 @@ class RolController extends Controller
      * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
+   // public function update(Request $request, $id)
     {
-        $datoRol = request()->except(['_token', '_method']);
-        Rol::where('id', '=', $id)->update($datoRol);
+        $dato = request()->except(['_token', '_method']);
+        $id = $dato[0]['id'];
+        Rol::where('id', '=', $id)->update($dato);
         return redirect('rols');
     }
 
