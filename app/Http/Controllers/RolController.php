@@ -30,6 +30,11 @@ class RolController extends Controller
         return view('rols.index', compact('rols'));
     }
 
+    public  function Refresh(){
+        $rols = Rol::all();
+        return view('rols.table', compact('rols'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -54,7 +59,8 @@ class RolController extends Controller
         
         $datos = $request->except('_token');
         Rol::insert($datos);
-        return redirect('rols');
+        return RolController::Refresh();
+
     }
 
     /**
@@ -84,16 +90,15 @@ class RolController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rol  $rol
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
-   // public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $dato = request()->except(['_token', '_method']);
-        $id = $dato[0]['id'];
+        $id = $dato['id'];
         Rol::where('id', '=', $id)->update($dato);
-        return redirect('rols');
+        return RolController::Refresh();
     }
 
     /**
@@ -105,6 +110,6 @@ class RolController extends Controller
     public function destroy($id)
     {
         Rol::destroy($id);
-        return redirect('rols');
+        return RolController::Refresh();
     }
 }

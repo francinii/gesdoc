@@ -7,12 +7,12 @@
       </div>
       <div class="modal-body">   
         <form action="{{ action('RolController@index') }}" method="POST">
-          {{csrf_field()}}  
+        {{csrf_field()}}
           <div class="form-group">
             <label for="rol">Nombre del rol</label>
-            <input type="text" class="form-control" id="rol" placeholder="Nombre del rol" name="description">
+            <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del rol" name="CreateDescription">
           </div>      
-          <button type="submit" class="btn btn-success">Agregar</button>
+          <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">Agregar</button>
         </form>    
       </div>
       <div class="modal-footer"> </div>
