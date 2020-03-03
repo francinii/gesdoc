@@ -2,6 +2,7 @@
 
 @section('head')
 <script src="{{ asset('../resources/js/rols/edit.js') }}" defer></script>
+<script src="{{ asset('../resources/js/delete.js') }}" defer></script>
 <script src="{{ asset('../resources/js/modal.js') }}" defer></script>
 
 @endsection
@@ -28,3 +29,5 @@
 
 @include('rols.create')
 @include('rols.edit')
+@include('rols.list_permisos')
+

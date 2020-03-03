@@ -11,8 +11,10 @@
             Administracion de sistema
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ url('/rols') }}">roles</a>
-            <a class="dropdown-item" href="{{ route('register') }}">Usuarios</a>
+            <a class="dropdown-item" href="{{ url('/rols') }}">Roles</a>
+            <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
+
+            <a class="dropdown-item" href="{{  route('register') }}">Registro</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>

@@ -27,12 +27,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('ldap/obtenerUsuario', 'Auth\RegisterController@ldapObtenerUsuario' );
 
+//Route::get('/register_user', 'Auth\RegisterController@index' );
+
 //Route::get('/rols', 'RolController@index');
-//Accede a todas las rutas necesarioas para obtener los metodos del RolController
+//Accede a todas las rutas necesarioas para
+// obtener los metodos del RolController
 Route::resource('rols', 'RolController');
 
-//Route::post('rols', 'RolController@update');
 
-// Por confirmar la ruta de post es necesaria cuando de un formulario se usa un metodo post
-// Fue la unica manera en que me funco el formulario cuando hacia la redirección
-//Route::post('rols', 'RolController@index');
+Route::resource('users', 'UserController');

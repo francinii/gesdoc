@@ -2,23 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Rol;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RolController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-       // $this->middleware('guest');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,14 +16,15 @@ class RolController extends Controller
      */
     public function index()
     {
-       // $rols = Rol::all();
-        $rols = Rol::with('permisos')->get();
-        return view('rols.index', compact('rols'));
+        $users = User::all();
+        $rols = Rol::all();
+        return view('users.index', compact('users','rols'));
     }
 
     public  function refresh(){
         $rols = Rol::all();
-        return view('rols.table', compact('rols'));
+        $users = User::all();
+        return view('users.table', compact('users','rols'));
     }
 
     /**
@@ -43,34 +34,27 @@ class RolController extends Controller
      */
     public function create()
     {
-        return view('rols.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rol  $rol
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-       // echo  response()->json($request->all());
-       // $datos = $request->all();
-        
-        $datos = $request->except('_token');
-        Rol::insert($datos);
-        return RolController::Refresh();
-
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Rol  $rol
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Rol $rol)
+    public function show($id)
     {
         //
     }
@@ -78,13 +62,12 @@ class RolController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Rol  $rol
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $rol = Rol::findOrFail($id); //regresa toda la info que tiene ese id
-        return view('rols.edit', compact('rol'));
+        //
     }
 
     /**
@@ -96,21 +79,18 @@ class RolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dato = request()->except(['_token', '_method']);
-        $id = $dato['id'];
-        Rol::where('id', '=', $id)->update($dato);
-        return RolController::Refresh();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rol  $rol
+   * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Rol::destroy($id);
-        return RolController::refresh();
+        User::destroy($id);
+        return UserController::refresh();
     }
 }

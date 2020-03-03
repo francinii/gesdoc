@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Rol;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -53,6 +54,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+          //  'rol' => ['required', 'integer', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -71,6 +73,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
+            'rol_id' => $data['rol'],
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -146,4 +149,15 @@ class RegisterController extends Controller
         return response()->json(['encontrado'=>true,'cn'=>$cn,'mail'=>$mail]);
     }
 
+
+
+    public function showRegistrationForm(){
+        $rols = Rol::all();
+        return view('auth.register', compact('rols'));
+    }
+
+
+
 }
+
+

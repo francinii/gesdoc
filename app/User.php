@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password',
+        'name', 'username',  'email', 'rol_id', 'password',
     ];
 
     /**
@@ -35,4 +35,9 @@ class User extends Authenticatable
     protected $casts = [
         'Cedula_verified_at' => 'datetime',
     ];
+
+
+    public function rol() {
+        return $this->belongsTo('App\Rol');
+    }
 }
