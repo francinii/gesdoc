@@ -35,14 +35,9 @@ C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\E
 
 
 Notas Fran ;3
-php artisan make:model Rol -mcr
-
+php artisan make:model Rol -mcr  
 php artisan make:seeder Permiso           Crea los seeders en laravel
 php artisan db:seed --class=Permiso       Migra los seed a la base de datos
 
-
-
-
-Laravel 
 Las tablas pivote deben:
-LLamarse en orden alfabetico con las dos tablas que se unen ej permiso_rol en singular
+LLamarse en orden alfabetico con las dos tablas que se unen ejemplo: permiso_rol Además deben ir en singular.
