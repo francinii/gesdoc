@@ -4,9 +4,6 @@ function clearDescription(){
     $("input[name=CreateDescription]").val("");
 }
 
-
-
-
 function edit(id, description , permisos, permisosAsociados) {
     $("#check_permisos").empty();
     $("input[name=description]").val(description);
@@ -14,7 +11,7 @@ function edit(id, description , permisos, permisosAsociados) {
     var check = "";
     permisos.forEach(element => {
         check = permisosAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
-        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input id="check'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
+        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="check" id="check'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
     });
    
    

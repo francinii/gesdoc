@@ -11,7 +11,18 @@
           <div class="form-group">
             <label for="rol">Nombre del rol</label>
             <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del rol" name="CreateDescription">
-          </div>      
+          </div>
+          
+            @foreach ($permisos as $permiso)
+              <div class="checkbox">
+                <label for="checkCreate{{$permiso->id}}">
+                  <input id="checkCreate{{$permiso->id}}"  type="checkbox"/> 
+                  {{$permiso->description}}
+                </label>
+              </div>
+            @endforeach
+          
+              
           <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">Agregar</button>
         </form>    
       </div>
