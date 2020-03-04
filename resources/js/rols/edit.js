@@ -19,6 +19,11 @@ function edit(id, description , permisos, permisosAsociados) {
 }
 
 function ajaxCreate(){
+   // var chequeados= $("input[class=input_check_create]").val();
+    $("input[class=input_check_create]:checked").each(function(){
+        //cada elemento seleccionado
+        alert($(this).val());
+    });
     $.ajax({
         url: "rols",
         method: "POST",
@@ -26,6 +31,7 @@ function ajaxCreate(){
         data: {
             _token: $("input[name=_token]").val(),
             description:  $("input[id=CreateDescription]").val(),
+            
         },
         success: function(result) {
             

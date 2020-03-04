@@ -16,7 +16,7 @@
             @foreach ($permisos as $permiso)
               <div class="checkbox">
                 <label for="checkCreate{{$permiso->id}}">
-                  <input id="checkCreate{{$permiso->id}}"  type="checkbox"/> 
+                  <input id="checkCreate{{$permiso->id}}"  clase ="input_check_create" type="checkbox"/> 
                   {{$permiso->description}}
                 </label>
               </div>
