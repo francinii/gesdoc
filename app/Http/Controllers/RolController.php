@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Rol;
+use App\Permiso;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,8 @@ class RolController extends Controller
     {
        // $rols = Rol::all();
         $rols = Rol::with('permisos')->get();
-        return view('rols.index', compact('rols'));
+        $permisos = Permiso::all();
+        return view('rols.index', compact('rols', 'permisos'));
     }
 
     public  function refresh(){

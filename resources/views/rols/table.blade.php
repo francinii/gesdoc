@@ -20,12 +20,12 @@
                         <?php
                             //Listando los permisos de un rol especifico
                              $rolp = App\Rol::find($rol->id) ;
-                            
+                             $permisosAsociados = $rolp->permisos;
                           //   echo $rolp->users;
                         ?>
 
                     
-                        <button onclick = "list({{$rolp->permisos}}, '{{$rol->description}}',1)"  class="btn btn-primary"  data-toggle="modal">
+                        <button onclick = "list({{ $permisosAsociados}}, '{{$rol->description}}',1)"  class="btn btn-primary"  data-toggle="modal">
                            <i class="fas fa-lock-open">
                            </i>
                        </button>
@@ -37,7 +37,7 @@
                         </button>
                     </td>
                     <td class="col-1 text-center">
-                            <button onclick = "edit('{{$rol->id}}', '{{$rol->description}}' )"  class="btn btn-success"  data-toggle="modal" >
+                            <button onclick = "edit('{{$rol->id}}', '{{$rol->description}}', {{$permisos}},{{ $permisosAsociados}} )"  class="btn btn-success"  data-toggle="modal" >
                                 <i class="fas fa-edit"></i>
                             </button>
                     </td>

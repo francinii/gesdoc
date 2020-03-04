@@ -14,7 +14,11 @@
             <input name="id" type="hidden">
              <label for="rol">Nombre del rol</label>
              <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
-           </div> 
+            </div> 
+            <label for="rol">Permisos asociados</label>
+            <div id="check_permisos">
+              
+            </div>   
 
            <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>
          </form>

@@ -7,9 +7,17 @@ function clearDescription(){
 
 
 
-function edit(id, description) {
+function edit(id, description , permisos, permisosAsociados) {
+    $("#check_permisos").empty();
     $("input[name=description]").val(description);
     $("input[name=id]").val(id);
+    var check = "";
+    permisos.forEach(element => {
+        check = permisosAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
+        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input id="check'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
+    });
+   
+   
     $("#edit").modal("show");
 }
 
@@ -64,6 +72,31 @@ function ajaxUpdate(){
 
 
 
+//Función que lista en una tabla 
+//código 1: lista permisos
+//código 2: lista usuarios
+function list(arreglo, rolDescripcion, codigo) {
+ 
+    $(".body_table").empty(); //elimina los elementos anteriores
+    $(".head_table").empty(); //elimina los elementos anteriores
+    $('#list_rol').text(rolDescripcion);
+
+    codigo == 1 ?
+    $( ".head_table" ).append( "<tr><th>Id</th><th>Permiso asocidado</th></tr>" ):
+    $( ".head_table" ).append( "<tr><th>Usuario</th><th>Nombre</th><th>Correo</th></tr>" );             
+    
+    arreglo.forEach(element => {  
+        codigo == 1 ?   //Tabla de permisos   
+        $( ".body_table" ).append( "<tr><td>"+ element.id +"</td><td>"+ element.description +"</td></tr>" ): 
+        $( ".body_table" ).append( "<tr><td>"+ element.username +"</td><td>"+ element.name +"</td><td>"+ element.email +"</td></tr>" ); 
+     
+    });   
+  
+    $("#list").modal("show");    
+}
+
+/*
+
 function list(arreglo, rolDescripcion, codigo) {
   // permisos
   //  var per = permisos[0];
@@ -80,14 +113,10 @@ function list(arreglo, rolDescripcion, codigo) {
         arreglo.forEach(element => {
             $( ".body_table" ).append( "<tr><td>"+ element.username +"</td><td>"+ element.name +"</td><td>"+ element.email +"</td></tr>" ); 
         });
-    }
-    
+    }   
    
-    $("#list").modal("show");
-    
+    $("#list").modal("show");    
 }
-
-/*
 
 function ajaxDelete(id){
     $.ajax({
