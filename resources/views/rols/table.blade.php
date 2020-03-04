@@ -43,7 +43,7 @@
                     </td>
                     <td class="col-1 text-center">
                         <form method="POST" action="{{url('/rols/'.$rol->id)}}">
-                            <button type="button" onclick="ajaxDelete({{$rol->id}} ,'rols' )"  class=" btn btn-danger">
+                            <button type="button" onclick="ajaxDelete({{$rol->id}} ,'rols','table')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>

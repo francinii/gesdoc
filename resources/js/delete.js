@@ -1,4 +1,4 @@
-function ajaxDelete(id, url1){
+function ajaxDelete(id, url1,table){
     $.ajax({
         url: url1 + "/" + id,
         method: "POST",
@@ -8,9 +8,8 @@ function ajaxDelete(id, url1){
             _method:'DELETE',
             id:id,
         },
-        success: function(result) {
-           
-            $("#table").html(result);
+        success: function(result) {           
+            $("#"+table).html(result);
            // $("#edit").modal("hide");
         },
         error: function (request, status, error) {

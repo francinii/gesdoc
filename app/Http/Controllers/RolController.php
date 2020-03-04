@@ -34,8 +34,9 @@ class RolController extends Controller
     }
 
     public  function refresh(){
-        $rols = Rol::all();
-        return view('rols.table', compact('rols'));
+        $rols = Rol::with('permisos')->get();
+        $permisos = Permiso::all();
+        return view('rols.table', compact('rols','permisos'));
     }
 
     /**
