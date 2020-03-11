@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Rol;
-use App\Permiso;
 use App\Http\Controllers\Controller;
+use App\Permiso;
+use App\Rol;
+use DB;
 use Illuminate\Http\Request;
 
 class RolController extends Controller
@@ -17,7 +18,7 @@ class RolController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-       // $this->middleware('guest');
+        // $this->middleware('guest');
     }
 
     /**
@@ -27,16 +28,17 @@ class RolController extends Controller
      */
     public function index()
     {
-       // $rols = Rol::all();
+        // $rols = Rol::all();
         $rols = Rol::with('permisos')->get();
         $permisos = Permiso::all();
         return view('rols.index', compact('rols', 'permisos'));
     }
 
-    public  function refresh(){
+    public function refresh()
+    {
         $rols = Rol::with('permisos')->get();
         $permisos = Permiso::all();
-        return view('rols.table', compact('rols','permisos'));
+        return view('rols.table', compact('rols', 'permisos'));
     }
 
     /**
@@ -58,11 +60,19 @@ class RolController extends Controller
      */
     public function store(Request $request)
     {
-       // echo  response()->json($request->all());
-       // $datos = $request->all();
-        
-        $datos = $request->except('_token');
-        Rol::insert($datos);
+        // echo  response()->json($request->all());
+        // $datos = $request->all();
+
+        $datos = $request->except('_token', 'permisos');
+        $permisos = request('permisos');
+        $Idrol = Rol::insertGetId($datos);
+        foreach ($permisos as $permiso) {
+            DB::table('permiso_rol')->insert([
+                'rol_id' => $id,
+                'permiso_id' => $permiso,
+            ]);
+        }
+
         return RolController::Refresh();
 
     }
@@ -99,9 +109,17 @@ class RolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dato = request()->except(['_token', '_method']);
+        $dato = request()->except(['_token', '_method', 'permisos']);
+        $permisos = request('permisos');
         $id = $dato['id'];
         Rol::where('id', '=', $id)->update($dato);
+        DB::table('permiso_rol')->where('rol_id', '=', $id)->delete();
+        foreach ($permisos as $permiso) {
+            DB::table('permiso_rol')->insert([
+                'rol_id' => $id,
+                'permiso_id' => $permiso,
+            ]);
+        }
         return RolController::Refresh();
     }
 

@@ -2,6 +2,7 @@
 
 namespace Illuminate\Pipeline;
 
+
 use Closure;
 use Exception;
 use Illuminate\Contracts\Container\Container;

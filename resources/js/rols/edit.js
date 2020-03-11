@@ -2,6 +2,11 @@
 //  editar
 function clearDescription(){
     $("input[name=CreateDescription]").val("");
+   
+    $("input[class=input_check_create]:checked").each(function(){
+        //cada elemento seleccionado
+        $(this).prop("checked", false);
+    });
 }
 
 function edit(id, description , permisos, permisosAsociados) {
@@ -11,7 +16,7 @@ function edit(id, description , permisos, permisosAsociados) {
     var check = "";
     permisos.forEach(element => {
         check = permisosAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
-        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="check" id="check'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
+        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="input_check_edit" id="check'+element.id+'" value="'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
     });
    
    
@@ -19,10 +24,10 @@ function edit(id, description , permisos, permisosAsociados) {
 }
 
 function ajaxCreate(){
-   // var chequeados= $("input[class=input_check_create]").val();
-    $("input[class=input_check_create]:checked").each(function(){
+    var permisos=[];
+        $("input[class=input_check_create]:checked").each(function(){
         //cada elemento seleccionado
-        alert($(this).val());
+        permisos.push($(this).val());
     });
     $.ajax({
         url: "rols",
@@ -31,6 +36,7 @@ function ajaxCreate(){
         data: {
             _token: $("input[name=_token]").val(),
             description:  $("input[id=CreateDescription]").val(),
+            permisos:permisos,
             
         },
         success: function(result) {
@@ -51,6 +57,11 @@ function ajaxCreate(){
 function ajaxUpdate(){
     var id = $("input[name=id]").val();
     var description = $("input[id=description]").val();
+    var permisos=[];
+    $("input[class=input_check_edit]:checked").each(function(){
+    //cada elemento seleccionado
+    permisos.push($(this).val());
+});
     $.ajax({
         url: "rols/{" + id+"}",
         method: "POST",
@@ -60,6 +71,7 @@ function ajaxUpdate(){
             _method:'PATCH',
             id:id,
             description:  description,
+            permisos:permisos,
         },
         success: function(result) {
             
