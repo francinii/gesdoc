@@ -18,6 +18,7 @@ class CreateRolsTable extends Migration
             $table->bigIncrements('id');
             $table->string('description',500);
             $table->timestamps();
+            $table->onDelete('cascade');
             
         });
     }
