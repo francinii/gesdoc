@@ -4,7 +4,7 @@
 
 @section('title', 'Roles')
 @section('header')
-@include('layouts.header') 
+@include('layouts.header')
 
 @section('content')
 <script src="{{ asset('../resources/js/auth/register.js') }}" defer></script>
@@ -22,8 +22,11 @@
                             <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('username') }}</label>
 
                             <div class="col-md-6">
+                              @if (env("use_LDAP"))
                                 <input id="username" type="text" onchange="obtenerDatos()" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
-
+                              @else
+                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                              @endif
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -60,14 +63,14 @@
 
                         <div class="form-group row">
                             <label for="rol" class="col-md-4 col-form-label text-md-right">{{ __('Rol') }}</label>
-                            <div class="col-md-6">                               
+                            <div class="col-md-6">
                                 <div class="form-group">
                                    <select class="form-control" name="rol" >
                                       @foreach($rols as $rol)
                                       <option value="{{$rol->id}}" name ="{{$rol->id}}">{{$rol->description}}</option>
                                       @endforeach
                                     </select>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
 
