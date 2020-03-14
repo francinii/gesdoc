@@ -2,6 +2,7 @@
 
 @section('head')
 <script src="{{ asset('../resources/js/delete.js') }}" defer></script>
+<script src="{{ asset('../resources/js/users.js') }}" defer></script>
 
 @endsection
 @section('title', 'Usuarios')
@@ -28,4 +29,4 @@
     </div> 
 </div>
 
-
+@include('users.edit')

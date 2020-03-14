@@ -41,3 +41,10 @@ php artisan db:seed --class=Permiso       Migra los seed a la base de datos
 
 Las tablas pivote deben:
 LLamarse en orden alfabetico con las dos tablas que se unen ejemplo: permiso_rol Además deben ir en singular.
+
+
+
+
+Comando para compilar el sass y que se observen los cambios que se realizan a la hoja de estilos
+sass --watch resources/sass/app.scss:public/css/estilos.css
+

@@ -19,8 +19,8 @@ class PermisoRol extends Migration
             $table->bigInteger('rol_id')->unsigned(); 
             $table->bigInteger('permiso_id')->unsigned(); 
 
-            $table->foreign('rol_id')->references('id')->on('rols');
-            $table->foreign('permiso_id')->references('id')->on('permisos');
+            $table->foreign('rol_id')->references('id')->on('rols')->onDelete('cascade');
+            $table->foreign('permiso_id')->references('id')->on('permisos')->onDelete('cascade');
 
             $table->timestamps();
         

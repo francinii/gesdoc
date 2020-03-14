@@ -1,9 +1,9 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/rols/edit.js') }}" defer></script>
+<script src="{{ asset('../resources/js/rols.js') }}" defer></script>
 <script src="{{ asset('../resources/js/delete.js') }}" defer></script>
-<script src="{{ asset('../resources/js/modal.js') }}" defer></script>
+
 
 @endsection
 @section('title', 'Roles')

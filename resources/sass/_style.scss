@@ -1,0 +1,13 @@
+.main_header{
+    background-color: $theme_color;
+    margin-bottom: 40px;
+
+}
+
+.navbar-light {
+    .navbar-nav{
+        .nav-link {
+            color: $text_light;
+        }
+    }
+}

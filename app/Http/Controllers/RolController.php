@@ -68,12 +68,12 @@ class RolController extends Controller
         $Idrol = Rol::insertGetId($datos);
         foreach ($permisos as $permiso) {
             DB::table('permiso_rol')->insert([
-                'rol_id' => $id,
+                'rol_id' => $Idrol,
                 'permiso_id' => $permiso,
             ]);
         }
 
-        return RolController::Refresh();
+        return RolController::refresh();
 
     }
 
@@ -120,7 +120,7 @@ class RolController extends Controller
                 'permiso_id' => $permiso,
             ]);
         }
-        return RolController::Refresh();
+        return RolController::refresh();
     }
 
     /**

@@ -27,6 +27,8 @@ class UserController extends Controller
         return view('users.table', compact('users','rols'));
     }
 
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -79,7 +81,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $dato = request()->except(['_token', '_method', 'permisos']);
+        $permisos = request('permisos');
+        $id = $dato['id'];
+        User::where('id', '=', $id)->update($dato);        
+        return UserController::refresh();
     }
 
     /**

@@ -20,8 +20,7 @@
                   {{$permiso->description}}
                 </label>
               </div>
-            @endforeach
-          
+            @endforeach         
               
           <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">Agregar</button>
         </form>    
