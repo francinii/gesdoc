@@ -15,12 +15,9 @@
    </div>    
    <div class="row  justify-content-center"> 
         <div class="col-md-10 text-right">
-        
-        <a type="button" class=" float-right btn btn-success"  href="{{  route('register') }}" >    
-                <i class="fas fa-plus-circle"></i> 
-                Agregar Usuario
-        </a>
-            
+            <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearDescription()" data-target="#create">
+                <i class="fas fa-plus-circle"></i>   Agregar Usuario
+            </button>  
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-10">
@@ -28,5 +25,5 @@
         </div>
     </div> 
 </div>
-
-@include('users.edit')
+@include('users.create');
+@include('users.edit');

@@ -1,24 +1,28 @@
-function edit(id, usuario , correo, nombre, rolid, rols) {
-    $("#rol_edit").empty();
-    $("input[id=edit_id]").val(id);
-    $("input[name=user]").val(usuario);
-    $("input[name=email]").val(correo);
-    $("input[name=name]").val(nombre);    
-    rols.forEach(element => {       
-        selected = rolid == element.id ? "selected": "";     
-        $( "#rol_edit" ).append( '<option value="'+element.id+'" name ="'+element.id+'" '+selected+'>'+element.description+'</option>'); 
-    });     
+function edit(id, usuario , correo, nombre, rolid,instanciaid) {
+    $("select option:selected" ).each(function(){
+        //cada elemento seleccionado
+        $(this).prop("selected", false);
+    });
+
+;
+    $("input[id=id_edit]").val(id);
+    $("input[name=user_edit]").val(usuario);
+    $("input[name=email_edit]").val(correo);
+    $("input[name=name_edit]").val(nombre);
+    $("option[name=rol_edit"+rolid+"]" ).prop("selected", true);
+    $("option[name=instancia_edit"+instanciaid+"]" ).prop("selected", true);;
     $("#edit").modal("show");
 }
 
 
 
 function ajaxUpdate(){
-    var id = $("input[id=edit_id]").val();
-    var user = $("input[name=user]").val();
-    var email= $("input[name=email]").val();
-    var name = $("input[name=name]").val();  
-    var rol =  $( "select[name=rol] option:selected" ).val();   
+    var id = $("input[id=id_edit]").val();
+    var user = $("input[name=user_edit]").val();
+    var email= $("input[name=email_edit]").val();
+    var name = $("input[name=name_edit]").val();  
+    var rol =  $( "select[name=rol_edit] option:selected" ).val();  
+    var instancia =  $( "select[name=instancia_edit] option:selected" ).val();  
     $.ajax({
         url: "users/{" + id+"}",
         method: "POST",
@@ -30,7 +34,8 @@ function ajaxUpdate(){
             name:  name,
             username:  user,
             email:  email,
-            rol_id: rol
+            rol_id: rol,
+            instancia_id:instancia,
         },
         success: function(result) {
             

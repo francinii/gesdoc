@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Rol;
 use App\Instancia;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class InstanciaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,20 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        $rols = Rol::all();
-        $instancias = Instancia::all();
-        return view('users.index', compact('users','rols','instancias'));
+        //
     }
-
-    public  function refresh(){
-        $rols = Rol::all();
-        $users = User::all();
-        $instancias = Instancia::all();
-        return view('users.table', compact('users','rols','instancias'));
-    }
-
-    
 
     /**
      * Show the form for creating a new resource.
@@ -56,10 +42,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Instancia  $instancia
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Instancia $instancia)
     {
         //
     }
@@ -67,10 +53,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Instancia  $instancia
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Instancia $instancia)
     {
         //
     }
@@ -79,27 +65,22 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Instancia  $instancia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Instancia $instancia)
     {
-        $dato = request()->except(['_token', '_method', 'permisos']);
-        $permisos = request('permisos');
-        $id = $dato['id'];
-        User::where('id', '=', $id)->update($dato);        
-        return UserController::refresh();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-   * @param  \App\User  $user
+     * @param  \App\Instancia  $instancia
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Instancia $instancia)
     {
-        User::destroy($id);
-        return UserController::refresh();
+        //
     }
 }

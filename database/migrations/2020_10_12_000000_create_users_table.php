@@ -17,13 +17,14 @@ class CreateUsersTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('rol_id')->unsigned()->nullable();  
+            $table->bigInteger('instancia_id')->unsigned()->nullable(); 
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email');
             $table->string('password');
             $table->timestamps();
            
-                                 
+            $table->foreign('instancia_id')->references('id')->on('rols')->onDelete('set null');                   
             $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
         });
     }

@@ -24,7 +24,7 @@
                         
                      
                     <td class="col-1 text-center">
-                        <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->rol_id}}', {{$rols}}  )"  class="btn btn-info"  data-toggle="modal" >
+                        <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->rol_id}}','{{$user->instancia_id}}')"  class="btn btn-info"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    
