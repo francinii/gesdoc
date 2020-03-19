@@ -25,8 +25,8 @@
           Gestión de documentos
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{ url('/rols') }}">Roles</a>
-          <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
+          <a class="dropdown-item" href="{{ url('/flujos') }}">Flujos </a>
+          <a class="dropdown-item" href="{{ url('/users') }}">Documentos</a>
 
           <a class="dropdown-item" href="{{  route('register') }}">Registro</a>
           <div class="dropdown-divider"></div>
