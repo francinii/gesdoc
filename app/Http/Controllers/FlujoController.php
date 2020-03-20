@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Flujo;
 use App\User;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Auth;
 
 class FlujoController extends Controller
 {
@@ -16,7 +18,9 @@ class FlujoController extends Controller
      */
     public function index()
     {
-        $flujos = Flujo::all();
+        $usuario = Auth::user()->id;
+        $flujos =Flujo::where('userId', '=', $usuario)->get();
+        //$flujos = Flujo::all();
         $users = User::all();
         return view('flujos.index',compact('flujos', 'users'));
     }
