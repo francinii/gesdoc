@@ -44,7 +44,7 @@ function ajaxDelete(id, url1,table){
         success: function(result) {           
             $("#"+table).html(result);
             $("#"+table).DataTable().destroy();
-            $("#"+table).DataTable();
+            createDataTable(table);
             $("#confirmar").modal("hide");
         },
         error: function (request, status, error) {

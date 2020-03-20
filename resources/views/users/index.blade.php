@@ -7,7 +7,7 @@
 @section('title', 'Usuarios')
 @section('header')
 @include('layouts.header')
-<script src="{{ asset('../resources/js/otros.js') }}" defer></script>
+<script src="{{ asset('../resources/js/FuncionesCompartidas.js') }}" defer></script>
 <script src="{{ asset('../resources/js/users.js') }}" defer></script> 
 @section('content')
 <div class="container-fluid">

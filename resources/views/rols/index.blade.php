@@ -2,7 +2,7 @@
 
 @section('head')
 <script src="{{ asset('../resources/js/rols.js') }}" defer></script>
-<script src="{{ asset('../resources/js/delete.js') }}" defer></script>
+<script src="{{ asset('../resources/js/FuncionesCompartidas.js') }}" defer></script>
 
 
 @endsection
