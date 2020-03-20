@@ -1,42 +1,39 @@
-<table id='table' class="table table-responsive table-striped">
+<table id='table' class="table table-responsive table-striped" cellspacing="0" width="100%">
             <thead class="thead-dark">
-                <tr class="">
-                    <th class="col-2 text-center">Usuario</th>
-                    <th class="col-3 text-center">Nombre</th>                    
-                    <th class="col-3 text-center">Correo</th>
-                    <th class="col-2 text-center">Rol Asociado</th>
-                    <th class="col-1 text-center">Editar usuario</th>                   
-                    <th class="col-1 text-center">Eliminar Usuario</th>
+                <tr>
+                    <th  class="text-center">Usuario</th>
+                    <th  class="col-md-1  text-center">Nombre</th>                    
+                    <th  class="col-md-1  text-center">Correo</th>
+                    <th   class=" text-center">Rol Asociado</th>
+                    <th  class=" text-center">Editar usuario</th>                   
+                    <th  class=" text-center">Eliminar Usuario</th>
                 </tr>
             </thead>
             <tbody >
                 @foreach ($users as $user)
                 <tr>
-                    <td class="col-2 text-center">{{$user->username}}</td>
-                    <td class="col-3 text-center">{{$user->name}}</td>
-                    <td class="col-3 text-center">{{$user->email}}</td>                              
+                    <td class=" text-center">{{$user->username}}</td>
+                    <td class=" text-center">{{$user->name}}</td>
+                    <td class=" text-center">{{$user->email}}</td>                              
                         @foreach($rols as $rol)
                             @if($user->rol_id == $rol->id )
-                                <td class="col-2 text-center">{{$rol->description}}</td>
+                                <td class=" text-center">{{$rol->description}}</td>
                                 @break
                             @endif
                         @endforeach           
                         
                      
-                    <td class="col-1 text-center">
+                    <td class=" text-center">
                         <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->rol_id}}','{{$user->instancia_id}}')"  class="btn btn-info"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    
-                    <td class="col-1 text-center">
-                        
-                            <button type="button" onclick="ajaxDelete({{$user->id }}  ,'users','table')"  class=" btn btn-danger">
+                    <td class=" text-center">                        
+                            <button type="button" onclick="confirmarDelete({{$user->id }}  ,'users','table','Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
-                            </button>
-                      
-                    </td>
-                    
+                            </button>                      
+                    </td>                    
                 </tr>
                 @endforeach
             </tbody>

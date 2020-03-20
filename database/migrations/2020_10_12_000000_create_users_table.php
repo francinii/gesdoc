@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->timestamps();
            
-            $table->foreign('instancia_id')->references('id')->on('rols')->onDelete('set null');                   
+            $table->foreign('instancia_id')->references('id')->on('instancias')->onDelete('set null');                   
             $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
         });
     }

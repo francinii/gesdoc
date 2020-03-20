@@ -16,10 +16,8 @@
              <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
             </div> 
             <label for="rol">Permisos asociados</label>
-            <div id="check_permisos">
-              
+            <div id="check_permisos">              
             </div>   
-
            <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>
          </form>
       </div>

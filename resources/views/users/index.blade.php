@@ -1,13 +1,14 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/delete.js') }}" defer></script>
-<script src="{{ asset('../resources/js/users.js') }}" defer></script>
+
 
 @endsection
 @section('title', 'Usuarios')
 @section('header')
-@include('layouts.header') 
+@include('layouts.header')
+<script src="{{ asset('../resources/js/otros.js') }}" defer></script>
+<script src="{{ asset('../resources/js/users.js') }}" defer></script> 
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
@@ -15,7 +16,7 @@
    </div>    
    <div class="row  justify-content-center"> 
         <div class="col-md-10 text-right">
-            <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearDescription()" data-target="#create">
+            <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearCreate()" data-target="#create">
                 <i class="fas fa-plus-circle"></i>   Agregar Usuario
             </button>  
         </div>
@@ -25,5 +26,10 @@
         </div>
     </div> 
 </div>
-@include('users.create');
-@include('users.edit');
+@include('users.create')
+@include('users.edit')
+@include('users.modalError')
+@include('users.modalBuscando')
+@include('users.confirmar')
+
+
