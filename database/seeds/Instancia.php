@@ -12,12 +12,12 @@ class Instancia extends Seeder
     public function run()
     {
         \DB::table('instancias')->insert(array(
-            'description' =>"Escuela de Informatica",
-            'academic_unit' =>"CIencias exactas y naturales",
+            'description' =>"Escuela de Informática",
+            'academic_unit' =>"Ciencias Exactas y Naturales",
         ));
         \DB::table('instancias')->insert(array(
-            'description' =>"Escuela de Matematica",
-            'academic_unit' =>"CIencias exactas y naturales",
+            'description' =>"Escuela de Matemática",
+            'academic_unit' =>"Ciencias Exactas y Naturales",
         ));
     }
 }
