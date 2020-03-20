@@ -10,7 +10,7 @@ class Flujo extends Model
      * Un usuario pertenece  o es dueño de varios flujos
     */
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','id');
     }
 
     /**

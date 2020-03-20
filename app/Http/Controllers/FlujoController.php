@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flujo;
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,8 @@ class FlujoController extends Controller
     public function index()
     {
         $flujos = Flujo::all();
-        return view('flujos.index',compact('flujos'));
+        $users = User::all();
+        return view('flujos.index',compact('flujos', 'users'));
     }
 
     /**
@@ -37,7 +39,10 @@ class FlujoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos = $request->except('_token', 'flujos');
+       // $flujos = request('flujos');
+        Flujo::insert($datos);
+        return FlujoController::refresh();
     }
 
     /**
@@ -69,19 +74,38 @@ class FlujoController extends Controller
      * @param  \App\Flujo  $flujo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Flujo $flujo)
+    public function update(Request $request, $id)
     {
-        //
+        $dato = request()->except(['_token', '_method', 'flujos']);
+        $flujos = request('flujos');
+        $id = $dato['id'];
+        Flujo::where('id', '=', $id)->update($dato);
+        
+        return FlujoController::refresh();
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \App\Flujo  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        Flujo::destroy($id);
+        return FlujoController::refresh();
+    }
+
+    /**
+     * Refresca la tabla que se muestra.
+     *
      * @param  \App\Flujo  $flujo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Flujo $flujo)
+    private function refresh()
     {
-        //
+        $flujos = Flujo::all();
+        $users = User::all();
+        return view('flujos.table',compact('flujos', 'users'));
     }
 }

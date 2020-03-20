@@ -45,7 +45,7 @@ class User extends Authenticatable
      * El usuario tiene asociado varios flujos
     */
     public function flujos() {
-        return $this->hasMany('App\Flujo');
+        return $this->hasMany('App\Flujo','id');
     }
 
     /**

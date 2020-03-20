@@ -34,12 +34,7 @@ class RolController extends Controller
         return view('rols.index', compact('rols', 'permisos'));
     }
 
-    public function refresh()
-    {
-        $rols = Rol::with('permisos')->get();
-        $permisos = Permiso::all();
-        return view('rols.table', compact('rols', 'permisos'));
-    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -126,12 +121,26 @@ class RolController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rol  $rol
+     * @param  \App\Rol  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         Rol::destroy($id);
         return RolController::refresh();
+    }
+
+
+    /**
+     * Refresca la tabla que se muestra.
+     *
+     * @param  \App\Flujo  $flujo
+     * @return \Illuminate\Http\Response
+     */
+    public function refresh()
+    {
+        $rols = Rol::with('permisos')->get();
+        $permisos = Permiso::all();
+        return view('rols.table', compact('rols', 'permisos'));
     }
 }

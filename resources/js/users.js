@@ -10,7 +10,7 @@ function edit(id, usuario , correo, nombre, rolid,instanciaid) {
     $("input[name=email_edit]").val(correo);
     $("input[name=name_edit]").val(nombre);
     $("option[name=rol_edit"+rolid+"]" ).prop("selected", true);
-    $("option[name=instancia_edit"+instanciaid+"]" ).prop("selected", true);;
+    $("option[name=instancia_edit"+instanciaid+"]" ).prop("selected", true);
     $("#edit").modal("show");
 }
 
