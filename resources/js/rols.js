@@ -71,6 +71,7 @@ function ajaxUpdate(){
     var id = $("input[name=id]").val();
     var description = $("input[id=description]").val();
     var permisos=[];
+    
     $("input[class=input_check_edit]:checked").each(function(){    
     permisos.push($(this).val());
 });

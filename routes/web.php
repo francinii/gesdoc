@@ -38,3 +38,5 @@ Route::resource('rols', 'RolController');
 Route::resource('users', 'UserController');
 
 Route::resource('flujos', 'FlujoController');
+
+Route::resource('documentos', 'DocumentoController');

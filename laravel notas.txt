@@ -38,6 +38,9 @@ Notas Fran ;3
 php artisan make:model Rol -mcr 
 php artisan make:model Flujo -mcr   
 php artisan make:seeder Permiso           Crea los seeders en laravel
+php artisan make:seeder Documento
+
+
 php artisan db:seed --class=Permiso       Migra los seed a la base de datos
 
 Las tablas pivote deben:
@@ -48,4 +51,52 @@ LLamarse en orden alfabetico con las dos tablas que se unen ejemplo: permiso_rol
 
 Comando para compilar el sass y que se observen los cambios que se realizan a la hoja de estilos
 sass --watch resources/sass/app.scss:public/css/estilos.css
+
+
+
+
+
+
+
+Convenciones para ATRIBUTOS
+1. nombre minuscula segunda palabra en mayuscula (lowel camel case).
+2. los atributos van a escribirse en español.
+    Ejemplo 
+        -flujoId
+        -usuarioId
+        -documentosFlujos
+
+
+Convenciones para CLASES MODELO
+1. Primera letra en mayuscula
+2. Escrito en singular
+3. Escrito en español
+    Ejemplo 
+        - Documento
+        - Flujo
+
+
+
+
+Convenciones para CLASES CONTROLADORES
+1. Primera letra en mayuscula
+2. Escrito en singular
+3. Usa lowel camel case (Primera en minuscula y luego cada letra inicial en mayúscula)
+4. El nombre del controlador va en singular
+5. Escrito en español
+    Ejemplo 
+        - DocumentoController
+        - FlujoController
+
+
+Convenciones para Archivos JS
+1. Escrito en minúscula
+2. Se escriben en plural si se relacionand a un resource específico. Sí la clase modelo
+se llama Documento.php el js para ese recurso sería documentos.js
+3. Escrito en español
+
+Convenciones para VISTAS blade.php
+1. carpetas con nombre en minuscula
+2. las vistas se escriben en ingles 
+3. las vistas se escriben en minusculas
 

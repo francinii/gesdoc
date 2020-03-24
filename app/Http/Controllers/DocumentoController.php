@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
+
+use Auth;
 use App\Documento;
+use App\Flujo;
+use DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,7 +20,11 @@ class DocumentoController extends Controller
      */
     public function index()
     {
-        //
+      //  $usuario = Auth::user()->id;
+       // $flujos =Flujo::where('userId', '=', $usuario)->get();
+        $documentos = Documento::all();
+        $flujos = Flujo::all();
+        return view('documentos.index',compact('documentos', 'flujos'));
     }
 
     /**
@@ -36,7 +45,18 @@ class DocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos = $request->except(['_token', 'userId'], 'documentos');
+        $documento = $request->except('_token', 'documentos');
+        $usuario =  $documento['userId'];
+        $idDocumento = Documento::insertGetId($datos);
+        
+            DB::table('documento_users')->insert([
+                'documentoId' => $idDocumento,
+                'userId' => $usuario ,
+            ]);
+        
+
+        return DocumentoController::refresh();
     }
 
     /**
@@ -79,8 +99,17 @@ class DocumentoController extends Controller
      * @param  \App\Documento  $documento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Documento $documento)
+    public function destroy($id)
     {
-        //
+        Documento::destroy($id);
+        return DocumentoController::refresh();
+    }
+
+
+    private function refresh()
+    {
+        $documentos = Documento::all();
+        $flujos = Flujo::all();
+        return view('documentos.table',compact('documentos', 'flujos'));        
     }
 }

@@ -108,7 +108,9 @@ class FlujoController extends Controller
      */
     private function refresh()
     {
-        $flujos = Flujo::all();
+        $usuario = Auth::user()->id;
+        $flujos =Flujo::where('userId', '=', $usuario)->get();
+        //$flujos = Flujo::all();
         $users = User::all();
         return view('flujos.table',compact('flujos', 'users'));
     }

@@ -26,7 +26,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url('/flujos') }}">Flujos </a>
-          <a class="dropdown-item" href="{{ url('/users') }}">Documentos</a>
+          <a class="dropdown-item" href="{{ url('/documentos') }}">Documentos</a>
 
           <a class="dropdown-item" href="{{  route('register') }}">Registro</a>
           <div class="dropdown-divider"></div>
