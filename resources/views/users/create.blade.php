@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="text-center">Crear Usuario</h2>
+        <h3 class="text-center">Crear Usuario</h3>
         <button type="close" class="close" data-dismiss="modal">
             X
         </button>
@@ -11,16 +11,25 @@
         <form action="" method="POST">
           <input type="hidden" id="id_create">
           <div class="form-group">
-            <label for="user">Usuario</label>
-            <input type="text" class="form-control" id="user_create" placeholder="Nombre usuario" name="user_create" value="">
+            <label for="user_create">Usuario</label>
+            @if (env("use_LDAP"))
+            <input type="text" onchange="obtenerDatos()" class="form-control" id="user_create" placeholder="Nombre usuario" name="user_create" >
+            @else
+            <input type="text" class="form-control " id="user_create" placeholder="Nombre usuario" name="user_create" >
+            @endif            
+              <span class="invalid-feedback" role="alert">
+                  <strong id="user_create_message"></strong>
+              </span>            
           </div>
            <div class="form-group">
              <label for="name">Nombre</label>
-             <input type="text" class="form-control" id="name_create" placeholder="Nombre usuario" name="name_create" value="">
+             <input type="text" class="form-control" id="name_create" placeholder="Nombre usuario" name="name_create">
+                     
             </div>
             <div class="form-group">
               <label for="email_create">Correo</label>
-              <input type="email" class="form-control" id="email_create" placeholder="Nombre usuario" name="email_create" value="">
+              <input type="email" class="form-control" id="email_create" placeholder="Nombre usuario" name="email_create">
+                
             </div>
 
             <label for="rol_create">Rol asociado</label>
@@ -39,11 +48,22 @@
               @endforeach
               </select>
             </div>
+            @if (!env("use_LDAP"))
+            <div class="form-group">
+              <label for="password_create">Contraseña</label>
+              <input type="password" class="form-control " id="password_create" placeholder="contraseña" name="password_create">
+              
+                <span class="invalid-feedback" role="alert">
+                    <strong id="password_create_message"></strong>
+                </span>
+              
+            </div>
+            @endif
 
-           <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Crear</button>
          </form>
       </div>
       <div class="modal-footer">
+        <button type="button" onclick="ajaxCreate() "id="CreateSubmit" class="btn btn-success">Crear</button>
       </div>
     </div>
  </div>

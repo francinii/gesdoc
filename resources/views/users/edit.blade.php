@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">      
-        <h2 class="text-center">Editar Usuario</h2>
+        <h3 class="text-center">Editar Usuario</h3>
         <button type="close" class="close" data-dismiss="modal"> 
             X
         </button>
@@ -39,11 +39,21 @@
               @endforeach
               </select>
             </div>
-
-           <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>
+            @if (!env("use_LDAP"))
+            <div class="form-group">            
+              <label for="password_edit">Actualizar Contraseña</label>
+              <input type="checkbox" id="checkbox_password" name="checkbox_password" onclick="change_password()">
+              <input type="password" class="form-control" id="password_edit" placeholder="contraseña nueva" name="password_edit" disabled >
+              <span class="invalid-feedback" role="alert">
+                    <strong id="password_edit_message"></strong>
+                </span>
+            </div> 
+            @endif
+          
          </form>
       </div>
-      <div class="modal-footer">     
+      <div class="modal-footer">  
+      <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>   
       </div>
     </div>
  </div>

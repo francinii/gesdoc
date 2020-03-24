@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('ldap/obtenerUsuario', 'Auth\RegisterController@ldapObtenerUsuario' );
+Route::get('ldap/obtenerUsuario', 'UserController@ldapObtenerUsuario' );
 
 //Route::get('/register_user', 'Auth\RegisterController@index' );
 

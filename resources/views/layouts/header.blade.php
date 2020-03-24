@@ -14,7 +14,6 @@
             <a class="dropdown-item" href="{{ url('/rols') }}">Roles</a>
             <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
 
-            <a class="dropdown-item" href="{{  route('register') }}">Registro</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>          
