@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/rols.js') }}" defer></script>
+<script src="{{ asset('../resources/js/roles.js') }}" defer></script>
 <script src="{{ asset('../resources/js/FuncionesCompartidas.js') }}" defer></script>
 
 
@@ -22,12 +22,12 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
-            @include('rols.table')
+            @include('roles.table')
         </div>
     </div> 
 </div>
 
-@include('rols.create')
-@include('rols.edit')
-@include('rols.list_permisos')
+@include('roles.create')
+@include('roles.edit')
+@include('roles.list')
 

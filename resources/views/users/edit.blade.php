@@ -23,11 +23,11 @@
               <input type="email" class="form-control" id="email_edit" placeholder="Nombre usuario" name="email_edit" value="">
             </div>            
             
-            <label for="rol_edit">Rol asociado</label>
+            <label for="role_edit">Rol asociado</label>
             <div class="form-group">
-              <select id="rol_edit"class="form-control" name="rol_edit" >
-              @foreach ($rols as $rol)
-              <option value="{{$rol->id}}" name ="rol_edit{{$rol->id}}">{{$rol->description}}</option>
+              <select id="role_edit"class="form-control" name="role_edit" >
+              @foreach ($roles as $role)
+              <option value="{{$role->id}}" name ="role_edit{{$role->id}}">{{$role->description}}</option>
               @endforeach
               </select>
             </div>

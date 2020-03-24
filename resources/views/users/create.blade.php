@@ -32,11 +32,11 @@
                 
             </div>
 
-            <label for="rol_create">Rol asociado</label>
+            <label for="role_create">Rol asociado</label>
             <div class="form-group">
-              <select id="rol_create"class="form-control" name="rol_create" >
-              @foreach ($rols as $rol)
-              <option value="{{$rol->id}}" name ="rol_create{{$rol->id}}">{{$rol->description}}</option>
+              <select id="role_create"class="form-control" name="role_create" >
+              @foreach ($roles as $role)
+              <option value="{{$role->id}}" name ="role_create{{$role->id}}">{{$role->description}}</option>
               @endforeach
               </select>
             </div>

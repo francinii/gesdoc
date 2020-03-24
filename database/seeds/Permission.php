@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Permiso extends Seeder
+class Permission extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,13 +11,13 @@ class Permiso extends Seeder
      */
     public function run()
     {
-        \DB::table('permisos')->insert(array(
+        \DB::table('permissions')->insert(array(
             'description' =>"Ingreso a los roles del sistema"       
         ));
-        \DB::table('permisos')->insert(array(
+        \DB::table('permissions')->insert(array(
             'description' =>"Ingreso a los usuarios del sistema"       
         ));
-        \DB::table('permisos')->insert(array(
+        \DB::table('permissions')->insert(array(
             'description' =>"Creación de documentos"       
         ));
     }

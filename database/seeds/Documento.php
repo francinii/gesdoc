@@ -12,11 +12,11 @@ class Documento extends Seeder
     public function run()
     {
         \DB::table('documentos')->insert(array(
-            'flujoId' =>1,
+            'flujo_id' =>1,
             'description' =>"Doc 1",            
         ));
         \DB::table('documentos')->insert(array(
-            'flujoId' =>1,
+            'flujo_id' =>1,
             'description' =>"Doc 2",            
         ));
     }

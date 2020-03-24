@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Permiso;
+use App\Permission;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PermisoController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class PermisoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Permiso  $permiso
+     * @param  \App\Permission  $permiso
      * @return \Illuminate\Http\Response
      */
-    public function show(Permiso $permiso)
+    public function show(Permission $permiso)
     {
         //
     }
@@ -53,10 +53,10 @@ class PermisoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Permiso  $permiso
+     * @param  \App\Permission  $permiso
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permiso $permiso)
+    public function edit(Permission $permiso)
     {
         //
     }
@@ -65,10 +65,10 @@ class PermisoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Permiso  $permiso
+     * @param  \App\Permission  $permiso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permiso $permiso)
+    public function update(Request $request, Permission $permiso)
     {
         //
     }
@@ -76,10 +76,10 @@ class PermisoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Permiso  $permiso
+     * @param  \App\Permission  $permiso
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permiso $permiso)
+    public function destroy(Permission $permiso)
     {
         //
     }

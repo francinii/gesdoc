@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('rol_id')->unsigned()->nullable();  
+            $table->bigInteger('role_id')->unsigned()->nullable();  
             $table->bigInteger('instancia_id')->unsigned()->nullable(); 
             $table->string('name');
             $table->string('username')->unique();
@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
            
             $table->foreign('instancia_id')->references('id')->on('instancias')->onDelete('set null');                   
-            $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 

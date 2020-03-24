@@ -6,18 +6,18 @@
           <button type="close" class="close" data-dismiss="modal">  X </button>
       </div>
       <div class="modal-body">   
-        <form action="{{ action('RolController@index') }}" method="POST">
+        <form action="{{ action('RoleController@index') }}" method="POST">
         {{csrf_field()}}
           <div class="form-group">
-            <label for="rol">Nombre del rol</label>
+            <label for="role">Nombre del rol</label>
             <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del rol" name="CreateDescription">
           </div>
           
-            @foreach ($permisos as $permiso)
+            @foreach ($permissions as $permission)
               <div class="checkbox">
-                <label for="checkCreate{{$permiso->id}}">
-                  <input id="checkCreate{{$permiso->id}}" value='{{$permiso->id}}' class ="input_check_create" type="checkbox"/> 
-                  {{$permiso->description}}
+                <label for="checkCreate{{$permission->id}}">
+                  <input id="checkCreate{{$permission->id}}" value='{{$permission->id}}' class ="input_check_create" type="checkbox"/> 
+                  {{$permission->description}}
                 </label>
               </div>
             @endforeach         

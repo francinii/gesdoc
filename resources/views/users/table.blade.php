@@ -15,16 +15,16 @@
                     <td class=" text-center">{{$user->username}}</td>
                     <td class=" text-center">{{$user->name}}</td>
                     <td class=" text-center">{{$user->email}}</td>                              
-                        @foreach($rols as $rol)
-                            @if($user->rol_id == $rol->id )
-                                <td class=" text-center">{{$rol->description}}</td>
+                        @foreach($roles as $role)
+                            @if($user->role_id == $role->id )
+                                <td class=" text-center">{{$role->description}}</td>
                                 @break
                             @endif
                         @endforeach           
                         
                      
                     <td class=" text-center">
-                        <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->rol_id}}','{{$user->instancia_id}}')"  class="btn btn-info"  data-toggle="modal" >
+                        <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->instancia_id}}')"  class="btn btn-info"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    

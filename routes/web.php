@@ -32,7 +32,7 @@ Route::get('ldap/obtenerUsuario', 'UserController@ldapObtenerUsuario' );
 //Route::get('/rols', 'RolController@index');
 //Accede a todas las rutas necesarioas para
 // obtener los metodos del RolController
-Route::resource('rols', 'RolController');
+Route::resource('roles', 'RoleController');
 
 
 Route::resource('users', 'UserController');

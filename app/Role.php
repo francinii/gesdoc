@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rol extends Model
+class Role extends Model
 {
-    public function permisos() {
-        return $this->belongsToMany('App\Permiso');
+    public function permissions() {
+        return $this->belongsToMany('App\Permission');
     }
 
     public function users() {

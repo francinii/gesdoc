@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Instancia;
-use App\Rol;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,17 +20,17 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $rols = Rol::all();
+        $roles = Role::all();
         $instancias = Instancia::all();
-        return view('users.index', compact('users', 'rols', 'instancias'));
+        return view('users.index', compact('users', 'roles', 'instancias'));
     }
 
     public function refresh()
     {
-        $rols = Rol::all();
+        $roles = Role::all();
         $users = User::all();
         $instancias = Instancia::all();
-        return view('users.table', compact('users', 'rols', 'instancias'));
+        return view('users.table', compact('users', 'roles', 'instancias'));
     }
 
     /**

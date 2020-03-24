@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PermisoRol extends Migration
+class PermissionRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class PermisoRol extends Migration
      */
     public function up()
     {
-        Schema::create('permiso_rol', function (Blueprint $table) {
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('rol_id')->unsigned(); 
-            $table->bigInteger('permiso_id')->unsigned(); 
+            $table->bigInteger('role_id')->unsigned(); 
+            $table->bigInteger('permission_id')->unsigned(); 
 
-            $table->foreign('rol_id')->references('id')->on('rols')->onDelete('cascade');
-            $table->foreign('permiso_id')->references('id')->on('permisos')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
 
             $table->timestamps();
         
@@ -34,6 +34,6 @@ class PermisoRol extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permiso_rol');
+        Schema::dropIfExists('permission_roles');
     }
 }

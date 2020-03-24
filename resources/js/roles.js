@@ -18,17 +18,17 @@ function clearDescription(){
  * 
  * @param {integer} id - id del rol
  * @param {string} description  - Descripcion del rol
- * @param {array} permisos - Arreglo con la lista de permisos de la base de datos
- * @param {array} permisosAsociados - Arreglo con la lista de permisos asociados   
+ * @param {array} permissions - Arreglo con la lista de permissions de la base de datos
+ * @param {array} permissionsAsociados - Arreglo con la lista de permissions asociados   
  */
-function edit(id, description , permisos, permisosAsociados) {
-    $("#check_permisos").empty();
+function edit(id, description , permissions, permissionsAsociados) {
+    $("#check_permissions").empty();
     $("input[name=description]").val(description);
     $("input[name=id]").val(id);
     var check = "";
-    permisos.forEach(element => {
-        check = permisosAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
-        $( "#check_permisos" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="input_check_edit" id="check'+element.id+'" value="'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
+    permissions.forEach(element => {
+        check = permissionsAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
+        $( "#check_permissions" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="input_check_edit" id="check'+element.id+'" value="'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
     });  
     $("#edit").modal("show");
 }
@@ -39,17 +39,17 @@ function edit(id, description , permisos, permisosAsociados) {
  * Envia una petición ajax, para agregar un rol  
  */
 function ajaxCreate(){
-    var permisos=[];
+    var permissions=[];
         $("input[class=input_check_create]:checked").each(function(){
-        permisos.push($(this).val());
+        permissions.push($(this).val());
     });
     $.ajax({
-        url: "rols",
+        url: "roles",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
             description:  $("input[id=CreateDescription]").val(),
-            permisos:permisos,            
+            permissions:permissions,            
         },
 
         success: function(result) {            
@@ -70,20 +70,20 @@ function ajaxCreate(){
 function ajaxUpdate(){
     var id = $("input[name=id]").val();
     var description = $("input[id=description]").val();
-    var permisos=[];
+    var permissions=[];
     
     $("input[class=input_check_edit]:checked").each(function(){    
-    permisos.push($(this).val());
+    permissions.push($(this).val());
 });
     $.ajax({
-        url: "rols/{" + id+"}",
+        url: "roles/{" + id+"}",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
             _method:'PATCH',
             id:id,
             description:  description,
-            permisos:permisos,
+            permissions:permissions,
         },
 
         success: function(result) {            
@@ -103,16 +103,16 @@ function ajaxUpdate(){
  * seleccionado. 
  * 
  * @param {array} arreglo -arreglo que lista los permisos o usuarios
- * @param {string} rolDescripcion  - Descripcion del rol
+ * @param {string} roleDescripcion  - Descripcion del rol
  * @param {integer} codigo - El código indica si se listan usuarios
  * o permisos: código 1 -> lista permisos, código 2: -> lista usuarios.  
  * 
  */
-function list(arreglo, rolDescripcion, codigo) { 
+function list(arreglo, roleDescripcion, codigo) { 
     $(".body_table").empty(); //elimina los elementos anteriores de la tabla
     $(".head_table").empty(); //elimina los elementos anteriores de la tabla
 
-    $('#list_rol').text(rolDescripcion);
+    $('#list_role').text(roleDescripcion);
     codigo == 1 ?
     $( ".head_table" ).append( "<tr><th>Id</th><th>Permiso asocidado</th></tr>" ):
     $( ".head_table" ).append( "<tr><th>Usuario</th><th>Nombre</th><th>Correo</th></tr>" );             

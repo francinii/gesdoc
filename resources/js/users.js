@@ -37,7 +37,7 @@ function validaEdit() {
     return validado;
 }
 
-function edit(id, usuario, correo, nombre, rolid, instanciaid) {
+function edit(id, usuario, correo, nombre, roleid, instanciaid) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -51,7 +51,7 @@ function edit(id, usuario, correo, nombre, rolid, instanciaid) {
     $("input[name=user_edit]").val(usuario);
     $("input[name=email_edit]").val(correo);
     $("input[name=name_edit]").val(nombre);
-    $("option[name=rol_edit" + rolid + "]").prop("selected", true);
+    $("option[name=role_edit" + roleid + "]").prop("selected", true);
     $("option[name=instancia_edit" + instanciaid + "]").prop("selected", true);
     $("#password_edit").attr("disabled", "disabled");
     $("input[name=checkbox_password]").prop("checked", false);
@@ -91,7 +91,7 @@ function ajaxUpdate() {
         var user = $("input[name=user_edit]").val();
         var email = $("input[name=email_edit]").val();
         var name = $("input[name=name_edit]").val();
-        var rol = $("select[name=rol_edit] option:selected").val();
+        var role = $("select[name=role_edit] option:selected").val();
         var instancia = $("select[name=instancia_edit] option:selected").val();
         var password = $("input[name=password_edit]").val();
         var updatepassword = $("input[name=checkbox_password]").is(":checked");
@@ -106,7 +106,7 @@ function ajaxUpdate() {
                 name: name,
                 username: user,
                 email: email,
-                rol_id: rol,
+                role_id: role,
                 instancia_id: instancia,
                 updatePassword: updatepassword,
                 password: password
@@ -181,7 +181,7 @@ function ajaxCreate() {
         var user = $("input[name=user_create]").val();
         var name = $("input[name=name_create]").val();
         var email = $("input[name=email_create]").val();
-        var rol = $("select[name=rol_create] option:selected").val();
+        var role = $("select[name=role_create] option:selected").val();
         var instancia = $(
             "select[name=instancia_create] option:selected"
         ).val();
@@ -196,7 +196,7 @@ function ajaxCreate() {
                 name: name,
                 username: user,
                 email: email,
-                rol_id: rol,
+                role_id: role,
                 instancia_id: instancia,
                 password: password
             },
@@ -235,10 +235,10 @@ function change_password() {
 //Función que lista en una tabla
 //código 1: lista permisos
 //código 2: lista usuarios
-function list(arreglo, rolDescripcion, codigo) {
+function list(arreglo, roleDescripcion, codigo) {
     $(".body_table").empty(); //elimina los elementos anteriores
     $(".head_table").empty(); //elimina los elementos anteriores
-    $("#list_rol").text(rolDescripcion);
+    $("#list_role").text(roleDescripcion);
 
     codigo == 1
         ? $(".head_table").append(

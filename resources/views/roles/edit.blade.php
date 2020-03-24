@@ -12,11 +12,11 @@
         
            <div class="form-group">
             <input name="id" type="hidden">
-             <label for="rol">Nombre del rol</label>
+             <label for="role">Nombre del rol</label>
              <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
             </div> 
-            <label for="rol">Permisos asociados</label>
-            <div id="check_permisos">              
+            <label for="role">Permisos asociados</label>
+            <div id="check_permissions">              
             </div>   
            <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>
          </form>

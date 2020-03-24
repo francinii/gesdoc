@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermisosTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreatePermisosTable extends Migration
      */
     public function up()
     {
-        Schema::create('permisos', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('description',500);
-            $table->timestamps();
+            $table->timestamps();           
+            
         });
     }
 
@@ -28,6 +29,6 @@ class CreatePermisosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permisos');
+        Schema::dropIfExists('roles');
     }
 }

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Permiso;
-use App\Rol;
+use App\Permission;
+use App\Role;
 use DB;
 use Illuminate\Http\Request;
 
-class RolController extends Controller
+class RoleController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -28,10 +28,10 @@ class RolController extends Controller
      */
     public function index()
     {
-        // $rols = Rol::all();
-        $rols = Rol::with('permisos')->get();
-        $permisos = Permiso::all();
-        return view('rols.index', compact('rols', 'permisos'));
+        // $roles = Role::all();
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::all();
+        return view('roles.index', compact('roles', 'permissions'));
     }
 
     
@@ -43,14 +43,14 @@ class RolController extends Controller
      */
     public function create()
     {
-        return view('rols.create');
+        return view('roles.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rol  $rol
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -58,27 +58,27 @@ class RolController extends Controller
         // echo  response()->json($request->all());
         // $datos = $request->all();
 
-        $datos = $request->except('_token', 'permisos');
-        $permisos = request('permisos');
-        $Idrol = Rol::insertGetId($datos);
-        foreach ($permisos as $permiso) {
-            DB::table('permiso_rol')->insert([
-                'rol_id' => $Idrol,
-                'permiso_id' => $permiso,
+        $datos = $request->except('_token', 'permissions');
+        $permissions = request('permissions');
+        $IdRole = Role::insertGetId($datos);
+        foreach ($permissions as $permission) {
+            DB::table('permission_role')->insert([
+                'role_id' => $IdRole,
+                'permission_id' => $permission,
             ]);
         }
 
-        return RolController::refresh();
+        return RoleController::refresh();
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Rol  $rol
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Rol $rol)
+    public function show(Role $role)
     {
         //
     }
@@ -86,13 +86,13 @@ class RolController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Rol  $rol
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $rol = Rol::findOrFail($id); //regresa toda la info que tiene ese id
-        return view('rols.edit', compact('rol'));
+        $roles = Role::findOrFail($id); //regresa toda la info que tiene ese id
+        return view('roles.edit', compact('roles'));
     }
 
     /**
@@ -104,30 +104,30 @@ class RolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dato = request()->except(['_token', '_method', 'permisos']);
-        $permisos = request('permisos');
+        $dato = request()->except(['_token', '_method', 'permissions']);
+        $permissions = request('permissions');
         $id = $dato['id'];
-        Rol::where('id', '=', $id)->update($dato);
-        DB::table('permiso_rol')->where('rol_id', '=', $id)->delete();
-        foreach ($permisos as $permiso) {
-            DB::table('permiso_rol')->insert([
-                'rol_id' => $id,
-                'permiso_id' => $permiso,
+        Role::where('id', '=', $id)->update($dato);
+        DB::table('permission_role')->where('role_id', '=', $id)->delete();
+        foreach ($permissions as $permission) {
+            DB::table('permission_role')->insert([
+                'role_id' => $id,
+                'permission_id' => $permission,
             ]);
         }
-        return RolController::refresh();
+        return RoleController::refresh();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rol  $id
+     * @param  \App\Role  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Rol::destroy($id);
-        return RolController::refresh();
+        Role::destroy($id);
+        return RoleController::refresh();
     }
 
 
@@ -139,8 +139,8 @@ class RolController extends Controller
      */
     public function refresh()
     {
-        $rols = Rol::with('permisos')->get();
-        $permisos = Permiso::all();
-        return view('rols.table', compact('rols', 'permisos'));
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::all();
+        return view('roles.table', compact('roles', 'permissions'));
     }
 }

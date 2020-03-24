@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Rol extends Seeder
+class Role extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,15 +11,15 @@ class Rol extends Seeder
      */
     public function run()
     {
-        \DB::table('rols')->insert(array(
+        \DB::table('roles')->insert(array(
             'description' =>"SuperAdmin"       
         ));
 
-        \DB::table('rols')->insert(array(
+        \DB::table('roles')->insert(array(
             'description' =>"Administrador"       
         ));
 
-        \DB::table('rols')->insert(array(
+        \DB::table('roles')->insert(array(
             'description' =>"Usuario"       
         ));
     }
