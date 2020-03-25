@@ -24,7 +24,7 @@ class User extends Seeder
             'username' =>"116780195",
             'email' =>"maria.corrales.garro@una.ac.cr",
             'role_id'  => 1,
-            'instancia_id'  => 1,
+            'department_id'  => 1,
             'password' => Hash::make('12345678')
         ));
 
@@ -33,7 +33,7 @@ class User extends Seeder
             'username' =>"402340421",
             'email' =>"tatiana.corrales.palma@una.ac.cr",
             'role_id'  => 1,
-            'instancia_id'  => 2,
+            'department_id'  => 2,
             'password' => Hash::make('12345678')
         ));
 
@@ -42,7 +42,7 @@ class User extends Seeder
             'username' =>"402340420",
             'email' =>"danny.valerio.ramirez@una.ac.cr",
             'role_id'  => 1,
-            'instancia_id'  => 1,
+            'department_id'  => 1,
             'password' => Hash::make('12345678')
         ));
 

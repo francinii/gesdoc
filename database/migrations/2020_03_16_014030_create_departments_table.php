@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInstanciasTable extends Migration
+class CreateDepartmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInstanciasTable extends Migration
      */
     public function up()
     {
-        Schema::create('instancias', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('description',500);
@@ -29,6 +29,6 @@ class CreateInstanciasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('instancias');
+        Schema::dropIfExists('departments');
     }
 }

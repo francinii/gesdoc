@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Instancia extends Seeder
+class Department extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,11 +11,11 @@ class Instancia extends Seeder
      */
     public function run()
     {
-        \DB::table('instancias')->insert(array(
+        \DB::table('departments')->insert(array(
             'description' =>"Escuela de Informática",
             'academic_unit' =>"Ciencias Exactas y Naturales",
         ));
-        \DB::table('instancias')->insert(array(
+        \DB::table('departments')->insert(array(
             'description' =>"Escuela de Matemática",
             'academic_unit' =>"Ciencias Exactas y Naturales",
         ));

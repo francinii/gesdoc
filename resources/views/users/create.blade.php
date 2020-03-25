@@ -40,11 +40,11 @@
               @endforeach
               </select>
             </div>
-            <label for="instancia_create">Instancia asociado</label>
+            <label for="department_create">Departamento asociado</label>
             <div class="form-group">
-              <select id="instancia_create"class="form-control" name="instancia_create" >
-              @foreach ($instancias as $instancia)
-              <option value="{{$instancia->id}}" name ="instancia_create{{$instancia->id}}">{{$instancia->description}}</option>
+              <select id="department_create"class="form-control" name="department_create" >
+              @foreach ($departments as $department)
+              <option value="{{$department->id}}" name ="department_create{{$department->id}}">{{$department->description}}</option>
               @endforeach
               </select>
             </div>

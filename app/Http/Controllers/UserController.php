@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Instancia;
+use App\Department;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -21,16 +21,16 @@ class UserController extends Controller
     {
         $users = User::all();
         $roles = Role::all();
-        $instancias = Instancia::all();
-        return view('users.index', compact('users', 'roles', 'instancias'));
+        $departments = Department::all();
+        return view('users.index', compact('users', 'roles', 'departments'));
     }
 
     public function refresh()
     {
         $roles = Role::all();
         $users = User::all();
-        $instancias = Instancia::all();
-        return view('users.table', compact('users', 'roles', 'instancias'));
+        $departments = Department::all();
+        return view('users.table', compact('users', 'roles', 'departments'));
     }
 
     /**
