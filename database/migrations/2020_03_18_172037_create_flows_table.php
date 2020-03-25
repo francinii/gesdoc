@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccionsTable extends Migration
+class CreateFlowsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateAccionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accions', function (Blueprint $table) {
+        Schema::create('flows', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned()->nullable();  
             $table->string('description',500);
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null'); 
         });
     }
 
@@ -28,6 +30,6 @@ class CreateAccionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accions');
+        Schema::dropIfExists('flows');
     }
 }

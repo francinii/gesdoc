@@ -1,8 +1,8 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/documentos.js') }}" defer></script>
-<script src="{{ asset('../resources/js/delete.js') }}" defer></script>
+<script src="{{ asset('../resources/js/documents.js') }}" defer></script>
+<script src="{{ asset('../resources/js/FuncionesCompartidas.js') }}" defer></script>
 
 
 @endsection
@@ -22,12 +22,12 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
-            @include('documentos.table')
+            @include('documents.table')
         </div>
     </div> 
 </div>
 
-@include('documentos.create')
+@include('documents.create')
 
 
 

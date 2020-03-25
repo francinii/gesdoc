@@ -37,6 +37,6 @@ Route::resource('roles', 'RoleController');
 
 Route::resource('users', 'UserController');
 
-Route::resource('flujos', 'FlujoController');
+Route::resource('flows', 'FlowController');
 
-Route::resource('documentos', 'DocumentoController');
+Route::resource('documents', 'DocumentController');

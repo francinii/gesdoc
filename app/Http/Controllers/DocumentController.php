@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 
 
 use Auth;
-use App\Documento;
-use App\Flujo;
+use App\Document;
+use App\Flow;
 use DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DocumentoController extends Controller
+class DocumentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,10 +21,10 @@ class DocumentoController extends Controller
     public function index()
     {
       //  $usuario = Auth::user()->id;
-       // $flujos =Flujo::where('userId', '=', $usuario)->get();
-        $documentos = Documento::all();
-        $flujos = Flujo::all();
-        return view('documentos.index',compact('documentos', 'flujos'));
+       // $flows =Flow::where('user_id', '=', $usuario)->get();
+        $documents = Document::all();
+        $flows = Flow::all();
+        return view('documents.index',compact('documents', 'flows'));
     }
 
     /**
@@ -45,27 +45,27 @@ class DocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $datos = $request->except(['_token', 'userId'], 'documentos');
-        $documento = $request->except('_token', 'documentos');
-        $usuario =  $documento['userId'];
-        $idDocumento = Documento::insertGetId($datos);
+        $datos = $request->except(['_token', 'user_id'], 'documents');
+        $document = $request->except('_token', 'documents');
+        $usuario =  $document['user_id'];
+        $idDocument = Document::insertGetId($datos);
         
-            DB::table('documento_users')->insert([
-                'documentoId' => $idDocumento,
-                'userId' => $usuario ,
+            DB::table('document_user')->insert([
+                'document_id' => $idDocument,
+                'user_id' => $usuario ,
             ]);
         
 
-        return DocumentoController::refresh();
+        return DocumentController::refresh();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Documento  $documento
+     * @param  \App\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function show(Documento $documento)
+    public function show(Document $document)
     {
         //
     }
@@ -73,10 +73,10 @@ class DocumentoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Documento  $documento
+     * @param  \App\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function edit(Documento $documento)
+    public function edit(Document $document)
     {
         //
     }
@@ -85,10 +85,10 @@ class DocumentoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Documento  $documento
+     * @param  \App\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Documento $documento)
+    public function update(Request $request, Document $document)
     {
         //
     }
@@ -96,20 +96,20 @@ class DocumentoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Documento  $documento
+     * @param  \App\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Documento::destroy($id);
-        return DocumentoController::refresh();
+        Document::destroy($id);
+        return DocumentController::refresh();
     }
 
 
     private function refresh()
     {
-        $documentos = Documento::all();
-        $flujos = Flujo::all();
-        return view('documentos.table',compact('documentos', 'flujos'));        
+        $documents = Document::all();
+        $flows = Flow::all();
+        return view('documents.table',compact('documents', 'flows'));        
     }
 }

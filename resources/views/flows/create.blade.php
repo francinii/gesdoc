@@ -6,7 +6,7 @@
             <button type="close" class="close" data-dismiss="modal">  X </button>
         </div>
         <div class="modal-body">   
-          <form action="{{ action('FlujoController@index') }}" method="POST">
+          <form action="{{ action('FlowController@index') }}" method="POST">
           {{csrf_field()}}
             <div class="form-group">
               <label for="CreateDescription">Nombre del flujo</label>

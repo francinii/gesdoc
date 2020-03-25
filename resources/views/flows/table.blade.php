@@ -9,26 +9,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($flujos as $flujo)         
+        @foreach ($flows as $flow)         
         <tr>
-            <td class="col-1 text-center">{{$flujo->id}}</td>
-            <td class="col-7 text-center">{{$flujo->description}}</td>
+            <td class="col-1 text-center">{{$flow->id}}</td>
+            <td class="col-7 text-center">{{$flow->description}}</td>
             @foreach($users as $user)
             
-                @if($flujo->userId == $user->id )
+                @if($flow->user_id == $user->id )
                     <?php $usuario =  $user->id ?>
                     <td id="usuarioId" class="col-2 text-center">{{$user->name}}</td>
                     @break
                 @endif
             @endforeach                                         
             <td class="col-1 text-center">
-                    <button onclick = "edit('{{$flujo->id}}', '{{$flujo->description}}','{{$usuario}} ')"  class="btn btn-success"  data-toggle="modal" >
+                    <button onclick = "edit('{{$flow->id}}', '{{$flow->description}}','{{$usuario}} ')"  class="btn btn-success"  data-toggle="modal" >
                         <i class="fas fa-edit"></i>
                     </button>
             </td>
             <td class="col-1 text-center">
-                <form method="POST" action="{{url('/flujos/'.$flujo->id)}}">
-                    <button type="button" onclick="ajaxDelete({{$flujo->id}} ,'flujos','table')"  class=" btn btn-danger">
+                <form method="POST" action="{{url('/flows/'.$flow->id)}}">
+                    <button type="button" onclick="ajaxDelete({{$flow->id}} ,'flows','table')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>

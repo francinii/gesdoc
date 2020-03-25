@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AccionDocumentoUsuario extends Model
+class ActionDocumentUser extends Model
 {
     //
 }

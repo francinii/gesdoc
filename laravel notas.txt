@@ -85,7 +85,7 @@ Convenciones para CLASES CONTROLADORES
 4. El nombre del controlador va en singular
 5. Escrito en español
     Ejemplo 
-        - DocumentoController
+        - DocumentController
         - FlujoController
 
 

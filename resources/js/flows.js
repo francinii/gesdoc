@@ -17,12 +17,12 @@ function clearDescription(){
  */
 function ajaxCreate(usuario){    
     $.ajax({
-        url: "flujos",
+        url: "flows",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
             description:  $("input[id=CreateDescription]").val(),   
-            userId: usuario,     
+            user_id: usuario,     
         },
 
         success: function(result) {            
@@ -45,14 +45,14 @@ function ajaxCreate(usuario){
  * @param {string} description  - Descripcion del flujo  
  */
 function edit(id, description, idUser) {
-    $("#flujoUsuario option:selected" ).each(function(){
+    $("#flowUsuario option:selected" ).each(function(){
         //cada elemento seleccionado
         $(this).prop("selected", false);
     });
     $("input[name=description]").val(description);
     $("input[name=id]").val(id);
     //idUser =$("input[id=idUser]").val();
-    $("option[name=flujoUsuario"+idUser+"]" ).prop("selected", true);
+    $("option[name=flowUsuario"+idUser+"]" ).prop("selected", true);
     //usuarios.forEach(element => {
 
     // });  
@@ -66,17 +66,17 @@ function edit(id, description, idUser) {
 function ajaxUpdate(){
     var id = $("input[name=id]").val();
     var description = $("input[id=description]").val();
-    var user =  $( "select[name=flujoUsuario] option:selected" ).val(); 
+    var user =  $( "select[name=flowUsuario] option:selected" ).val(); 
 
     $.ajax({
-        url: "flujos/{" + id+"}",
+        url: "flows/{" + id+"}",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
             _method:'PATCH',
             id:id,
             description:  description,
-            userId:user,
+            user_id:user,
         },
 
         success: function(result) {            

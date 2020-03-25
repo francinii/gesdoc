@@ -59,13 +59,16 @@ class RoleController extends Controller
         // $datos = $request->all();
 
         $datos = $request->except('_token', 'permissions');
+        
         $permissions = request('permissions');
         $IdRole = Role::insertGetId($datos);
-        foreach ($permissions as $permission) {
-            DB::table('permission_role')->insert([
-                'role_id' => $IdRole,
-                'permission_id' => $permission,
-            ]);
+        if($permissions != NULL){
+            foreach ($permissions as $permission) {
+                DB::table('permission_role')->insert([
+                    'role_id' => $IdRole,
+                    'permission_id' => $permission,
+                ]);
+            }
         }
 
         return RoleController::refresh();

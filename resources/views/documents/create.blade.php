@@ -6,17 +6,17 @@
             <button type="close" class="close" data-dismiss="modal">  X </button>
         </div>
         <div class="modal-body">   
-          <form action="{{ action('DocumentoController@index') }}" method="POST">
+          <form action="{{ action('DocumentController@index') }}" method="POST">
           {{csrf_field()}}
             <div class="form-group">
               <label for="CreateDescription">Nombre del documento</label>
               <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del documento" name="CreateDescription">
             </div>    
-            <label for="flujo_create">Flujo asociado</label>
+            <label for="flow_create">Flujo asociado</label>
             <div class="form-group">
-              <select id="flujo_create"class="form-control" name="flujo_create" >
-                  @foreach ($flujos as $flujo)
-                    <option value="{{$flujo->id}}" name ="flujo{{$flujo->id}}">{{$flujo->description}}</option>
+              <select id="flow_create"class="form-control" name="flow_create" >
+                  @foreach ($flows as $flow)
+                    <option value="{{$flow->id}}" name ="flow{{$flow->id}}">{{$flow->description}}</option>
                   @endforeach
               </select>
             </div>

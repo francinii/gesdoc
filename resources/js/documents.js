@@ -5,16 +5,16 @@ function clearDescription(){
 
 
 function ajaxCreate(usuario){  
-    var flujo = $("#flujo_create option:selected" ).val(); 
+    var flow = $("#flow_create option:selected" ).val(); 
     var descripcion = $("input[id=CreateDescription]").val();
     $.ajax({
-        url: "documentos",
+        url: "documents",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
             description: descripcion ,   
-            flujoId: flujo,
-            userId: usuario,     
+            flow_id: flow,
+            user_id: usuario,     
         },
 
         success: function(result) {            

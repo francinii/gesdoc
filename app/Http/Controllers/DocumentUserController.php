@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\AccionDocumentoUsuario;
+use App\DocumentUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AccionDocumentoUsuarioController extends Controller
+class DocumentUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class AccionDocumentoUsuarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\AccionDocumentoUsuario  $accionDocumentoUsuario
+     * @param  \App\DocumentUser  $documentUser
      * @return \Illuminate\Http\Response
      */
-    public function show(AccionDocumentoUsuario $accionDocumentoUsuario)
+    public function show(DocumentUser $documentUser)
     {
         //
     }
@@ -53,10 +53,10 @@ class AccionDocumentoUsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AccionDocumentoUsuario  $accionDocumentoUsuario
+     * @param  \App\DocumentUser  $documentUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(AccionDocumentoUsuario $accionDocumentoUsuario)
+    public function edit(DocumentUser $documentUser)
     {
         //
     }
@@ -65,10 +65,10 @@ class AccionDocumentoUsuarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AccionDocumentoUsuario  $accionDocumentoUsuario
+     * @param  \App\DocumentUser  $documentUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AccionDocumentoUsuario $accionDocumentoUsuario)
+    public function update(Request $request, DocumentUser $documentUser)
     {
         //
     }
@@ -76,10 +76,10 @@ class AccionDocumentoUsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\AccionDocumentoUsuario  $accionDocumentoUsuario
+     * @param  \App\DocumentUser  $documentUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AccionDocumentoUsuario $accionDocumentoUsuario)
+    public function destroy(DocumentUser $documentUser)
     {
         //
     }

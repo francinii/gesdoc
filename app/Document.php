@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Documento extends Model
+class Document extends Model
 {
     /**
      * Un documento pertenece a un flujo
     */
-    public function flujo() {
-        return $this->belongsTo('App\Flujo');
+    public function flow() {
+        return $this->belongsTo('App\Flow');
     }
 
     /**

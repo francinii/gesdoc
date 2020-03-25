@@ -14,11 +14,11 @@
                 <label for="rol">Nombre del flujo</label>
                 <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
             </div> 
-            <label for="flujoUsuario">Pasar propiedad del flujo a otro usuario</label>              
+            <label for="flowUsuario">Pasar propiedad del flujo a otro usuario</label>              
             <div class="form-group">
-                <select id="flujoUsuario"class="form-control" name="flujoUsuario" >
+                <select id="flowUsuario"class="form-control" name="flowUsuario" >
                     @foreach ($users as $user)
-                        <option value="{{$user->id}}" name ="flujoUsuario{{$user->id}}" >{{$user->name}}</option>
+                        <option value="{{$user->id}}" name ="flowUsuario{{$user->id}}" >{{$user->name}}</option>
                     @endforeach
                 </select>
             </div>               

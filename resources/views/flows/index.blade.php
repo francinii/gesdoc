@@ -1,8 +1,8 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/flujos.js') }}" defer></script>
-<script src="{{ asset('../resources/js/delete.js') }}" defer></script>
+<script src="{{ asset('../resources/js/flows.js') }}" defer></script>
+<script src="{{ asset('../resources/js/FuncionesCompartidas.js') }}" defer></script>
 
 
 @endsection
@@ -22,12 +22,12 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
-            @include('flujos.table')
+            @include('flows.table')
         </div>
     </div> 
 </div>
 
-@include('flujos.create')
-@include('flujos.edit')
+@include('flows.create')
+@include('flows.edit')
 
 

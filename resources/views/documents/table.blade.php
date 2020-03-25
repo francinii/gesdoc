@@ -9,26 +9,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($documentos as $documento)         
+        @foreach ($documents as $document)         
         <tr>
-            <td class="col-1 text-center">{{$documento->id}}</td>
-            <td class="col-7 text-center">{{$documento->description}}</td>
-            @foreach($flujos as $flujo)
+            <td class="col-1 text-center">{{$document->id}}</td>
+            <td class="col-7 text-center">{{$document->description}}</td>
+            @foreach($flows as $flow)
             
-                @if($documento->flujoId == $flujo->id )
-                    <?php $flujoId =  $flujo->id ?>
-                    <td id="usuarioId" class="col-2 text-center">{{$flujo->description}}</td>
+                @if($document->flow_id == $flow->id )
+                    <?php 
+                    $flowId =  $flow->id;
+                     ?>
+                    <td id="usuarioId" class="col-2 text-center">{{$flow->description}}</td>
                     @break
                 @endif
             @endforeach                                         
             <td class="col-1 text-center">
-                    <button onclick = "edit('{{$documento->id}}', '{{$documento->description}}','{{$flujoId}} ')"  class="btn btn-success"  data-toggle="modal" >
+                    <button onclick = "edit('{{$document->id}}', '{{$document->description}}','{{$flowId}}')"  class="btn btn-success"  data-toggle="modal" >
                         <i class="fas fa-edit"></i>
                     </button>
             </td>
             <td class="col-1 text-center">
-                <form method="POST" action="{{url('/documento/'.$documento->id)}}">
-                    <button type="button" onclick="ajaxDelete({{$documento->id}} ,'documentos','table')"  class=" btn btn-danger">
+                <form method="POST" action="{{url('/document/'.$document->id)}}">
+                    <button type="button" onclick="ajaxDelete({{$document->id}} ,'documents','table')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>

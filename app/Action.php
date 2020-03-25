@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Accion extends Model
+class Action extends Model
 {
     /**
      * Relación de muchos a muchos
     */
-    public function documentoUsers() {
-        return $this->belongsToMany('App\DocumentoUser');
+    public function documentUsers() {
+        return $this->belongsToMany('App\DocumentUser');
     }
 }

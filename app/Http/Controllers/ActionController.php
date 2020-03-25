@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Accion;
+use App\Action;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AccionController extends Controller
+class ActionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class AccionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Accion  $accion
+     * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function show(Accion $accion)
+    public function show(Action $action)
     {
         //
     }
@@ -53,10 +53,10 @@ class AccionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Accion  $accion
+     * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function edit(Accion $accion)
+    public function edit(Action $action)
     {
         //
     }
@@ -65,10 +65,10 @@ class AccionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Accion  $accion
+     * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Accion $accion)
+    public function update(Request $request, Action $action)
     {
         //
     }
@@ -76,10 +76,10 @@ class AccionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Accion  $accion
+     * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Accion $accion)
+    public function destroy(Action $action)
     {
         //
     }

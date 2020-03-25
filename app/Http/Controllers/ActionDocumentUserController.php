@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\DocumentoUser;
+use App\ActionDocumentUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DocumentoUserController extends Controller
+class ActionDocumentUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class DocumentoUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\DocumentoUser  $documentoUser
+     * @param  \App\ActionDocumentUser  $actionDocumentUser
      * @return \Illuminate\Http\Response
      */
-    public function show(DocumentoUser $documentoUser)
+    public function show(ActionDocumentUser $actionDocumentUser)
     {
         //
     }
@@ -53,10 +53,10 @@ class DocumentoUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\DocumentoUser  $documentoUser
+     * @param  \App\ActionDocumentUser  $actionDocumentUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(DocumentoUser $documentoUser)
+    public function edit(ActionDocumentUser $actionDocumentUser)
     {
         //
     }
@@ -65,10 +65,10 @@ class DocumentoUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\DocumentoUser  $documentoUser
+     * @param  \App\ActionDocumentUser  $actionDocumentUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DocumentoUser $documentoUser)
+    public function update(Request $request, ActionDocumentUser $actionDocumentUser)
     {
         //
     }
@@ -76,10 +76,10 @@ class DocumentoUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\DocumentoUser  $documentoUser
+     * @param  \App\ActionDocumentUser  $actionDocumentUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DocumentoUser $documentoUser)
+    public function destroy(ActionDocumentUser $actionDocumentUser)
     {
         //
     }

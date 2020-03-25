@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Flujo extends Model
+class Flow extends Model
 {
     /**
      * Un usuario pertenece  o es dueño de varios flujos

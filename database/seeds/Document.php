@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Documento extends Seeder
+class Document extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,12 +11,12 @@ class Documento extends Seeder
      */
     public function run()
     {
-        \DB::table('documentos')->insert(array(
-            'flujo_id' =>1,
+        \DB::table('documents')->insert(array(
+            'flow_id' =>1,
             'description' =>"Doc 1",            
         ));
-        \DB::table('documentos')->insert(array(
-            'flujo_id' =>1,
+        \DB::table('documents')->insert(array(
+            'flow_id' =>1,
             'description' =>"Doc 2",            
         ));
     }
