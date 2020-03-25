@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use DB;
 class DepartmentController extends Controller
 {
     /**
@@ -15,7 +15,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        // $roles = Role::all();
+        $departments = Department::all();
+        return view('departments.index', compact('departments'));
     }
 
     /**

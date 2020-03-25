@@ -40,3 +40,5 @@ Route::resource('users', 'UserController');
 Route::resource('flows', 'FlowController');
 
 Route::resource('documents', 'DocumentController');
+
+Route::resource('departaments', 'DepartmentController');
