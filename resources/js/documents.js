@@ -20,10 +20,12 @@ function ajaxCreate(usuario){
         success: function(result) {            
             $("#table").html(result);
             $("#create").modal("hide");
+            alerts("El documento "+description+" ha sido creaado satisfactoriamente", "alert-success");
         },
 
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
         }
     });
 

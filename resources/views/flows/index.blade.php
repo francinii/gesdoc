@@ -1,9 +1,9 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/flows.js') }}" defer></script>
-<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
 
+<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+<script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 
 @endsection
 @section('title', 'Flujos')
@@ -22,6 +22,7 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
+            @include('partials.alert')
             @include('flows.table')
         </div>
     </div> 
@@ -29,5 +30,6 @@
 
 @include('flows.create')
 @include('flows.edit')
+@include('partials.confirm')
 
 

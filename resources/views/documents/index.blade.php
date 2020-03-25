@@ -22,12 +22,14 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
+            @include('partials.alert')
             @include('documents.table')
         </div>
     </div> 
 </div>
 
 @include('documents.create')
+@include('partials.confirm')
 
 
 

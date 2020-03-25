@@ -28,7 +28,7 @@
             </td>
             <td class="col-1 text-center">
                 <form method="POST" action="{{url('/flows/'.$flow->id)}}">
-                    <button type="button" onclick="ajaxDelete({{$flow->id}} ,'flows','table')"  class=" btn btn-danger">
+                    <button type="button" onclick="confirmDelete({{$flow->id}} ,'flows','table','¿Desea eliminar el flujo: {{$flow->description}}?')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>

@@ -112,11 +112,13 @@ class RoleController extends Controller
         $id = $dato['id'];
         Role::where('id', '=', $id)->update($dato);
         DB::table('permission_role')->where('role_id', '=', $id)->delete();
-        foreach ($permissions as $permission) {
-            DB::table('permission_role')->insert([
-                'role_id' => $id,
-                'permission_id' => $permission,
-            ]);
+        if($permissions != NULL){
+            foreach ($permissions as $permission) {
+                DB::table('permission_role')->insert([
+                    'role_id' => $id,
+                    'permission_id' => $permission,
+                ]);
+            }
         }
         return RoleController::refresh();
     }

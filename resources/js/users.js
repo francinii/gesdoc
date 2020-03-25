@@ -118,8 +118,10 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
+                alerts("El usuario "+name+" ha sido actualizado satisfactoriamente", "alert-success");
             },
             error: function(request, status, error) {
+                alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
             }
         });
@@ -205,8 +207,9 @@ function ajaxCreate() {
                 $("#table")
                     .DataTable()
                     .destroy();
-                createDataTable("table");
+                createDataTable("table");                
                 $("#create").modal("hide");
+                alerts("El usuario"+name+"ha sido agregado satisfactoriamente", "alert-success");
             },
             error: function(request, status, error) {
                 var user = request.responseJSON["errors"]["username"];
@@ -214,6 +217,7 @@ function ajaxCreate() {
                     $("input[name=user_create]").addClass("is-invalid");
                     $("#user_create_message").html("El usuario ya existe");
                 } else {
+                    alerts("Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
                 }
             }

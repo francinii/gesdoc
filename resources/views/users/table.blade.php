@@ -1,12 +1,12 @@
 <table id='table' class="table table-responsive table-striped" cellspacing="0" width="100%">
             <thead class="thead-dark">
                 <tr>
-                    <th  class="text-center">Usuario</th>
-                    <th  class="col-md-1  text-center">Nombre</th>                    
-                    <th  class="col-md-1  text-center">Correo</th>
-                    <th   class=" text-center">Rol Asociado</th>
-                    <th  class=" text-center">Editar usuario</th>                   
-                    <th  class=" text-center">Eliminar Usuario</th>
+                    <th  class="col-md-2 text-center">Usuario</th>
+                    <th  class="col-md-3  text-center">Nombre</th>                    
+                    <th  class="col-md-3  text-center">Correo</th>
+                    <th   class="col-md-2 text-center">Rol Asociado</th>
+                    <th  class="col-md-1 text-center">Editar usuario</th>                   
+                    <th  class="col-md-1 text-center">Eliminar Usuario</th>
                 </tr>
             </thead>
             <tbody >
@@ -20,8 +20,7 @@
                                 <td class=" text-center">{{$role->description}}</td>
                                 @break
                             @endif
-                        @endforeach           
-                        
+                        @endforeach                  
                      
                     <td class=" text-center">
                         <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->department_id}}')"  class="btn btn-info"  data-toggle="modal" >
@@ -29,7 +28,7 @@
                         </button>
                     </td>    
                     <td class=" text-center">                        
-                            <button type="button" onclick="confirmarDelete({{$user->id }}  ,'users','table','Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
+                            <button type="button" onclick="confirmDelete({{$user->id }}  ,'users','table','¿Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>                      

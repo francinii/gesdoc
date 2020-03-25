@@ -39,8 +39,9 @@ function edit(id, description , permissions, permissionsAsociados) {
  * Envia una petición ajax, para agregar un rol  
  */
 function ajaxCreate(){
+    description =  $("input[id=CreateDescription]").val();
     var permissions=[];
-        $("input[class=input_check_create]:checked").each(function(){
+    $("input[class=input_check_create]:checked").each(function(){
         permissions.push($(this).val());
     });
     $.ajax({
@@ -48,17 +49,20 @@ function ajaxCreate(){
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
-            description:  $("input[id=CreateDescription]").val(),
+            description: description,
             permissions:permissions,            
         },
 
         success: function(result) {            
             $("#table").html(result);
             $("#create").modal("hide");
+            alerts("El rol "+description+" ha sido agregado satisfactoriamente", "alert-success");
         },
 
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
+            
         }
     });
 }
@@ -89,10 +93,12 @@ function ajaxUpdate(){
         success: function(result) {            
             $("#table").html(result);
             $("#edit").modal("hide");
+            alerts("El rol "+description+" ha sido actualizado satisfactoriamente", "alert-success");
         },
 
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
         }
     });
 }

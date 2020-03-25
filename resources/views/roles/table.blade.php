@@ -43,7 +43,7 @@
                     </td>
                     <td class="col-1 text-center">
                         <form method="POST" action="{{url('/roles/'.$role->id)}}">
-                            <button type="button" onclick="ajaxDelete({{$role->id}} ,'roles','table')"  class=" btn btn-danger">
+                            <button type="button" onclick="confirmDelete({{$role->id}} ,'roles','table', '¿Desea eliminar el rol: {{$role->description}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>

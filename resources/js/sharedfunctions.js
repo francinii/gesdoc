@@ -24,7 +24,7 @@ function createDataTable(table) {
     });
 }
 
-function confirmarDelete(id, url1,table,mensaje){
+function confirmDelete(id, url1,table,mensaje){
     $( "#mensajeConfirmar" ).html( "<p>"+mensaje+"</p>" );  
     $("#confirmarButton").attr("onClick","ajaxDelete("+id+",'"+url1+"','"+table+"')");
     $("#confirmar").modal("show");
@@ -46,9 +46,23 @@ function ajaxDelete(id, url1,table){
             $("#"+table).DataTable().destroy();
             createDataTable(table);
             $("#confirmar").modal("hide");
+            alerts("Elemento eliminado correctamente.", "alert-success");
         },
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
         }
     });
+}
+
+
+
+function alerts(contenido, type_class){    
+   $('#alert-content').text(contenido);
+   $('#alerts').show(1000);
+   $('#alerts').removeClass('alert-warning alert-success alert-danger alert-info').addClass(type_class);
+}
+
+function hideAlert(){
+    $('#alerts').hide(1000);
 }

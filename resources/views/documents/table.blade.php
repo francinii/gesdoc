@@ -30,7 +30,7 @@
             </td>
             <td class="col-1 text-center">
                 <form method="POST" action="{{url('/document/'.$document->id)}}">
-                    <button type="button" onclick="ajaxDelete({{$document->id}} ,'documents','table')"  class=" btn btn-danger">
+                    <button type="button" onclick="confirmDelete({{$document->id}} ,'documents','table', '¿Desea eliminar el documento: {{$document->description}}?')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>

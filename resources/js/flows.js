@@ -16,22 +16,25 @@ function clearDescription(){
  * @param {integer} usuario - id del usuario que crea el flujo * 
  */
 function ajaxCreate(usuario){    
+    description =  $("input[id=CreateDescription]").val();
     $.ajax({
         url: "flows",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
-            description:  $("input[id=CreateDescription]").val(),   
+            description:   description,
             user_id: usuario,     
         },
 
         success: function(result) {            
             $("#table").html(result);
             $("#create").modal("hide");
+            alerts("El flujo "+description+" ha sido creado satisfactoriamente", "alert-success");
         },
 
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
         }
     });
 
@@ -82,10 +85,12 @@ function ajaxUpdate(){
         success: function(result) {            
             $("#table").html(result);
             $("#edit").modal("hide");
+            alerts("El flujo "+description+" ha sido actualizado satisfactoriamente", "alert-success");
         },
 
         error: function (request, status, error) {
             alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
         }
     });
 }

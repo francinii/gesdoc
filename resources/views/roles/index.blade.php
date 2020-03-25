@@ -14,7 +14,7 @@
    <div class="row  justify-content-center">         
         <h2 class="text-center">Roles del sistema</h2>                      
    </div>    
-   <div class="row  justify-content-center"> 
+   <div class="row  justify-content-center">     
         <div class="col-md-8 text-right">
             <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearDescription()" data-target="#create">
                 <i class="fas fa-plus-circle"></i>   Agregar
@@ -22,6 +22,7 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-8">
+            @include('partials.alert')
             @include('roles.table')
         </div>
     </div> 
@@ -30,4 +31,5 @@
 @include('roles.create')
 @include('roles.edit')
 @include('roles.list')
+@include('partials.confirm')
 
