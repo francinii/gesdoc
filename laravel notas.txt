@@ -9,7 +9,7 @@ php artisan migrate // crear tabla en la base con base al modelo
 php artisan make:controller PersonaController // crear controlador
 php artisan make:controller ldapController --resource// crear controlador con funciones por defecto
 php artisan ui:auth // crear autentificacion
-
+php artisan route:list // lista de rutas
 //antes de esto de la autentificacion
 composer require laravel/ui --dev
 php artisan ui vue --auth
