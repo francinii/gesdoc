@@ -71,6 +71,8 @@ function edit(id,nombre,flowId) {
     $("input[name=descriptionEdit]").removeClass("is-invalid");
     $("input[name=descriptionEdit]").val(nombre);
     $("option[name=flowEdit" + flowId + "]").prop("selected", true);
+    $("#edit").modal("show");
+
 }
 
 
