@@ -11,6 +11,18 @@ use Auth;
 
 class FlowController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Flow Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the flows' resources. That 
+    | includes listening, showing, storing, creating and updating working
+    | flows.
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *
@@ -101,9 +113,8 @@ class FlowController extends Controller
     }
 
     /**
-     * Refresca la tabla que se muestra.
+     * Refresh the table on the view.
      *
-     * @param  \App\Flow  $flow
      * @return \Illuminate\Http\Response
      */
     private function refresh()

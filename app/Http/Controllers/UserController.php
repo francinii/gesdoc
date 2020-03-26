@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | User Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the users' resources. That 
+    | includes listening, showing, storing, creating and updating the users
+    | in the system.
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *
@@ -25,19 +37,6 @@ class UserController extends Controller
         return view('users.index', compact('users', 'roles', 'departments'));
     }
     
-    /**
-     * Display a table of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function refresh()
-    {
-        $roles = Role::all();
-        $users = User::all();
-        $departments = Department::all();
-        return view('users.table', compact('users', 'roles', 'departments'));
-    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -224,4 +223,20 @@ class UserController extends Controller
         }
         return response()->json(['encontrado'=>true,'cn'=>$cn,'mail'=>$mail]);
     }
+    
+
+    /**
+     * Refresh the table on the view.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function refresh()
+    {
+        $roles = Role::all();
+        $users = User::all();
+        $departments = Department::all();
+        return view('users.table', compact('users', 'roles', 'departments'));
+    }
+
+
 }

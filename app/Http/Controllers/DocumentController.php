@@ -14,6 +14,17 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Document Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the documents' resources. That 
+    | includes listening, showing, storing, creating and updating
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *
@@ -128,6 +139,11 @@ class DocumentController extends Controller
     }
 
 
+    /**
+     * Refresh the table on the view.
+     *
+     * @return \Illuminate\Http\Response
+     */
     private function refresh()
     {
         $documents = Document::all();

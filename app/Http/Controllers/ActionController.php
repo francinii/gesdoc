@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class ActionController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Action Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the actions' resources. That 
+    | includes listening, showing, storing, creating and updating
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *

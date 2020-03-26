@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     /**
-     * Un documento pertenece a un flujo
+     * A document belongs to a flow
     */
     public function flow() {
         return $this->belongsTo('App\Flow');
     }
 
     /**
-     * Relación de muchos a muchos
+     * Relationship many to many 
     */
     public function users() {
         return $this->belongsToMany('App\User');

@@ -1,5 +1,7 @@
-/**
- * Limpia los inputs dandonles un valor ""
+
+/** 
+ * Clean the inputs
+ * 
  */
 function clearDescription() {
     $("input[name=CreateDescription]").val("");
@@ -10,19 +12,20 @@ function clearDescription() {
 }
 
 /**
- * Envia una petición ajax, para agregar un flujo
- *
- * @param {integer} usuario - id del usuario que crea el flujo *
+ * Send an ajax request in order to add a flow 
+ * 
+ * @param {integer} user - user id
+ * 
  */
-function ajaxCreate(usuario) {
-    description = $("input[id=CreateDescription]").val();
+function ajaxCreate(user){    
+    description =  $("input[id=CreateDescription]").val();
     $.ajax({
         url: "flows",
         method: "POST",
         data: {
             _token: $("input[name=_token]").val(),
-            description: description,
-            user_id: usuario
+            description:   description,
+            user_id: user,     
         },
 
         success: function(result) {
@@ -48,10 +51,12 @@ function ajaxCreate(usuario) {
 }
 
 /**
- * Abre modal para editar un rol
- *
- * @param {integer} id - id del flujo
- * @param {string} description  - Descripcion del flujo
+ * Open a modal for a edit form
+ * 
+ * @param {integer} id - flow id
+ * @param {string} description  - flow description
+ * @param {integer} idUser  - user id 
+ * 
  */
 function edit(id, description, idUser) {
     $("#flowUsuario option:selected").each(function() {
@@ -69,7 +74,8 @@ function edit(id, description, idUser) {
 }
 
 /**
- * Envia una petición ajax, para actualizar un flujo
+ * Send an ajax request in order to update an specific flow
+ * 
  */
 function ajaxUpdate() {
     var id = $("input[name=id]").val();

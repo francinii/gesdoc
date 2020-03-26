@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class DocumentUserController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Document User Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the document users' resources. That 
+    | includes listening, showing, storing, creating and updating
+    |
+    */
+
     /**
      * Display a listing of the resource.
      *

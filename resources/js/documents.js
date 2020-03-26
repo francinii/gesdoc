@@ -1,3 +1,7 @@
+/** 
+ * Clean the inputs
+ * 
+ */
 function clearDescription() {
     $("input[name=descriptionCreate]").val("");
 }
@@ -13,7 +17,13 @@ function validaCreate() {
     return validado;
 }
 
-function ajaxCreate(usuario) {
+/**
+ * Send an ajax request in order to add a flow 
+ * 
+ * @param {integer} user - user id
+ * 
+ */
+function ajaxCreate(user) {
     if (validaCreate()) {
         var flow = $("#flowCreate option:selected").val();
         var descripcion = $("input[id=descriptionCreate]").val();
@@ -24,7 +34,7 @@ function ajaxCreate(usuario) {
                 _token: $("input[name=_token]").val(),
                 description: descripcion,
                 flow_id: flow,
-                user_id: usuario
+                user_id: user
             },
 
             success: function(result) {
@@ -55,13 +65,16 @@ function edit(id,nombre,flowId) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
+
     });
     $("input[id=idEdit]").val(id);
     $("input[name=descriptionEdit]").removeClass("is-invalid");
     $("input[name=descriptionEdit]").val(nombre);
-    $("option[name=editFlow" + flowId + "]").prop("selected", true);
-    $("#edit").modal("show");
+    $("option[name=flowEdit" + flowId + "]").prop("selected", true);
 }
+
+
+
 
 function validaEdit() {
     var validado = true;

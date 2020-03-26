@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Action extends Model
 {
     /**
-     * Relación de muchos a muchos
+     * Relationship many to many 
     */
     public function documentUsers() {
         return $this->belongsToMany('App\DocumentUser');

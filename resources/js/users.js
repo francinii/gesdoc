@@ -1,3 +1,5 @@
+
+
 function validaEdit() {
     var validado = true;
     if ($("input[name=user_edit]").val() == "") {
@@ -37,7 +39,20 @@ function validaEdit() {
     return validado;
 }
 
-function edit(id, usuario, correo, nombre, roleid, departmentid) {
+
+/**
+ * Change the classes of the inputs depending on if the entrance
+ * is valid or not.
+ * 
+ * @param {integer} id - user id
+ * @param {string} user  - user description
+ * @param {string} email - user's email 
+ * @param {string} name - user's name
+ * @param {string} roleId - role asociated to the user
+ * @param {string} departmentId - department asociated to the user
+ *     
+ */
+function edit(id, user, email, name, roleId, departmentId) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -48,16 +63,17 @@ function edit(id, usuario, correo, nombre, roleid, departmentid) {
     $("input[name=password_edit]").removeClass("is-invalid");
     $("#password_create_message").html("");
     $("input[id=id_edit]").val(id);
-    $("input[name=user_edit]").val(usuario);
-    $("input[name=email_edit]").val(correo);
-    $("input[name=name_edit]").val(nombre);
-    $("option[name=role_edit" + roleid + "]").prop("selected", true);
-    $("option[name=department_edit" + departmentid + "]").prop("selected", true);
+    $("input[name=user_edit]").val(user);
+    $("input[name=email_edit]").val(email);
+    $("input[name=name_edit]").val(name);
+    $("option[name=role_edit" + roleId + "]").prop("selected", true);
+    $("option[name=department_edit" + departmentId + "]").prop("selected", true);
     $("#password_edit").attr("disabled", "disabled");
     $("input[name=checkbox_password]").prop("checked", false);
     $("input[name=password_edit]").val("");
     $("#edit").modal("show");
 }
+
 
 function obtenerDatos() {
     var username = $("input[name=user_create]").val();
@@ -85,6 +101,10 @@ function obtenerDatos() {
     });
 }
 
+/**
+ * Send an ajax request in order to update an specific user
+ * 
+ */
 function ajaxUpdate() {
     if (validaEdit()) {
         var id = $("input[id=id_edit]").val();
@@ -128,7 +148,7 @@ function ajaxUpdate() {
     }
 }
 
-//  editar
+
 function clearCreate() {
     $("input[name=user_create]").val("");
     $("input[name=email_create]").val("");
@@ -178,6 +198,11 @@ function validaCreate() {
     return validado;
 }
 
+
+/**
+ * Send an ajax request in order to update an specific user
+ * 
+ */
 function ajaxCreate() {
     if (validaCreate()) {
         var user = $("input[name=user_create]").val();
@@ -239,7 +264,7 @@ function change_password() {
 //Función que lista en una tabla
 //código 1: lista permisos
 //código 2: lista usuarios
-function list(arreglo, roleDescripcion, codigo) {
+/*function list(arreglo, roleDescripcion, codigo) {
     $(".body_table").empty(); //elimina los elementos anteriores
     $(".head_table").empty(); //elimina los elementos anteriores
     $("#list_role").text(roleDescripcion);
@@ -273,6 +298,5 @@ function list(arreglo, roleDescripcion, codigo) {
     });
 
     $("#list").modal("show");
-}
-
+}*/
 

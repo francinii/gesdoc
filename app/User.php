@@ -37,19 +37,22 @@ class User extends Authenticatable
     ];
 
 
+    /**
+     * The user belongs to a role
+    */
     public function role() {
         return $this->belongsTo('App\Role');
     }
 
     /**
-     * El usuario tiene asociado varios flujos
+     * The user has many flows
     */
     public function flujos() {
         return $this->hasMany('App\Flujo','id');
     }
 
     /**
-     * Para relaciones de muchos a muchosS
+     * Relationship many to many
     */
     public function documentos() {
         return $this->belongsToMany('App\Documento');

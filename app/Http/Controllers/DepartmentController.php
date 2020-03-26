@@ -9,6 +9,17 @@ use DB;
 use Illuminate\Support\Facades\Validator;
 class DepartmentController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Department Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the departments' resources. That 
+    | includes listening, showing, storing, creating and updating
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *
