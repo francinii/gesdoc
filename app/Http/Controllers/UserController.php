@@ -24,6 +24,12 @@ class UserController extends Controller
         $departments = Department::all();
         return view('users.index', compact('users', 'roles', 'departments'));
     }
+    
+    /**
+     * Display a table of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function refresh()
     {
@@ -36,7 +42,9 @@ class UserController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     * @param bool $updatePassword
+     * @param bool $create
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data, $updatePassword,$create)
@@ -44,6 +52,9 @@ class UserController extends Controller
         $validacion = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:255'],
+            'role_id'=> ['required', 'int'],
+            'department_id'=> ['required', 'int'],
+
         ];
         if($create && env("use_LDAP")){
             $validacion['username']=['required', 'string', 'max:255', 'unique:users'];
@@ -152,7 +163,15 @@ class UserController extends Controller
         User::destroy($id);
         return UserController::refresh();
     }
-    public function ldapObtenerUsuario(Request $request)
+
+    /**
+     * Get the name of user in the ldap.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function ldapGetUser(Request $request)
     {
         if(!env("use_LDAP")){
             return response()->json(['encontrado'=>false]);

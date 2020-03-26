@@ -209,7 +209,7 @@ function ajaxCreate() {
                     .destroy();
                 createDataTable("table");                
                 $("#create").modal("hide");
-                alerts("El usuario"+name+"ha sido agregado satisfactoriamente", "alert-success");
+                alerts("El usuario "+name+" ha sido agregado satisfactoriamente", "alert-success");
             },
             error: function(request, status, error) {
                 var user = request.responseJSON["errors"]["username"];
@@ -275,6 +275,4 @@ function list(arreglo, roleDescripcion, codigo) {
     $("#list").modal("show");
 }
 
-$(document).ready(function() {
-    createDataTable("table");
-});
+

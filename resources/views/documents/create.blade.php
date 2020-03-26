@@ -9,23 +9,25 @@
           <form action="{{ action('DocumentController@index') }}" method="POST">
           {{csrf_field()}}
             <div class="form-group">
-              <label for="CreateDescription">Nombre del documento</label>
-              <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del documento" name="CreateDescription">
+              <label for="descriptionCreate">Nombre del documento</label>
+              <input type="text" class="form-control" id="descriptionCreate" placeholder="Nombre del documento" name="descriptionCreate">
             </div>    
-            <label for="flow_create">Flujo asociado</label>
+            <label for="flowCreate">Flujo asociado</label>
             <div class="form-group">
-              <select id="flow_create"class="form-control" name="flow_create" >
+              <select id="flowCreate"class="form-control" name="flowCreate" >
                   @foreach ($flows as $flow)
-                    <option value="{{$flow->id}}" name ="flow{{$flow->id}}">{{$flow->description}}</option>
+                    <option value="{{$flow->id}}" name ="flowCreate{{$flow->id}}">{{$flow->description}}</option>
                   @endforeach
               </select>
             </div>
                       
                 
-            <button  type="button" id="CreateSubmit" onclick="ajaxCreate({{ Auth::user()->id }})" class="btn btn-success">Agregar</button>
+            
           </form>    
         </div>
-        <div class="modal-footer"> </div>
+        <div class="modal-footer">
+        <button  type="button" id="CreateSubmit" onclick="ajaxCreate({{ Auth::user()->id }})" class="btn btn-success">Agregar</button>
+         </div>
         </div>
     </div>
   </div>

@@ -29,6 +29,7 @@
 </div>
 
 @include('documents.create')
+@include('documents.edit')
 @include('partials.confirm')
 
 

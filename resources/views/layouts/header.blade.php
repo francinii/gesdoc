@@ -13,7 +13,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{{ url('/roles') }}">Roles</a>
             <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
-            <a class="dropdown-item" href="{{ url('/departaments') }}">Departamentos</a>
+            <a class="dropdown-item" href="{{ url('/departments') }}">Departamentos</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>          
@@ -26,8 +26,6 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url('/flows') }}">Flujos </a>
           <a class="dropdown-item" href="{{ url('/documents') }}">Documentos</a>
-
-          <a class="dropdown-item" href="{{  route('register') }}">Registro</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>          

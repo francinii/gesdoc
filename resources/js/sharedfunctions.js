@@ -48,9 +48,10 @@ function ajaxDelete(id, url1,table){
             $("#confirmar").modal("hide");
             alerts("Elemento eliminado correctamente.", "alert-success");
         },
-        error: function (request, status, error) {
-            alert(request.responseText);
+        error: function (request, status, error) {    
+            $("#confirmar").modal("hide");        
             alerts("Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
+            alert(request.responseText);
         }
     });
 }
@@ -66,3 +67,7 @@ function alerts(contenido, type_class){
 function hideAlert(){
     $('#alerts').hide(1000);
 }
+
+$(document).ready(function() {
+    createDataTable("table");
+});

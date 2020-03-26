@@ -8,6 +8,7 @@ use Auth;
 use App\Document;
 use App\Flow;
 use DB;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,22 @@ class DocumentController extends Controller
     }
 
     /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        $validacion = [
+            'description' => ['required', 'string', 'max:255'],
+            'flow_id' => ['required', 'int'],
+        ];
+
+        return Validator::make($data, $validacion);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -45,6 +62,7 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validator($request->all())->validate();
         $datos = $request->except(['_token', 'user_id'], 'documents');
         $document = $request->except('_token', 'documents');
         $usuario =  $document['user_id'];
@@ -85,12 +103,16 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Document  $document
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Document $document)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validator($request->all())->validate();
+        $dato = request()->except(['_token','_method']);
+        $id = $dato['id'];
+        Document::where('id', '=', $id)->update($dato);
+        return DocumentController::refresh();
     }
 
     /**

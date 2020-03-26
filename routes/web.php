@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('ldap/obtenerUsuario', 'UserController@ldapObtenerUsuario' );
+Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 //Route::get('/register_user', 'Auth\RegisterController@index' );
 
@@ -41,4 +41,4 @@ Route::resource('flows', 'FlowController');
 
 Route::resource('documents', 'DocumentController');
 
-Route::resource('departaments', 'DepartmentController');
+Route::resource('departments', 'DepartmentController');

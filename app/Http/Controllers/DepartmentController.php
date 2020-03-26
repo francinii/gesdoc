@@ -6,6 +6,7 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Validator;
 class DepartmentController extends Controller
 {
     /**
@@ -18,6 +19,33 @@ class DepartmentController extends Controller
         // $roles = Role::all();
         $departments = Department::all();
         return view('departments.index', compact('departments'));
+    }
+
+        /**
+     * Display a table of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function refresh()
+    {
+        $departments = Department::all();
+        return view('departments.table', compact('departments'));
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        $validacion = [
+            'description' => ['required', 'string', 'max:255'],
+        ];
+
+        return Validator::make($data, $validacion);
     }
 
     /**
@@ -38,7 +66,11 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validator($request->all())->validate();
+        $dato = request()->except(['_token']);
+
+        Department::insert($dato);        
+        return DepartmentController::refresh();
     }
 
     /**
@@ -67,22 +99,27 @@ class DepartmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validator($request->all())->validate();
+        $dato = request()->except(['_token','_method']);
+        $id = $dato['id'];
+        Department::where('id', '=', $id)->update($dato);
+        return DepartmentController::refresh();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Department  $department
+     * @param  \App\Department  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Department $department)
+    public function destroy($id)
     {
-        //
+        Department::destroy($id);
+        return DepartmentController::refresh();
     }
 }

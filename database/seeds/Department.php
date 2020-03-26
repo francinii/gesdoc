@@ -13,11 +13,11 @@ class Department extends Seeder
     {
         \DB::table('departments')->insert(array(
             'description' =>"Escuela de Informática",
-            'academic_unit' =>"Ciencias Exactas y Naturales",
+           
         ));
         \DB::table('departments')->insert(array(
             'description' =>"Escuela de Matemática",
-            'academic_unit' =>"Ciencias Exactas y Naturales",
+         
         ));
     }
 }
