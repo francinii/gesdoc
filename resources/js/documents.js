@@ -1,10 +1,20 @@
+
+/** 
+ * Clean the inputs
+ * 
+ */
 function clearDescription(){
     $("input[name=CreateDescription]").val("");   
     
 }
 
-
-function ajaxCreate(usuario){  
+/**
+ * Send an ajax request in order to add a flow 
+ * 
+ * @param {integer} user - user id
+ * 
+ */
+function ajaxCreate(user){  
     var flow = $("#flow_create option:selected" ).val(); 
     var descripcion = $("input[id=CreateDescription]").val();
     $.ajax({
@@ -14,7 +24,7 @@ function ajaxCreate(usuario){
             _token: $("input[name=_token]").val(),
             description: descripcion ,   
             flow_id: flow,
-            user_id: usuario,     
+            user_id: user,     
         },
 
         success: function(result) {            

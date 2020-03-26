@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Permission Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the permission' resources. That 
+    | includes listening, showing, storing, creating and updating the system' 
+    | permissions.
+    |
+    */
+
+
+
     /**
      * Display a listing of the resource.
      *

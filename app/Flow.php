@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Flow extends Model
 {
     /**
-     * Un usuario pertenece  o es dueño de varios flujos
+     * An user belongs (or  own) to many flows 
     */
     public function user() {
         return $this->belongsTo('App\User','id');
     }
 
     /**
-     * Un flujo posee varios documentos
+     * A flow has some documents
     */
     public function documento() {
         return $this->hasMany('App\Documento');

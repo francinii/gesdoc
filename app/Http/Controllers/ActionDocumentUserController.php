@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class ActionDocumentUserController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Action Document User Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the action document user' resources. That 
+    | includes listening, showing, storing, creating and updating
+    |
+    */
+
+
     /**
      * Display a listing of the resource.
      *

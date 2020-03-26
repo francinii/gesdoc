@@ -1,42 +1,40 @@
-
 /** 
- * Limpia los inputs dándonles un valor ""  
+ * Clean the inputs
+ * 
  */
 function clearDescription(){
-    $("input[name=CreateDescription]").val("");
-   
+    $("input[name=CreateDescription]").val("");   
     $("input[class=input_check_create]:checked").each(function(){
         //cada elemento seleccionado
         $(this).prop("checked", false);
     });
 }
 
-
-
 /**
- * Abre modal para editar un rol
+ * Open a modal to edit a role
  * 
- * @param {integer} id - id del rol
- * @param {string} description  - Descripcion del rol
- * @param {array} permissions - Arreglo con la lista de permissions de la base de datos
- * @param {array} permissionsAsociados - Arreglo con la lista de permissions asociados   
+ * @param {integer} id - rol id
+ * @param {string} description  - rol description
+ * @param {array} permissions - Array with a permissions list from the database
+ * @param {array} asociatedPermissions -  Array with  asociate permissions list 
+ *    
  */
-function edit(id, description , permissions, permissionsAsociados) {
+function edit(id, description , permissions, asociatedPermissions) {
     $("#check_permissions").empty();
     $("input[name=description]").val(description);
     $("input[name=id]").val(id);
     var check = "";
     permissions.forEach(element => {
-        check = permissionsAsociados.find(elemento => elemento.id == element.id) ? "checked": "";     
+        check = asociatedPermissions.find(elemento => elemento.id == element.id) ? "checked": "";     
         $( "#check_permissions" ).append( '<div class="checkbox"><label for="check'+element.id+'"><input class="input_check_edit" id="check'+element.id+'" value="'+element.id+'" type="checkbox" '+check+'> '+ element.description+'</label></div>' ); 
     });  
     $("#edit").modal("show");
 }
 
 
-
 /**
- * Envia una petición ajax, para agregar un rol  
+ * Send an ajax request in order to add a role
+ *  
  */
 function ajaxCreate(){
     description =  $("input[id=CreateDescription]").val();
@@ -69,7 +67,8 @@ function ajaxCreate(){
 
 
 /**
- * Envia una petición ajax, para actualizar un rol  
+ * Send an ajax request in order to update an specific role
+ * 
  */
 function ajaxUpdate(){
     var id = $("input[name=id]").val();
@@ -105,25 +104,25 @@ function ajaxUpdate(){
 
 
 /**
- * Lista en una tabla dentro de un modal los usuarios o permisos asociados a un rol
- * seleccionado. 
+ * LIst a table inside a modal with the permissions or users asocited to an 
+ * specific role.  
  * 
- * @param {array} arreglo -arreglo que lista los permisos o usuarios
- * @param {string} roleDescripcion  - Descripcion del rol
- * @param {integer} codigo - El código indica si se listan usuarios
- * o permisos: código 1 -> lista permisos, código 2: -> lista usuarios.  
+ * @param {array} array  - Array that  list the users or permissions
+ * @param {string} roleDescripcion  - Role description
+ * @param {integer} code - This code means if is a user or permission list.
+ * If the code is  1 -> list the permissions and if it is 2: -> list user.  
  * 
  */
-function list(arreglo, roleDescripcion, codigo) { 
-    $(".body_table").empty(); //elimina los elementos anteriores de la tabla
-    $(".head_table").empty(); //elimina los elementos anteriores de la tabla
+function list(array, roleDescripcion, code ) { 
+    $(".body_table").empty(); //Delete the element before in a table
+    $(".head_table").empty(); //Delete the element before in a table
 
     $('#list_role').text(roleDescripcion);
-    codigo == 1 ?
+    code  == 1 ?
     $( ".head_table" ).append( "<tr><th>Id</th><th>Permiso asocidado</th></tr>" ):
     $( ".head_table" ).append( "<tr><th>Usuario</th><th>Nombre</th><th>Correo</th></tr>" );             
-    arreglo.forEach(element => {  
-        codigo == 1 ?     
+    array.forEach(element => {  
+        code  == 1 ?     
         $( ".body_table" ).append( "<tr><td>"+ element.id +"</td><td>"+ element.description +"</td></tr>" ): 
         $( ".body_table" ).append( "<tr><td>"+ element.username +"</td><td>"+ element.name +"</td><td>"+ element.email +"</td></tr>" ); 
     });     

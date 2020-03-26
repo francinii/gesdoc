@@ -10,6 +10,17 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Role Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the roles' resources. That 
+    | includes listening, showing, storing, creating and updating the system's 
+    | roles.
+    |
+    */
+
     /**
      * Create a new controller instance.
      *
@@ -137,10 +148,9 @@ class RoleController extends Controller
 
 
     /**
-     * Refresca la tabla que se muestra.
+     * Refresh the table on the view.
      *
-     * @param  \App\Flujo  $flujo
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response 
      */
     public function refresh()
     {
