@@ -1,8 +1,16 @@
+/** 
+ * Clean the create form
+ * 
+ */
 function clearCreate() {
     $("input[name=nameCreate]").val("");
     
 }
 
+/** 
+ * Validate the inputs in the create form
+ * 
+ */
 function validaCreate() {
     var validado = true;
     if ($("input[name=nameCreate]").val() == "") {
@@ -15,6 +23,11 @@ function validaCreate() {
     return validado;
 }
 
+
+/**
+ * Send an ajax request in order to add a department
+ *  
+ */
 function ajaxCreate() {
     if (validaCreate()) {       
         var description = $("input[name=nameCreate]").val();       
@@ -46,18 +59,31 @@ function ajaxCreate() {
     }
 }
 
-function edit(id,nombre) {
+
+/**
+ * Open a modal to edit a role
+ * 
+ * @param {integer} id - department id
+ * @param {string} name  - department name
+ *    
+ */
+function edit(id,name) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
     });
     $("input[id=idEdit]").val(id);
     $("input[name=nameEdit]").removeClass("is-invalid");
-    $("input[name=nameEdit]").val(nombre);
+    $("input[name=nameEdit]").val(name);
 
     $("#edit").modal("show");
 }
 
+
+/**
+ * Validate inputs in the edit form.  
+ *    
+ */
 function validaEdit() {
     var validado = true;
 
@@ -66,8 +92,7 @@ function validaEdit() {
         validado = false;
     } else {
         $("input[name=nameEdit]").removeClass("is-invalid");
-    }
-    
+    }    
     return validado;
 }
 

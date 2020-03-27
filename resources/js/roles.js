@@ -119,7 +119,7 @@ function ajaxUpdate() {
 }
 
 /**
- * LIst a table inside a modal with the permissions or users asocited to an 
+ * List a table inside a modal with the permissions or users asocited to an 
  * specific role.  
  * 
  * @param {array} array  - Array that  list the users or permissions

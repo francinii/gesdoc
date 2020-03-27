@@ -65,11 +65,7 @@ function edit(id, description, idUser) {
     });
     $("input[name=description]").val(description);
     $("input[name=id]").val(id);
-    //idUser =$("input[id=idUser]").val();
-    $("option[name=flowUsuario" + idUser + "]").prop("selected", true);
-    //usuarios.forEach(element => {
-
-    // });
+    $("option[name=flowUsuario" + idUser + "]").prop("selected", true);    
     $("#edit").modal("show");
 }
 

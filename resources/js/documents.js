@@ -6,6 +6,11 @@ function clearDescription() {
     $("input[name=descriptionCreate]").val("");
 }
 
+
+/**
+ *  This function validates the inputs of the create form in the browser
+ *  
+ */
 function validaCreate() {
     var validado = true;
     if ($("input[name=descriptionCreate]").val() == "") {
@@ -61,15 +66,22 @@ function ajaxCreate(user) {
 }
 
 
-function edit(id,nombre,flowId) {
+/**
+ *  Set inputs in the edit form
+ * 
+ * @param {integer} id - document id
+ * @param {string} name - name of the flow
+ * @param {integer} flowId - flow id
+ *  
+ */
+function edit(id,name,flowId) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
-
     });
     $("input[id=idEdit]").val(id);
     $("input[name=descriptionEdit]").removeClass("is-invalid");
-    $("input[name=descriptionEdit]").val(nombre);
+    $("input[name=descriptionEdit]").val(name);
     $("option[name=flowEdit" + flowId + "]").prop("selected", true);
     $("#edit").modal("show");
 
@@ -77,7 +89,10 @@ function edit(id,nombre,flowId) {
 
 
 
-
+/**
+ *  This function validates the inputs of the edit form in the browser
+ *  
+ */
 function validaEdit() {
     var validado = true;
     if ($("input[name=descriptionEdit]").val() == "") {
@@ -89,6 +104,11 @@ function validaEdit() {
     return validado;
 }
 
+
+/**
+ * Send an ajax request in order to update an specific flow 
+ * 
+ */
 function ajaxUpdate() {
     if (validaEdit()) {
         var id = $("input[id=idEdit]").val();

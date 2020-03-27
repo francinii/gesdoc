@@ -12,7 +12,7 @@
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
-        <h2 class="text-center">Roles del sistema</h2>                      
+        <h2 class="text-center">Roles del sistema {{ __('Reset Password') }}</h2>                      
    </div>    
    <div class="row  justify-content-center">     
         <div class="col-md-8 text-right">
