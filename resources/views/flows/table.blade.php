@@ -1,32 +1,32 @@
-<table id='table' class="table table-responsive table-striped">
+<table id='table' class="table table-striped">
     <thead class="thead-dark">
         <tr class="">
-            <th class="col-1 text-center">{{ __('app.flows.table.id') }}</th>
-            <th class="col-6 text-center">{{ __('app.flows.table.description') }}</th>
-            <th class="col-3 text-center">{{ __('app.flows.table.owner') }}</th>                    
-            <th class="col-1 text-center">{{ __('app.flows.table.edit') }}</th>
-            <th class="col-1 text-center">{{ __('app.flows.table.delete') }}</th>
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.id') }}</th>
+            <th style="width: 50%"  class="text-center">{{ __('app.flows.table.description') }}</th>
+            <th style="width: 20%"  class="text-center">{{ __('app.flows.table.owner') }}</th>                    
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.edit') }}</th>
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.delete') }}</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($flows as $flow)         
         <tr>
-            <td class="col-1 text-center">{{$flow->id}}</td>
-            <td class="col-7 text-center">{{$flow->description}}</td>
+            <td class="text-center">{{$flow->id}}</td>
+            <td class="text-center">{{$flow->description}}</td>
             @foreach($users as $user)
             
                 @if($flow->user_id == $user->id )
                     <?php $usuario =  $user->id ?>
-                    <td id="usuarioId" class="col-2 text-center">{{$user->name}}</td>
+                    <td id="usuarioId" class="text-center">{{$user->name}}</td>
                     @break
                 @endif
             @endforeach                                         
-            <td class="col-1 text-center">
+            <td class="text-center">
                     <button onclick = "edit('{{$flow->id}}', '{{$flow->description}}','{{$usuario}} ')"  class="btn btn-success"  data-toggle="modal" >
                         <i class="fas fa-edit"></i>
                     </button>
             </td>
-            <td class="col-1 text-center">
+            <td class="text-center">
                 <form method="POST" action="{{url('/flows/'.$flow->id)}}">
                     <button type="button" onclick="confirmDelete({{$flow->id}} ,'flows','table','¿Desea eliminar el flujo: {{$flow->description}}?')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">

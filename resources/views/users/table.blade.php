@@ -1,12 +1,12 @@
 <table id='table' class="table table-responsive table-striped" cellspacing="0" width="100%">
             <thead class="thead-dark">
                 <tr>
-                    <th  class="col-md-2 text-center">{{ __('app.users.table.user') }}</th>
-                    <th  class="col-md-3  text-center">{{ __('app.users.table.name') }}</th>                    
-                    <th  class="col-md-3  text-center">{{ __('app.users.table.email') }}</th>
-                    <th   class="col-md-2 text-center">{{ __('app.users.table.role') }}</th>
-                    <th  class="col-md-1 text-center">{{ __('app.users.table.edit') }}</th>                   
-                    <th  class="col-md-1 text-center">{{ __('app.users.table.delete') }}</th>
+                    <th  style="width: 10%" class="text-center">{{ __('app.users.table.user') }}</th>
+                    <th  style="width: 20%" class="text-center">{{ __('app.users.table.name') }}</th>                    
+                    <th  style="width: 20%" class="text-center">{{ __('app.users.table.email') }}</th>
+                    <th  style="width: 20%"  class="text-center">{{ __('app.users.table.role') }}</th>
+                    <th  style="width: 10%" class="text-center">{{ __('app.users.table.edit') }}</th>                   
+                    <th  style="width: 10%" class="text-center">{{ __('app.users.table.delete') }}</th>
                 </tr>
             </thead>
             <tbody >
