@@ -1,14 +1,13 @@
 @extends('layouts.template')
 
 @section('head')
-
-
-@endsection
+<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+<script src="{{ asset('../resources/js/users.js') }}" defer></script> 
+@stop
 @section('title', 'Usuarios')
 @section('header')
 @include('layouts.header')
-<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
-<script src="{{ asset('../resources/js/users.js') }}" defer></script> 
+@stop
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
@@ -38,5 +37,5 @@
 @include('partials.error')
 @include('partials.search')
 @include('partials.confirm')
-
+@stop
 

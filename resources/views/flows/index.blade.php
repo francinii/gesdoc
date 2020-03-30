@@ -5,10 +5,11 @@
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
 <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 
-@endsection
+@stop
 @section('title', 'Flujos')
 @section('header')
 @include('layouts.header') 
+@stop
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
@@ -31,5 +32,5 @@
 @include('flows.create')
 @include('flows.edit')
 @include('partials.confirm')
-
+@stop
 

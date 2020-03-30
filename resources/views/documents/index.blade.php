@@ -3,12 +3,12 @@
 @section('head')
 <script src="{{ asset('../resources/js/documents.js') }}" defer></script>
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+@stop
 
-
-@endsection
 @section('title', 'Documentos')
 @section('header')
 @include('layouts.header') 
+@stop
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
@@ -31,6 +31,6 @@
 @include('documents.create')
 @include('documents.edit')
 @include('partials.confirm')
-
+@stop
 
 

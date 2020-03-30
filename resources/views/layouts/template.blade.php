@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8" >    
+    <meta charset="utf-8"  name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >    
     <title> Gesdoc - @yield('title') </title>
     <link rel="stylesheet"  href="{{ asset('../resources/extencions/fontawesome-free-5.13.0-web/css/all.css') }}" >
     <link rel="stylesheet"   href="{{ asset('../resources/extencions/Bootstrap-4-4.1.1/css/bootstrap.min.css') }}" >

@@ -3,12 +3,12 @@
 @section('head')
 <script src="{{ asset('../resources/js/roles.js') }}" defer></script>
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+@stop
 
-
-@endsection
 @section('title', 'Roles')
 @section('header')
-@include('layouts.header') 
+@include('layouts.header')
+@stop
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">         
@@ -32,4 +32,4 @@
 @include('roles.edit')
 @include('roles.list')
 @include('partials.confirm')
-
+@stop
