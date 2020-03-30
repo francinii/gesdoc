@@ -23,4 +23,8 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function textEditor(){
+        return view('textEditor.textEditor');
+    }
 }

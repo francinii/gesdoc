@@ -25,6 +25,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/textEditor', 'HomeController@textEditor');
+
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 //Route::get('/register_user', 'Auth\RegisterController@index' );

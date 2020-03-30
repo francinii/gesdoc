@@ -1,20 +1,20 @@
 <table id='table' class="table table-responsive table-striped">
             <thead class="thead-dark">
                 <tr class="">
-                    <th class="col-1 text-center">Id</th>
-                    <th class="col-7 text-center">Descripcion del Rol</th>
-                    <th class="col-1 text-center">Permisos asociados</th>
-                    <th class="col-1 text-center">Usuarios asociados</th>
-                    <th class="col-1 text-center">Modificar Rol</th>
-                    <th class="col-1 text-center">Eliminar Rol</th>
+                    <th class="col-1  text-center">Id</th>
+                    <th class="col-6 text-center">Descripcion del Rol</th>
+                    <th class="col-1  text-center">Permisos asociados</th>
+                    <th class="col-1  text-center">Usuarios asociados</th>
+                    <th class="col-1  text-center">Modificar Rol</th>
+                    <th class="col-1  text-center">Eliminar Rol</th>
                 </tr>
             </thead>
             <tbody >
                 @foreach ($roles as $role)         
-                <tr>
-                    <td class="col-1 text-center">{{$role->id}}</td>
-                    <td class="col-7 text-center">{{$role->description}}</td>
-                    <td class="col-1 text-center"> 
+                <tr class="">
+                    <td class=" col-1  text-center">{{$role->id}}</td>
+                    <td class=" col-6  text-center">{{$role->description}}</td>
+                    <td class=" col-1  text-center"> 
                         
                         
                         <?php
@@ -30,18 +30,18 @@
                            </i>
                        </button>
                    </td>
-                    <td class="col-1 text-center">         
+                    <td class=" col-1  text-center">         
                          <button onclick = "list({{$role->users}}, '{{$role->description}}',2 )"  class="btn btn-info"  data-toggle="modal">
                             <i class="fas fa-user">
                             </i>
                         </button>
                     </td>
-                    <td class="col-1 text-center">
+                    <td class=" col-1  text-center">
                             <button onclick = "edit('{{$role->id}}', '{{$role->description}}', {{$permissions}},{{ $permissionsAsociados}} )"  class="btn btn-success"  data-toggle="modal" >
                                 <i class="fas fa-edit"></i>
                             </button>
                     </td>
-                    <td class="col-1 text-center">
+                    <td class=" col-1  text-center">
                         <form method="POST" action="{{url('/roles/'.$role->id)}}">
                             <button type="button" onclick="confirmDelete({{$role->id}} ,'roles','table', '¿Desea eliminar el rol: {{$role->description}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">

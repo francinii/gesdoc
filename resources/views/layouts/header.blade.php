@@ -26,6 +26,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url('/flows') }}">Flujos </a>
           <a class="dropdown-item" href="{{ url('/documents') }}">Documentos</a>
+          <a class="dropdown-item" href="{{ url('/textEditor') }}">Editor de texto</a>          
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>          
