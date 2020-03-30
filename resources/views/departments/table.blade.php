@@ -1,10 +1,10 @@
 <table id='table' class="table table-responsive table-striped"  width="100%">
             <thead class="thead-dark">
                 <tr>
-                    <th  class="text-center" >Id</th>
-                    <th  class="col-md-2 text-center" >Nombre</th>                    
-                    <th  class="text-center"  >Editar usuario</th>                   
-                    <th  class="text-center">Eliminar Usuario</th>
+                    <th  class="text-center" >{{ __('app.departments.table.id') }}</th>
+                    <th  class="col-md-2 text-center" >{{ __('app.departments.table.description') }}</th>                    
+                    <th  class="text-center"  >{{ __('app.departments.table.edit') }}</th>                   
+                    <th  class="text-center">{{ __('app.departments.table.delete') }}</th>
                 </tr>
             </thead>
             <tbody >
