@@ -15,13 +15,13 @@
         <h2 class="text-center">{{ __('app.documents.index.title') }}</h2>                      
    </div>    
    <div class="row  justify-content-center"> 
-        <div class="col-md-8 text-right">
+        <div class="col-md-9 text-right">
             <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearDescription()" data-target="#create">
                 <i class="fas fa-plus-circle"></i>  {{ __('app.buttons.add') }}
             </button>    
         </div>
         <div  class="col-md-12">&nbsp</div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             @include('partials.alert')
             @include('documents.table')
         </div>

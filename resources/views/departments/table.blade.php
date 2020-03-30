@@ -1,10 +1,10 @@
 <table id='table' class="table table-responsive table-striped"  width="100%">
             <thead class="thead-dark">
                 <tr>
-                    <th  class="text-center" >{{ __('app.departments.table.id') }}</th>
-                    <th  class="col-md-2 text-center" >{{ __('app.departments.table.description') }}</th>                    
-                    <th  class="text-center"  >{{ __('app.departments.table.edit') }}</th>                   
-                    <th  class="text-center">{{ __('app.departments.table.delete') }}</th>
+                    <th  style="width: 10%"  class="text-center" >{{ __('app.departments.table.id') }}</th>
+                    <th  style="width: 70%"  class="text-center" >{{ __('app.departments.table.description') }}</th>                    
+                    <th  style="width: 10%"  class="text-center"  >{{ __('app.departments.table.edit') }}</th>                   
+                    <th  style="width: 10%"  class="text-center">{{ __('app.departments.table.delete') }}</th>
                 </tr>
             </thead>
             <tbody >

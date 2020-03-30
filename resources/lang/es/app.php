@@ -75,7 +75,7 @@ return [
         ],
 
         'index' => [
-            'title' => 'Roles del sistema',
+            'title' => 'Usuarios del sistema',
         ],
 
         'list' => [

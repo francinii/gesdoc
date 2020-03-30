@@ -19,10 +19,7 @@
                     <option value="{{$flow->id}}" name ="flowCreate{{$flow->id}}">{{$flow->description}}</option>
                   @endforeach
               </select>
-            </div>
-                      
-                
-            
+            </div>    
           </form>    
         </div>
         <div class="modal-footer">
