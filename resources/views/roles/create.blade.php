@@ -2,15 +2,15 @@
   <div class="modal-dialog" role="document" >
       <div class="modal-content">
       <div class="modal-header">      
-          <h5 class="modal-title">Nuevo Rol</h5>
+          <h5 class="modal-title">  {{ __('app.roles.create.title') }}</h5>
           <button type="close" class="close" data-dismiss="modal">  X </button>
       </div>
       <div class="modal-body">   
         <form action="{{ action('RoleController@index') }}" method="POST">
         {{csrf_field()}}
           <div class="form-group">
-            <label for="role">Nombre del rol</label>
-            <input type="text" class="form-control" id="CreateDescription" placeholder="Nombre del rol" name="CreateDescription">
+            <label for="role">{{ __('app.roles.create.name') }}</label>
+            <input type="text" class="form-control" id="CreateDescription" placeholder="{{ __('app.roles.create.name') }}" name="CreateDescription">
           </div>
           
             @foreach ($permissions as $permission)
@@ -22,7 +22,7 @@
               </div>
             @endforeach         
               
-          <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">Agregar</button>
+          <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">{{ __('app.buttons.add') }}</button>
         </form>    
       </div>
       <div class="modal-footer"> </div>

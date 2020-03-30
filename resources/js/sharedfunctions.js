@@ -1,3 +1,11 @@
+
+/**
+ * This function is in charge of create the data table and give
+ * them the all necesary attirbutes.
+ * 
+ * @param {string} table - id name of the  table
+ *  
+ */
 function createDataTable(table) {
     $("#" + table).dataTable({
         lengthChange: false,
@@ -24,13 +32,28 @@ function createDataTable(table) {
     });
 }
 
-function confirmDelete(id, url1,table,mensaje){
-    $( "#mensajeConfirmar" ).html( "<p>"+mensaje+"</p>" );  
+
+/**
+ * This function is in charge of create the data table and give
+ * them the all necesary attirbutes.
+ * 
+ * @param {integer} id -id of the element for delete
+ * @param {string} url1 - url of the deleted element
+ * @param {string} table - table to repaint
+ * @param {string} messasge -Message that you want to show
+ *  
+ */
+function confirmDelete(id, url1,table,message){
+    $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
     $("#confirmarButton").attr("onClick","ajaxDelete("+id+",'"+url1+"','"+table+"')");
     $("#confirmar").modal("show");
 }
 
 
+/**
+ * Send an ajax request in order to delete an element 
+ *  
+ */
 function ajaxDelete(id, url1,table){
     $.ajax({
         url: url1 + "/" + id,
@@ -57,17 +80,30 @@ function ajaxDelete(id, url1,table){
 }
 
 
-
+/**
+ * Show a div when an event is actived.  (For example when you 
+ * add, delete, or update data).
+ *  
+ */
 function alerts(contenido, type_class){    
    $('#alert-content').text(contenido);
    $('#alerts').show(1000);
    $('#alerts').removeClass('alert-warning alert-success alert-danger alert-info').addClass(type_class);
 }
 
+/**
+ * Hide an alert div when you click on the x button.
+ *  
+ */
 function hideAlert(){
     $('#alerts').hide(1000);
 }
 
+
+/**
+ * Create a dataTable
+ *  
+ */
 $(document).ready(function() {
     createDataTable("table");
 });

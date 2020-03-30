@@ -2,17 +2,17 @@
     <div class="modal-dialog" role="document" >
         <div class="modal-content">
         <div class="modal-header">      
-            <h5 class="modal-title">Nuevo Documento</h5>
+            <h5 class="modal-title">{{ __('app.documents.create.title') }}</h5>
             <button type="close" class="close" data-dismiss="modal">  X </button>
         </div>
         <div class="modal-body">   
           <form action="{{ action('DocumentController@index') }}" method="POST">
           {{csrf_field()}}
             <div class="form-group">
-              <label for="descriptionCreate">Nombre del documento</label>
-              <input type="text" class="form-control" id="descriptionCreate" placeholder="Nombre del documento" name="descriptionCreate">
+              <label for="descriptionCreate">{{ __('app.documents.create.name') }}</label>
+              <input type="text" class="form-control" id="descriptionCreate" placeholder="{{ __('app.documents.create.name') }}" name="descriptionCreate">
             </div>    
-            <label for="flowCreate">Flujo asociado</label>
+            <label for="flowCreate">{{ __('app.documents.create.flow') }}</label>
             <div class="form-group">
               <select id="flowCreate"class="form-control" name="flowCreate" >
                   @foreach ($flows as $flow)

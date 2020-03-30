@@ -1,12 +1,12 @@
 <table id='table' class="table table-responsive table-striped">
             <thead class="thead-dark">
                 <tr class="">
-                    <th class="col-1  text-center">Id</th>
-                    <th class="col-6 text-center">Descripcion del Rol</th>
-                    <th class="col-1  text-center">Permisos asociados</th>
-                    <th class="col-1  text-center">Usuarios asociados</th>
-                    <th class="col-1  text-center">Modificar Rol</th>
-                    <th class="col-1  text-center">Eliminar Rol</th>
+                    <th class="col-1 text-center">{{ __('app.roles.table.id') }}</th>
+                    <th class="col-7 text-center">{{ __('app.roles.table.description') }}</th>
+                    <th class="col-1 text-center">{{ __('app.roles.table.permission') }}</th>
+                    <th class="col-1 text-center">{{ __('app.roles.table.user') }}</th>
+                    <th class="col-1 text-center">{{ __('app.roles.table.edit') }}</th>
+                    <th class="col-1 text-center">{{ __('app.roles.table.delete') }}</th>
                 </tr>
             </thead>
             <tbody >

@@ -12,7 +12,7 @@
 @section('content')
 <div class="container-fluid">
    <div class="row  justify-content-center">
-        <h2 class="text-center">Departamentos del sistema</h2>
+        <h2 class="text-center">{{ __('app.departments.index.title') }}</h2>
    </div>
    <div class="row  justify-content-center">
         <div class="col-md-6">
@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-2 text-right">
             <button data-toggle="modal" class=" float-right btn btn-success" onclick="clearCreate()" data-target="#create">
-                <i class="fas fa-plus-circle"></i>   Agregar Departamento
+                <i class="fas fa-plus-circle"></i>  {{ __('app.buttons.add') }}
             </button>
         </div>
         <div  class="col-md-12">&nbsp</div>

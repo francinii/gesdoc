@@ -1,11 +1,11 @@
 <table id='table' class="table table-responsive table-striped">
     <thead class="thead-dark">
         <tr class="">
-            <th class="col-1 text-center">Id</th>
-            <th class="col-6 text-center">Descripcion del Flujo</th>
-            <th class="col-3 text-center">Creado por</th>                    
-            <th class="col-1 text-center">Modificar Flujo</th>
-            <th class="col-1 text-center">Eliminar Flujo</th>
+            <th class="col-1 text-center">{{ __('app.flows.table.id') }}</th>
+            <th class="col-6 text-center">{{ __('app.flows.table.description') }}</th>
+            <th class="col-3 text-center">{{ __('app.flows.table.owner') }}</th>                    
+            <th class="col-1 text-center">{{ __('app.flows.table.edit') }}</th>
+            <th class="col-1 text-center">{{ __('app.flows.table.delete') }}</th>
         </tr>
     </thead>
     <tbody>

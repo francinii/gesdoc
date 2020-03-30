@@ -2,7 +2,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">      
-          <h2 class="text-center">Editar Flujo</h2>
+          <h2 class="text-center">{{ __('app.flows.edit.title') }}</h2>
           <button type="close" class="close" data-dismiss="modal"> 
               X
           </button>
@@ -11,10 +11,10 @@
           <form action="" method="POST">
             <div class="form-group">
                 <input name="id" type="hidden">
-                <label for="rol">Nombre del flujo</label>
-                <input type="text" class="form-control" id="description" placeholder="Nombre del rol" name="description" value="">
+                <label for="rol">{{ __('app.flows.edit.name') }}</label>
+                <input type="text" class="form-control" id="description" placeholder="{{ __('app.flows.edit.name') }}" name="description" value="">
             </div> 
-            <label for="flowUsuario">Pasar propiedad del flujo a otro usuario</label>              
+            <label for="flowUsuario">{{ __('app.flows.edit.property') }}</label>              
             <div class="form-group">
                 <select id="flowUsuario"class="form-control" name="flowUsuario" >
                     @foreach ($users as $user)
@@ -23,7 +23,7 @@
                 </select>
             </div>               
   
-             <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">Actualizar</button>
+            <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>
            </form>
         </div>
         <div class="modal-footer">     
