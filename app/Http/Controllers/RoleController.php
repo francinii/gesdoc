@@ -7,6 +7,7 @@ use App\Permission;
 use App\Role;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -15,11 +16,11 @@ class RoleController extends Controller
     | Role Controller
     |--------------------------------------------------------------------------
     |
-    | This controller is responsible for handling the roles' resources. That 
-    | includes listening, showing, storing, creating and updating the system's 
+    | This controller is responsible for handling the roles' resources. That
+    | includes listening, showing, storing, creating and updating the system's
     | roles.
     |
-    */
+     */
 
     /**
      * Create a new controller instance.
@@ -45,7 +46,20 @@ class RoleController extends Controller
         return view('roles.index', compact('roles', 'permissions'));
     }
 
-    
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        $validacion = [
+            'description' => ['required', 'string', 'max:255'],
+        ];
+
+        return Validator::make($data, $validacion);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -68,12 +82,12 @@ class RoleController extends Controller
     {
         // echo  response()->json($request->all());
         // $datos = $request->all();
-
+        $this->validator($request->all())->validate();
         $datos = $request->except('_token', 'permissions');
-        
+
         $permissions = request('permissions');
         $IdRole = Role::insertGetId($datos);
-        if($permissions != NULL){
+        if ($permissions != null) {
             foreach ($permissions as $permission) {
                 DB::table('permission_role')->insert([
                     'role_id' => $IdRole,
@@ -118,12 +132,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validator($request->all())->validate();
         $dato = request()->except(['_token', '_method', 'permissions']);
         $permissions = request('permissions');
         $id = $dato['id'];
         Role::where('id', '=', $id)->update($dato);
         DB::table('permission_role')->where('role_id', '=', $id)->delete();
-        if($permissions != NULL){
+        if ($permissions != null) {
             foreach ($permissions as $permission) {
                 DB::table('permission_role')->insert([
                     'role_id' => $id,
@@ -146,11 +161,10 @@ class RoleController extends Controller
         return RoleController::refresh();
     }
 
-
     /**
      * Refresh the table on the view.
      *
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
      */
     public function refresh()
     {

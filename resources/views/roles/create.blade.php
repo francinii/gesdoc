@@ -22,10 +22,12 @@
               </div>
             @endforeach         
               
-          <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">{{ __('app.buttons.add') }}</button>
+          
         </form>    
       </div>
-      <div class="modal-footer"> </div>
+      <div class="modal-footer"> 
+       <button  type="button" id="CreateSubmit" onclick="ajaxCreate()" class="btn btn-success">{{ __('app.buttons.add') }}</button>
+      </div>
       </div>
   </div>
 </div>

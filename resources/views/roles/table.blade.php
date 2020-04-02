@@ -36,7 +36,7 @@
                         </button>
                     </td>
                     <td class="text-center">
-                            <button onclick = "edit('{{$role->id}}', '{{$role->description}}', {{$permissions}},{{ $permissionsAsociados}} )"  class="btn btn-success"  data-toggle="modal" >
+                            <button onclick = "edit('{{$role->id}}', '{{$role->description}}', {{ $permissionsAsociados}} )"  class="btn btn-success"  data-toggle="modal" >
                                 <i class="fas fa-edit"></i>
                             </button>
                     </td>
