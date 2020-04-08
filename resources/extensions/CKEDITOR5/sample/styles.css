@@ -22,6 +22,7 @@ main .ck-editor[role='application'] .ck.ck-content,
 .ck.editor__editable[role='textbox'],
 .ck.ck-editor__editable[role='textbox'],
 /* Inline & Balloon build. */
+
 .ck.editor[role='textbox'] {
 	width: 100%;
 	background: #fff;
@@ -50,15 +51,15 @@ main .ck-editor[role='application'] .ck.ck-content,
 }
 
 /* --------- DECOUPLED (DOCUMENT) BUILD. ---------------------------------------------*/
-body[data-editor='DecoupledDocumentEditor'] .document-editor__toolbar {
-	width: 100%;
+div[data-editor='DecoupledDocumentEditor'] .document-editor__toolbar {
+	width: 100%;	
 }
 
-body[ data-editor='DecoupledDocumentEditor'] .collaboration-demo__editable,
-body[ data-editor='DecoupledDocumentEditor'] .row-editor .editor {
-	width: 18.5cm;
+div[ data-editor='DecoupledDocumentEditor'] .collaboration-demo__editable,
+div[ data-editor='DecoupledDocumentEditor'] .row-editor .editor {
+	width: 21.6cm;
 	height: 100%;
-	min-height: 26.25cm;
+	min-height: 27.94cm;	
 	padding: 1.75cm 1.5cm;
 	margin: 2.5rem;
 	border: 1px hsl( 0, 0%, 82.7% ) solid;
@@ -66,7 +67,8 @@ body[ data-editor='DecoupledDocumentEditor'] .row-editor .editor {
 	box-shadow: 0 0 5px hsla( 0, 0%, 0%, .1 );
 }
 
-body[ data-editor='DecoupledDocumentEditor'] .row-editor {
+
+div[ data-editor='DecoupledDocumentEditor'] .row-editor {
 	display: flex;
 	position: relative;
 	justify-content: center;
@@ -75,13 +77,15 @@ body[ data-editor='DecoupledDocumentEditor'] .row-editor {
 	border: 1px solid hsl(0, 0%, 77%);
 }
 
-body[data-editor='DecoupledDocumentEditor'] .sidebar {
+div[data-editor='DecoupledDocumentEditor'] .sidebar {
 	background: transparent;
 	border: 0;
 	box-shadow: none;
 }
 
 /* --------- COMMENTS & TRACK CHANGES FEATURE ---------------------------------------------------------------------- */
+
+
 .sidebar {
 	padding: 0 15px;
 	position: relative;
@@ -179,7 +183,7 @@ body[data-editor='DecoupledDocumentEditor'] .sidebar {
 	border: 1px solid hsl(0, 0%, 77%);
 }
 
-body[ data-editor='InlineEditor'] .collaboration-demo__row {
+div[ data-editor='InlineEditor'] .collaboration-demo__row {
 	border: 0;
 }
 
@@ -304,7 +308,7 @@ body[ data-editor='InlineEditor'] .collaboration-demo__row {
 }
 
 /* --------- SAMPLE GENERIC STYLES (not related to CKEditor) ------------------------------------------------------- */
-body, html {
+div, html {
 	padding: 0;
 	margin: 0;
 
@@ -313,12 +317,12 @@ body, html {
 	line-height: 1.5;
 }
 
-body {
+div {
 	height: 100%;
 	color: #2D3A4A;
 }
 
-body * {
+div * {
 	box-sizing: border-box;
 }
 

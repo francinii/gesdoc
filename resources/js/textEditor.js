@@ -1,16 +1,69 @@
-DecoupledEditor.create(document.querySelector(".document-editor__editable"), {
-    plugins: [PageBreak],
-    toolbar: ["pageBreak"]
+DecoupledDocumentEditor.create(document.querySelector(".editor"), {
+    toolbar: {
+        items: [
+            "heading",
+            "|",
+            "fontSize",
+            "fontFamily",
+            "|",
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "highlight",
+            "|",
+            "alignment",
+            "|",
+            "numberedList",
+            "bulletedList",
+            "|",
+            "indent",
+            "outdent",
+            "|",
+            "todoList",
+            "link",
+            "blockQuote",
+            "imageUpload",
+            "insertTable",
+            "mediaEmbed",
+            "specialCharacters",
+            'pageBreak',
+            "|",
+            "undo",
+            "redo"
+        ]
+    },
+    language: "es",
+    image: {
+        toolbar: ["imageTextAlternative", "imageStyle:full", "imageStyle:side"]
+    },
+    table: {
+        contentToolbar: [
+            "tableColumn",
+            "tableRow",
+            "mergeTableCells",
+            "tableCellProperties",
+            "tableProperties"
+        ]
+    },
+    licenseKey: ""
 })
     .then(editor => {
-        const toolbarContainer = document.querySelector(
-            ".document-editor__toolbar"
-        );
-
-        toolbarContainer.appendChild(editor.ui.view.toolbar.element);
-
         window.editor = editor;
+
+        // Set a custom container for the toolbar.
+        document
+            .querySelector(".document-editor__toolbar")
+            .appendChild(editor.ui.view.toolbar.element);
+        document.querySelector(".ck-toolbar").classList.add("ck-reset_all");
     })
-    .catch(err => {
-        console.error(err);
+    .catch(error => {
+        console.error("Oops, something gone wrong!");
+        console.error(
+            "Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:"
+        );
+        console.warn("Build id: 1ec2378iquub-nlir1rqomxfc");
+        console.error(error);
     });
+
+editor.execute("pageBreak");

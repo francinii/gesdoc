@@ -30,13 +30,13 @@ import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize.js';
 import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak.js';
+import SpecialCharactersLatin from '@ckeditor/ckeditor5-special-characters/src/specialcharacterslatin.js';
 import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters.js';
-import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials.js';
 import SpecialCharactersMathematical from '@ckeditor/ckeditor5-special-characters/src/specialcharactersmathematical.js';
 import SpecialCharactersText from '@ckeditor/ckeditor5-special-characters/src/specialcharacterstext.js';
 import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
-import Title from '@ckeditor/ckeditor5-heading/src/title.js';
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
@@ -72,13 +72,13 @@ Editor.builtinPlugins = [
 	TableToolbar,
 	TodoList,
 	Underline,
+	ImageResize,
 	PageBreak,
+	SpecialCharactersLatin,
 	SpecialCharacters,
-	SpecialCharactersEssentials,
 	SpecialCharactersMathematical,
 	SpecialCharactersText,
 	TableCellProperties,
-	Title,
 	TableProperties,
 	Essentials,
 	Paragraph
