@@ -1,3 +1,4 @@
+var myEditor;
 DecoupledDocumentEditor.create(document.querySelector(".editor"), {
     toolbar: {
         items: [
@@ -27,7 +28,7 @@ DecoupledDocumentEditor.create(document.querySelector(".editor"), {
             "insertTable",
             "mediaEmbed",
             "specialCharacters",
-            'pageBreak',
+            
             "|",
             "undo",
             "redo"
@@ -49,8 +50,10 @@ DecoupledDocumentEditor.create(document.querySelector(".editor"), {
     licenseKey: ""
 })
     .then(editor => {
+        myEditor=editor;
+       // editor.execute( 'pageBreak' );
         window.editor = editor;
-
+       // editor.isReadOnly = true
         // Set a custom container for the toolbar.
         document
             .querySelector(".document-editor__toolbar")
@@ -66,4 +69,7 @@ DecoupledDocumentEditor.create(document.querySelector(".editor"), {
         console.error(error);
     });
 
-editor.execute("pageBreak");
+    $( document ).ready(function() {
+        myEditor.execute( 'pageBreak' );
+    });
+   
