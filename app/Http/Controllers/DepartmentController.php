@@ -6,6 +6,7 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
 class DepartmentController extends Controller
 {
@@ -48,16 +49,30 @@ class DepartmentController extends Controller
      * Get a validator for an incoming registration request.
      *
      * @param array $data
+     * @param bool $create
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data,$create)
     {
-        $validacion = [
+        $validacion = [           
             'description' => ['required', 'string', 'max:255'],
         ];
+        if(!$create){
+            $validacion['id']=['required', 'int'];
+        }
 
         return Validator::make($data, $validacion);
     }
+
+    protected function myArray(array $dato)
+    { 
+
+   
+        $arryString="'".$dato['description']."'";
+     
+        return $arryString;
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,7 +81,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -77,11 +92,15 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all())->validate();
+        $this->validator($request->all(),true)->validate();
         $dato = request()->except(['_token']);
-
-        Department::insert($dato);        
-        return DepartmentController::refresh();
+        $dato=$this->myArray($dato);  
+        DB::select("call insert_department($dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']==3)  throw new DecryptException('el usuario ya existe en la base de datos');
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**
@@ -115,10 +134,15 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
+        $this->validator($request->all(),false)->validate();
         $dato = request()->except(['_token','_method']);
         $id = $dato['id'];
-        Department::where('id', '=', $id)->update($dato);
+        $dato=$this->myArray($dato);  
+        DB::select("call update_department($id,$dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
         return DepartmentController::refresh();
     }
 
@@ -130,7 +154,10 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        Department::destroy($id);
-        return DepartmentController::refresh();
+        DB::select("call delete_department($id,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 }
