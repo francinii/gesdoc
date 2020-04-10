@@ -11,6 +11,21 @@ function clearDescription() {
     });
 }
 
+
+function openCreate(){
+    //clearDescription();
+    $("#flow-wrapper").hide(500);
+    $("#create-wrapper").show(1000);
+}
+
+function openTable(){
+    $("#create-wrapper").hide(1000);
+    $("#flow-wrapper").show(500);
+       
+}
+
+
+
 /**
  * Send an ajax request in order to add a flow 
  * 
@@ -110,3 +125,53 @@ function ajaxUpdate() {
         }
     });
 }
+
+
+function changeDepartment(array){
+    $(".body_table").empty();
+    var id_department = $("select[id=select_document] option:selected").attr('id');
+    array.forEach(element => {
+        if (id_department == element.department_id)
+        {
+            $(".body_table").append(
+                "<tr>" +               
+                    "<td>" +
+                    element.username +
+                    "</td><td>" +
+                    element.name +
+                    "</td><td>" +
+                    element.email +
+                "</td><td><input id ='check"+element.username+"' type ='checkbox'></td></tr>"
+            );
+        }
+   }); 
+}
+
+var id = 1;
+function addStep(){    
+    var contenido = $(".step").html();
+    //$('.inside_step').attr('id').val('hfdsa');
+    contenido = '<div id= "paso'+id+'" class= "container-step">'+ contenido + '</div>';
+    $("#steps").append( contenido);
+
+    var elemento = $("#paso"+id).find('.step-description');
+    elemento.text('Paso'+ id);
+    id += 1;
+     
+}
+
+
+function openStepEditor(step){
+
+}
+
+
+
+function deleteStep(element){
+  var elemento = element.closest('div[class^="container-step"]');
+  var step = elemento.getAttribute('id');
+  $("#"+step).remove();
+}
+
+
+

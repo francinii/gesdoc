@@ -4,7 +4,7 @@ Schema::defaultStringLength(191);
 
 php artisan serve // iniciar proyecto
 php artisan make:model Cliente // crear modelo
-php artisan make:model Persona -m // crear modelo y en la base
+php artisan make:model Persona -m // crear modelo y migracion
 php artisan migrate // crear tabla en la base con base al modelo
 php artisan make:controller PersonaController // crear controlador
 php artisan make:controller ldapController --resource// crear controlador con funciones por defecto
@@ -36,7 +36,8 @@ C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\E
 
 Notas Fran ;3
 php artisan make:model Rol -mcr 
-php artisan make:model Flujo -mcr   
+php artisan make:model Flujo -mcr  
+
 php artisan make:seeder Permiso           Crea los seeders en laravel
 php artisan make:seeder Documento
 

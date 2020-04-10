@@ -1,30 +1,33 @@
-<div id = "create" class="modal fade" aria-hidden="true" tabindex="-1" role="dialog" >
-    <div class="modal-dialog" role="document" >
-        <div class="modal-content">
-        <div class="modal-header">      
-            <h5 class="modal-title">{{ __('app.flows.create.title') }}</h5>
-            <button type="close" class="close" data-dismiss="modal">  X </button>
+ 
+<?php $step  = 1?>
+<div class="container-fluid " id = "create-wrapper"  style="display:none">    
+    <div class="row  justify-content-center">         
+        <div  class="col-md-10">
+          <div class="float-lg-left"> 
+            <button  type="button" id="CreateSubmit" onclick="openTable()" class="btn btn-success">
+              <i class="fas fa-arrow-left"></i>
+            </button>     
+          </div>          
         </div>
-        <div class="modal-body">   
-          <form action="{{ action('FlowController@index') }}" method="POST">
-          {{csrf_field()}}
-            <div class="form-group">
-              <label for="CreateDescription">{{ __('app.flows.create.name') }}</label>
-              <input type="text" class="form-control" id="CreateDescription" placeholder="{{ __('app.flows.create.name') }}" name="CreateDescription">
-            </div>    
-                      
-                
-            <button  type="button" id="CreateSubmit" onclick="ajaxCreate({{ Auth::user()->id }})" class="btn btn-success">{{ __('app.buttons.add') }}</button>
-          </form>    
+        <div  class="col-md-10 container">
+          <div class="form-group row">
+              <label class="control-label col-2" for="flowName"> {{ __('app.flows.create.name') }} </label>
+              <input type="text" class="form-control col-10" id="flowName" placeholder="{{ __('app.flows.create.name') }}" name="flowName">
+          
+            </div> 
+        </div> 
+        <div class="col-md-10">
+          <div class="float-right">
+            <button class="btn btn-success" onclick="addStep()" > Agregar paso
+              <i class="fas fa-plus-circle">                
+              </i>
+            </button>
+          </div>
         </div>
-        <div class="modal-footer"> </div>
-        </div>
-    </div>
-  </div>
-  
-  
-    
-  
-  
-  
-  
+        <div class="col-md-10">&nbsp;</div>
+        <div id = "steps" class="col-10" >              
+        </div>              
+    </div> 
+</div>
+
+

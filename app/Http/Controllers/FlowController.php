@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Flow;
 use App\User;
+use App\Department;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -34,7 +35,8 @@ class FlowController extends Controller
         $flows =Flow::where('user_id', '=', $usuario)->get();
         //$Flows = Flow::all();
         $users = User::all();
-        return view('Flows.index',compact('flows', 'users'));
+        $departments = Department::all();
+        return view('Flows.index',compact('flows', 'users','departments'));
     }
 
     /**
