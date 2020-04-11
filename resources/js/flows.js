@@ -247,15 +247,14 @@ function createDraggable(id){
     });
 }
 
-
 function joinStep(div){
     var labelName = 'Probando';
     if(divFirst == ""){
         divFirst = div.getAttribute('id');
-    } else if(divSecond == ""){
+    } else if(divSecond == "" && divSecond != divFirst ){
         divSecond = div.getAttribute('id');
     }
-    if(divFirst != "" && divSecond != "" ){
+    if(divFirst != "" && divSecond != "" && divSecond != divFirst ){
         line = new LeaderLine( document.getElementById(divFirst), document.getElementById(divSecond), {
             hide:'true',
             startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
@@ -265,15 +264,22 @@ function joinStep(div){
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
-      
-        var end = line.end.getAttribute('id');
-        var start = line.start.getAttribute('id');
-        console.log(line);
-        array.push(line);       
-
-        divFirst = "";
-        divSecond = "";
+        array.push(line);
+        reset();
     }
+    if(divSecond == divFirst){
+        reset();
+    }
+}
+
+function reset(){
+    divFirst = "";
+    divSecond = "";
+}
+
+function addAction(){
+
+alert('Si funciono!!!!!');
 }
 
 
