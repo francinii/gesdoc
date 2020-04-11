@@ -2,9 +2,10 @@
 
 @section('head')
     <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
-    <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
-
-    @stop
+    <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
+    <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
+   
+@stop
 
 @section('title', 'Flujos') 
 
@@ -30,12 +31,12 @@
             </div>
         </div> 
     </div>
-    @include('flows.create')
+   
     @include('flows.edit')
     @include('flows.list')
     @include('flows.card') 
     @include('partials.confirm')
+    @include('flows.create')
 
-
-
+    <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 @stop

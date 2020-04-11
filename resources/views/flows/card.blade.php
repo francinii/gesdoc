@@ -1,10 +1,8 @@
     
 <div id = "accordion" class="step fade">
     <div class="card container inside_step " style="margin-bottom:1%">
-        <div class="card-header bg-dark row">
-     
+        <div class="card-header bg-dark row">     
             <a class="h5 col-md-11 text-white step-description" data-toggle="collapse" data-parent="#accordion" href="#collapse1">Collapsible Group 1</a>
-       
             <div  class="col-md-1 justify-content-right"> 
                 <button onclick="deleteStep(this)" type="button"  class="btn btn-danger">
                     <i  class="fa fa-trash"></i>
