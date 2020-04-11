@@ -1,5 +1,3 @@
- 
-<?php $step  = 1?>
 <div class="container-fluid " id = "create-wrapper"  style="display:none">    
     <div class="row  justify-content-center">         
         <div  class="col-md-10">
@@ -17,9 +15,9 @@
         </div> 
         <div class="col-md-10">
           <div class="float-right">
-            <button class="btn btn-success" onclick="addStep()" > Agregar paso
-              <i class="fas fa-plus-circle">                
-              </i>
+            <button type="button" class="btn btn-primary" onclick="createStep()">
+              <i class="fas fa-plus-circle"> </i>
+              Agregar paso
             </button>
           </div>
         </div>
@@ -28,34 +26,8 @@
         </div>              
     </div> 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
     <!--Inicio del flujo de trabajo -->
-    <div class="row"> 
-      <div class="col-md-2">
-        <button type="button" class="btn btn-primary" onclick="createStep()">
-          <i class="fas fa-plus-circle"> </i>
-          Agregar paso
-        </button>
-      </div>
-    </div>
+   
     <div class="row">  
       <div class="col-12" id= 'drag-container'  >       
         

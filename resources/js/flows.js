@@ -195,7 +195,7 @@ function openStep(id){
 }
 
 function editStep(id){
-    alert ('edit Step');
+    $("#card").modal("show");
 }
 
 function deleteStep(step){
