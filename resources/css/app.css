@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+.main_header {
+  background-color: #bf0b24;
+  margin-bottom: 40px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: white;
+}
+
+.circle {
+  width: 80px;
+  height: 80px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  position: relative;
+}
+
+.backgroud-green {
+  background: #14b966;
+}
+
+.backgroud-red {
+  background: #f3341b;
+}
+
+.backgroud-blue {
+  background: #9fe8eb;
+}
+
+.square {
+  width: 100px;
+  position: relative;
+}
+
+.circle p {
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  font-size: 1.2rem;
+}
+
+.row #drag-container {
+  overflow: auto;
+  background-color: #e4e4e4;
+  height: 600px;
+  position: relative;
+}
+
+.card-step input {
+  margin: 1%;
+}
+.card-step button {
+  margin: 1%;
+}
+.card-step label {
+  margin: 1%;
+  color: white;
+}
+
+.card_size {
+  padding: 0;
+  width: 500px;
+}
+
+.special_card {
+  padding: 0;
+  width: 130px;
+}
+
+/*# sourceMappingURL=app.css.map */
