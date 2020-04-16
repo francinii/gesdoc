@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\Validator;
+//use Illuminate\Support\Facades\Validator;
 class DepartmentController extends Controller
 {
     /*
@@ -63,7 +63,11 @@ class DepartmentController extends Controller
 
         return Validator::make($data, $validacion);
     }
-
+    /**
+     * transform a array to string
+     * @param array $create
+     * @return String     
+     */  
     protected function myArray(array $dato)
     { 
 
@@ -98,7 +102,7 @@ class DepartmentController extends Controller
         DB::select("call insert_department($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
-        if($res[0]['res']==3)  throw new DecryptException('el usuario ya existe en la base de datos');
+        if($res[0]['res']==3)  throw new DecryptException('el departamento ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
         return $this->refresh();
     }
@@ -143,7 +147,7 @@ class DepartmentController extends Controller
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
         return $this->refresh();
-        return DepartmentController::refresh();
+        
     }
 
     /**

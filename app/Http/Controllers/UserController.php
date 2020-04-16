@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Department;
 use App\Role;
 use App\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -75,6 +76,21 @@ class UserController extends Controller
 
 
     /**
+     * transform a array to string
+     * @param array $create
+     * @return String     
+     */  
+    protected function myArray(array $dato)
+    { 
+   
+        $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."','".$dato['username'].
+        "','".$dato['email']."','".$dato['password']."'";
+     
+        return $arryString;
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -95,16 +111,20 @@ class UserController extends Controller
     {
         $this->validator($request->all(),false,true)->validate();
         $dato= $request->all();
-
         if (!env("use_LDAP")) {
             $dato = request()->except(['_token', '_method','updatePassword']);
             $dato['password'] = Hash::make($dato['password']);
         } else {
             $dato = request()->except(['_token', '_method','updatePassword', 'password']);
-            $dato['password']="12345678";
+            $dato['password']="created with ldap";
         }
-        User::create($dato);        
-        return UserController::refresh();
+        $dato=$this->myArray($dato);  
+        DB::select("call insert_user($dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']==3)  throw new DecryptException('el usuario ya existe en la base de datos');
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**
