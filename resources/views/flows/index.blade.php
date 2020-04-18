@@ -4,8 +4,16 @@
     <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
-   
-@stop
+
+        <!-- Para el select con search -->
+        
+  
+
+       
+  <script src="{{ asset('../resources/js/select.js') }}"></script>   
+
+
+        @stop
 
 @section('title', 'Flujos') 
 

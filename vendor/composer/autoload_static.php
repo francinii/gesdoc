@@ -33,6 +33,10 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'a' => 
+        array (
+            'andcarpi\\Popper\\' => 16,
+        ),
         'X' => 
         array (
             'XdgBaseDir\\' => 11,
@@ -155,6 +159,10 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'andcarpi\\Popper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/andcarpi/laravel-popper/src',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -4556,6 +4564,9 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
+        'andcarpi\\Popper\\Facades\\Popper' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/Facades/Popper.php',
+        'andcarpi\\Popper\\Popper' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/Popper.php',
+        'andcarpi\\Popper\\PopperServiceProvider' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/PopperServiceProvider.php',
         'phpDocumentor\\Reflection\\DocBlock' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
         'phpDocumentor\\Reflection\\DocBlockFactory' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
         'phpDocumentor\\Reflection\\DocBlockFactoryInterface' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactoryInterface.php',

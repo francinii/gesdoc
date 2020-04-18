@@ -9,10 +9,14 @@
     <link rel="stylesheet"   href="{{ asset('../resources/extensions/bootstrap-4.3.1/css/bootstrap.min.css') }}" >
     <link rel="stylesheet"    href="{{ asset('../resources/css/app.css') }}">
     <link rel="stylesheet"   href="{{ asset('../resources/extensions/DataTables-1.10.20/css/jquery.dataTables.min.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('../resources/extensions/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+    
     <script type="text/javascript"  src = "{{ asset('../resources/extensions/JQuery-3.3.1/jquery-3.3.1.min.js') }}"></script>
-    <script type="text/javascript"  src="{{ asset('../resources/extensions/bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript"  src="{{ asset('../resources/extensions/bootstrap-4.3.1/js/bootstrap.bundle.min.js') }}"></script>
+
     <script type="text/javascript"  src="{{ asset('../resources/extensions/DataTables-1.10.20/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('../resources/extensions/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
+
     @yield('head')
 </head>
 
