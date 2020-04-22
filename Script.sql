@@ -5,4 +5,5 @@ php artisan db:seed --class=User;
 php artisan db:seed --class=Flow;
 php artisan db:seed --class=Document;
 php artisan db:seed --class=Step;
+php artisan db:seed --class=Classification;
 

@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">      
-        <h3 class="text-center">{{ __('app.departments.edit.title') }}</h3>
+        <h3 class="text-center">{{ __('app.home.edit.title') }}</h3>
         <button type="close" class="close" data-dismiss="modal"> 
             X
         </button>
@@ -11,8 +11,8 @@
         <form action="" method="POST">
           <input type="hidden" id="idEdit">        
            <div class="form-group">            
-             <label for="nameEdit">{{ __('app.departments.edit.name') }}</label>
-             <input type="text" class="form-control" id="nameEdit" placeholder="{{ __('app.departments.edit.name') }}" name="nameEdit" value="">
+             <label for="descriptionEdit">{{ __('app.home.edit.name') }}</label>
+             <input type="text" class="form-control" id="descriptionEdit" placeholder="{{ __('app.home.edit.name') }}" name="descriptionEdit" value="">
             </div>           
          </form>
       </div>

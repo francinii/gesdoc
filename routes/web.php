@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return view('home');
+        return redirect('home');
     }
     else{
         return view('auth/login');
@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index');
 
 Route::get('/textEditor', 'HomeController@textEditor');
 
@@ -34,6 +34,9 @@ Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 //Route::get('/rols', 'RolController@index');
 //Accede a todas las rutas necesarioas para
 // obtener los metodos del RolController
+
+Route::resource('home', 'HomeController');
+
 Route::resource('roles', 'RoleController');
 
 

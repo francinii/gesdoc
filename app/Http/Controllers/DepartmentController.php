@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
-//use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
+
 class DepartmentController extends Controller
 {
     /*
