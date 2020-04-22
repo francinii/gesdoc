@@ -1,4 +1,3 @@
-
 /** 
  * Clean the inputs
  * 
@@ -123,11 +122,28 @@ function ajaxUpdate() {
     });
 }
 
+
+$('#select_document').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    var evento = e.currentTarget[clickedIndex];
+    var username = $("select[id=select_document] option:selected").attr('id');
+    var email = $("select[id=select_document] option:selected").val();
+    var name = $("select[id=select_document] option:selected").text();
+    $(".body_table").append(
+        "<tr>" +               
+            "<td>" +
+            username +
+            "</td><td>" +
+            name +
+            "</td><td>" +
+            email +
+        "</td><td><input id ='check"+username+"' type ='checkbox'></td></tr>"
+    );
+  });
 function changeDepartment(array){
     $(".body_table").empty();
-    var id_department = $("select[id=select_document] option:selected").attr('id');
+    var id_user = $("select[id=select_document] option:selected").attr('id');
     array.forEach(element => {
-        if (id_department == element.department_id)
+        if (id_user == element.username)
         {
             $(".body_table").append(
                 "<tr>" +               
