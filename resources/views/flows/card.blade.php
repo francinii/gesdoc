@@ -1,8 +1,9 @@
 <div class="modal fade" id="card">
+    <input id ="stepId" type="hidden" value="">
     <div class="modal-dialog  modal-lg">
       <div class="modal-content">
         <div class="modal-header">      
-          <h2 class="text-center">Editar Paso</h2>
+          <h2 id= "card-title" class="text-center"></h2>
           <button type="close" class="close" data-dismiss="modal"> 
               X
           </button>
@@ -20,15 +21,13 @@
                             </div>                                      
                               
                             <div class="form-group">
-                                <label class="control-label" for="searchUser">Usuarios asociados</label>                                                       
-                              
-                                <select id='select_document' class="form-control selectpicker"  data-live-search="true" multiple >                 
-                                    <optgroup label="Picnic" >                                     
+                                <label class="control-label" for="searchUser">Usuarios asociados</label>                                                        
+                                <select id='select_document' class="form-control selectpicker"  data-live-search="true" multiple >                
+                                <optgroup label="Prueba" >      
                                     @foreach ($users as $user)
-                                        <option id = "{{$user->username}}" value = "{{$user->email}}">{{$user->name}}</option>
+                                        <option data-tokens = "Prueba" id = "{{$user->username}}" value = "{{$user->email}}">{{$user->name}}</option>
                                     @endforeach  
-                                    </optgroup>
-                                     
+                                </optgroup>                                     
                                 </select>                           
                               </div>           
                               <table id='tablelist' class="table table-responsive table-striped" style="display:table">
@@ -41,8 +40,7 @@
                                 <tbody class="body_table" >              
                                 </tbody>
                               </table>
-                            <button type="button" id="CreateSubmit" onclick="ajaxCreate({{ Auth::user()->id }})" class="btn btn-success">{{ __('app.buttons.add') }}</button>
-                        </form>
+                         </form>
                         </div>
                     </div>
                 </div>    
@@ -50,7 +48,7 @@
         </div>
         <div class="modal-footer">     
             <div class="col-md-9 text-right">
-                <button data-toggle="modal" class=" float-right btn btn-success" onclick="addUsers()" data-target="">
+                <button data-toggle="modal" class=" float-right btn btn-success" onclick="addStep()" data-target="">
                     <i class="fas fa-plus-circle"></i> {{ __('app.buttons.add') }}
                 </button>    
               </div>  
