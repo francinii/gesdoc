@@ -373,7 +373,8 @@ function joinStep(div){
     if(divSecond == divFirst){
         reset();
     }
-    $("svg").css("pointer-events","auto");
+
+    $("svg text").css("pointer-events","auto");
 }
 
 
@@ -394,7 +395,7 @@ alert('Si funciono!!!!!');
 
 
 
-$(document).on("click touchend", "svg", function (e) {
+$(document).on("click touchend", "svg text", function (e) {
     alert('Si funciono!!!!!');
 });
 
