@@ -12,6 +12,10 @@ class Classification extends Seeder
     public function run()
     {
         \DB::table('classifications')->insert(array(
+            'description' =>"Sin clasificar",
+           
+        ));
+        \DB::table('classifications')->insert(array(
             'description' =>"Documentos personales",
            
         ));

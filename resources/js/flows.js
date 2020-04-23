@@ -328,6 +328,7 @@ function createStep(){
     '</div>' ;
     $("#drag-container").append( contenido);
     step += 1;
+    
     createDraggable(id);
     saveInStorage(null, id);
     editStep(id, 'Crear un nuevo paso');
@@ -359,10 +360,9 @@ function joinStep(div){
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
+        
         array.push(line);
-        $("svg.leader-line g").click(function(){ myFunction(alert('Hola')); });
-
-      
+              
         var elemento = sessionStorage.getItem(divFirst);
         elemento= JSON.parse(elemento);  
         elemento.steps.push({begin:divFirst, end: divSecond})
@@ -373,6 +373,8 @@ function joinStep(div){
     if(divSecond == divFirst){
         reset();
     }
+
+    $("svg text").css("pointer-events","auto");
 }
 
 
@@ -384,6 +386,7 @@ function reset(){
     divSecond = "";
 }
 
+
 function addAction(){
 
 alert('Si funciono!!!!!');
@@ -391,4 +394,8 @@ alert('Si funciono!!!!!');
 
 
 
+
+$(document).on("click touchend", "svg text", function (e) {
+    alert('Si funciono!!!!!');
+});
 

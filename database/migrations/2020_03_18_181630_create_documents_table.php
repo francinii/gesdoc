@@ -17,10 +17,12 @@ class CreateDocumentsTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('flow_id')->unsigned()->nullable();   
+            $table->bigInteger('classification_id')->unsigned()->nullable();
             $table->string('description',500);
        
             $table->timestamps();
-            $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null'); 
+            $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null');
+            $table->foreign('classification_id')->references('id')->on('classifications')->onDelete('set null'); 
         });
     }
 

@@ -11,6 +11,7 @@
           <div class="form-group row">
               <label class="control-label col-2" for="flowName"> {{ __('app.flows.create.name') }} </label>
               <input type="text" class="form-control col-10" id="flowName" placeholder="{{ __('app.flows.create.name') }}" name="flowName">
+              <text>pruebaa</text>
               </div> 
         </div> 
         <div class="col-md-10">
