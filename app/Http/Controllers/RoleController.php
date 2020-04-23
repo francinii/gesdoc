@@ -46,21 +46,46 @@ class RoleController extends Controller
         return view('roles.index', compact('roles', 'permissions'));
     }
 
-    /**
+  /**
      * Get a validator for an incoming registration request.
      *
      * @param array $data
+     * @param bool $create
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data,$create)
     {
-        $validacion = [
+        $validacion = [           
             'description' => ['required', 'string', 'max:255'],
         ];
+        if(!$create){
+            $validacion['id']=['required', 'int'];
+        }
 
         return Validator::make($data, $validacion);
     }
-
+    /**
+     * transform a array to string
+     * @param array $create
+     * @return String     
+     */  
+    protected function myArray(array $dato)
+    {         
+        $arryString="'".$dato['description']."'";
+        $arryString.=",'";
+        $permissions=null;
+        if(isset($dato['permissions'])) $permissions = $dato['permissions'];   
+        if ($permissions != null) {
+            
+            foreach ($permissions as $permission) {
+                $arryString.="$permission,";
+            }
+            $arryString=rtrim($arryString, ",");
+            
+        }
+        $arryString.="'";
+        return $arryString;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -82,10 +107,19 @@ class RoleController extends Controller
     {
         // echo  response()->json($request->all());
         // $datos = $request->all();
-        $this->validator($request->all())->validate();
-        $datos = $request->except('_token', 'permissions');
+        $this->validator($request->all(),true)->validate();
+        $dato = $request->except('_token');
+        $dato=$this->myArray($dato);  
+        DB::select("call insert_role($dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']==3)  throw new DecryptException('el rol  ya existe en la base de datos');
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
 
-        $permissions = request('permissions');
+
+
+      /*  
         $IdRole = Role::insertGetId($datos);
         if ($permissions != null) {
             foreach ($permissions as $permission) {
@@ -96,7 +130,7 @@ class RoleController extends Controller
             }
         }
 
-        return RoleController::refresh();
+        return RoleController::refresh();*/
 
     }
 
@@ -132,21 +166,15 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validator($request->all())->validate();
-        $dato = request()->except(['_token', '_method', 'permissions']);
-        $permissions = request('permissions');
+        $this->validator($request->all(),false)->validate();
+        $dato = request()->except(['_token', '_method']);
         $id = $dato['id'];
-        Role::where('id', '=', $id)->update($dato);
-        DB::table('permission_role')->where('role_id', '=', $id)->delete();
-        if ($permissions != null) {
-            foreach ($permissions as $permission) {
-                DB::table('permission_role')->insert([
-                    'role_id' => $id,
-                    'permission_id' => $permission,
-                ]);
-            }
-        }
-        return RoleController::refresh();
+        $dato=$this->myArray($dato);  
+        DB::select("call update_role($id,$dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**
@@ -157,8 +185,11 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        Role::destroy($id);
-        return RoleController::refresh();
+        DB::select("call delete_role($id,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**

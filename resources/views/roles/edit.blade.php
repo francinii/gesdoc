@@ -13,7 +13,7 @@
            <div class="form-group">
             <input name="editId" type="hidden">
              <label for="editDescription">{{ __('app.roles.edit.name') }}</label>
-             <input type="text" class="form-control" id="description" placeholder="{{ __('app.roles.edit.name') }}" name="editDescription" value="">
+             <input type="text" class="form-control" id="editDescription" placeholder="{{ __('app.roles.edit.name') }}" name="editDescription" value="">
             </div> 
             <label for="role">{{ __('app.roles.edit.permission') }}</label>
             <div id="editCheckPermissions">           

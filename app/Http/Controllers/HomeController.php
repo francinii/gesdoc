@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Classification;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use DB;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Validator;
+
 class HomeController extends Controller
 {
     /**
@@ -21,7 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $classifications = Classification::all();
+        return view('home.home', compact('classifications'));
     }
 
     public function textEditor(){

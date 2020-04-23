@@ -178,5 +178,38 @@ return [
             'delete' => 'Eliminar documento',
         ],
     ],
+    'home' => [    
+        'create' => [  
+            'title' => 'Nueva clasificacion',  
+            'name' => 'Nombre de la clasificacion',             
+        ],
+
+        'edit' => [
+            'title' => 'Editar clasificacion',  
+            'name' => 'Nombre del clasificacion', 
+        ],
+
+        'index' => [
+            'title' => 'Departamentos del sistema',
+        ],
+
+        'list' => [
+            'title' => '',
+        ],
+
+        'table' => [
+            'id' => 'Id',
+            'type' => 'tipo',
+            'description' => 'Clasificación',
+            'create'=> 'Creado',
+            'modified'=> 'Modificado',
+            'edit' => 'Editar clasificación',
+            'delete' => 'Eliminar clasificación',
+        ],
+        'menu' => [
+            'option1' => 'Mis documentos',
+            'option2' => 'Mis flujos',
+        ],
+    ],
 
 ];
