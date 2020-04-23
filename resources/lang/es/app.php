@@ -200,7 +200,7 @@ return [
         'table' => [
             'id' => 'Id',
             'type' => 'tipo',
-            'description' => 'Clasificación',
+            'description' => 'Nombre',
             'create'=> 'Creado',
             'modified'=> 'Modificado',
             'edit' => 'Editar clasificación',

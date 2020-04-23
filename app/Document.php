@@ -19,5 +19,12 @@ class Document extends Model
     public function users() {
         return $this->belongsToMany('App\User');
     }
+    
+    /**
+     * Relationship many to many 
+    */
+    public function classfication() {
+        return $this->belongsTo('App\Classfication');
+    }
 
 }

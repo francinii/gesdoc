@@ -253,6 +253,7 @@ function createStep(){
     '</div>' ;
     $("#drag-container").append( contenido);
     step += 1;
+    
     createDraggable(id);
 }
 
@@ -280,12 +281,15 @@ function joinStep(div){
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
+        
         array.push(line);
+        
         reset();
     }
     if(divSecond == divFirst){
         reset();
     }
+    $("svg").css("pointer-events","auto");
 }
 
 function reset(){
@@ -293,10 +297,16 @@ function reset(){
     divSecond = "";
 }
 
+
 function addAction(){
 
 alert('Si funciono!!!!!');
 }
 
 
+
+
+$(document).on("click touchend", "svg", function (e) {
+    alert('Si funciono!!!!!');
+});
 
