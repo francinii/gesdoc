@@ -116,6 +116,7 @@ class RoleController extends Controller
         if($res[0]['res']==3)  throw new DecryptException('el rol  ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
         return $this->refresh();
+        
 
 
 
