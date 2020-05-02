@@ -20,30 +20,14 @@ class User extends Seeder
         )); */
 
         \DB::table('users')->insert(array(
-            'name' =>"MARIA ELENA CORRALES",
-            'username' =>"116780195",
-            'email' =>"maria.corrales.garro@una.ac.cr",
-            'role_id'  => 1,
-            'department_id'  => 1,
-            'password' => Hash::make('12345678')
-        ));
-
-        \DB::table('users')->insert(array(
-            'name' =>"TATIANA CORRALES",
-            'username' =>"402340421",
-            'email' =>"tatiana.corrales.palma@una.ac.cr",
-            'role_id'  => 1,
-            'department_id'  => 2,
-            'password' => Hash::make('12345678')
-        ));
-
-        \DB::table('users')->insert(array(
             'name' =>"DANNTY VALERIO",
             'username' =>"402340420",
             'email' =>"danny.valerio.ramirez@una.ac.cr",
             'role_id'  => 1,
             'department_id'  => 1,
-            'password' => Hash::make('12345678')
+            'password' => Hash::make('12345678'),
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',
         ));
 
     }

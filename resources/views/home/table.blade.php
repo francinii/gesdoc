@@ -10,13 +10,32 @@
                 </tr>
             </thead>
             <tbody >
-                @foreach ($classifications as $classification)
+                
+                @foreach ($classification->classifications as $classifications)
                 <tr>
-                     <td class="text-center">{{$classification->id}}</td>
-                    <td class="text-center"><i class="fas fa-folder fa-2x"></i></td>
-                    <td class="text-center">{{$classification->description}}</td>                           
-                    <td class="text-center">{{$classification->created_at}}</td>  
-                    <td class="text-center">{{$classification->updated_at}}</td>
+                     <td class="text-center">{{$classifications->id}}</td>
+                    <td class="text-center"><i class="fas fa-folder fa-2x" value="folder"></i></td>
+                    <td class="text-center">{{$classifications->description}}</td>                           
+                    <td class="text-center">{{$classifications->created_at}}</td>  
+                    <td class="text-center">{{$classifications->updated_at}}</td>
+          
+                </tr>
+                @endforeach
+                @foreach ($classification->documents as $document)
+                <tr>
+                     <td class="text-center">{{$document->id}}</td>
+                     @if ($document->type="doc")
+                    <td class="text-center"><i class="fas fa-file-word fa-2x"><span style="display:none;">{{$document->type}}</span></i></td>
+                    @elseif($document->type="xls")
+                    <td class="text-center"><i class="fas fa-file-word fa-2x"><span style="display:none;">{{$document->type}}</span></i></td>
+                    @elseif($document->type="ppt")
+                    <td class="text-center"><i class="fas fa-file-powerpoint fa-2x"><span style="display:none;">{{$document->type}}</span></i></td>
+                    @else
+                    <td class="text-center"><i class="fas fa-file fa-2x"><span style="display:none;">{{$document->type}}</span></i></td>
+                    @endif
+                    <td class="text-center">{{$document->description}}</td>                           
+                    <td class="text-center">{{$document->created_at}}</td>  
+                    <td class="text-center">{{$document->updated_at}}</td>
           
                 </tr>
                 @endforeach

@@ -83,8 +83,8 @@ class UserController extends Controller
     protected function myArray(array $dato)
     { 
    
-        $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."','".$dato['username'].
-        "','".$dato['email']."','".$dato['password']."'";
+        $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."',".$dato['username'].
+        ",'".$dato['email']."','".$dato['password']."'";
      
         return $arryString;
     }

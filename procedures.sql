@@ -234,8 +234,9 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_user`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` int,IN `p_email` varchar(500),IN `p_password` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` int,IN `p_email` varchar(500),IN `p_password` varchar(500),IN `p_classification` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
+  declare p_user_id Integer;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -251,6 +252,8 @@ BEGIN
 	END;
             START TRANSACTION;
                     INSERT INTO `users`(role_id,department_id,name,username,email,password,created_at) VALUES (p_role_id,p_department_id,p_name,p_username,p_email,p_password, NOW());
+                    SET p_id = LAST_INSERT_ID();
+                    
             COMMIT;
             -- SUCCESS
 SET res = 0;

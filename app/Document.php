@@ -24,7 +24,7 @@ class Document extends Model
      * Relationship many to many 
     */
     public function classfication() {
-        return $this->belongsTo('App\Classfication');
+        return $this->belongsToMany('App\Classfication');
     }
 
 }

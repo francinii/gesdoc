@@ -14,15 +14,18 @@ class CreateActionDocumentUserTable extends Migration
     public function up()
     {
         Schema::create('action_document_user', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->engine = 'InnoDB';      
+            $table->bigInteger('action_id')->unsigned()->nullable(); 
+            $table->bigInteger('document_id')->unsigned()->nullable();   
+            $table->string('username')->nullable(); 
+              
             $table->timestamps();
 
-            $table->bigInteger('document_user_id')->unsigned()->nullable();   
-            $table->bigInteger('action_id')->unsigned()->nullable();  
-
-            $table->foreign('document_user_id')->references('id')->on('document_user')->onDelete('cascade');
+            $table->primary(['action_id','document_id','username']);
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');
+            $table->foreign('document_id')->references('document_id')->on('document_user')->onDelete('cascade');
+            $table->foreign('username')->references('username')->on('document_user')->onDelete('cascade');
+            
 
         });
     }

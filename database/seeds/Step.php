@@ -14,17 +14,23 @@ class Step extends Seeder
         \DB::table('steps')->insert(array(            
             'flow_id' =>"1",  
             'sequence' =>"1",  
-            'description' =>"Paso 1",      
+            'description' =>"Paso 1",  
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',    
         ));
         \DB::table('steps')->insert(array(            
             'flow_id' =>"1",  
             'sequence' =>"2",  
-            'description' =>"Paso 2",      
+            'description' =>"Paso 2", 
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',     
         ));
         \DB::table('steps')->insert(array(            
             'flow_id' =>"1",  
             'sequence' =>"3",  
-            'description' =>"Paso 3",      
+            'description' =>"Paso 3", 
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',     
         ));
 
 

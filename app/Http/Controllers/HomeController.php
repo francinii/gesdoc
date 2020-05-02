@@ -29,8 +29,8 @@ class HomeController extends Controller
     public function index()
     {
 
-        $classifications = Classification::all();
-        return view('home.home', compact('classifications'));
+        $classification = Classification::all()->first();;
+        return view('home.home', compact('classification'));
     }
 
     public function textEditor(){
