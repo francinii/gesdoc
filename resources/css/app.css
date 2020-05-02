@@ -69,4 +69,8 @@
   width: 130px;
 }
 
+.card-shadow {
+  box-shadow: 0 0 20px #3490dc !important;
+}
+
 /*# sourceMappingURL=app.css.map */

@@ -63,3 +63,10 @@
     width: 130px;
 }
 
+.card-shadow {
+    //border: 1px solid ;
+    //padding: 5px;
+    //box-shadow: 2px 2px 2px 2px blue inset !important;
+    box-shadow: 0 0 20px $blue !important;
+}
+

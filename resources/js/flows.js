@@ -1,3 +1,12 @@
+//////////////////// Variables Globales //////////////////
+var id = 1; //revisar si se sta usando
+var array = Array(); //arreglo de objetos LeaderLine
+var arrayDraggable = Array();
+var step = 1;// Necessary for the creation of id in the draggle createStep() method
+var divFirst = ""; //usados en el metodo joinStep()
+var divSecond = ""; //usados en el metodo joinStep()
+//////////////////// Fin Variables Globales //////////////////
+
 /** 
  * Clean the inputs
  * 
@@ -9,9 +18,9 @@ function clearDescription() {
         $(this).prop("checked", false);
     });
 }
-function prueba(){
-    alert("holaS");
-}
+// function prueba(){
+//     alert("holaS");
+// }
 function openCreate(){
     //clearDescription();
     $("#flow-wrapper").hide(500);
@@ -184,33 +193,29 @@ function deleteStep(element){
 }*/
 //Funciones del flujo
 
-//////////////////// Variables Globales //////////////////
-var id = 1; //revisar si se sta usando
-var array = Array(); //arreglo de objetos LeaderLine
-var step = 1;// Necessary for the creation of id in the draggle createStep() method
-var divFirst = ""; //usados en el metodo joinStep()
-var divSecond = ""; //usados en el metodo joinStep()
-//////////////////// Fin Variables Globales //////////////////
+
+// function createStep2(nombre){
+   
+//     new PlainDraggable(document.getElementById(), {
+//         onMove: function() { movimiento() },
+//         zIndex: false
+//     });
+// }
 
 
-new PlainDraggable(document.getElementById('draggable_inicio'), {
-    onMove: function() { movimiento() },
-    zIndex: false
-});
-new PlainDraggable(document.getElementById('draggable_final'), {
-    onMove: function() { movimiento() },
-    zIndex: false
-});
 
-function movimiento(){
-    array.forEach(element => {
-        element.position();
-    });
+function openStep(step, title){   
+    editStep(step, title);
+    formDisable(true);
 }
 
-function openStep(id){
-    alert ('see open Step');
+function formDisable(property){
+    $("#stepId").prop('disabled', property);
+    $("#CreateDescription").prop('disabled', property);
+    $(".body_table button").prop('disabled', property);
+    $("#select_document").prop('disabled', property);    
 }
+
 function deleteStep(step){
     //  var elemento = element.closest('div[class^="container-step"]');
     var id = step.getAttribute('id');
@@ -223,18 +228,31 @@ function deleteStep(step){
           }
           index+=1;
       }); 
-      for (var i = indices.length -1; i >= 0; i--){
-          array.splice(indices[i],1);
-      }
-      $("#"+id).remove();   
+    for (var i = indices.length -1; i >= 0; i--){
+        array.splice(indices[i],1);
+    }
+
+    for(let i=0; i<sessionStorage.length; i++) {       
+       let key = sessionStorage.key(i);
+       item =  JSON.parse(sessionStorage.getItem(key));
+       a  =  item.steps;
+       b =  item.steps.length;
+       for(var j = item.steps.length -1; j >= 0; j--) {        
+            if(item.steps[j].begin == id || item.steps[j].end == id ){
+                item.steps.splice(j,1);        
+                sessionStorage.setItem(item.id, JSON.stringify(item));             
+            }        
+        }
+    }
+    $("#"+id).remove();   
       sessionStorage.removeItem(id); 
 }
   
 function editStep(step, title){
+    formDisable(false);
     $(".body_table").empty();
     //var id = step.getAttribute('id');
-    var id = step;
-    
+    var id = step;    
     var elemento = sessionStorage.getItem(id);
     elemento= JSON.parse(elemento);  
     $("#stepId").val(id);    
@@ -251,9 +269,6 @@ function editStep(step, title){
         });
     }
     steps = elemento.steps;
-  //  steps.forEach(element => {
-        
-   /// });   
     $("#card").modal("show");
 }
 
@@ -280,24 +295,22 @@ function addStep(){
     saveInStorage(step, idStep);
     $("#card").modal("hide");
     $("#text"+idStep).val(description);    
-
 } 
+
 //sessionStorage.getItem(step);
 function saveInStorage(step, stepId){     
     if (typeof(Storage) !== "undefined") {
         (step !=null)?
-            sessionStorage.setItem(stepId, JSON.stringify(step)) :
-            sessionStorage.setItem(stepId, JSON.stringify(createObjectStep()) );            
+        sessionStorage.setItem(stepId, JSON.stringify(step)) :
+        sessionStorage.setItem(stepId, JSON.stringify(createObjectStep(stepId)));            
     }
 }
 
-
 //Crea un objeto en blanco que es almacenado cuando se crea un step en el local 
 //storge
-function createObjectStep(){
-    idStep =$("#stepId").val();  
+function createObjectStep(stepId) {   
     return step1 = {
-        id : idStep,
+        id : stepId,
         description : '',
         users : [],
         steps : [],
@@ -306,13 +319,36 @@ function createObjectStep(){
     }
 }
 
+function createStartEnd(id, text, class1 ){
+   drag = 0;
+    arrayDraggable.forEach(element => {
+       dragId = element.id;
+       if(dragId == id){
+            drag = 1;
+           
+       }
+    });   
+    if(drag != 1){
+        var contenido = 
+        '<div id ="'+id+'" class="special_card card">' +
+            '<div class="card-step card-header '+class1+'">' +
+            '<label>'+text+' </label>' +
+            '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">' +
+                '<i class="fas fa-link"></i>' +
+            '</button>'+
+        '</div>'+
+        '</div>';
+        addElementToCanvas(id,contenido);
+    }
+    
+}
 
 function createStep(){
     var id = 'draggable' + step;
     var contenido = '<div id = "'+id+'" class="card card_size "> '+
     '<div class="card-step card-header bg-dark">'+
     '<input id ="text'+id+'" type="text" placeholder="Descripcion" disabled>  '+             
-    '<button type="button" class="btn btn-success" onclick="openStep('+id+')"> '+
+    '<button type="button" class="btn btn-success" onclick="openStep(\`'+id+'\`, \`Ver \`)"> '+
     '<i class="far fa-eye"></i> '+
     '</button> '+
     '<button type="button" class="btn btn-info" onclick="editStep(\`'+id+'\`, \`Editar\`)"> '+
@@ -325,30 +361,42 @@ function createStep(){
     '<i class="fas fa-link"></i> '+
     '</button> '+
     '</div>'+
-    '</div>' ;
-    $("#drag-container").append( contenido);
+    '</div>' ;   
     step += 1;
-    
-    createDraggable(id);
-    saveInStorage(null, id);
-    editStep(id, 'Crear un nuevo paso');
-
-    
+    addElementToCanvas(id,contenido);
+    editStep(id, 'Crear un nuevo paso');    
 }
 
-function createDraggable(id){
-    new PlainDraggable(document.getElementById(id), {
-        onMove: function() { movimiento() },
-        zIndex: false
+function movimiento(){
+    array.forEach(element => {
+        element.position();
     });
 }
 
+function addElementToCanvas(id,contenido){
+    $("#drag-container").append(contenido);
+    createDraggable(id);
+    saveInStorage(null, id);
+}
+
+function createDraggable(id){
+     //'draggable_inicio' 'draggable_final'
+    drag =new PlainDraggable(document.getElementById(id), {
+        onMove: function() { movimiento() },
+        zIndex: false
+    });
+    arrayDraggable.push({id: id, drag: drag}); 
+}
+
 function joinStep(div){
+      
     var labelName = 'Probando';
-    if(divFirst == ""){
+    if(divFirst == ""){       
         divFirst = div.getAttribute('id');
-    } else if(divSecond == "" && divSecond != divFirst ){
+        $("#"+divFirst).addClass("card-shadow");
+    } else if(divSecond == "" && divSecond != divFirst ){        
         divSecond = div.getAttribute('id');
+        $("#"+divSecond).addClass("card-shadow");
     }
     if(divFirst != "" && divSecond != "" && divSecond != divFirst ){
         line = new LeaderLine( document.getElementById(divFirst), document.getElementById(divSecond), {
@@ -359,14 +407,14 @@ function joinStep(div){
         //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
-        line.show(); 
-        
-        array.push(line);
-              
+        line.show();         
+        array.push(line);              
         var elemento = sessionStorage.getItem(divFirst);
         elemento= JSON.parse(elemento);  
         elemento.steps.push({begin:divFirst, end: divSecond})
         sessionStorage.setItem(divFirst, JSON.stringify(elemento));
+        $("#"+divFirst).removeClass("card-shadow");
+         $("#"+divSecond).removeClass("card-shadow");  
         reset(); 
 
     }
@@ -377,23 +425,17 @@ function joinStep(div){
     $("svg text").css("pointer-events","auto");
 }
 
-
 function probando (){
     alert('hola');
 }
-function reset(){
+function reset(){    
     divFirst = "";
-    divSecond = "";
+    divSecond = "";    
 }
-
 
 function addAction(){
-
-alert('Si funciono!!!!!');
+    alert('Si funciono!!!!!');
 }
-
-
-
 
 $(document).on("click touchend", "svg text", function (e) {
     alert('Si funciono!!!!!');
