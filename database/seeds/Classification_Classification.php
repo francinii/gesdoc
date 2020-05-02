@@ -13,14 +13,14 @@ class Classification_Classification extends Seeder
     {
         \DB::table('classification_classification')->insert(array(
             'first_id' =>1,
-            'second__id' =>2,
+            'second_id' =>2,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
         ));
         \DB::table('classification_classification')->insert(array(
             'first_id' =>1,
-            'second__id' =>3,
+            'second_id' =>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
