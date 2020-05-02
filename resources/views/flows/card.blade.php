@@ -23,11 +23,15 @@
                             <div class="form-group">
                                 <label class="control-label" for="searchUser">Usuarios asociados</label>                                                        
                                 <select id='select_document' class="form-control selectpicker"  data-live-search="true" multiple >                
-                                <optgroup label="Prueba" >      
+                                @foreach ($departments as $department)                                                            
+                                <optgroup label="{{$department->description}}" >      
                                     @foreach ($users as $user)
-                                        <option data-tokens = "Prueba" id = "{{$user->username}}" value = "{{$user->email}}">{{$user->name}}</option>
+                                        @if($user->department_id == $department->id)
+                                        <option data-tokens = "{{$department->description}}" id = "{{$user->username}}" value = "{{$user->email}}">{{$user->name}}</option>
+                                        @endif 
                                     @endforeach  
-                                </optgroup>                                     
+                                </optgroup>   
+                                @endforeach                                    
                                 </select>                           
                               </div>           
                               <table id='tablelist' class="table table-responsive table-striped" style="display:table">
