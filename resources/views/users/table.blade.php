@@ -23,12 +23,12 @@
                         @endforeach                  
                      
                     <td class=" text-center">
-                        <button onclick = "edit('{{$user->id}}','{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->department_id}}')"  class="btn btn-info"  data-toggle="modal" >
+                        <button onclick = "edit('{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->department_id}}')"  class="btn btn-info"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    
                     <td class=" text-center">                        
-                            <button type="button" onclick="confirmDelete({{$user->id }}  ,'users','table','¿Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
+                            <button type="button" onclick="confirmDelete({{$user->username }}  ,'users','table','¿Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>                      

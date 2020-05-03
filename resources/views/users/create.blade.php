@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <form action="" method="POST">
-          <input type="hidden" id="id_create">
+         
           <div class="form-group">
             <label for="user_create">{{ __('app.users.create.username') }}</label>
             @if (env("use_LDAP"))

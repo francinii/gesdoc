@@ -41,7 +41,7 @@ function validaEdit() {
  * Change the classes of the inputs depending on if the entrance
  * is valid or not.
  *
- * @param {integer} id - user id
+ * 
  * @param {string} user  - user description
  * @param {string} email - user's email
  * @param {string} name - user's name
@@ -49,7 +49,7 @@ function validaEdit() {
  * @param {string} departmentId - department asociated to the user
  *
  */
-function edit(id, user, email, name, roleId, departmentId) {
+function edit(user, email, name, roleId, departmentId) {
     $("select option:selected").each(function () {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -59,7 +59,7 @@ function edit(id, user, email, name, roleId, departmentId) {
     $("input[name=name_edit]").removeClass("is-invalid");
     $("input[name=password_edit]").removeClass("is-invalid");
     $("#password_create_message").html("");
-    $("input[id=id_edit]").val(id);
+    
     $("input[name=user_edit]").val(user);
     $("input[name=email_edit]").val(email);
     $("input[name=name_edit]").val(name);
@@ -106,8 +106,8 @@ function obtenerDatos() {
  */
 function ajaxUpdate() {
     if (validaEdit()) {
-        var id = $("input[id=id_edit]").val();
-        var user = $("input[name=user_edit]").val();
+        var id = $("input[id=user_edit]").val(); 
+        var user=  $("input[id=user_edit]").val();     
         var email = $("input[name=email_edit]").val();
         var name = $("input[name=name_edit]").val();
         var role = $("select[name=role_edit] option:selected").val();
@@ -123,7 +123,7 @@ function ajaxUpdate() {
             data: {
                 _token: $("input[name=_token]").val(),
                 _method: "PATCH",
-                id: id,
+               
                 name: name,
                 username: user,
                 email: email,

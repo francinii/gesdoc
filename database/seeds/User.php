@@ -20,9 +20,9 @@ class User extends Seeder
         )); */
 
         \DB::table('users')->insert(array(
-            'name' =>"DANNTY VALERIO",
+            'name' =>"DANNY VALERIO",
             'username' =>"402340420",
-            'email' =>"danny.valerio.ramirez@una.ac.cr",
+            'email' =>"danny.valerio.ramirez@est.una.ac.cr",
             'role_id'  => 1,
             'department_id'  => 1,
             'password' => Hash::make('12345678'),

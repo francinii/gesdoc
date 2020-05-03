@@ -181,7 +181,8 @@ return [
     'home' => [    
         'create' => [  
             'title' => 'Nueva clasificacion',  
-            'name' => 'Nombre de la clasificacion',             
+            'name' => 'Nombre de la clasificacion',     
+                      
         ],
 
         'edit' => [
@@ -205,6 +206,7 @@ return [
             'modified'=> 'Modificado',
             'edit' => 'Editar clasificación',
             'delete' => 'Eliminar clasificación',
+            'defaultClassification' => 'Sin clasificar', 
         ],
         'menu' => [
             'option1' => 'Mis documentos',

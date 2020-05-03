@@ -84,7 +84,7 @@ class UserController extends Controller
     { 
    
         $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."',".$dato['username'].
-        ",'".$dato['email']."','".$dato['password']."'";
+        ",'".$dato['email']."','".$dato['password']."','". __('app.home.table.defaultClassification')."'";
      
         return $arryString;
     }
@@ -166,8 +166,8 @@ class UserController extends Controller
         } else {
             $dato = request()->except(['_token', '_method','updatePassword', 'password']);
         }
-        $id = $dato['id'];
-        User::where('id', '=', $id)->update($dato);
+        $id = $dato['username'];
+        User::where('username', '=', $id)->update($dato);
         return UserController::refresh();
     }
 
