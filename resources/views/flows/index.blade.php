@@ -6,14 +6,7 @@
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
 
         <!-- Para el select con search -->
-        
-  
-
-       
-  <script src="{{ asset('../resources/js/select.js') }}"></script>   
-
-
-        @stop
+@stop
 
 @section('title', 'Flujos') 
 
@@ -45,6 +38,7 @@
     @include('flows.card') 
     @include('partials.confirm')
     @include('flows.create')
+    @include('flows.line')
 
     <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 @stop

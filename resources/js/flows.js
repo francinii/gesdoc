@@ -7,6 +7,21 @@ var divFirst = ""; //usados en el metodo joinStep()
 var divSecond = ""; //usados en el metodo joinStep()
 //////////////////// Fin Variables Globales //////////////////
 
+
+
+
+$(document).ready(function (e){
+    var n = sessionStorage.length -1;
+    while(n>=0) {
+        key = sessionStorage.key(n);       
+        sessionStorage.removeItem(key);
+        n -=1;
+                  
+    }
+
+
+    
+});
 /** 
  * Clean the inputs
  * 
@@ -221,9 +236,9 @@ function deleteStep(step){
     var id = step.getAttribute('id');
     var index = 0; 
     var indices = Array();
-      array.forEach(line => {              
-          if(line.start.getAttribute('id') == id  || line.end.getAttribute('id') == id ){
-              line.remove();        
+      array.forEach(element => {              
+          if(element.line.start.getAttribute('id') == id  || element.line.end.getAttribute('id') == id ){
+            element.line.remove();        
              indices.push(index);
           }
           index+=1;
@@ -369,7 +384,7 @@ function createStep(){
 
 function movimiento(){
     array.forEach(element => {
-        element.position();
+        element.line.position();
     });
 }
 
@@ -388,56 +403,60 @@ function createDraggable(id){
     arrayDraggable.push({id: id, drag: drag}); 
 }
 
-function joinStep(div){
-      
+function joinStep(div){    
+    //Verificar que no se creen lineas que tienen el mismo div de inicio y final  
     var labelName = 'Probando';
     if(divFirst == ""){       
         divFirst = div.getAttribute('id');
-        $("#"+divFirst).addClass("card-shadow");
+        $("#"+divFirst).addClass("card-shadow-info");
     } else if(divSecond == "" && divSecond != divFirst ){        
         divSecond = div.getAttribute('id');
-        $("#"+divSecond).addClass("card-shadow");
+        $("#"+divSecond).addClass("card-shadow-info");
     }
-    if(divFirst != "" && divSecond != "" && divSecond != divFirst ){
+    if(divFirst != "" && divSecond != "" && divSecond != divFirst ){       
+        idLine = divFirst+'-'+ divSecond; 
         line = new LeaderLine( document.getElementById(divFirst), document.getElementById(divSecond), {
             hide:'true',
             startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
-        // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),
+        // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
+            startLabel: LeaderLine.captionLabel(idLine, {color: 'red', outlineColor : ''}),
             middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
         //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
-        line.show();         
-        array.push(line);              
+        line.show(); 
+        //Agregar al array de lineas la linea con su respectivo id        
+        array.push({id: idLine, line: line});              
         var elemento = sessionStorage.getItem(divFirst);
         elemento= JSON.parse(elemento);  
-        elemento.steps.push({begin:divFirst, end: divSecond})
+        elemento.steps.push({begin:divFirst, end: divSecond});
         sessionStorage.setItem(divFirst, JSON.stringify(elemento));
-        $("#"+divFirst).removeClass("card-shadow");
-         $("#"+divSecond).removeClass("card-shadow");  
+        $("#"+divFirst).removeClass("card-shadow-info");
+         $("#"+divSecond).removeClass("card-shadow-info");  
         reset(); 
-
+        //Le da la accion de clicear a los svg text
+        $("svg text").css("pointer-events","auto");       
     }
     if(divSecond == divFirst){
+        $("#"+divFirst).removeClass("card-shadow-info");
         reset();
-    }
-
-    $("svg text").css("pointer-events","auto");
+    } 
 }
 
-function probando (){
-    alert('hola');
-}
+
+
+$(document).on("click", "svg.leader-line text", function (e) {   
+  
+   $("#line-modal").modal("show"); 
+});  
+
+
 function reset(){    
     divFirst = "";
     divSecond = "";    
 }
 
-function addAction(){
-    alert('Si funciono!!!!!');
-}
-
-$(document).on("click touchend", "svg text", function (e) {
-    alert('Si funciono!!!!!');
-});
-
+ 
+// $(document).on("click touchend", "svg text", function (e) {
+//     alert('Si funciono!!!!!');
+// });
