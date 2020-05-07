@@ -66,7 +66,7 @@ class RoleController extends Controller
     }
     /**
      * transform a array to string
-     * @param array $create
+     * @param array $dato
      * @return String     
      */  
     protected function myArray(array $dato)

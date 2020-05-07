@@ -77,14 +77,19 @@ class UserController extends Controller
 
     /**
      * transform a array to string
-     * @param array $create
+     * @param array $dato
+     * @param boolean $create
      * @return String     
      */  
-    protected function myArray(array $dato)
+    protected function myArray(array $dato,$create)
     { 
-   
+        $arryString;
+        if($create){
         $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."',".$dato['username'].
         ",'".$dato['email']."','".$dato['password']."','". __('app.home.table.defaultClassification')."'";
+        }else{
+            
+        }
      
         return $arryString;
     }
@@ -118,7 +123,7 @@ class UserController extends Controller
             $dato = request()->except(['_token', '_method','updatePassword', 'password']);
             $dato['password']="created with ldap";
         }
-        $dato=$this->myArray($dato);  
+        $dato=$this->myArray($dato,true);  
         DB::select("call insert_user($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);

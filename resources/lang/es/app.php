@@ -212,6 +212,14 @@ return [
             'option1' => 'Mis documentos',
             'option2' => 'Mis flujos',
         ],
+
+        'contextMenu' => [
+            'delete' => 'Eliminar',
+            'createClassification' => 'Crear clasificación',
+            'editClassification' => 'Editar clasificación',
+            'createDocument' => 'Crear documento',
+            'share' => 'compartir',
+        ],
     ],
 
 ];

@@ -261,3 +261,35 @@ END
 DELIMITER ;
 -- call insert_user(1,1,'Danny',406750539,'user@gmail.com','created with ldap',@res);
 -- SELECT @res as res;
+
+-- ----------------------------
+-- PROCEDURE delete a department
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `update_department`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_department`(IN `p_id` int, IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                  UPDATE `departments` SET `description`= p_description, updated_at=NOW()  WHERE `id`= p_id; 
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call update_department(1,'sedes',@res);
+-- SELECT @res as res;
