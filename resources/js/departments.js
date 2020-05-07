@@ -119,7 +119,7 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts("El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
+                alerts("El departamento "+description+" ha sido actualizado satisfactoriamente", "alert-success");
             },
             error: function(request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");

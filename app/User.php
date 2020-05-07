@@ -10,6 +10,13 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * The attributes that is the primaryKey
+     *
+     * @var array
+     */
+    protected $primaryKey = 'username';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -48,7 +55,7 @@ class User extends Authenticatable
      * The user has many flows
     */
     public function flujos() {
-        return $this->hasMany('App\Flujo','id');
+        return $this->hasMany('App\Flujo');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Department extends Seeder
+class Classification_Classification extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,17 +11,19 @@ class Department extends Seeder
      */
     public function run()
     {
-        \DB::table('departments')->insert(array(
-            'description' =>"Escuela de Informática",
+        \DB::table('classification_classification')->insert(array(
+            'first_id' =>1,
+            'second_id' =>2,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
         ));
-        \DB::table('departments')->insert(array(
-            'description' =>"Escuela de Matemática",
+        \DB::table('classification_classification')->insert(array(
+            'first_id' =>1,
+            'second_id' =>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
-         
+           
         ));
     }
 }

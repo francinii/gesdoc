@@ -16,8 +16,13 @@ class CreateClassificationsTable extends Migration
         Schema::create('classifications', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
+            $table->string('username')->nullable();  
             $table->string('description',500);
+            $table->boolean('is_Start');
             $table->timestamps();
+
+            
+            $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
         });
     }
 

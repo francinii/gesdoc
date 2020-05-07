@@ -13,7 +13,7 @@ php artisan route:list // lista de rutas
 //antes de esto de la autentificacion
 composer require laravel/ui --dev
 php artisan ui vue --auth
-
+php artisan make:migration create_classification_document_table
 
 debug blade.php
 <?php xdebug_break(); ?>

@@ -1,5 +1,3 @@
-
-
 function validaEdit() {
     var validado = true;
     if ($("input[name=user_edit]").val() == "") {
@@ -21,39 +19,38 @@ function validaEdit() {
     } else {
         $("input[name=email_edit]").removeClass("is-invalid");
     }
-
-    if (
-        $("input[name=checkbox_password]").is(":checked") &&
-        $("input[name=password_edit]").val().length < 7
-    ) {
-        $("input[name=password_edit]").addClass("is-invalid");
-        $("#password_edit_message").html(
-            "La contraseña debe tener al menos 8 digitos"
-        );
-        validado = false;
-    } else {
-        $("input[name=password_edit]").removeClass("is-invalid");
-        $("#password_edit_message").html("");
+    if (!ldap) {
+        if (
+            $("input[name=checkbox_password]").is(":checked") &&
+            $("input[name=password_edit]").val().length < 7
+        ) {
+            $("input[name=password_edit]").addClass("is-invalid");
+            $("#password_edit_message").html(
+                "La contraseña debe tener al menos 8 digitos"
+            );
+            validado = false;
+        } else {
+            $("input[name=password_edit]").removeClass("is-invalid");
+            $("#password_edit_message").html("");
+        }
     }
-
     return validado;
 }
-
 
 /**
  * Change the classes of the inputs depending on if the entrance
  * is valid or not.
+ *
  * 
- * @param {integer} id - user id
  * @param {string} user  - user description
- * @param {string} email - user's email 
+ * @param {string} email - user's email
  * @param {string} name - user's name
  * @param {string} roleId - role asociated to the user
  * @param {string} departmentId - department asociated to the user
- *     
+ *
  */
-function edit(id, user, email, name, roleId, departmentId) {
-    $("select option:selected").each(function() {
+function edit(user, email, name, roleId, departmentId) {
+    $("select option:selected").each(function () {
         //cada elemento seleccionado
         $(this).prop("selected", false);
     });
@@ -62,18 +59,20 @@ function edit(id, user, email, name, roleId, departmentId) {
     $("input[name=name_edit]").removeClass("is-invalid");
     $("input[name=password_edit]").removeClass("is-invalid");
     $("#password_create_message").html("");
-    $("input[id=id_edit]").val(id);
+    
     $("input[name=user_edit]").val(user);
     $("input[name=email_edit]").val(email);
     $("input[name=name_edit]").val(name);
     $("option[name=role_edit" + roleId + "]").prop("selected", true);
-    $("option[name=department_edit" + departmentId + "]").prop("selected", true);
+    $("option[name=department_edit" + departmentId + "]").prop(
+        "selected",
+        true
+    );
     $("#password_edit").attr("disabled", "disabled");
     $("input[name=checkbox_password]").prop("checked", false);
     $("input[name=password_edit]").val("");
     $("#edit").modal("show");
 }
-
 
 function obtenerDatos() {
     var username = $("input[name=user_create]").val();
@@ -82,7 +81,7 @@ function obtenerDatos() {
         type: "get",
         url: "ldap/obtenerUsuario",
         data: { username: username },
-        success: function(data) {
+        success: function (data) {
             $("#buscando").modal("hide");
             var encondrado = data.encontrado;
             if (encondrado) {
@@ -92,27 +91,29 @@ function obtenerDatos() {
                 $("#error").modal("show");
             }
         },
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             $("#buscando").modal("hide");
             $("#error").modal("show");
             $("input[name=name_create]").val("");
             $("input[name=email_create]").val("");
-        }
+        },
     });
 }
 
 /**
  * Send an ajax request in order to update an specific user
- * 
+ *
  */
 function ajaxUpdate() {
     if (validaEdit()) {
-        var id = $("input[id=id_edit]").val();
-        var user = $("input[name=user_edit]").val();
+        var id = $("input[id=user_edit]").val(); 
+        var user=  $("input[id=user_edit]").val();     
         var email = $("input[name=email_edit]").val();
         var name = $("input[name=name_edit]").val();
         var role = $("select[name=role_edit] option:selected").val();
-        var department = $("select[name=department_edit] option:selected").val();
+        var department = $(
+            "select[name=department_edit] option:selected"
+        ).val();
         var password = $("input[name=password_edit]").val();
         var updatepassword = $("input[name=checkbox_password]").is(":checked");
         $.ajax({
@@ -122,32 +123,34 @@ function ajaxUpdate() {
             data: {
                 _token: $("input[name=_token]").val(),
                 _method: "PATCH",
-                id: id,
+               
                 name: name,
                 username: user,
                 email: email,
                 role_id: role,
                 department_id: department,
                 updatePassword: updatepassword,
-                password: password
+                password: password,
             },
-            success: function(result) {
+            success: function (result) {
                 $("#table").html(result);
-                $("#table")
-                    .DataTable()
-                    .destroy();
+                $("#table").DataTable().destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts("El usuario "+name+" ha sido actualizado satisfactoriamente", "alert-success");
+                alerts(
+                    "El usuario " +
+                        name +
+                        " ha sido actualizado satisfactoriamente",
+                    "alert-success"
+                );
             },
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-            }
+            },
         });
     }
 }
-
 
 function clearCreate() {
     $("input[name=user_create]").val("");
@@ -183,25 +186,24 @@ function validaCreate() {
     } else {
         $("input[name=email_create]").removeClass("is-invalid");
     }
-
-    if ($("input[name=password_create]").val().length < 7) {
-        $("input[name=password_create]").addClass("is-invalid");
-        $("#password_create_message").html(
-            "La contraseña debe tener al menos 8 digitos"
-        );
-        validado = false;
-    } else {
-        $("input[name=password_create]").removeClass("is-invalid");
-        $("#password_create_message").html("");
+    if (!ldap) {
+        if ($("input[name=password_create]").val().length < 7) {
+            $("input[name=password_create]").addClass("is-invalid");
+            $("#password_create_message").html(
+                "La contraseña debe tener al menos 8 digitos"
+            );
+            validado = false;
+        } else {
+            $("input[name=password_create]").removeClass("is-invalid");
+            $("#password_create_message").html("");
+        }
     }
-
     return validado;
 }
 
-
 /**
  * Send an ajax request in order to update an specific user
- * 
+ *
  */
 function ajaxCreate() {
     if (validaCreate()) {
@@ -225,18 +227,21 @@ function ajaxCreate() {
                 email: email,
                 role_id: role,
                 department_id: department,
-                password: password
+                password: password,
             },
-            success: function(result) {
+            success: function (result) {
                 $("#table").html(result);
-                $("#table")
-                    .DataTable()
-                    .destroy();
-                createDataTable("table");                
+                $("#table").DataTable().destroy();
+                createDataTable("table");
                 $("#create").modal("hide");
-                alerts("El usuario "+name+" ha sido agregado satisfactoriamente", "alert-success");
+                alerts(
+                    "El usuario " +
+                        name +
+                        " ha sido agregado satisfactoriamente",
+                    "alert-success"
+                );
             },
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 var user = request.responseJSON["errors"]["username"];
                 if (user[0] == "The username has already been taken.") {
                     $("input[name=user_create]").addClass("is-invalid");
@@ -245,7 +250,7 @@ function ajaxCreate() {
                     alerts("Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
                 }
-            }
+            },
         });
     }
 }
@@ -299,4 +304,3 @@ function change_password() {
 
     $("#list").modal("show");
 }*/
-

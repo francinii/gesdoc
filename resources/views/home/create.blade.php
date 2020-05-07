@@ -11,7 +11,7 @@
         <form action="" method="POST">
           <input type="hidden" id="idCreate">
            <div class="form-group">
-             <label for="name">{{ __('app.home.create.name') }}</label>
+             <label for="nameCreate">{{ __('app.home.create.name') }}</label>
              <input type="text" class="form-control" id="nameCreate" placeholder="{{ __('app.home.create.name') }}" name="nameCreate">
            </div>
 

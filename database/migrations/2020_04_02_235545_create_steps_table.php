@@ -20,8 +20,10 @@ class CreateStepsTable extends Migration
             $table->bigInteger('sequence');
             $table->string('description',500);            
             $table->timestamps();
+
+            
             $table->foreign('flow_id')->references('id')->on('flows')->onDelete('cascade');
-           
+            
         });
     }
 

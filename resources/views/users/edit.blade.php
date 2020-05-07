@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <form action="" method="POST">
-          <input type="hidden" id="id_edit">
+          
           <div class="form-group">            
             <label for="user_edit">{{ __('app.users.edit.user') }}</label>
             <input type="text" disabled class="form-control" id="user_edit" placeholder="{{ __('app.users.edit.username') }}" name="user_edit" value="">

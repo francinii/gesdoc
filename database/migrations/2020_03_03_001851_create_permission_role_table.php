@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PermissionRoleTable extends Migration
+class CreatePermissionRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class PermissionRoleTable extends Migration
     {
         Schema::create('permission_role', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
             $table->bigInteger('role_id')->unsigned(); 
             $table->bigInteger('permission_id')->unsigned(); 
 
@@ -23,6 +22,8 @@ class PermissionRoleTable extends Migration
             $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->primary(['role_id', 'permission_id']);
         
         });
     }

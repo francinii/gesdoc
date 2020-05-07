@@ -15,10 +15,11 @@ class CreateStepStepTable extends Migration
     {
         Schema::create('step_step', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
             $table->bigInteger('preview_step_id')->unsigned()->nullable();  
             $table->bigInteger('next_step_id')->unsigned()->nullable(); 
             $table->timestamps();
+
+            $table->primary(['preview_step_id','next_step_id']);
             $table->foreign('preview_step_id')->references('id')->on('steps')->onDelete('cascade');
             $table->foreign('next_step_id')->references('id')->on('steps')->onDelete('cascade');
 

@@ -18,6 +18,8 @@ class CreateActionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('description',500);
             $table->timestamps();
+
+            
         });
     }
 

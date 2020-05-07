@@ -33,5 +33,9 @@
 @include('partials.error')
 @include('partials.search')
 @include('partials.confirm')
+<script>
+var ldap={{env("use_LDAP")}}
+</script>
+
 @stop
 

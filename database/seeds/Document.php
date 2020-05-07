@@ -12,14 +12,18 @@ class Document extends Seeder
     public function run()
     {
         \DB::table('documents')->insert(array(
-            'flow_id' =>1,
-            'classification_id'=>1,
-            'description' =>"Doc 1",            
+            'flow_id' =>1,            
+            'description' =>"Doc 1", 
+            'type' =>"doc",   
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',    
         ));
         \DB::table('documents')->insert(array(
-            'flow_id' =>1,
-            'classification_id'=>1,
-            'description' =>"Doc 2",            
+            'flow_id' =>1,            
+            'description' =>"Doc 2",   
+            'type' =>"xls",  
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',         
         ));
     }
 }

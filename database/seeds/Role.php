@@ -12,15 +12,21 @@ class Role extends Seeder
     public function run()
     {
         \DB::table('roles')->insert(array(
-            'description' =>"SuperAdmin"       
+            'description' =>"SuperAdmin",
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',      
         ));
 
         \DB::table('roles')->insert(array(
-            'description' =>"Administrador"       
+            'description' =>"Administrador",
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',       
         ));
 
         \DB::table('roles')->insert(array(
-            'description' =>"Usuario"       
+            'description' =>"Usuario",
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',       
         ));
     }
 }
