@@ -78,15 +78,17 @@ function ajaxCreate() {
             method: "POST",
 
             data: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 _token: $("input[name=_token]").val(),
                 currentClassification:currentClassification,
                 description: description,            
             },
             success: function(result) {
-                $("#table").html(result);
                 $("#table")
-                    .DataTable()
-                    .destroy();
+                .DataTable()
+                .destroy();
+                $("#divTable").html(result);
+               
                 createDataTable("table");                
                 $("#create").modal("hide");
                 alerts("La clasificacion "+description+" ha sido agregado satisfactoriamente", "alert-success");

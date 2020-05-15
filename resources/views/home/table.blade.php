@@ -1,15 +1,13 @@
-<table id='table' class="table table-responsive table-striped"  width="100%">
-<script>
- currentClassification={{$classification->id}}
-</script>
+<table id='table' class="table table-responsive table-striped"  width="100%" >
+
             <thead class="thead-dark" >
                 <tr>
                    
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
-                    <th style="width: 50%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
+                    <th style="width: 55%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
                     <th style="width: 15%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
-                    <th  tyle="width: 15%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
-                    <th  style="display:none;" style="width: 10%"  class="text-center" >{{ __('app.home.table.id') }}</th>
+                    <th  style="width: 15%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
+                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.id') }}</th>
                 
                 </tr>
             </thead>
@@ -47,3 +45,6 @@
                 @endforeach
             </tbody>
  </table>
+ <script>
+    currentClassification={{$classification->id}}
+</script>

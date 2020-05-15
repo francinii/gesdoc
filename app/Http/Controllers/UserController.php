@@ -50,24 +50,24 @@ class UserController extends Controller
     protected function validator(array $data, $updatePassword,$create)
     {
         $validacion = [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:500'],
+            'email' => ['required', 'string', 'max:500'],
             'role_id'=> ['required', 'int'],
             'department_id'=> ['required', 'int'],
 
         ];
         if($create && env("use_LDAP")){
-            $validacion['username']=['required', 'string', 'max:255', 'unique:users'];
+            $validacion['username']=['required', 'string', 'max:500', 'unique:users'];
         }
         elseif($create && !env("use_LDAP")){
-            $validacion['username']=['required', 'string', 'max:255', 'unique:users'];
+            $validacion['username']=['required', 'string', 'max:500', 'unique:users'];
             $validacion['password']=['required', 'string', 'min:8'];
         }
         elseif(env("use_LDAP")||!$updatePassword){
-            $validacion['username']=['required', 'string', 'max:255'];            
+            $validacion['username']=['required', 'string', 'max:500'];            
         }
         else{
-            $validacion['username']=['required', 'string', 'max:255'];
+            $validacion['username']=['required', 'string', 'max:500'];
             $validacion['password']=['required', 'string', 'min:8'];
         }
 
@@ -83,14 +83,14 @@ class UserController extends Controller
      */  
     protected function myArray(array $dato,$create)
     { 
-        $arryString;
+        $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."','".$dato['username'].
+        "','".$dato['email']."','".$dato['password']."'";
         if($create){
-        $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."',".$dato['username'].
-        ",'".$dato['email']."','".$dato['password']."','". __('app.home.table.defaultClassification')."'";
+        $arryString.=",'". __('app.home.table.defaultClassification')."'";
         }else{
-            
+        $arryString.=",".$dato['updatePassword'];
         }
-     
+        
         return $arryString;
     }
 
@@ -165,15 +165,19 @@ class UserController extends Controller
     {
         $updatePassword = filter_var(request('updatePassword'), FILTER_VALIDATE_BOOLEAN);
         $this->validator($request->all(), $updatePassword,false)->validate();
+        $dato = request()->except(['_token', '_method']);
         if (!env("use_LDAP") && $updatePassword) {
-            $dato = request()->except(['_token', '_method','updatePassword']);
+            
             $dato['password'] = Hash::make($dato['password']);
-        } else {
-            $dato = request()->except(['_token', '_method','updatePassword', 'password']);
-        }
-        $id = $dato['username'];
-        User::where('username', '=', $id)->update($dato);
-        return UserController::refresh();
+        } 
+       
+        $dato=$this->myArray($dato,false);  
+        DB::select("call update_user($dato,@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']==3)  throw new DecryptException('el usuario ya existe en la base de datos');
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**
@@ -184,8 +188,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::destroy($id);
-        return UserController::refresh();
+        DB::select("call delete_user('$id',@res)");
+        $res=DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
+        return $this->refresh();
     }
 
     /**

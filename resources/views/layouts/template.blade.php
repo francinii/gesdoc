@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title> Gesdoc - @yield('title') </title>
     <link rel="stylesheet"  href="{{ asset('../resources/extensions/fontawesome-free-5.13.0-web/css/all.css') }}" >
     <link rel="stylesheet"   href="{{ asset('../resources/extensions/bootstrap-4.3.1/css/bootstrap.min.css') }}" >

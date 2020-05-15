@@ -26,8 +26,9 @@
         <div class="col-md-1"></div>
         <div class="col-md-8">
         @include('partials.alert')
+        <div id="divTable">
         @include('home.table')
-     
+        </div>
         </div>
     </div>
 </div>
