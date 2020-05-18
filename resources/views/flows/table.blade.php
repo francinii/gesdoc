@@ -9,14 +9,15 @@
         </tr>
     </thead>
     <tbody>
+        <?php $usuario = ''?>
         @foreach ($flows as $flow)         
         <tr>
             <td class="text-center">{{$flow->id}}</td>
             <td class="text-center">{{$flow->description}}</td>
             @foreach($users as $user)
             
-                @if($flow->user_id == $user->id )
-                    <?php $usuario =  $user->id ?>
+                @if($flow->username == $user->username )
+                    <?php $usuario =  $user->username ?>
                     <td id="usuarioId" class="text-center">{{$user->name}}</td>
                     @break
                 @endif

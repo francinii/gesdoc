@@ -16,14 +16,13 @@ class CreateStepsTable extends Migration
         Schema::create('steps', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('flow_id')->unsigned()->nullable(); 
-            $table->bigInteger('sequence');
-            $table->string('description',500);            
-            $table->timestamps();
-
-            
+            $table->bigInteger('flow_id')->unsigned()->nullable();             
+            $table->string('identifier',500);
+            $table->string('description',500);       
+            $table->bigInteger('axisX');
+            $table->bigInteger('axisY');         
+            $table->timestamps();            
             $table->foreign('flow_id')->references('id')->on('flows')->onDelete('cascade');
-            
         });
     }
 

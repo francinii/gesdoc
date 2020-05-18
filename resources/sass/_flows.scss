@@ -33,30 +33,35 @@
    }
 }
 
+
 .row {
     #drag-container{
-      overflow: auto;
+      overflow: scroll;
       background-color: rgb(228, 228, 228);
-      height: 600px;
-      position: relative;
+      min-height: 600px;
+      margin-bottom: 5%;
+      //height: 600px;
+      //position: relative;
     }
 }
 .card-step{
+    padding: 5%;
     input {
-        margin: 1%;       
+        margin-bottom: 5%;   
+        width: 100%;    
     }
-    button {
-        margin: 1%;  
+    button.btn {
+        border-radius:0rem;
     }
+    
     label {
         margin: 1%;
         color: $text_light;
     }
 }
-
 .card_size {
     padding: 0;
-    width: 500px;
+    width: 20%;
 }
 .special_card {
     padding: 0;
@@ -67,5 +72,12 @@
     box-shadow: 0 0 20px $blue !important;
 }
 
+#create-wrapper{
+    button {
+        border-radius: 0rem;
+    }    
+}
 
-
+.body_table_line tr td, .head_table tr th {
+   text-align:center;
+} 

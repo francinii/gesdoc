@@ -8,15 +8,15 @@
               X
           </button>
         </div>
-        <div class="modal-body">
-            <div id = "" class="step">
+        <div class="modal-body" id = "modal-body-step">
+            <div class="step">
                 <div class="card container inside_step " style="margin-bottom:1%">   
                     <div id = "" class="card-body">
                         <div id = "create">                             
                         <form class="" action="" method="POST">
                             {{csrf_field()}}
                             <div class="form-group ">
-                                <label class="control-label col-md-4" for="CreateDescription"> Descripción del Paso</label>
+                                <label class="control-label" for="CreateDescription"> Descripción del Departamento</label>
                                 <input type="text" class="form-control " id="CreateDescription" placeholder="Descripcion" name="CreateDescription">
                             </div>                                      
                               
@@ -38,22 +38,50 @@
                                 <thead class="head_table thead-dark ">   
                                     <th>Usuario</th>    
                                     <th>Nombre</th>      
-                                    <th>Correo</th>      
+                                    <th>Correo</th>                                     
                                     <th>Eliminar</th>             
                                 </thead>
                                 <tbody class="body_table" >              
                                 </tbody>
                               </table>
+
                          </form>
+                         <div class="form-group">
+                            <button class ='btn btn-primary' onclick= "openPermissions({{$actions}}) "   type ='button' >
+                                <i class='fas fa-lock-open'>
+                                </i> 
+                                Asociar permisos a usuarios 
+                            </button>
+                         </div>
                         </div>
                     </div>
                 </div>    
             </div>        
         </div>
+        <div class="modal-body" id = "modal-body-step-back" style="display:none">
+            <button class="btn btn-info" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
+            <div class="card container inside_step " style="padding:1%">                
+                <table id='tableLine' class="table table-responsive table-striped" style="display:table">
+                <thead class="head_table thead-dark ">   
+                        <th>Usuarios</th>    
+                        @foreach ($actions as $action)                  
+                        <th id = "{{$action->id}}" >{{$action->description}}</th>
+                        @endforeach             
+                </thead>
+                <tbody class="body_table_line" >    
+                    
+                </tbody>
+                </table>
+            </div>   
+            <button data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
+                <i class="fas fa-plus-circle"></i> Guardar los permisos
+            </button>     
+        </div>
+
         <div class="modal-footer">     
             <div class="col-md-9 text-right">
                 <button data-toggle="modal" class=" float-right btn btn-success" onclick="addStep()" data-target="">
-                    <i class="fas fa-plus-circle"></i> {{ __('app.buttons.add') }}
+                    <i class="fas fa-plus-circle"></i> Guardar
                 </button>    
               </div>  
         </div>

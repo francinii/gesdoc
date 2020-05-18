@@ -18,5 +18,5 @@ class Flow extends Model
     */
     public function documento() {
         return $this->hasMany('App\Documento');
-    }
+    }    
 }
