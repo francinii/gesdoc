@@ -14,12 +14,16 @@ class CreateActionStepUserTable extends Migration
     public function up()
     {
         Schema::create('action_step_user', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->timestamps();          
-            $table->bigInteger('step_id')->unsigned()->nullable();  
-            $table->string('username')->nullable(); 
-            $table->bigInteger('action_id')->unsigned()->nullable();              
-            $table->primary(['step_id','username','action_id']);
+            $table->string('step_id'); 
+            $table->bigInteger('flow_id')->unsigned(); 
+            $table->string('username'); 
+            $table->bigInteger('action_id')->unsigned();
+            $table->primary(['step_id','flow_id','username','action_id'],'action_step_user_pk');
+
             $table->foreign('step_id')->references('step_id')->on('step_user')->onDelete('cascade');
+            $table->foreign('flow_id')->references('flow_id')->on('step_user')->onDelete('cascade'); 
             $table->foreign('username')->references('username')->on('step_user')->onDelete('cascade');
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');            
         });

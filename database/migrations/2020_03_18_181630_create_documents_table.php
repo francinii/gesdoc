@@ -20,12 +20,12 @@ class CreateDocumentsTable extends Migration
      
             $table->string('description',500);
             $table->string('type',500);
-       
-            $table->timestamps();
-
-            
+         
             $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null');
 
+            $table->timestamps();
+
+          
         });
     }
 

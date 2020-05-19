@@ -49,9 +49,9 @@ function ajaxCreate(user){
     description =  $("input[id=flowName]").val();
     data = "";
     datos = [];
-    for (var i = 0; i < sessionStorage.length; i++){
-       data = sessionStorage.getItem(sessionStorage.key('draggable'+i));
-       datos[i] = JSON.parse(data);
+    for (var i = 1; i <= sessionStorage.length; i++){
+       data = sessionStorage.getItem('draggable'+ i);
+       datos.push(JSON.parse(data));
         // Do something with localStorage.getItem(localStorage.key(i));
     }  
 
@@ -225,12 +225,10 @@ function savePermissions(){
         });
         item = sessionStorage.getItem(stepId);
         item2 = JSON.parse(item);
-        item2.actions.push({username: username, actions: actionsByUser});
+        item2.actions.push({id: stepId, username: username, actions: actionsByUser});
         sessionStorage.setItem(stepId, JSON.stringify(item2));
         actionsByUser = [];   
     });
-    
-
 }
 
 function openStepEdition(){
@@ -357,8 +355,9 @@ function addStep(){
     var elemento = sessionStorage.getItem(idStep);
     elemento = JSON.parse(elemento);
     var steps = (elemento != null )? elemento.steps : [];
+    var actions = (elemento != null )? elemento.actions : [];
 
-    var step =  createObjectStep(idStep,description,users,steps,[],'','') ;
+    var step =  createObjectStep(idStep,description,users,steps,actions,'','') ;
     saveInStorage(step, idStep);
     $("#card").modal("hide");
     $("#text"+idStep).val(description);    

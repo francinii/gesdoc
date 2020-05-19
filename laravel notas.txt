@@ -90,3 +90,7 @@ Convenciones para VISTAS blade.php
 2. las vistas se escriben en ingles 
 3. las vistas se escriben en minusculas
 
+
+
+//Limpiar cache en laravel
+php artisan config:cache

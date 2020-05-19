@@ -14,10 +14,15 @@ class CreateStepUserTable extends Migration
     public function up()
     {
         Schema::create('step_user', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->timestamps();
-            $table->bigInteger('step_id')->unsigned()->nullable();  
-            $table->string('username')->nullable(); 
-            $table->primary(['step_id','username']);
+            $table->string('step_id');  
+            $table->bigInteger('flow_id')->unsigned();   
+            $table->string('username'); 
+        
+            $table->primary(['step_id','flow_id','username'],'step_user_pk');
+
+            $table->foreign('flow_id')->references('flow_id')->on('steps')->onDelete('cascade');           
             $table->foreign('step_id')->references('id')->on('steps')->onDelete('cascade');
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             

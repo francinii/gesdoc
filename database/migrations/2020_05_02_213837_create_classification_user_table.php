@@ -14,6 +14,7 @@ class CreateClassificationUserTable extends Migration
     public function up()
     {
         Schema::create('classification_user', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->bigInteger('classification_id')->unsigned()->nullable();  
             $table->string('username')->nullable(); 
             $table->timestamps();

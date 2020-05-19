@@ -8,6 +8,7 @@ php artisan db:seed --class=Classification_Classification;
 php artisan db:seed --class=Document;
 php artisan db:seed --class=Step;
 php artisan db:seed --class=Classification_Document;
-php artisan db:seed --class=States;
+php artisan db:seed --class=State;
+php artisan db:seed --class=Action;
 
 

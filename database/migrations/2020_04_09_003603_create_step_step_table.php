@@ -15,13 +15,22 @@ class CreateStepStepTable extends Migration
     {
         Schema::create('step_step', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigInteger('preview_step_id')->unsigned()->nullable();  
-            $table->bigInteger('next_step_id')->unsigned()->nullable(); 
+            $table->string('prev_step_id');  
+            $table->string('next_step_id'); 
+            $table->bigInteger('prev_flow_id')->unsigned();  
+            $table->bigInteger('next_flow_id')->unsigned(); 
+            $table->bigInteger('id_action')->unsigned();
             $table->timestamps();
 
-            $table->primary(['preview_step_id','next_step_id']);
-            $table->foreign('preview_step_id')->references('id')->on('steps')->onDelete('cascade');
+            $table->primary(['prev_step_id','next_step_id','prev_flow_id','next_flow_id'], 'step_step_pk');
+
+            $table->foreign('prev_step_id')->references('id')->on('steps')->onDelete('cascade');
             $table->foreign('next_step_id')->references('id')->on('steps')->onDelete('cascade');
+
+            $table->foreign('prev_flow_id')->references('flow_id')->on('steps')->onDelete('cascade');
+            $table->foreign('next_flow_id')->references('flow_id')->on('steps')->onDelete('cascade');
+
+            $table->foreign('id_action')->references('id')->on('actions')->onDelete('cascade');
 
         });
     }
