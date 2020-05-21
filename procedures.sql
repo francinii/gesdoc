@@ -425,8 +425,8 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_action_step_user`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_action_step_user`(IN `p_id` varchar(500), IN `p_username` varchar(500),IN `p_id_flow` int, IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
-                                               
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_action_step_user`(IN `p_id` varchar(500),IN `p_id_flow` int, IN `p_username` varchar(500), IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
+                                              
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
