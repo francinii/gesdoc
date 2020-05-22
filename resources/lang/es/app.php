@@ -188,7 +188,7 @@ return [
         'edit' => [
             'title' => 'Editar clasificación',  
             'name' => 'Nombre del clasificación', 
-            'move' => 'Mover la clasificación',
+            'move' => 'Mover a ',
             'movehere'=>'Mover aqui',
         ],
 
