@@ -339,7 +339,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_classification`(IN `p_classification` varchar(500),IN `p_current_classification` int,IN `p_username` varchar(500),OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `insert_classification`(IN `p_description` varchar(500),IN `p_current_classification` int,IN `p_username` varchar(500),OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE p_id Integer;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -357,7 +357,7 @@ BEGIN
 	END;
             START TRANSACTION;
                    
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_classification,false, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_description,false, NOW(),NOW());
                     SET p_id = LAST_INSERT_ID();
                     INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
             COMMIT;
@@ -367,4 +367,35 @@ END
 ;;
 DELIMITER ;
 -- call insert_classification('402340421','mi clasificacion',1,@res);
+-- SELECT @res as res;
+-- ----------------------------
+-- PROCEDURE delete a classification
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `update_classification`;
+DELIMITER ;;
+CREATE   PROCEDURE `update_classification`(IN `p_id` int, IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                  UPDATE `classifications` SET `description`=p_description,`updated_at`=NOW() WHERE `id`=p_id;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call update_classification(2,'mis documentos',@res);
 -- SELECT @res as res;

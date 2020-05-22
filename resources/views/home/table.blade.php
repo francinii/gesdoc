@@ -1,3 +1,4 @@
+<div id="tableTitle"></div>
 <table id='table' class="table table-responsive table-striped"  width="100%" >
 
             <thead class="thead-dark" >
@@ -14,9 +15,9 @@
             <tbody >
                 
                 @foreach ($classification->classifications as $classifications)
-                <tr>
+                <tr onclick="openClassification({{$classifications->id}})">
                    
-                    <td class="text-center"><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
+                    <td class="text-center" ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
                     <td class="text-center">{{$classifications->description}}</td>                           
                     <td class="text-center">{{$classifications->created_at}}</td>  
                     <td class="text-center">{{$classifications->updated_at}}</td>
@@ -46,5 +47,9 @@
             </tbody>
  </table>
  <script>
-    currentClassification={{$classification->id}}
+    $( document ).ready(function() {
+        var js_data = '<?php echo json_encode($classification); ?>';        
+         currentClassification=JSON.parse(js_data );
+         drawRoute();
+    });
 </script>

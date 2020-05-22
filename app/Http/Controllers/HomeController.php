@@ -31,8 +31,8 @@ class HomeController extends Controller
     {
 
         $username = Auth::id();
-        $classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
-        return view('home.home', compact('classification'));
+        $allClassification=$classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
+        return view('home.home', compact('classification','allClassification'));
     }
     
     /**
@@ -44,8 +44,9 @@ class HomeController extends Controller
     public function refresh($currentClassification)
     {
         $username = Auth::id();
-        $classification = Classification::where([['username', '=',''.$username.''],['id', '=',$currentClassification]])->first();      
-        return view('home.table', compact('classification'));
+        $classification = Classification::where([['username', '=',''.$username.''],['id', '=',$currentClassification]])->first();    
+        $allClassification=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
+        return view('home.table', compact('classification','allClassification'));
     }
     /**
      * Get a validator for an incoming registration request.
@@ -167,6 +168,21 @@ class HomeController extends Controller
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
         return $this->refresh();
+    }
+    
+    public function classifications($classification)
+    {
+        $classifications;
+        $arrayClassifications = array();
+
+        $classifications['classification'] = $classification;
+      
+        foreach ($classification->classifications as $subClassification) {
+            array_push($arrayClassifications, $this->classifications($subClassification));            
+        }
+        $classifications['classifications'] = $arrayClassifications;
+        return $classifications;
+
     }
 
 }

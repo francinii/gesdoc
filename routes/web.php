@@ -23,17 +23,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index');
-
-Route::get('/textEditor', 'HomeController@textEditor');
+Route::get('home/{id}', 'HomeController@refresh');
 
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
-//Route::get('/register_user', 'Auth\RegisterController@index' );
-
-//Route::get('/rols', 'RolController@index');
-//Accede a todas las rutas necesarioas para
-// obtener los metodos del RolController
 
 Route::resource('home', 'HomeController');
 
