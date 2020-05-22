@@ -42,17 +42,21 @@
 }
 
 .row #drag-container {
-  overflow: auto;
+  overflow: scroll;
   background-color: #e4e4e4;
-  height: 600px;
-  position: relative;
+  min-height: 600px;
+  margin-bottom: 5%;
 }
 
-.card-step input {
-  margin: 1%;
+.card-step {
+  padding: 5%;
 }
-.card-step button {
-  margin: 1%;
+.card-step input {
+  margin-bottom: 5%;
+  width: 100%;
+}
+.card-step button.btn {
+  border-radius: 0rem;
 }
 .card-step label {
   margin: 1%;
@@ -61,7 +65,7 @@
 
 .card_size {
   padding: 0;
-  width: 500px;
+  width: 20%;
 }
 
 .special_card {
@@ -71,6 +75,14 @@
 
 .card-shadow-info {
   box-shadow: 0 0 20px #3490dc !important;
+}
+
+#create-wrapper button {
+  border-radius: 0rem;
+}
+
+.body_table_line tr td, .head_table tr th {
+  text-align: center;
 }
 
 /*# sourceMappingURL=app.css.map */

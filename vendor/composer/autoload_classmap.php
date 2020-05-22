@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Action' => $baseDir . '/database/seeds/Action.php',
     'Adldap\\Adldap' => $vendorDir . '/adldap2/adldap2/src/Adldap.php',
     'Adldap\\AdldapException' => $vendorDir . '/adldap2/adldap2/src/AdldapException.php',
     'Adldap\\AdldapInterface' => $vendorDir . '/adldap2/adldap2/src/AdldapInterface.php',
@@ -189,8 +190,11 @@ return array(
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\Role' => $baseDir . '/app/Role.php',
+    'App\\State' => $baseDir . '/app/State.php',
+    'App\\StateStepUser' => $baseDir . '/app/StateStepUser.php',
     'App\\Step' => $baseDir . '/app/Step.php',
     'App\\StepStep' => $baseDir . '/app/StepStep.php',
+    'App\\StepUser' => $baseDir . '/app/StepUser.php',
     'App\\User' => $baseDir . '/app/User.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonImmutable' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonImmutable.php',
@@ -3360,6 +3364,7 @@ return array(
     'SebastianBergmann\\Type\\UnknownType' => $vendorDir . '/sebastian/type/src/UnknownType.php',
     'SebastianBergmann\\Type\\VoidType' => $vendorDir . '/sebastian/type/src/VoidType.php',
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
+    'State' => $baseDir . '/database/seeds/State.php',
     'Step' => $baseDir . '/database/seeds/Step.php',
     'Symfony\\Component\\Console\\Application' => $vendorDir . '/symfony/console/Application.php',
     'Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface' => $vendorDir . '/symfony/console/CommandLoader/CommandLoaderInterface.php',

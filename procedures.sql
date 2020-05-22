@@ -368,6 +368,8 @@ END
 DELIMITER ;
 -- call insert_classification('402340421','mi clasificacion',1,@res);
 -- SELECT @res as res;
+
+
 -- ----------------------------
 -- PROCEDURE delete a classification
 -- return 0 success, 1 or 2 error in database
@@ -399,3 +401,157 @@ END
 DELIMITER ;
 -- call update_classification(2,'mis documentos',@res);
 -- SELECT @res as res;
+
+
+
+
+-- PROCEDURE insert a new flow
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `insert_flow`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_flow`(IN `p_username` varchar(500), IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                   INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
+           COMMIT;
+            SET id_flow = LAST_INSERT_ID();
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+-- PROCEDURE insert a new step to a flow
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `insert_step`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_step`(IN `p_identifier` varchar(500), IN `p_idFlow` int,  IN `p_description` varchar(500), IN `p_axisx` int,  IN `p_axisy` int,  OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                 INSERT INTO `steps`(flow_id, id, description, axisX, axisY, created_at,updated_at) VALUES (p_idFlow, p_identifier, p_description, p_axisx, p_axisy, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+-- PROCEDURE insert a new step step  to step_step table
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+DROP PROCEDURE IF EXISTS `insert_step_step`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_step_step`(IN `p_id_initial` varchar(500), IN `p_id_final` varchar(500),IN `p_id_flow` int, IN p_action int, OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                 INSERT INTO `step_step`(prev_step_id, 	next_step_id, 	prev_flow_id,	next_flow_id, 	id_action, 	created_at, 	updated_at ) VALUES (p_id_initial,p_id_final,p_id_flow,p_id_flow, p_action, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+-- PROCEDURE insert a new row to the step_user table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `insert_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_step_user`(IN `p_id` varchar(500), IN `p_username` varchar(500),IN `p_id_flow` int, OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                 INSERT INTO `step_user`(step_id,	flow_id, username, 	created_at, 	updated_at ) VALUES (p_id, p_username, p_id_flow, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+-- PROCEDURE insert a new row to the step_user table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `insert_action_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_action_step_user`(IN `p_id` varchar(500),IN `p_id_flow` int, IN `p_username` varchar(500), IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
+                                              
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                 INSERT INTO `action_step_user`(step_id, flow_id, username, action_id,	created_at, 	updated_at ) VALUES (p_id, p_id_flow, p_username, p_action, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;

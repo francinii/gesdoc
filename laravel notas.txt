@@ -31,9 +31,6 @@ en la configuracion de ambiente use_LDAP se pone 1 para usarlo y 0 para no
 C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\SessionGuard.php
 C:\wamp64\www\Laravel-Apps\prueba\vendor\laravel\framework\src\Illuminate\Auth\EloquentUserProvider.php
 
-
-
-
 Notas Fran ;3
 php artisan make:model Rol -mcr 
 php artisan make:model Flujo -mcr  
@@ -47,16 +44,8 @@ php artisan db:seed --class=Permiso       Migra los seed a la base de datos
 Las tablas pivote deben:
 LLamarse en orden alfabetico con las dos tablas que se unen ejemplo: permiso_rol Además deben ir en singular.
 
-
-
-
 Comando para compilar el sass y que se observen los cambios que se realizan a la hoja de estilos
 sass --watch resources/sass/app.scss:public/css/estilos.css
-
-
-
-
-
 
 
 Convenciones para ATRIBUTOS
@@ -101,3 +90,7 @@ Convenciones para VISTAS blade.php
 2. las vistas se escriben en ingles 
 3. las vistas se escriben en minusculas
 
+
+
+//Limpiar cache en laravel
+php artisan config:cache

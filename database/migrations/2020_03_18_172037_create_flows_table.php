@@ -20,7 +20,6 @@ class CreateFlowsTable extends Migration
             $table->string('description',500);
             $table->timestamps();
 
-            
             $table->foreign('username')->references('username')->on('users')->onDelete('set null'); 
         });
     }
