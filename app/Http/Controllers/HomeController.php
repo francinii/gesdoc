@@ -31,8 +31,9 @@ class HomeController extends Controller
     {
 
         $username = Auth::id();
-        $allClassification=$classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
-        return view('home.home', compact('classification','allClassification'));
+        $classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
+        $allClassifications=$this->classifications($classification);
+        return view('home.home', compact('classification','allClassifications'));
     }
     
     /**
@@ -45,8 +46,9 @@ class HomeController extends Controller
     {
         $username = Auth::id();
         $classification = Classification::where([['username', '=',''.$username.''],['id', '=',$currentClassification]])->first();    
-        $allClassification=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
-        return view('home.table', compact('classification','allClassification'));
+        $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
+        $allClassifications=$this->classifications($allClassifications);
+        return view('home.table', compact('classification','allClassifications'));
     }
     /**
      * Get a validator for an incoming registration request.

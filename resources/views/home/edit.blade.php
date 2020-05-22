@@ -17,12 +17,17 @@
             <div class="card">
                 <div class="card-header">{{ __('app.home.edit.move') }}</div>
                 <div class="card-body">
-                <span class="btn badge badge-danger badge-pill" onclick="editBackClassification({{$allClassification}})"><i class="fas fa-long-arrow-alt-left"></i></span>
-                <input name="editClassification" type="hidden">
-                <div id="listEdit" class="list-group">                    
+                  <div>
+                    <label id="editLableClassification"></label>
+                    <input id="editClassification" name="editClassification" type="hidden">
+                  </div>
+                   <span class="btn badge badge-danger badge-pill" onclick="editBackClassification()"><i class="fas fa-long-arrow-alt-left"></i></span>
+                  
+                 
+                  <div id="listEdit" class="list-group">                    
                     
 
-                    </div>  
+                  </div>  
                   
                 </div>
             </div>

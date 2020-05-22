@@ -50,6 +50,8 @@
     $( document ).ready(function() {
         var js_data = '<?php echo json_encode($classification); ?>';        
          currentClassification=JSON.parse(js_data );
+        var js_data = '<?php echo json_encode($allClassifications); ?>';        
+        allClassifications=JSON.parse(js_data );
          drawRoute();
     });
 </script>

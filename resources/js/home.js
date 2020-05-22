@@ -7,7 +7,7 @@ var descriptionEdit;
 var typeContextMenu;
 var currentClassification = null;
 var listClassification = [];
-
+var allClassifications
 /**
 * draw the route follow for the user  
 *
@@ -155,10 +155,9 @@ function ajaxCreate() {
 /**
  * Open a modal to edit a classification
  *
- * @param {array} classifications list of all the classification of the user
  * 
  */
-function edit(classifications) {
+function edit() {
     $("select option:selected").each(function () {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -167,9 +166,23 @@ function edit(classifications) {
     $("input[id=idEdit]").val(idEdit);
     $("input[name=descriptionEdit]").removeClass("is-invalid");
     $("input[name=descriptionEdit]").val(descriptionEdit);
-    $("input[id=editClassification]").val(currentClassification.id);
+    
 
-    currentClassification.classifications.forEach(function (classification, index) {
+    drawMoveEdit(currentClassification);
+
+    $("#edit").modal("show");
+}
+/**
+ * 
+ * @param {array} classifications to drawn in move
+ */
+
+function drawMoveEdit(classifications){
+    $("input[id=editClassification]").val(classifications.id);
+    $("label[id=editLableClassification]").text(classifications.description);
+    
+    $("#listEdit").empty();
+    classifications.classifications.forEach(function (classification, index) {
         $("#listEdit").append(
             '<li id="listEdit-' + classification.id +'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">' +
                 classification.description +
@@ -179,14 +192,6 @@ function edit(classifications) {
                 "</li>"
         );
     });
-
-    $("#listEdit li").click(function(e) {
-        var td = e.target;
-        if(td.localName=="li"){
-            editselectClassification(td.id)
-        }
-    })
-    $("#edit").modal("show");
 }
 
 /**
@@ -202,27 +207,31 @@ function editEnterClassification(id) {
 
 /**
  * modal to edit, back to the parent classification
- *@param {Object} allClassification list of all classification
+ *@param {Object} allClassifications list of all classification
  */
-function editBackClassification(allClassification) {
-    var openedClassification=editFindParentClassification(allClassification, $("input[id=editClassification]").val());
-
+function editBackClassification() {
+    var openedClassification=editFindParentClassification(allClassifications['classification'], $("input[id=editClassification]").val());
+    if(openedClassification!=true && openedClassification!=null){
+        drawMoveEdit(openedClassification);
+    }
 }
-
 /**
  * modal to edit, find the parent of a classification
- * @param {Object} allClassification list of all classification
+ * @param {Object} Classification list of all classification
  * @param {Integer} id of the classification
  */
-function editFindParentClassification(allClassification,id){
-    allClassification.classifications.forEach(Classification => {
-        if(Classification.id==id){
-            return Classification;
-         }
-       
-        return editFindParentClassification(Classification,id);
-     });
-    return false;
+function editFindParentClassification(Classification,id){
+    var openedClassification
+    if(Classification.id==id) 
+        return true;
+
+    for (let index = 0; index <  Classification.classifications.length; index++) {
+        if(Classification.classifications[index].id==id)
+        return Classification;            
+    }
+    for (let index = 0; index <  Classification.classifications.length; index++) {
+        return editFindParentClassification(Classification.classifications[index],id);        
+    }
 }
 /**
  * modal to edit, find the classification
@@ -236,24 +245,7 @@ function editFindClassification(allClassification,id){
  
  }
 
-/**
- * modal to edit, select the classification
- *
- * @param {Integer} id of the classification opend
- * 
- */
 
-function editselectClassification(id){
-    var selectedClassification=$("#listEdit li.active");
-    if(selectedClassification.length!=0){
-        $("#listEdit li").removeClass("active");
-        if(selectedClassification[0].id()!=id){
-            $('#'+id).addClass("active");
-        }
-    }
-    else{$('#'+id).addClass("active");}
-    
-}
 
 /**
  * open a classification
