@@ -13,7 +13,15 @@ class Classification extends Seeder
     {
         \DB::table('classifications')->insert(array(
             'username'=>'402340420',
-            'description' =>"Sin clasificar",
+            'description' =>"Principal",
+            'is_Start'=>true,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',
+           
+        ));
+        \DB::table('classifications')->insert(array(
+            'username'=>'116650288',
+            'description' =>"Principal",
             'is_Start'=>true,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',

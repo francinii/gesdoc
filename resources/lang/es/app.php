@@ -186,10 +186,10 @@ return [
         ],
 
         'edit' => [
-            'title' => 'Editar clasificación',  
-            'name' => 'Nombre del clasificación', 
+            'title' => 'Editar',  
+            'name' => 'Nombre', 
             'move' => 'Mover a ',
-            'movehere'=>'Mover aqui',
+            
         ],
 
         'index' => [
@@ -218,7 +218,7 @@ return [
         'contextMenu' => [
             'delete' => 'Eliminar',
             'createClassification' => 'Crear clasificación',
-            'editClassification' => 'Editar clasificación',
+            'editClassification' => 'Editar',
             'createDocument' => 'Crear documento',
             'share' => 'compartir',
         ],

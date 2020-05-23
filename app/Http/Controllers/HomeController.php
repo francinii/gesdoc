@@ -58,12 +58,15 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     
-    protected function validator(array $data)
+    protected function validator(array $data,$create)
     {
         $validacion = [           
             'description' => ['required', 'string', 'max:500'],
             'currentClassification'=>['required', 'int'],
         ];
+        if(!$create){
+            $validacion['parentClassification']=['required', 'int'];
+        }
 
         return Validator::make($data, $validacion);
     }
@@ -76,9 +79,11 @@ class HomeController extends Controller
     { 
 
         $username = Auth::id();        
-        $arryString="'".$dato['description']."',".$dato['currentClassification'];
+        $arryString="'".$dato['description']."'";
         if($create){
-            $arryString.=",'".$username."'";
+            $arryString.=",".$dato['currentClassification'].",'".$username."'";
+        }else{
+            $arryString.=",".$dato['parentClassification'].",".$dato['id'];
         }
         return $arryString;
     }
@@ -102,7 +107,7 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all())->validate();
+        $this->validator($request->all(),true)->validate();
         $dato = request()->except(['_token']);
         $currentClassification=$dato['currentClassification'];
         $dato=$this->myArray($dato,true);  
@@ -146,14 +151,15 @@ class HomeController extends Controller
     public function update(Request $request, $id)
     {
         $this->validator($request->all(),false)->validate();
-        $dato = request()->except(['_token','_method']);
-        $id = $dato['id'];
-        $dato=$this->myArray($dato);  
-        DB::select("call update_department($id,$dato,@res)");
+        $dato = request()->except(['_token']);
+        $currentClassification=$dato['currentClassification'];
+        $dato=$this->myArray($dato,false);  
+        DB::select("call update_classification($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
+        if($res[0]['res']==3)  throw new DecryptException('la clasificacion ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh();
+        return $this->refresh($currentClassification);
         
     }
 

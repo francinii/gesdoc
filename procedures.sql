@@ -376,7 +376,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_classification`;
 DELIMITER ;;
-CREATE   PROCEDURE `update_classification`(IN `p_id` int, IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `update_classification`( IN `p_description` varchar(500),IN `p_current_classification` int,IN `p_id` int, OUT `res` TINYINT  UNSIGNED)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -393,13 +393,15 @@ BEGIN
 	END;
             START TRANSACTION;
                   UPDATE `classifications` SET `description`=p_description,`updated_at`=NOW() WHERE `id`=p_id;
+                  DELETE FROM `classification_classification` WHERE `second_id`=p_id;
+                  INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
             COMMIT;
             -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
--- call update_classification(2,'mis documentos',@res);
+-- call update_classification(2,'mis documentos',1,@res);
 -- SELECT @res as res;
 
 

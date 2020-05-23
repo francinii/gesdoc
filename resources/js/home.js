@@ -5,7 +5,7 @@
 var idEdit;
 var descriptionEdit;
 var typeContextMenu;
-var currentClassification = null;
+var currentClassification;
 var listClassification = [];
 var allClassifications
 /**
@@ -44,8 +44,7 @@ $("html")
         idEdit = "";
         descriptionEdit = "";
         if (td.className != "dataTables_empty") {
-            typeContextMenu =
-                td.parentNode.childNodes[1].childNodes[1].innerText;
+            typeContextMenu =td.parentNode.childNodes[1].childNodes[1].innerText;
             idEdit = td.parentNode.childNodes[9].innerText;
             descriptionEdit = td.parentNode.childNodes[3].innerText;
         }
@@ -59,16 +58,14 @@ $("html")
                 left: left,
             })
             .addClass("show");
-        if (typeContextMenu == "classification") {
-            $("#editClassificationContext").show();
-            $("#deleteContext").show();
-            $("#shareContext").show();
-        } else if (td.className == "dataTables_empty") {
-            $("#editClassificationContext").hide();
+        if (td.className == "dataTables_empty") {
+            $("#editContext").hide();
             $("#deleteContext").hide();
             $("#shareContext").hide();
         } else {
-            $("#editClassificationContext").hide();
+            $("#editContext").show();
+            $("#deleteContext").show();
+            $("#shareContext").show();
         }
         return false; //blocks default Webbrowser right click menu
     })
@@ -111,9 +108,8 @@ function validaCreate() {
 function ajaxCreate() {
     var me = $(this);
 
-    if (me.data("requestRunning")) {
+    if (me.data("requestRunning"))
         return;
-    }
     me.data("requestRunning", true);
 
     if (validaCreate()) {
@@ -179,10 +175,11 @@ function edit() {
 
 function drawMoveEdit(classifications){
     $("input[id=editClassification]").val(classifications.id);
-    $("label[id=editLableClassification]").text(classifications.description);
+    $("label[id=editLableClassification]").text('"'+classifications.description+'"');
     
     $("#listEdit").empty();
     classifications.classifications.forEach(function (classification, index) {
+        if(classification.id!=$("input[id=idEdit]").val())
         $("#listEdit").append(
             '<li id="listEdit-' + classification.id +'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">' +
                 classification.description +
@@ -202,7 +199,10 @@ function drawMoveEdit(classifications){
  */
 
 function editEnterClassification(id) {
-    alert("open"+id);
+    var openedClassification=editFindClassification(allClassifications['classification'],id);
+    if(openedClassification!=true && openedClassification!=null){
+        drawMoveEdit(openedClassification);
+    }
 }
 
 /**
@@ -230,17 +230,30 @@ function editFindParentClassification(Classification,id){
         return Classification;            
     }
     for (let index = 0; index <  Classification.classifications.length; index++) {
-        return editFindParentClassification(Classification.classifications[index],id);        
+        openedClassification=editFindParentClassification(Classification.classifications[index],id); 
+        if(openedClassification!=null){
+            return openedClassification
+        }       
     }
 }
+
 /**
  * modal to edit, find the classification
  * @param {Object} allClassification list of all classification
  * @param {Integer} id of the classification
  */
-function editFindClassification(allClassification,id){
-    if(parent){
- 
+function editFindClassification(Classification,id){
+    var openedClassification
+
+    for (let index = 0; index <  Classification.classifications.length; index++) {
+        if(Classification.classifications[index].id==id)
+        return Classification.classifications[index];            
+    }
+    for (let index = 0; index <  Classification.classifications.length; index++) {
+        openedClassification=editFindClassification(Classification.classifications[index],id);      
+        if(openedClassification!=null){
+            return openedClassification
+        }
     }
  
  }
@@ -255,10 +268,8 @@ function editFindClassification(allClassification,id){
  */
 function openClassification(id) {
     var me = $(this);
-
-    if (me.data("requestRunning")) {
-        return;
-    }
+    if (me.data("requestRunning"))
+        return;    
     me.data("requestRunning", true);
 
     $.ajax({
@@ -299,5 +310,67 @@ function BackClassification(id) {
             LastClassificacion = listClassification.pop();
         }
         openClassification(id);
+    }
+}
+
+/**
+ * Validate inputs in the edit form.  
+ *    
+ */
+function validaEdit() {
+    var validado = true;
+
+    if ($("input[name=descriptionEdit]").val() == "") {
+        $("input[name=descriptionEdit]").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("input[name=descriptionEdit]").removeClass("is-invalid");
+    }    
+    return validado;
+}
+
+/**
+ * Update a classification
+*/
+
+function ajaxUpdate() {
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
+    me.data("requestRunning", true);
+
+    if (validaEdit()) {
+        var id = $("input[id=idEdit]").val();
+        var description = $("input[name=descriptionEdit]").val();
+    
+        $.ajax({
+            url: "home/{" + id + "}",
+            method: "POST",
+
+            data: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                _token: $("input[name=_token]").val(),
+                _method: "PATCH",
+                id:id,
+                currentClassification: currentClassification.id,
+                description: description,
+                parentClassification:$("input[id=editClassification]").val(),
+
+            },
+            success: function(result) {                
+                $("#table").DataTable().destroy();
+                $("#divTable").html(result);
+                createDataTable("table");
+                $("#edit").modal("hide");
+                alerts("La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
+                me.data("requestRunning", false);
+            },
+            error: function(request, status, error) {
+                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alert(request.responseText);
+                me.data("requestRunning", false);
+            }
+        });
     }
 }
