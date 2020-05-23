@@ -13,7 +13,7 @@
           <div class="form-group">
             <label for="user_create">{{ __('app.users.create.username') }}</label>
             @if (env("use_LDAP"))
-            <input type="text" onchange="obtenerDatos()" class="form-control" id="user_create" placeholder="{{ __('app.users.create.username') }}" name="user_create" >
+              <input type="text" onchange="obtenerDatos()" class="form-control" id="user_create" placeholder="{{ __('app.users.create.username') }}" name="user_create" >
             @else
             <input type="text" class="form-control " id="user_create" placeholder="{{ __('app.users.create.username') }}" name="user_create" >
             @endif            

@@ -80,7 +80,7 @@
 
         <div class="modal-footer">     
             <div class="col-md-9 text-right">
-                <button data-toggle="modal" class=" float-right btn btn-success" onclick="addStep()" data-target="">
+                <button data-toggle="modal" class=" float-right btn btn-success" onclick="hideModalCardSave()" data-target="">
                     <i class="fas fa-plus-circle"></i> Guardar
                 </button>    
               </div>  

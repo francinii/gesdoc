@@ -22,7 +22,7 @@
               <i class="fas fa-plus-circle"> </i>
               Agregar final
             </button>
-            <button type="button" class="btn btn-info float-right" onclick="createStep()">
+            <button type="button" class="btn btn-info float-right" onclick="createStep({{$actions}})">
               <i class="fas fa-plus-circle"> </i>
               Agregar departamento
             </button>
