@@ -56,7 +56,7 @@ class RoleController extends Controller
     protected function validator(array $data,$create)
     {
         $validacion = [           
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:500'],
         ];
         if(!$create){
             $validacion['id']=['required', 'int'];

@@ -32,7 +32,8 @@ class HomeController extends Controller
 
         $username = Auth::id();
         $classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
-        return view('home.home', compact('classification'));
+        $allClassifications=$this->classifications($classification);
+        return view('home.home', compact('classification','allClassifications'));
     }
     
     /**
@@ -41,10 +42,13 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function refresh()
+    public function refresh($currentClassification)
     {
-        $departments = Department::all();
-        return view('departments.table', compact('departments'));
+        $username = Auth::id();
+        $classification = Classification::where([['username', '=',''.$username.''],['id', '=',$currentClassification]])->first();    
+        $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
+        $allClassifications=$this->classifications($allClassifications);
+        return view('home.table', compact('classification','allClassifications'));
     }
     /**
      * Get a validator for an incoming registration request.
@@ -54,16 +58,12 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     
-    protected function validator(array $data,$create)
+    protected function validator(array $data)
     {
         $validacion = [           
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:500'],
+            'currentClassification'=>['required', 'int'],
         ];
-        if(!$create){
-            $validacion['id']=['required', 'int'];
-        }else{
-            $validacion['currentClassification']=['required', 'int'];            
-        }
 
         return Validator::make($data, $validacion);
     }
@@ -76,7 +76,7 @@ class HomeController extends Controller
     { 
 
         $username = Auth::id();        
-        $arryString="'".$dato['description']."','".$dato['currentClassification']."'";
+        $arryString="'".$dato['description']."',".$dato['currentClassification'];
         if($create){
             $arryString.=",'".$username."'";
         }
@@ -102,15 +102,16 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all(),true)->validate();
+        $this->validator($request->all())->validate();
         $dato = request()->except(['_token']);
-        $dato=$this->myArray($dato);  
+        $currentClassification=$dato['currentClassification'];
+        $dato=$this->myArray($dato,true);  
         DB::select("call insert_classification($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']==3)  throw new DecryptException('la clasificacion ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh();
+        return $this->refresh($currentClassification);
     }
 
     /**
@@ -169,6 +170,21 @@ class HomeController extends Controller
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
         return $this->refresh();
+    }
+    
+    public function classifications($classification)
+    {
+        $classifications;
+        $arrayClassifications = array();
+
+        $classifications['classification'] = $classification;
+      
+        foreach ($classification->classifications as $subClassification) {
+            array_push($arrayClassifications, $this->classifications($subClassification));            
+        }
+        $classifications['classifications'] = $arrayClassifications;
+        return $classifications;
+
     }
 
 }

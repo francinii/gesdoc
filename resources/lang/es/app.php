@@ -180,14 +180,16 @@ return [
     ],
     'home' => [    
         'create' => [  
-            'title' => 'Nueva clasificacion',  
-            'name' => 'Nombre de la clasificacion',     
+            'title' => 'Nueva clasificación',  
+            'name' => 'Nombre de la clasificación',     
                       
         ],
 
         'edit' => [
-            'title' => 'Editar clasificacion',  
-            'name' => 'Nombre del clasificacion', 
+            'title' => 'Editar clasificación',  
+            'name' => 'Nombre del clasificación', 
+            'move' => 'Mover a ',
+            'movehere'=>'Mover aqui',
         ],
 
         'index' => [
@@ -206,7 +208,7 @@ return [
             'modified'=> 'Modificado',
             'edit' => 'Editar clasificación',
             'delete' => 'Eliminar clasificación',
-            'defaultClassification' => 'Sin clasificar', 
+            'defaultClassification' => 'Principal', 
         ],
         'menu' => [
             'option1' => 'Mis documentos',

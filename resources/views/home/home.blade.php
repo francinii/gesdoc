@@ -2,7 +2,8 @@
 
 @section('head')
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
-<script src="{{ asset('../resources/js/home.js') }}" defer></script> 
+<script src="{{ asset('../resources/js/home.js') }}" defer></script>
+
 @stop
 @section('title', 'Usuarios')
 @section('header')
@@ -15,8 +16,7 @@
             <div class="card">
                 <div class="card-header">Menu</div>
                 <div class="card-body">
-                    <div class="list-group">
-         
+                    <div class="list-group">         
                         <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option1') }}</button>
                         <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option2') }}</button>                
                     </div>         
@@ -26,8 +26,9 @@
         <div class="col-md-1"></div>
         <div class="col-md-8">
         @include('partials.alert')
+        <div id="divTable">
         @include('home.table')
-     
+        </div>
         </div>
     </div>
 </div>

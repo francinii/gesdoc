@@ -48,7 +48,7 @@ class DocumentController extends Controller
     protected function validator(array $data)
     {
         $validacion = [
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:500'],
             'flow_id' => ['required', 'int'],
         ];
 
