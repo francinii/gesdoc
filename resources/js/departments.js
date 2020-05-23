@@ -95,6 +95,9 @@ function validaEdit() {
     }    
     return validado;
 }
+/**
+ * Update a departament
+ */
 
 function ajaxUpdate() {
     if (validaEdit()) {
