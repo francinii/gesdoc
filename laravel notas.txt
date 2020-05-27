@@ -93,4 +93,11 @@ Convenciones para VISTAS blade.php
 
 
 //Limpiar cache en laravel
+php artisan config:clear
+
+
+
 php artisan config:cache
+php artisan view:clear
+php artisan route:clear
+composer dump-autoload
