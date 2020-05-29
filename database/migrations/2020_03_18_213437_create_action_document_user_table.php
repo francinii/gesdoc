@@ -24,7 +24,7 @@ class CreateActionDocumentUserTable extends Migration
             $table->primary(['action_id','document_id','username']);
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');
             $table->foreign('document_id')->references('document_id')->on('document_user')->onDelete('cascade');
-            $table->foreign('username')->references('username')->on('document_user')->onDelete('cascade');
+            $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             
 
         });

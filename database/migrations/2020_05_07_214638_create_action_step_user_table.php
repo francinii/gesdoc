@@ -24,7 +24,7 @@ class CreateActionStepUserTable extends Migration
 
             $table->foreign('step_id')->references('step_id')->on('step_user')->onDelete('cascade');
             $table->foreign('flow_id')->references('flow_id')->on('step_user')->onDelete('cascade'); 
-            $table->foreign('username')->references('username')->on('step_user')->onDelete('cascade');
+            $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');            
         });
     }
