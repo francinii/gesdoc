@@ -16,8 +16,15 @@ class Flow extends Model
     /**
      * A flow has some documents
     */
-    public function documento() {
-        return $this->hasMany('App\Documento');
+    public function documents() { 
+        return $this->hasMany('App\Document');
     }    
+
+    /**
+     * A flow has some steps
+    */
+    public function steps() {
+        return $this->hasMany('App\Step');
+    }
     
 }

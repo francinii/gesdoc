@@ -10,7 +10,7 @@
             <div class="form-group">
                 <input name="id" type="hidden">
             </div> 
-            <div class="form-group">
+            <div id ="div-selector-action" class="form-group">
               <label for="">Acción</label> 
               <select id="select_action"class="form-control" name="" >
                   @foreach ($actions as $action)

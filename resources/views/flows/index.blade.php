@@ -32,13 +32,13 @@
             </div>
         </div> 
     </div>
-   
+    @include('partials.alertModal')
     @include('flows.edit')
     @include('flows.list')
     @include('flows.card') 
     @include('partials.confirm')
     @include('flows.create')
     @include('flows.line')
-
+   
     <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 @stop

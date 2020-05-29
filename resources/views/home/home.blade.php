@@ -35,7 +35,7 @@
 @include('home.contextMenu')
 @include('home.create')
 @include('home.edit')
-@include('partials.error')
+@include('partials.alertModal')
 @include('partials.search')
 @include('partials.confirm')
 @stop

@@ -88,15 +88,15 @@ function obtenerDatos() {
                 $("input[name=name_create]").val(data.cn);
                 $("input[name=email_create]").val(data.mail);
             } else {
-                $("#alertModalTitle").val('Error');
-                $("#alertModalDescription").val('Ha ocurrido un error inesperado.');
+                $("#alertModalTitle").text('Error');
+                $("#alertModalDescription").text('Ha ocurrido un error inesperado.');
                 $("#alertModal").modal("show");
             }
         },
         error: function (request, status, error) {
             $("#buscando").modal("hide");
-            $("#alertModalTitle").val('Error');
-            $("#alertModalDescription").val('Ha ocurrido un error inesperado.');
+            $("#alertModalTitle").text('Error');
+            $("#alertModalDescription").text('Ha ocurrido un error inesperado.');
             $("#alertModal").modal("show");
             $("input[name=name_create]").val("");
             $("input[name=email_create]").val("");

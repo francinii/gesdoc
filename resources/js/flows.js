@@ -16,8 +16,8 @@ var step = 1;
 var divFirst = ""; 
 var divSecond = ""; 
 var globalMode = 0;
-
-
+const DRAGGABLE_FINAL = "draggable_final";
+const DRAGGABLE_INICIO = "draggable_inicio";
 
 /**
  * Ready function actived when the flows.js is called.
@@ -81,42 +81,43 @@ function ajaxCreate(user){
     description =  $("input[id=flowName]").val();
     data = "";
     datos = [];
-    for (var i = 1; i <= sessionStorage.length; i++){
-       data = sessionStorage.getItem('draggable'+ i);
-       datos.push(JSON.parse(data));
-        // Do something with localStorage.getItem(localStorage.key(i));
-    }  
-
-    $.ajax({
-        url: "flows",
-        method: "POST",
-        data: {
-            _token: $("input[name=_token]").val(),
-            description:   description,
-            data: datos,   
-            username: user 
-        },
-
-        success: function(result) {
-            $("#table").html(result);
-            $("#table")
-                .DataTable()
-                .destroy();
-            createDataTable("table");
-            $("#create").modal("hide");
-            alerts(
-                "El flujo " +
-                    description +
-                    " ha sido creado satisfactoriamente",
-                "alert-success"
-            );
-        },
-
-        error: function(request, status, error) {
-            alert(request.responseText);
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
+    valid = validateFlow();
+   
+    if(valid){
+        for (var i = 1; i <= sessionStorage.length; i++){
+        data = sessionStorage.getItem('draggable'+ i);
+        datos.push(JSON.parse(data));
+            // Do something with localStorage.getItem(localStorage.key(i));
         }
-    });
+        $.ajax({
+            url: "flows",
+            method: "POST",
+            data: {
+                _token: $("input[name=_token]").val(),
+                description:   description,
+                data: datos,   
+                username: user 
+            },
+            success: function(result) {
+                $("#table").html(result);
+                $("#table")
+                    .DataTable()
+                    .destroy();
+                createDataTable("table");
+                $("#create").modal("hide");
+                alerts(
+                    "El flujo " +
+                        description +
+                        " ha sido creado satisfactoriamente",
+                    "alert-success"
+                );
+            },
+            error: function(request, status, error) {
+                alert(request.responseText);
+                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+            }
+        }); 
+    }
 }
 
 /**
@@ -161,6 +162,42 @@ function ajaxUpdate() {
     });
 }
 
+
+
+function ajaxEdit(idFlow,flowName) {
+  
+       $.ajax({
+        url: "flows/{" + idFlow + "}",
+        method: "GET",
+        dataType: 'JSON',
+        data: {
+            _token: $("input[name=_token]").val(),
+            _method: "PATCH",
+            id: idFlow,
+        },
+        beforeSend: function(){
+            alerts("Espere por favor.", "alert-danger");
+        },
+
+        success: function (response){
+            $("input[id=flowName]").val(flowName);
+            editFlow(response);
+        },
+        done: function(response) {
+            //alert("funcionno");
+           // console.log(response);
+           // alert(response);
+          // return response;
+        },
+
+        error: function(request, status, error) {
+            alert(request.responseText);
+            alerts("Ha ocurrido un error inesperado.", "alert-danger");
+         
+        }
+    });
+
+}
 
 /**
  * 
@@ -663,9 +700,10 @@ function createDraggable(id){
  * 
  *  @param {integer} id - id Of the step (draggable#)
  */
-function joinStep(div){    
+function joinStep(div){  
+    bandera =  false;  
     //Verificar que no se creen lineas que tienen el mismo div de inicio y final  
-    var labelName = 'Acción siguiente';
+    var labelName = divFirst == DRAGGABLE_INICIO? 'Inicio': 'Acción siguiente';
     if(divFirst == ""){   
         //Firts div to join    
         divFirst = div.getAttribute('id');
@@ -683,11 +721,12 @@ function joinStep(div){
         
         if(validateBeginEnd(divFirst,divSecond)){
         //Create a line between each card step.
-            createLine(begin, end, idLine, labelName);  
+         bandera =   createLine(begin, end, idLine, labelName);  
         //Id's line 
             var identificador = divFirst+"-"+divSecond;
         //Storage the line to the  sessionStorage
-            storageLine(identificador, divFirst, divSecond,'', []);  
+            if(bandera)
+                storageLine(identificador, divFirst, divSecond,'', []);  
         }        
         
         //Remove the focus class
@@ -724,7 +763,7 @@ function storageLine(identificador, divFirst, divSecond,action, usersLine){
 
 /**
  * Draw a line between two card steps in the canvas.
- * @param {integer} begin - id of the first card step 
+ * @param {string} begin - id of the first card step 
  * @param {string} end - id of the second card step
  * @param {string} idLine - second div to join
  * @param {string} labelName - name of the action
@@ -732,17 +771,31 @@ function storageLine(identificador, divFirst, divSecond,action, usersLine){
  *
  */
 function createLine(begin, end, idLine, labelName){
-    line = new LeaderLine( begin , end , {
-        hide:'true',
-        startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
-        // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
-        startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
-        middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
-        //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
+    var bandera = false;
+
+    array.forEach(element => {
+         arr = element['id'].split('-');  
+        var line = idLine.split('-');      
+        if( arr[0]== line[0] && line[0] == DRAGGABLE_INICIO)
+            bandera =true;        
     });
+    if(!bandera){
+        line = new LeaderLine( begin , end , {
+            hide:'true',
+            startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
+            // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
+            startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
+            middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
+            //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
+        });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
         array.push({id: idLine, line: line});  
+        return true;
+    }else {
+        alerta('Alerta', 'El inicio no puede tener más de dos líneas',false);
+        return false;
+    }    
 }
 
 
@@ -775,6 +828,14 @@ $(document).on("click", "svg.leader-line text", function (e) {
             }
         });
     }  */
+    if(arr[0] == DRAGGABLE_INICIO){
+         $("#div-selector-action").css('display','none');
+         $(".modal-footer #EditSubmit").css('display','none');
+    } else {
+        $("#div-selector-action").css('display','block');
+        $(".modal-footer #EditSubmit").css('display','block');
+    } 
+   
    $("#line-modal").modal("show"); 
 });  
 
@@ -865,51 +926,28 @@ function reset(){
     divSecond = "";    
 }
 
-/**
- *  Update a specific flow
- */
-function editFlow(){
-    //obtener datos de la base de datos
-    //setearlo en el storage
-    // 
-    //Creamos el html del card
-    
-    contenido = createStepCard(id);
-    //agregamos primero todos los drag al canvas    
-    addElementToCanvas(id,contenido);
-    //De una agregamos los drag al storage
-    saveInStorage(null, id);
 
-    //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
-    //Guarda las lineas en un array llamado array (Global)
-    createLine(begin, end, idLine, labelName);
-
-    //Guarda la linea en el storage
-    storageLine(identificador, divFirst, divSecond,action, usersLine)
-
-
-}
 
 /*****Metodos para las validaciones de campos, contenido y alertas. ****/
 
 /**
  *  Validate the createDescription field is not empty
  */
-function validateFields(){
-    $("#CreateDescription").removeClass("card-shadow-info");
-    $("#errLabel").remove();
-    text = $("#CreateDescription").val();
-    text != '' ? true: false;
-    if (!text){
-        $("#CreateDescription").after('<p id = "errLabel">Por favor, rellene este campo</p>');
-        $("#CreateDescription").addClass("card-shadow-info");
-        $("#errLabel").css('color', 'red');
+function validateFields(description, idField, idFieldError, message){
+    $("#"+idFieldError).remove();
+    isEmpty= description != '' ? true: false;
+    if(!isEmpty){
+        $("#"+idField).after('<p id = "'+idFieldError+'">'+message+'</p>');
+        $("#"+idField).addClass("card-shadow-info");
+        $("#"+idFieldError).css('color', 'red');
+        return false;    
     }
-    return text;
+    return true;
 }
 
+
 /**
- *  Focus a field that is invalid
+ *  Delete the class of a field with id: "CreateDescription" that is invalid
  */
 $( "#CreateDescription" ).focus(function() {
     $("#CreateDescription").removeClass("card-shadow-info");
@@ -918,18 +956,158 @@ $( "#CreateDescription" ).focus(function() {
   });
 
 
+/**
+ *  Delete the class of a field with the  id: "flowName" that is invalid
+ */
+  $( "#flowName" ).focus(function() {
+    $("#flowName").removeClass("card-shadow-info");
+    $("#errFlow").remove();
+   
+  });
+ 
+
+
   function validateBeginEnd(begin,end){
-    if(begin == 'draggable_final'){
-        alert ('El elemento final no puede asociarse a otro elemento');
-        return false;
+      var title = "Alerta";
+      var description = "";
+      var bandera = true;
+   if(begin == DRAGGABLE_FINAL){
+        description = 'El elemento final no puede asociarse a otro elemento';       
+        bandera = false;
     }
-    else if(end == 'draggable_inicio'){
-        alert ('El elemento inicial no puede asociarse a otro elemento');
-        return false;
+    else if(end == DRAGGABLE_INICIO){
+        description ='El elemento inicial no puede asociarse a otro elemento' ;         
+        bandera = false;
     }
-    else if(begin == 'draggable_inicio' && end == 'draggable_final'){
-        alert ('No es posible conectar estos dos elementos');
-        return false;
+    else if(begin == DRAGGABLE_INICIO && end == DRAGGABLE_FINAL){
+        description ='No es posible conectar estos dos elementos' ; 
+        bandera  = false;
     }
-    return true;
+    alerta(title, description,bandera);
+    return bandera;
   }
+
+
+  function alerta(title, description,bandera){
+    $('#alertModalTitle').text(title);
+    $('#alertModalDescription').text(description);
+    bandera == false ? $("#alertModal").modal('show'): "";
+  }
+
+
+  
+function validateRepeatAction(item){
+    cont = 0;    
+    steps = item.steps;
+    arrayAux =steps;   
+    steps.forEach(element => {
+        arrayAux = arrayAux.splice(1);
+        arrayAux.forEach(element2 => { 
+            element['action'] == element2['action']? cont++: cont;
+           
+        });
+    });
+    return cont >= 1? false:true;
+}
+
+
+function validateFlow(){
+    stepDescription = $("#CreateDescription").val();
+    flowName = $("#flowName").val();
+    validFlow =validateFields(flowName, 'flowName', 'errFlow', 'Por favor, rellene este campo' )
+    //validStepField =validateFields(stepDescription, 'CreateDescription', 'errlabel', 'Por favor, rellene este campo' )
+ 
+    // validField = validateFields();
+    if(validFlow ){
+       // if(validStepField){
+            keys = Object.keys(sessionStorage);
+            result = true;
+            hayInicio = false;
+            hayFinal = false;
+            validField = true; // valido hasta que se demuestre lo contrario
+            keys.forEach(element => {
+                item = sessionStorage.getItem(element);
+                item = JSON.parse(item);
+
+                // Verify if the step has a description (except the beggining step and ending step)
+                if(  item['id'] != DRAGGABLE_INICIO &&  item['id'] != DRAGGABLE_FINAL ){
+                    validField = item['description'] != ''? true:false;
+                }            
+
+                // Verify if a begin and end step exist in the flow          
+                hayInicio = item['id'] == DRAGGABLE_INICIO? true: hayInicio;
+                hayFinal = item['id'] == DRAGGABLE_FINAL?  true: hayFinal;
+
+                // Validate if the actions are not repeat it in each step. 
+                result = validateRepeatAction(item);
+                if(!result){
+                    description = 'El elemento ' +item['description']+ 'está asociado con las mismas acciones a varios pasos siguientes. Asegurese que cada línea que sale de un mismo paso tiene diferente acción.';
+                    alerta('Error',description, false);
+                    return result;
+                } 
+                // Validate if the fields are valid
+                else if (!validField) {
+                    description = 'Hay elementos que no poseen una descripcion. Asegúrese que cada paso tiene una descripción no vacía.';
+                    alerta('Error',description, false);
+                    return false;
+                }  
+            });
+            if(!hayInicio){
+                description = 'El flujo no tiene un elemento inicial. Asegurese de agregar un paso inicial.';
+                alerta('Error',description, false);
+                return false;
+            } else if(!hayFinal){
+                description = 'El flujo no tiene un elemento final. Asegurese de agregar un paso final.';
+                alerta('Error',description, false);
+                return false;
+            }  
+        //}else {
+           // description = 'Asegúrese de que todos los pasos tengan una descripción no vacía.';
+           // alerta('Error',description, false);
+           // return false;
+       // }
+    }else {
+        description = 'El flujo no posee una descripción. Asegúrese de que el nombre del flujo no esté vacío.';
+        alerta('Error',description, false);
+        return false;
+    }
+return result;  
+}
+
+
+
+/**
+ *  Update a specific flow
+ */
+function editFlow(data){
+    
+    
+    //obtener datos de la base de datos
+    //setearlo en el storage
+    // var data = ajaxEdit(idFlow);
+    
+    $flow = data.flow;
+    $steps = data.steps;
+    console.log($steps);
+    $stepStep = data.step_step;
+    console.log($stepStep);
+    $stepUser = data.step_user;
+    console.log($stepUser);
+    $actionStepUser = data.action_step_user;
+    console.log($actionStepUser);
+    //Creamos el html del card    
+    // contenido = createStepCard(id);
+    //agregamos primero todos los drag al canvas    
+   // addElementToCanvas(id,contenido);
+    //De una agregamos los drag al storage
+    //7objetct = createObjectStep(stepId,description,users,steps,axisX,axisY)
+    //saveInStorage(object, id);
+
+    //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
+    //Guarda las lineas en un array llamado array (Global)
+   // createLine(begin, end, idLine, labelName);
+
+    //Guarda la linea en el storage
+   // storageLine(identificador, divFirst, divSecond,action, usersLine)
+   openCreate();
+}
