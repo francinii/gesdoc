@@ -45,7 +45,7 @@ function createDataTable(table) {
  */
 function confirmDelete(id, url1,table,message){
     $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
-    $("#confirmarButton").attr("onClick","ajaxDelete("+id+",'"+url1+"','"+table+"')");
+    $("#confirmarButton").attr("onClick","ajaxDelete('"+id+"','"+url1+"','"+table+"')");
     $("#confirmar").modal("show");
 }
 
@@ -55,6 +55,19 @@ function confirmDelete(id, url1,table,message){
  *  
  */
 function ajaxDelete(id, url1,table){
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
+    me.data("requestRunning", true);
+
+    var array = table.split('-');
+    table=array[0];
+    if(array.length>1){
+        divTable=array[1];
+    }else{
+        divTable=table
+    }
     $.ajax({
         url: url1 + "/" + id,
         method: "POST",
@@ -64,17 +77,20 @@ function ajaxDelete(id, url1,table){
             _method:'DELETE',
             id:id,
         },
-        success: function(result) {           
-            $("#"+table).html(result);
-            $("#"+table).DataTable().destroy();
+        success: function(result) {  
+            $("#"+table).DataTable().destroy();         
+            $("#"+divTable).html(result);            
             createDataTable(table);
             $("#confirmar").modal("hide");
             alerts("Elemento eliminado correctamente.", "alert-success");
+            me.data("requestRunning", false);
         },
         error: function (request, status, error) {    
-            $("#confirmar").modal("hide");        
+            $("#confirmar").modal("hide");  
+            me.data("requestRunning", false);      
             alerts("Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
             alert(request.responseText);
+            
         }
     });
 }

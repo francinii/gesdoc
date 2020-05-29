@@ -2,7 +2,7 @@
 * global variable   
 *
 */
-var idEdit;
+var idselect;
 var descriptionEdit;
 var typeContextMenu;
 var currentClassification;
@@ -41,11 +41,11 @@ $("html")
     .on("contextmenu", "td", function (e) {
         var td = e.currentTarget;
         typeContextMenu = "";
-        idEdit = "";
+        idselect = "";
         descriptionEdit = "";
         if (td.className != "dataTables_empty") {
             typeContextMenu =td.parentNode.childNodes[1].childNodes[1].innerText;
-            idEdit = td.parentNode.childNodes[9].innerText;
+            idselect = td.parentNode.childNodes[9].innerText;
             descriptionEdit = td.parentNode.childNodes[3].innerText;
         }
         var top = e.pageY - 10;
@@ -159,7 +159,7 @@ function edit() {
         $(this).prop("selected", false);
     });
     $("#listEdit").empty();
-    $("input[id=idEdit]").val(idEdit);
+    $("input[id=idEdit]").val(idselect);
     $("input[name=descriptionEdit]").removeClass("is-invalid");
     $("input[name=descriptionEdit]").val(descriptionEdit);
     
@@ -373,4 +373,17 @@ function ajaxUpdate() {
             }
         });
     }
+}
+
+
+function deletefile(){
+    var mensaje='Desea eliminar ';
+    if(typeContextMenu=='classification'){
+        mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
+    }else{
+        mensaje+="el documento "+descriptionEdit
+    }
+    var id=idselect+"-"+typeContextMenu+"-"+currentClassification.id
+    confirmDelete(id,'home','table-divTable',mensaje)
+
 }

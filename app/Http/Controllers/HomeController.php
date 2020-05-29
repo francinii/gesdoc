@@ -45,7 +45,7 @@ class HomeController extends Controller
     public function refresh($currentClassification)
     {
         $username = Auth::id();
-        $classification = Classification::where([['username', '=',''.$username.''],['id', '=',$currentClassification]])->first();    
+        $classification = Classification::where([['id', '=',$currentClassification]])->first();    
         $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
         $allClassifications=$this->classifications($allClassifications);
         return view('home.table', compact('classification','allClassifications'));
@@ -171,13 +171,23 @@ class HomeController extends Controller
      */
     public function destroy($id)
     {
-        DB::select("call delete_department($id,@res)");
+        $array = explode('-', $id);
+        $id=(int)$array[0];
+        $type=$array[1];
+        $currentClassification=(int)$array[2];
+        $username = Auth::id();
+        DB::select("call delete_classification($id,'$username',@res)");
+        
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh();
+        return $this->refresh($currentClassification);
     }
+
     
+    /**
+     * @param object $classification
+     */
     public function classifications($classification)
     {
         $classifications;

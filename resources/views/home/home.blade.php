@@ -18,7 +18,8 @@
                 <div class="card-body">
                     <div class="list-group">         
                         <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option1') }}</button>
-                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option2') }}</button>                
+                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option2') }}</button>
+                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option3') }}</button>                
                     </div>         
                 </div>
             </div> 
