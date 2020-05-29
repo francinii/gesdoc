@@ -23,7 +23,7 @@
                 @endif
             @endforeach                                         
             <td class="text-center">
-                    <button onclick = "edit('{{$flow->id}}', '{{$flow->description}}','{{$usuario}} ')"  class="btn btn-success"  data-toggle="modal" >
+                    <button onclick = "ajaxEdit('{{$flow->id}}', '{{$flow->description}}')"  class="btn btn-success"  data-toggle="modal" >
                         <i class="fas fa-edit"></i>
                     </button>
             </td>

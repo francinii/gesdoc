@@ -30,7 +30,7 @@
 @include('users.create')
 @include('users.edit')
 
-@include('partials.error')
+@include('partials.alertModal')
 @include('partials.search')
 @include('partials.confirm')
 <script>

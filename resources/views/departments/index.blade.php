@@ -31,7 +31,7 @@
 </div>
 @include('departments.create')
 @include('departments.edit')
-@include('partials.error')
+@include('partials.alertModal')
 @include('partials.search')
 @include('partials.confirm')
 @stop

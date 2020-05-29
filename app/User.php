@@ -54,14 +54,22 @@ class User extends Authenticatable
     /**
      * The user has many flows
     */
-    public function flujos() {
-        return $this->hasMany('App\Flujo');
+    public function flows() {
+        return $this->hasMany('App\Flow');
     }
 
     /**
      * Relationship many to many
     */
-    public function documentos() {
-        return $this->belongsToMany('App\Documento');
+    public function documents() {
+        return $this->belongsToMany('App\Document');
     }
+
+    /**
+     * One step belongs to a StepUser
+    */
+    public function stepUser() {
+        return $this->belongsTo('App\StepUser');
+    }
+
 }

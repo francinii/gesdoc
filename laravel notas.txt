@@ -101,3 +101,8 @@ php artisan config:cache
 php artisan view:clear
 php artisan route:clear
 composer dump-autoload
+
+
+
+//Ver todas las rutas
+php artisan route:list
