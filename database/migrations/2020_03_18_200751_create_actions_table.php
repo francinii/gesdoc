@@ -17,7 +17,7 @@ class CreateActionsTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('description',500);
-            $table->boolean('type');
+            $table->unsignedTinyInteger('type');
             $table->timestamps();            
         });
     }
