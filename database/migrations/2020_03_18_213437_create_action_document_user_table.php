@@ -15,16 +15,16 @@ class CreateActionDocumentUserTable extends Migration
     {
         Schema::create('action_document_user', function (Blueprint $table) {
             $table->engine = 'InnoDB';      
-            $table->bigInteger('action_id')->unsigned()->nullable(); 
-            $table->bigInteger('document_id')->unsigned()->nullable();   
-            $table->string('username')->nullable(); 
+            $table->bigInteger('action_id')->unsigned();
+            $table->bigInteger('document_id')->unsigned();  
+            $table->string('username');
               
             $table->timestamps();
 
             $table->primary(['action_id','document_id','username']);
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');
-            $table->foreign('document_id')->references('document_id')->on('document_user')->onDelete('cascade');
-            $table->foreign('username')->references('username')->on('document_user')->onDelete('cascade');
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             
 
         });

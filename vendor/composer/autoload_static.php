@@ -584,6 +584,7 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         'Adldap\\Utilities' => __DIR__ . '/..' . '/adldap2/adldap2/src/Utilities.php',
         'App\\Action' => __DIR__ . '/../..' . '/app/Action.php',
         'App\\ActionDocumentUser' => __DIR__ . '/../..' . '/app/ActionDocumentUser.php',
+        'App\\ActionStepUser' => __DIR__ . '/../..' . '/app/ActionStepUser.php',
         'App\\Classification' => __DIR__ . '/../..' . '/app/Classification.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Department' => __DIR__ . '/../..' . '/app/Department.php',

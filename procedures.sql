@@ -287,7 +287,7 @@ BEGIN
             IF p_update_password then
             
               UPDATE `users` SET `role_id`=p_role_id,`department_id`=p_department_id,`name`=p_name,`email`=p_email,`password`=p_password,`updated_at`=NOW() WHERE `username`=p_username;
-              ELSE
+            ELSE
         
               UPDATE `users` SET `role_id`=p_role_id,`department_id`=p_department_id,`name`=p_name,`email`=p_email,`password`=p_password,`updated_at`=NOW() WHERE `username`=p_username;
             END IF;
@@ -404,6 +404,45 @@ DELIMITER ;
 -- call update_classification(2,'mis documentos',1,@res);
 -- SELECT @res as res;
 
+
+-- ----------------------------
+-- PROCEDURE delete a classification
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_classification`;
+DELIMITER ;;
+CREATE   PROCEDURE `delete_classification`(IN `p_id` int,IN `p_username` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE owner_username varchar(500);
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                  select username into owner_username  from `classifications` WHERE `id`=p_id; 
+                  IF owner_username=p_username then
+                    DELETE FROM `classifications` WHERE `id`=p_id;
+                    DELETE FROM `documents` WHERE NOT EXISTS (SELECT null from `classification_document` WHERE classification_document.document_id=documents.id) and documents.flow_id IS NULL;                    
+                  ELSE
+                    DELETE FROM `classification_classification` WHERE `second_id`=p_id;
+                  END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call delete_classification(2,'402340420',@res);
+-- SELECT @res as res;
 
 
 

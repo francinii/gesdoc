@@ -23,15 +23,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('textEditor',  function () {
+    return view('textEditor/textEditor');
+});
+
 Route::get('home/{id}', 'HomeController@refresh');
 
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
-
 Route::resource('home', 'HomeController');
 
 Route::resource('roles', 'RoleController');
-
 
 Route::resource('users', 'UserController');
 

@@ -212,7 +212,9 @@ return [
         ],
         'menu' => [
             'option1' => 'Mis documentos',
-            'option2' => 'Mis flujos',
+            'option2' => 'Compartidos conmigo',
+            'option3' => 'Mis flujos',
+            
         ],
 
         'contextMenu' => [

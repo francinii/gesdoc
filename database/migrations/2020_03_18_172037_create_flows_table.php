@@ -16,11 +16,11 @@ class CreateFlowsTable extends Migration
         Schema::create('flows', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->string('username')->nullable();   
+            $table->string('username');
             $table->string('description',500);
             $table->timestamps();
 
-            $table->foreign('username')->references('username')->on('users')->onDelete('set null'); 
+            $table->foreign('username')->references('username')->on('users')->onDelete('cascade'); 
         });
     }
 

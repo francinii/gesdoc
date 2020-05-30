@@ -150,6 +150,7 @@ return array(
     'Adldap\\Utilities' => $vendorDir . '/adldap2/adldap2/src/Utilities.php',
     'App\\Action' => $baseDir . '/app/Action.php',
     'App\\ActionDocumentUser' => $baseDir . '/app/ActionDocumentUser.php',
+    'App\\ActionStepUser' => $baseDir . '/app/ActionStepUser.php',
     'App\\Classification' => $baseDir . '/app/Classification.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Department' => $baseDir . '/app/Department.php',

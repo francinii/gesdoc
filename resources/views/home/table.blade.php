@@ -28,14 +28,14 @@
                 @foreach ($classification->documents as $document)
                 <tr>
                      
-                     @if ($document->type="doc")
-                    <td class="text-center"><i class="fas fa-file-word fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                    @elseif($document->type="xls")
-                    <td class="text-center"><i class="fas fa-file-word fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                    @elseif($document->type="ppt")
-                    <td class="text-center"><i class="fas fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                     @if ($document->type=="doc")
+                    <td class="text-center"><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
+                    @elseif($document->type=="xls")
+                    <td class="text-center"><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                    @elseif($document->type=="ppt")
+                    <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @else
-                    <td class="text-center"><i class="fas fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                    <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @endif
                     <td class="text-center">{{$document->description}}</td>                           
                     <td class="text-center">{{$document->created_at}}</td>  

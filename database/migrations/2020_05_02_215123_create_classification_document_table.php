@@ -15,8 +15,8 @@ class CreateClassificationDocumentTable extends Migration
     {
         Schema::create('classification_document', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigInteger('classification_id')->unsigned()->nullable();  
-            $table->bigInteger('document_id')->unsigned()->nullable();
+            $table->bigInteger('classification_id')->unsigned();
+            $table->bigInteger('document_id')->unsigned();
             $table->timestamps();
 
             $table->primary(['classification_id','document_id']);
