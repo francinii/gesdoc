@@ -17,9 +17,9 @@
                 <div class="card-header">Menu</div>
                 <div class="card-body">
                     <div class="list-group">         
-                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option1') }}</button>
-                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option2') }}</button>
-                        <button type="button" class="btn btn-primary btn-block">{{ __('app.home.menu.option3') }}</button>                
+                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(1)">{{ __('app.home.menu.option1') }}</button>
+                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(2)">{{ __('app.home.menu.option2') }}</button>
+                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(3)">{{ __('app.home.menu.option3') }}</button>                
                     </div>         
                 </div>
             </div> 
@@ -28,7 +28,7 @@
         <div class="col-md-8">
         @include('partials.alert')
         <div id="divTable">
-        @include('home.table')
+        @include('home.tableMyDocuments')
         </div>
         </div>
     </div>

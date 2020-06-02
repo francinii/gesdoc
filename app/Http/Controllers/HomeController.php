@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
 
         $username = Auth::id();
-        $classification = Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();      
+        $classification = Classification::where([['username', '=',''.$username.''],['type', '=',1]])->first();      
         $allClassifications=$this->classifications($classification);
         return view('home.home', compact('classification','allClassifications'));
     }
@@ -40,15 +40,76 @@ class HomeController extends Controller
      * Display a table of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param int $table 
+     * @param int $currentClassification 
      */
 
-    public function refresh($currentClassification)
+    public function refresh($table,$currentClassification)
     {
+        switch ($table) {
+            case '1':
+              return  $this->refreshMyDocuments($currentClassification);
+                break;
+            case '2':
+                return  $this->refreshShareDocuments($currentClassification);
+                 break;   
+            case '3':
+                return $this->refreshDocumentsFlow($currentClassification);
+                 break;
+            default:
+                # code...
+                break;
+        }
+    }
+
+    /**
+     * Display a table of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param int $currentClassification 
+     */
+    public function refreshMyDocuments($currentClassification){
         $username = Auth::id();
+        $allClassifications=Classification::where([['username', '=',''.$username.''],['type', '=',1]])->first();         
+        if($currentClassification)
+        $classification = Classification::where([['id', '=',$currentClassification]])->first(); 
+        else       
+        $classification=$allClassifications;
+
+        $allClassifications=$this->classifications($allClassifications);
+        return view('home.tableMyDocuments', compact('classification','allClassifications'));
+    }
+
+        /**
+     * Display a table of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param int $currentClassification 
+     */
+    public function refreshShareDocuments($currentClassification){
+        $username = Auth::id();
+        $allClassifications=Classification::where([['username', '=',''.$username.''],['type', '=',2]])->first();         
+        if($currentClassification)
+        $classification = Classification::where([['id', '=',$currentClassification]])->first(); 
+        else       
+        $classification=$allClassifications;
+
+        $allClassifications=$this->classifications($allClassifications);
+        return view('home.tableShareDocuments', compact('classification','allClassifications'));
+    }
+
+        /**
+     * Display a table of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param int $currentClassification 
+     */
+    public function refreshDocumentsFlow($currentClassification){
+        /*$username = Auth::id();
         $classification = Classification::where([['id', '=',$currentClassification]])->first();    
         $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first(); 
         $allClassifications=$this->classifications($allClassifications);
-        return view('home.table', compact('classification','allClassifications'));
+        return view('home.tableDocumentsFlow', compact('classification','allClassifications'));*/
     }
     /**
      * Get a validator for an incoming registration request.
@@ -96,7 +157,8 @@ class HomeController extends Controller
      */
     public function create()
     {
-        
+        $aqui="create";
+        return $aqui;
     }
 
     /**
@@ -110,13 +172,14 @@ class HomeController extends Controller
         $this->validator($request->all(),true)->validate();
         $dato = request()->except(['_token']);
         $currentClassification=$dato['currentClassification'];
+        $currentTable=$dato['currentTable'];
         $dato=$this->myArray($dato,true);  
         DB::select("call insert_classification($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']==3)  throw new DecryptException('la clasificacion ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh($currentClassification);
+        return $this->refresh($currentTable,$currentClassification);
     }
 
     /**
@@ -127,7 +190,8 @@ class HomeController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        $aqui="show";
+        return $aqui;
     }
 
     /**
@@ -138,7 +202,8 @@ class HomeController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        $aqui="edit";
+        return $aqui;
     }
 
     /**
@@ -153,13 +218,14 @@ class HomeController extends Controller
         $this->validator($request->all(),false)->validate();
         $dato = request()->except(['_token']);
         $currentClassification=$dato['currentClassification'];
+        $currentTable=$dato['currentTable'];
         $dato=$this->myArray($dato,false);  
         DB::select("call update_classification($dato,@res)");
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']==3)  throw new DecryptException('la clasificacion ya existe en la base de datos');
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh($currentClassification);
+        return $this->refresh($currentTable,$currentClassification);
         
     }
 
@@ -175,13 +241,14 @@ class HomeController extends Controller
         $id=(int)$array[0];
         $type=$array[1];
         $currentClassification=(int)$array[2];
+        $currentTable=(int)$array[3];
         $username = Auth::id();
         DB::select("call delete_classification($id,'$username',@res)");
         
         $res=DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if($res[0]['res']!=0)  throw new DecryptException('error en la base de datos');
-        return $this->refresh($currentClassification);
+        return $this->refresh($currentTable,$currentClassification);
     }
 
     

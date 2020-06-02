@@ -234,7 +234,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_user`;
 DELIMITER ;;
-CREATE   PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` varchar(500),IN `p_email` varchar(500),IN `p_password` varchar(500),IN `p_classification` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` varchar(500),IN `p_email` varchar(500),IN `p_password` varchar(500),IN `p_classification` varchar(500),IN `p_share_classification` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
  
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -252,7 +252,8 @@ BEGIN
 	END;
             START TRANSACTION;
                     INSERT INTO `users`(role_id,department_id,name,username,email,password,created_at,updated_at) VALUES (p_role_id,p_department_id,p_name,p_username,p_email,p_password, NOW(),NOW());
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_classification,true, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_classification,1, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_share_classification,2, NOW(),NOW());
             COMMIT;
             -- SUCCESS
 SET res = 0;
@@ -357,7 +358,7 @@ BEGIN
 	END;
             START TRANSACTION;
                    
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_description,false, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_description,3, NOW(),NOW());
                     SET p_id = LAST_INSERT_ID();
                     INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
             COMMIT;

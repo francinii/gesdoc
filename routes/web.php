@@ -27,11 +27,12 @@ Route::get('textEditor',  function () {
     return view('textEditor/textEditor');
 });
 
-Route::get('home/{id}', 'HomeController@refresh');
+
+Route::resource('home', 'HomeController');
 
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
-Route::resource('home', 'HomeController');
+Route::get('home/{table}/{id}', 'HomeController@refresh');
 
 Route::resource('roles', 'RoleController');
 

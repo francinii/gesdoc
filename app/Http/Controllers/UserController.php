@@ -87,6 +87,7 @@ class UserController extends Controller
         "','".$dato['email']."','".$dato['password']."'";
         if($create){
         $arryString.=",'". __('app.home.table.defaultClassification')."'";
+        $arryString.=",'". __('app.home.table.defaultShareClassification')."'";
         }else{
         $arryString.=",".$dato['updatePassword'];
         }
