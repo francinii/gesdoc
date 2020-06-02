@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Classification;
+use App\Department;
+use App\Action;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
@@ -33,7 +35,9 @@ class HomeController extends Controller
         $username = Auth::id();
         $classification = Classification::where([['username', '=',''.$username.''],['type', '=',1]])->first();      
         $allClassifications=$this->classifications($classification);
-        return view('home.home', compact('classification','allClassifications'));
+        $departments=Department::all();
+        $actions=Action::all();
+        return view('home.home', compact('classification','allClassifications','departments','actions'));
     }
     
     /**

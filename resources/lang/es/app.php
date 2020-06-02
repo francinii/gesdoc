@@ -225,6 +225,16 @@ return [
             'createDocument' => 'Crear documento',
             'share' => 'compartir',
         ],
+
+        'share' => [
+            'shareWithUser' => 'Compartir con usuarios',
+            'AsociatePermission' => 'Asociar Persmisos',
+            'editClassification' => 'Editar',
+            'createDocument' => 'Crear documento',
+            'share' => 'compartir',
+        ],
+        
+
     ],
 
 ];
