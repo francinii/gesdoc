@@ -209,6 +209,7 @@ return [
             'edit' => 'Editar clasificación',
             'delete' => 'Eliminar clasificación',
             'defaultClassification' => 'Principal', 
+            'defaultShareClassification' => 'Compartido conmigo', 
         ],
         'menu' => [
             'option1' => 'Mis documentos',

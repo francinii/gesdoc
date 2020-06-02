@@ -18,7 +18,7 @@ class CreateClassificationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('username'); 
             $table->string('description',500);
-            $table->boolean('is_Start');
+            $table->tinyInteger('type')->unsigned();
             $table->timestamps();
 
             

@@ -14,7 +14,7 @@ class Classification extends Seeder
         \DB::table('classifications')->insert(array(
             'username'=>'402340420',
             'description' =>"Principal",
-            'is_Start'=>true,
+            'type'=>1,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
@@ -22,7 +22,23 @@ class Classification extends Seeder
         \DB::table('classifications')->insert(array(
             'username'=>'116650288',
             'description' =>"Principal",
-            'is_Start'=>true,
+            'type'=>1,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',
+           
+        ));
+        \DB::table('classifications')->insert(array(
+            'username'=>'402340420',
+            'description' =>"Compartido conmigo",
+            'type'=>2,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',
+           
+        ));
+        \DB::table('classifications')->insert(array(
+            'username'=>'116650288',
+            'description' =>"Compartido conmigo",
+            'type'=>2,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
@@ -30,7 +46,7 @@ class Classification extends Seeder
         \DB::table('classifications')->insert(array(
             'username'=>'402340420',
             'description' =>"Documentos personales",
-            'is_Start'=>false,
+            'type'=>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            
@@ -38,7 +54,7 @@ class Classification extends Seeder
         \DB::table('classifications')->insert(array(
             'username'=>'402340420',
             'description' =>"Documentos del trabajo",
-            'is_Start'=>false,
+            'type'=>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
            

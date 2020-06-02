@@ -8,6 +8,7 @@ var typeContextMenu;
 var currentClassification;
 var listClassification = [];
 var allClassifications
+var currentTable="1" // 1 = my documents, 2 share with me, 3 my documents in flows
 /**
 * draw the route follow for the user  
 *
@@ -105,7 +106,7 @@ function validaCreate() {
  * Send an ajax request in order to add a classification
  *
  */
-function ajaxCreate() {
+function ajaxCreate(){
     var me = $(this);
 
     if (me.data("requestRunning"))
@@ -123,6 +124,7 @@ function ajaxCreate() {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 _token: $("input[name=_token]").val(),
                 currentClassification: currentClassification.id,
+                currentTable:currentTable,
                 description: description,
             },
             success: function (result) {
@@ -273,12 +275,13 @@ function openClassification(id) {
     me.data("requestRunning", true);
 
     $.ajax({
-        url: "home/" + id,
+        url: "home/"+currentTable+"/"+id,
         method: "get",
 
         data: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             _token: $("input[name=_token]").val(),
+            currentTable:currentTable,
             id: id,
         },
         success: function (result) {
@@ -347,6 +350,7 @@ function ajaxUpdate() {
         $.ajax({
             url: "home/{" + id + "}",
             method: "POST",
+           
 
             data: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -354,6 +358,7 @@ function ajaxUpdate() {
                 _method: "PATCH",
                 id:id,
                 currentClassification: currentClassification.id,
+                currentTable:currentTable,
                 description: description,
                 parentClassification:$("input[id=editClassification]").val(),
 
@@ -375,6 +380,9 @@ function ajaxUpdate() {
     }
 }
 
+/**
+ * delete a clasification or document select
+ */
 
 function deletefile(){
     var mensaje='Desea eliminar ';
@@ -383,7 +391,18 @@ function deletefile(){
     }else{
         mensaje+="el documento "+descriptionEdit
     }
-    var id=idselect+"-"+typeContextMenu+"-"+currentClassification.id
+    var id=idselect+"-"+typeContextMenu+"-"+currentClassification.id+"-"+currentTable;
     confirmDelete(id,'home','table-divTable',mensaje)
 
 }
+
+/**
+ *  open a sheet of the menu  1 = my documents, 2 share with me, 3 my documents in flows
+ * @param {Integer} sheet number of the sheet
+ */
+
+ function openSheet(sheet){
+    currentTable=sheet;
+    listClassification = [];
+    openClassification(0);
+ }
