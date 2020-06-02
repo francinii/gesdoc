@@ -17,14 +17,8 @@ class Step extends Model
      * The steps that belong to the step.
      */
     public function steps() {
-        return $this->belongsToMany('App\Step');
+        return $this->belongsToMany('App\Step','next_step_id','prev_flow_id','prev_step_id','next_flow_id');
     }
 
 
-    /**
-     * One step belongs to a StepUser
-    */
-    public function stepUser() {
-        return $this->belongsTo('App\StepUser');
-    }
 }

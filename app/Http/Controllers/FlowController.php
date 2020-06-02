@@ -29,6 +29,10 @@ class FlowController extends Controller
     |
     */
 
+
+    const DRAGGABLE_FINAL = "draggable_final";
+    const DRAGGABLE_INICIO = "draggable_inicio";
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +45,7 @@ class FlowController extends Controller
         //$Flows = Flow::all();
         $users = User::all();
         $departments = Department::all();
-        $actions = Action::where('type', '=', 1)->get();
+        $actions = Action::all();
         return view('Flows.index',compact('flows', 'users','departments','actions'));
     }
 
@@ -82,22 +86,36 @@ class FlowController extends Controller
     {
         $data = request()->except(['_token']);  
         $id_flow = $data['id'];
-        $flow =Flow::where('id', '=', $id_flow)->get();
-        $steps =Step::where('flow_id', '=', $flow)->get();
-        $step_step = StepStep::where('prev_flow_id', '=', $flow)->get();
-        $step_user = StepUser::where('flow_id', '=', $flow)->get();
-        $action_step_user = ActionStepUser::where('flow_id', '=', $flow)->get();
+      // $flow =Flow::where('id', '=', $id_flow)->get();
+       $flow =Flow::find($id_flow);
+       $steps = $flow->steps;   
+       
+       // $step_step = $steps->steps;
+        //$action_step_user = $flow->steps;
+        //$steps = $flow->steps;
+        $step_step = StepStep::where('prev_flow_id', '=', $id_flow)->get();
+       //$step_user = StepUser::where('flow_id', '=', $flow)->get();
+        $action_step_user = ActionStepUser::where('flow_id', '=', $id_flow)->get();
 
        // return view('flows.table',compact('flow', 'steps', 'step_step','step_user', 'action_step_user'));
-        $usuario = Auth::user()->id;
-        $flows =Flow::where('username', '=', $usuario)->get();
-        $users = User::all();
-        $departments = Department::all();
-        $actions = Action::where('type', '=', 1)->get();
+     //   $usuario = Auth::user()->id;
+     //   $flows =Flow::where('username', '=', $usuario)->get();
+      //  $users = User::all();
+      //  $departments = Department::all();
+      //  $actions = Action::all();
       // return view('flows.table',compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
       // return FlowController::refresh();
       //return response()->json(compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
-      return json_encode(compact('flow','steps','step_step', 'step_user', 'action_step_user'));
+      $steps =  json_encode( $steps);
+     
+    // $steps = json_decode(json_encode($steps), true);
+    // $steps = json_encode($steps, JSON_FORCE_OBJECT);
+    // $step_step = json_encode($step_step);
+
+   //  $action_step_user = json_encode($action_step_user);
+      return compact('flow','steps','step_step', 'action_step_user');
+    //  return compact('flow','steps','step_step', 'action_step_user');
+
     }
 
     /**
@@ -155,7 +173,8 @@ class FlowController extends Controller
         //$flows = Flow::all();
         $users = User::all();
         $departments = Department::all();
-        $actions = Action::where('type', '=', 1)->get();
+        //$actions = Action::where('type', '=', 1)->get();
+        $actions = Action::all();
         return view('flows.table',compact('flows', 'users','departments','actions'));
     }
 
@@ -166,22 +185,23 @@ class FlowController extends Controller
      * @param string $id_Flow   
      */  
     protected function insert(array $datos, $id_Flow)
-    {
+    {   
+
         $idFlow =  "'". $id_Flow."'";  
         $steps = json_decode(json_encode( $datos['data']), true);
         if($steps != null){
             //insertamos a la tabla de steps Es necesario que se agreguen los 
             //steps antes de ingresar datos a las otras tablas
-            $this->insertStep($datos, $steps, $idFlow);
+            $this->insertStep($steps, $idFlow);
         
             foreach ($steps as $step) {                  
             //insertamos a la tabla de steps_steps
             if($step != null){
-                  $this->insertStepStep( $datos,  $step, $idFlow);
+                  $this->insertStepStep($step, $idFlow);
             //insertamos a la tabla de steps_users
-                $this->insertStepUser( $datos,  $step, $idFlow);
+               // $this->insertStepUser( $datos,  $step, $idFlow);
             //insertamos a la tabla de action_step_user
-                $this->insertActionStepUser( $datos, $step, $idFlow);
+                $this->insertActionStepUser($step, $idFlow);
             }
               
             } 
@@ -217,7 +237,7 @@ class FlowController extends Controller
      * @param string $id_flow
      * @return String     
      */  
-    protected function insertStep(array $datos,array $steps, $id_flow)
+    protected function insertStep(array $steps, $id_flow)
     {   
         $res= -1;
         foreach ($steps as $step) { 
@@ -241,53 +261,29 @@ class FlowController extends Controller
      * @param string $id_flow
      * @return String     
      */  
-    protected function insertStepStep(array $datos, array $step, $id_flow)
-    {   $res = -1;
+    protected function insertStepStep(array $step, $id_flow)
+    {   
+        $actions = Action::where('type', '=', 2)->get();
+        $actionid = $actions[0]['id'];
+        $res = -1;
             //Falta validar los datos que esten que no este vacio etc
         $pasos = array_key_exists('steps', $step) ? $step['steps']: null;            
         if($pasos != null)
-        foreach ($pasos as $paso) {
-            if($paso !=null){
-            $idInicial =  "'".$paso['begin']."'"; 
-            $idFinal =  "'".$paso['end']."'";  
-            $action =  $paso['action'] != ''?  $paso['action']: '1';   //Validar que action exista cuando se pasa           
-                if( $action != null){
-                    DB::select("call insert_step_step($idInicial, $idFinal, $id_flow, $action, @res)");
-                    $res=DB::select("SELECT @res as res;"); 
-                    //$res = json_decode(json_encode($res), true);
-                    //if($res[0]['res'] != 0)
+            foreach ($pasos as $paso) {
+                if($paso !=null){
+                $idInicial =  "'".$paso['begin']."'"; 
+                $idFinal =  "'".$paso['end']."'";  
+                $action = $paso['begin'] == self::DRAGGABLE_INICIO?   $actionid : $paso['action'];
+            // $action =  $paso['action'] != ''?  "'".$paso['action']."'" : "'1'";   //Validar que action exista cuando se pasa           
+                    if( $action != null){
+                        DB::select("call insert_step_step($idInicial, $idFinal, $id_flow, $action, @res)");
+                        $res=DB::select("SELECT @res as res;"); 
+                        //$res = json_decode(json_encode($res), true);
+                        //if($res[0]['res'] != 0)
                         return json_decode(json_encode($res), true);
-                }  
-            }                                      
-        } 
-        return json_decode(json_encode($res), true);
-    }
-
-
-    /**
-     * Insert a row to the table StepUser
-     * @param array $datos
-     * @param object $step
-     * @param string $id_flow
-     * @return String     
-     */  
-    protected function insertStepUser(array $datos, array $step, $id_flow)
-    {   
-        $res = -1;
-        //Falta validar los datos que esten que no este vacio etc
-        $users = array_key_exists('users', $step) ? $step['users']: null;            
-        if($users != null)
-            foreach ($users as $user) {
-                if($user !=null){
-                    $step_id =  "'".$step['id']."'";   
-                    $username =  "'".$user['username']."'";      
-                    DB::select("call insert_step_user($step_id, $id_flow, $username, @res)");
-                    $res=DB::select("SELECT @res as res;");   
-                    $res = json_decode(json_encode($res), true);
-                    if($res[0]['res'] == 0 )
-                        $this->insertActionStepUser($user, $id_flow, $step_id) ;
-                }     
-            }
+                    }  
+                }                                      
+            } 
         return json_decode(json_encode($res), true);
     }
 
@@ -298,18 +294,26 @@ class FlowController extends Controller
      * @param string $id_flow
      * @return String     
      */  
-    protected function insertActionStepUser(array $user, $id_flow, $step_id) {  
+    protected function insertActionStepUser(array $step, $id_flow) { 
+
+        $users =  array_key_exists('users', $step) ?  $step['users']: null;    
         $res = -1; 
-        $username =  "'".$user['username']."'";   
-        $actions = array_key_exists('actions', $user) ? $user['actions']: null;  // Actions on the step
-        if($actions != null)
-            foreach ($actions as $action) {        
-                if($action !=null){
-                    $accion = $action;
-                    DB::select("call insert_action_step_user($step_id, $id_flow, $username,$accion, @res)");
-                    $res=DB::select("SELECT @res as res;");   
-                }                                            
-            }    
+        $step_id = "'". $step['id']."'";
+        
+        if($users != null){                   
+            foreach ($users as $user) {   
+                $username =  "'".$user['username']."'";   
+                $actions = array_key_exists('actions', $user) ? $user['actions']: null;  // Actions on the step   
+                if($actions != null)
+                    foreach ($actions as $action) {        
+                        if($action !=null){    
+                                          
+                            DB::select("call insert_action_step_user($step_id, $id_flow, $username,$action, @res)");
+                            $res=DB::select("SELECT @res as res;");   
+                        }                                            
+                    }
+            }
+        }
         return json_decode(json_encode($res), true);
     }
 }

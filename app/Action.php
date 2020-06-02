@@ -12,4 +12,5 @@ class Action extends Model
     public function documentUsers() {
         return $this->belongsToMany('App\DocumentUser');
     }
+    
 }

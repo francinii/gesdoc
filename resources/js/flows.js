@@ -15,6 +15,7 @@ var arrayDraggable = Array();
 var step = 1;
 var divFirst = ""; 
 var divSecond = ""; 
+var idFlow = "";  // For update the same flow dont create each tine
 var globalMode = 0;
 const DRAGGABLE_FINAL = "draggable_final";
 const DRAGGABLE_INICIO = "draggable_inicio";
@@ -82,12 +83,12 @@ function ajaxCreate(user){
     data = "";
     datos = [];
     valid = validateFlow();
-   
-    if(valid){
-        for (var i = 1; i <= sessionStorage.length; i++){
-        data = sessionStorage.getItem('draggable'+ i);
-        datos.push(JSON.parse(data));
-            // Do something with localStorage.getItem(localStorage.key(i));
+
+    if(valid){       
+        for (var i = 0; i <= sessionStorage.length; i++){
+            key = sessionStorage.key(i);
+            data = sessionStorage.getItem(key);
+            datos.push(JSON.parse(data));
         }
         $.ajax({
             url: "flows",
@@ -97,6 +98,9 @@ function ajaxCreate(user){
                 description:   description,
                 data: datos,   
                 username: user 
+            },
+            beforeSend: function (xhr) { // Add this line
+                xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
             },
             success: function(result) {
                 $("#table").html(result);
@@ -176,11 +180,13 @@ function ajaxEdit(idFlow,flowName) {
             id: idFlow,
         },
         beforeSend: function(){
+            //CAMBIAR ESTA ALERTA POR POP APP
             alerts("Espere por favor.", "alert-danger");
         },
 
         success: function (response){
             $("input[id=flowName]").val(flowName);
+            // JSON.encode(response)
             editFlow(response);
         },
         done: function(response) {
@@ -701,9 +707,12 @@ function createDraggable(id){
  *  @param {integer} id - id Of the step (draggable#)
  */
 function joinStep(div){  
-    bandera =  false;  
+    var bandera =  false;  
+    var action = '-1';
     //Verificar que no se creen lineas que tienen el mismo div de inicio y final  
     var labelName = divFirst == DRAGGABLE_INICIO? 'Inicio': 'Acción siguiente';
+    var action = divFirst == DRAGGABLE_INICIO? '-2': action;
+   // action =  divFirst == DRAGGABLE_INICIO? ''
     if(divFirst == ""){   
         //Firts div to join    
         divFirst = div.getAttribute('id');
@@ -726,7 +735,7 @@ function joinStep(div){
             var identificador = divFirst+"-"+divSecond;
         //Storage the line to the  sessionStorage
             if(bandera)
-                storageLine(identificador, divFirst, divSecond,'', []);  
+                storageLine(identificador, divFirst, divSecond,action, []);  
         }        
         
         //Remove the focus class
@@ -997,17 +1006,22 @@ $( "#CreateDescription" ).focus(function() {
 
   
 function validateRepeatAction(item){
-    cont = 0;    
-    steps = item.steps;
-    arrayAux =steps;   
+   var cont = 0;    
+   var steps = item.steps;
+   var arrayAux =steps; 
+   var bandera = -1;  
     steps.forEach(element => {
+        if(element['action'] == '-1')
+            bandera = 2;
         arrayAux = arrayAux.splice(1);
         arrayAux.forEach(element2 => { 
-            element['action'] == element2['action']? cont++: cont;
-           
+            element['action'] == element2['action']? cont++: cont;           
         });
     });
-    return cont >= 1? false:true;
+    if (bandera == 2) 
+        return 2
+    else 
+        return cont >= 1? 1:3;
 }
 
 
@@ -1040,11 +1054,15 @@ function validateFlow(){
 
                 // Validate if the actions are not repeat it in each step. 
                 result = validateRepeatAction(item);
-                if(!result){
+                if(result == 1){
                     description = 'El elemento ' +item['description']+ 'está asociado con las mismas acciones a varios pasos siguientes. Asegurese que cada línea que sale de un mismo paso tiene diferente acción.';
                     alerta('Error',description, false);
                     return result;
-                } 
+                } else if(result == 2){
+                    description = 'El elemento ' +item['description']+ 'Tiene líneas sin acciones específicas, asegurese que todas las conexiones posean una acción que pueda ejecutarse.';
+                    alerta('Error',description, false);
+                    return result;
+                }
                 // Validate if the fields are valid
                 else if (!validField) {
                     description = 'Hay elementos que no poseen una descripcion. Asegúrese que cada paso tiene una descripción no vacía.';
@@ -1087,21 +1105,26 @@ function editFlow(data){
     // var data = ajaxEdit(idFlow);
     
     $flow = data.flow;
-    $steps = data.steps;
+    $steps = data.steps; //steps
     console.log($steps);
-    $stepStep = data.step_step;
+    $stepStep = data.step_step; //lines
     console.log($stepStep);
-    $stepUser = data.step_user;
-    console.log($stepUser);
+   
+    
     $actionStepUser = data.action_step_user;
     console.log($actionStepUser);
     //Creamos el html del card    
-    // contenido = createStepCard(id);
+    $steps.forEach(element => {
+        id = element['id'];
+        contenido = createStepCard(id);
     //agregamos primero todos los drag al canvas    
-   // addElementToCanvas(id,contenido);
+        addElementToCanvas(id,contenido);
     //De una agregamos los drag al storage
-    //7objetct = createObjectStep(stepId,description,users,steps,axisX,axisY)
-    //saveInStorage(object, id);
+    object = createObjectStep(stepId,description,users,steps,axisX,axisY)
+    saveInStorage(object, id);
+    });
+    
+  
 
     //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
     //Guarda las lineas en un array llamado array (Global)
