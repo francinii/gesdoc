@@ -540,36 +540,6 @@ DELIMITER ;
 
 -- PROCEDURE insert a new row to the step_user table
 -- return 0 success, 1 or 2 database error, 3 the row already exists
-DROP PROCEDURE IF EXISTS `insert_step_user`;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_step_user`(IN `p_id` varchar(500), IN `p_username` varchar(500),IN `p_id_flow` int, OUT `res` TINYINT  UNSIGNED)
-                                               
-BEGIN
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		-- ERROR
-    SET res = -1;
-    ROLLBACK;
-	END;
-
-  DECLARE EXIT HANDLER FOR SQLWARNING
-	BEGIN
-		-- ERROR
-    SET res = -2;
-    ROLLBACK;
-	END;
-            START TRANSACTION;
-                 INSERT INTO `step_user`(step_id,	flow_id, username, 	created_at, 	updated_at ) VALUES (p_id, p_username, p_id_flow, NOW(),NOW());
-            COMMIT;
-          -- SUCCESS
-SET res = 0;
-END
-;;
-DELIMITER ;
-
-
--- PROCEDURE insert a new row to the step_user table
--- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_action_step_user`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_action_step_user`(IN `p_id` varchar(500),IN `p_id_flow` int, IN `p_username` varchar(500), IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
@@ -589,7 +559,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-                 INSERT INTO `action_step_user`(step_id, flow_id, username, action_id,	created_at, 	updated_at ) VALUES (p_id, p_id_flow, p_username, p_action, NOW(),NOW());
+                 INSERT INTO `action_step_user`(created_at, 	updated_at, step_id, flow_id, username, action_id ) VALUES (NOW(),NOW(),p_id, p_id_flow, p_username, p_action);
             COMMIT;
           -- SUCCESS
 SET res = 0;
