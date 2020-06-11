@@ -84,8 +84,8 @@ function clearDescription() {
  * 
  */
 function openCreate(){
-    //Global variable
-  //  idFlowForUpdate = ''; 
+
+    $("#flowName").val("");
     $("#flow-wrapper").hide(500);
     $("#create-wrapper").show(1000);
 }
@@ -468,33 +468,6 @@ function deleteUserTable(tableId, username){
 
 
 /**
- * Add 
- * @param {array} array - Array of elements 
-
- * 
- */
-/*function changeDepartment(array){
-    $(".body_table").empty();
-    var id_user = $("select[id=select_document] option:selected").attr('id');
-    array.forEach(element => {
-        if (id_user == element.username)
-        {
-            $(".body_table").append(
-                "<tr>" +               
-                    "<td>" +
-                    element.username +
-                    "</td><td>" +
-                    element.name +
-                    "</td><td>" +
-                    element.email +
-                "</td><td><input id ='check"+element.username+"' type ='checkbox'></td></tr>"
-            );
-        }
-   }); 
-}   */
-
-
-/**
  * Able or disable a form. If the view is in edit mode the 
  * property is going to be false and if it is view mode the
  * property is going to be true.
@@ -547,7 +520,7 @@ function deleteStep(step){
             }
     }
     $("#"+id).remove();   
-      sessionStorage.removeItem(id); 
+        sessionStorage.removeItem(id); 
 }
 
   
@@ -940,19 +913,7 @@ $(document).on("click", "svg.leader-line text", function (e) {
     //lineaSeleccionada  = (arr.length > 0 )? arr[0]: '' ; 
     elemento  = (arr.length > 0 )? sessionStorage.getItem(arr[0]): null ;
     elemento = JSON.parse(elemento);
-   // steps = elemento.steps;
-   /* if(steps.length > 0 ){
-        steps.forEach(element => {
-            if(element.usersLine.length > 0 ){
-                element.usersLine.forEach(element => {
-                    username =element.username;
-                    name = element.name;
-                    email = element.email;
-                    appendUserTable(username, name, email, 'body_table_line');
-                });
-            }
-        });
-    }  */
+
     if(arr[0] == DRAGGABLE_INICIO){
          $("#div-selector-action").css('display','none');
          $(".modal-footer #EditSubmit").css('display','none');
@@ -1152,8 +1113,6 @@ function validateFlow(){
             hayFinal = false;
             validField = true; // valido hasta que se demuestre lo contrario
             for (let index = 0; index < keys.length; index++) {
-              
-                // result = keys.forEach(element => {
                 item = sessionStorage.getItem(keys[index]);
                 item = JSON.parse(item);
 
@@ -1187,16 +1146,15 @@ function validateFlow(){
                     description = 'Hay elementos que no poseen una descripcion. Asegúrese que cada paso tiene una descripción no vacía.';
                     alerta('Error',description, false);                  
                    // return 3;
+                   result = 3;
                    break;
-                }
-               
-           // });
+                }          
             }
-            if(!hayInicio){
+            if(!hayInicio && result == 0){
                 description = 'El flujo no tiene un elemento inicial. Asegurese de agregar un paso inicial.';
                 alerta('Error',description, false);
                 result = 6;                
-            } else if(!hayFinal){
+            } else if(!hayFinal  && result == 0){
                 description = 'El flujo no tiene un elemento final. Asegurese de agregar un paso final.';
                 alerta('Error',description, false);
                 result = 4;                
