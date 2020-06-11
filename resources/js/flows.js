@@ -83,9 +83,7 @@ function clearDescription() {
  * Show the screen that allow you to create a flow
  * 
  */
-function openCreate(){
-
-    $("#flowName").val("");
+function openCreate(){   
     $("#flow-wrapper").hide(500);
     $("#create-wrapper").show(1000);
 }
@@ -100,6 +98,7 @@ function openTable(){
     clearAll();
     //Global variable
     idFlowForUpdate = "";
+    $("#flowName").val("");
     $("#create-wrapper").hide(1000);
     $("#flow-wrapper").show(500);
        
@@ -198,7 +197,7 @@ function ajaxCall(user){
             success: function(result) {  
                openTable();        
                alerta('Proceso exitoso', message,false);
-               // alerts(  "El flujo " +  description + " ha sido creado satisfactoriamente",
+               // alerts('alerts', 'alert-content',  "El flujo " +  description + " ha sido creado satisfactoriamente",
                //"alert-success" );
                 $("#table").html(result);
                 $("#table").DataTable().destroy();
@@ -257,7 +256,7 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts(
+                alerts('alerts', 'alert-content',
                     "El flujo " +
                         description +
                         " ha sido actualizado satisfactoriamente",
@@ -267,7 +266,7 @@ function ajaxUpdate() {
             },
             error: function(request, status, error) {
                 alert(request.responseText);
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }   
         });
@@ -282,10 +281,8 @@ function ajaxUpdate() {
  * @param {string} flowName - flow's name  
  * 
  */
-function ajaxEdit(idFlow,flowName) {
-  
-    //Global variable
-    idFlowForUpdate = idFlow;
+function ajaxEdit(idFlow,flowName) {     
+    idFlowForUpdate = idFlow;  //Global variable idFlowForUpdate
        $.ajax({
         url: "flows/{" + idFlow + "}",
         method: "GET",
@@ -296,14 +293,11 @@ function ajaxEdit(idFlow,flowName) {
             id: idFlow,
         },
         beforeSend: function(){
-            //CAMBIAR ESTA ALERTA POR POP APP
-           // alerts("Espere por favor.", "alert-danger");
             $("#cargandoDiv").css('display', 'block')
         },       
         success: function (response){
-           hideAlert();
+           hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
-            // JSON.encode(response)
             editFlow(response);
             $("#cargandoDiv").css('display', 'none')
         },
@@ -312,7 +306,7 @@ function ajaxEdit(idFlow,flowName) {
 
         error: function(request, status, error) {
             alert(request.responseText);
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
     });
@@ -453,6 +447,10 @@ function savePermissions(){
         axisY = item.axisY;         
         item = createObjectStep(stepId, description, users, steps, axisX, axisY);
         sessionStorage.setItem(stepId, JSON.stringify(item));
+
+        alerts('alertPermission', 'alert-permission-content',
+        "Los permisos han sido actualizados satisfactoriamente",
+        "alert-success" );
 }
 
 
@@ -465,6 +463,8 @@ function openStepEdition(){
     $("#modal-body-step-back").hide(500);
     $("#modal-body-step").show(500);
     $("#card-title").val('Edición del departamento');
+    hideAlert('alertPermission');
+    
     //Cambia el contenido del body del modal 
 }  
 
@@ -694,7 +694,7 @@ function createStartEnd(id, text, class1 ){
    drag = 0;
     arrayDraggable.forEach(element => {
        dragId = element.id;
-       var desc = (dragId == DRAGGABLE_INICIO)?'Solo puede haver un elemento inicial':'Solo puede haber un elemento final';
+       var desc = (dragId == DRAGGABLE_INICIO)?'Solo puede haber un elemento inicial':'Solo puede haber un elemento final';
 
        if(dragId == id){
            drag = 1;

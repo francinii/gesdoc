@@ -75,7 +75,7 @@ function ajaxCreate() {
                     .destroy();
                 createDataTable("table");
                 $("#create").modal("hide");
-                alerts(
+                alerts('alerts', 'alert-content',
                     "El rol " +
                         description +
                         " ha sido agregado satisfactoriamente",
@@ -86,7 +86,7 @@ function ajaxCreate() {
 
             error: function(request, status, error) {
                 alert(request.responseText);
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }
         });
@@ -137,7 +137,7 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts(
+                alerts('alerts', 'alert-content',
                     "El rol " +
                         description +
                         " ha sido actualizado satisfactoriamente",
@@ -148,7 +148,7 @@ function ajaxUpdate() {
 
             error: function(request, status, error) {
                 alert(request.responseText);
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }
         });

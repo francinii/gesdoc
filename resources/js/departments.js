@@ -50,12 +50,12 @@ function ajaxCreate() {
                     .destroy();
                 createDataTable("table");                
                 $("#create").modal("hide");
-                alerts("El departamento "+name+" ha sido agregado satisfactoriamente", "alert-success");
+                alerts('alerts', 'alert-content',"El departamento "+name+" ha sido agregado satisfactoriamente", "alert-success");
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 
-                    alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                    alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
                     $("#cargandoDiv").css('display', 'none')
                 
@@ -130,11 +130,11 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts("El departamento "+description+" ha sido actualizado satisfactoriamente", "alert-success");
+                alerts('alerts', 'alert-content',"El departamento "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 $("#cargandoDiv").css('display', 'none')
             }

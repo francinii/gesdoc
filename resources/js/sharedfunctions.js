@@ -85,14 +85,14 @@ function ajaxDelete(id, url1,table){
             $("#"+divTable).html(result);            
             createDataTable(table);
             $("#confirmar").modal("hide");
-            alerts("Elemento eliminado correctamente.", "alert-success");
+            alerts('alerts', 'alert-content',"Elemento eliminado correctamente.", "alert-success");
             me.data("requestRunning", false);
             $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {    
             $("#confirmar").modal("hide");  
             me.data("requestRunning", false);      
-            alerts("Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
+            alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
             alert(request.responseText);
             $("#cargandoDiv").css('display', 'none')
         }
@@ -105,19 +105,19 @@ function ajaxDelete(id, url1,table){
  * add, delete, or update data).
  *  
  */
-function alerts(contenido, type_class){    
-   $('#alert-content').text(contenido);
-   $('#alerts').show(1000);
-   $('#alerts').removeClass('alert-warning alert-success alert-danger alert-info').addClass(type_class);
+function alerts(idAlert, idContent, contenido, type_class){    
+   $('#'+idContent).text(contenido);
+   $('#'+idAlert).show(1000);
+   $('#'+idAlert).removeClass('alert-warning alert-success alert-danger alert-info').addClass(type_class);
 }
 
 /**
  * Hide an alert div when you click on the x button.
  *  
  */
-function hideAlert(){
+function hideAlert(id){
     
-    $('#alerts').hide(1000);
+    $('#'+id).hide(1000);
 }
 
 

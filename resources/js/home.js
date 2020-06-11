@@ -136,7 +136,7 @@ function ajaxCreate(){
 
                 createDataTable("table");
                 $("#create").modal("hide");
-                alerts(
+                alerts('alerts', 'alert-content',
                     "La clasificacion " +
                         description +
                         " ha sido agregado satisfactoriamente",
@@ -146,7 +146,7 @@ function ajaxCreate(){
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
@@ -302,7 +302,7 @@ function openClassification(id) {
             $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
             me.data("requestRunning", false);
             $("#cargandoDiv").css('display', 'none')
@@ -381,12 +381,12 @@ function ajaxUpdate() {
                 $("#divTable").html(result);
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts("La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
+                alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')

@@ -52,7 +52,7 @@ function ajaxCreate(user) {
                     .destroy();
                 createDataTable("table");
                 $("#create").modal("hide");
-                alerts(
+                alerts('alerts', 'alert-content',
                     "El documento " +
                         description +
                         " ha sido creaado satisfactoriamente",
@@ -63,7 +63,7 @@ function ajaxCreate(user) {
 
             error: function(request, status, error) {
                 alert(request.responseText);
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }
         });
@@ -141,7 +141,7 @@ function ajaxUpdate() {
                     .destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
-                alerts("El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
+                alerts('alerts', 'alert-content',"El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {

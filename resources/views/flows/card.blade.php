@@ -61,6 +61,10 @@
         <div class="modal-body" id = "modal-body-step-back" style="display:none">
             <button class="btn btn-info" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
             <div class="card container inside_step " style="padding:1%">                
+                <div id = "alertPermission" class="alert alert-dismissable" style="display: none">
+                    <button type="button" class="close" onclick="hideAlert('alertPermission')">&times;</button>
+                    <div id="alert-permission-content"> </div>    
+                </div>
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
                         <th>Usuarios</th>    
@@ -70,8 +74,7 @@
                         @endif
                         @endforeach             
                 </thead>
-                <tbody class="body_table_line" >    
-                    
+                <tbody class="body_table_line" >                         
                 </tbody>
                 </table>
             </div>   

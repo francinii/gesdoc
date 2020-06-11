@@ -86,42 +86,18 @@ class FlowController extends Controller
     {
         $data = request()->except(['_token']);  
         $id_flow = $data['id'];
-      // $flow =Flow::where('id', '=', $id_flow)->get();
-       $flow =Flow::find($id_flow);
-       $steps = $flow->steps;   
-       
-       // $step_step = $steps->steps;
-        //$action_step_user = $flow->steps;
-        //$steps = $flow->steps;
+        $flow =Flow::find($id_flow);
+        $steps = $flow->steps;   
         $step_step = StepStep::where('prev_flow_id', '=', $id_flow)
             ->join('actions', 'actions.id', '=', 'step_step.id_action')
             ->get();
-       //$step_user = StepUser::where('flow_id', '=', $flow)->get();
         $action_step_user = 
         ActionStepUser::where('flow_id', '=', $id_flow)
             ->join('users', 'users.username', '=', 'action_step_user.username')
             ->join('actions', 'actions.id', '=', 'action_step_user.action_id')
             ->get();
-
-       // return view('flows.table',compact('flow', 'steps', 'step_step','step_user', 'action_step_user'));
-       // $usuario = Auth::user()->id;
-       //   $flows =Flow::where('username', '=', $usuario)->get();
         $users = User::all();
-      //  $departments = Department::all();
-      //  $actions = Action::all();
-      // return view('flows.table',compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
-      // return FlowController::refresh();
-      //return response()->json(compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
-      // $steps =  json_encode( $steps);
-     
-    // $steps = json_decode(json_encode($steps), true);
-    // $steps = json_encode($steps, JSON_FORCE_OBJECT);
-    // $step_step = json_encode($step_step);
-
-    //  $action_step_user = json_encode($action_step_user);
       return compact('flow','step_step','users', 'action_step_user');
-    //  return compact('flow','steps','step_step', 'action_step_user');
-
     }
 
     /**
@@ -143,24 +119,14 @@ class FlowController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-       
+    {       
         $data = request()->except(['_token', '_method']);  
-        //$res = $this->insertFlow($data);        
-       // $idFlow = $res[0]['id_flow'] ;
         $this->destroy($id);
         $res= $this->insertFlow( $data);
-         $idFlow = $res[0]['id_flow'] ;
+        $idFlow = $res[0]['id_flow'] ;
         $this->insert( $data, $idFlow);
     
-        return $this->refresh();
-
-     //   $dato = request()->except(['_token', '_method', 'flows']);
-      //  $flows = request('flows');
-      //  $id = $dato['id'];
-      //  Flow::where('id', '=', $id)->update($dato);
-        
-      //  return FlowController::refresh();
+      return $this->refresh();
     }
 
     /**
@@ -184,12 +150,9 @@ class FlowController extends Controller
     {
         $usuario = Auth::user()->username;
         $flows =Flow::where('username', '=', $usuario)->get();
-        //$flows = Flow::all();
         $users = User::all();
         $departments = Department::all();
-        //$actions = Action::where('type', '=', 1)->get();
         $actions = Action::all();
-        //return view('Flows.index',compact('flows', 'users','departments','actions'));
         return view('flows.table',compact('flows', 'users','departments','actions'));
     }
 
