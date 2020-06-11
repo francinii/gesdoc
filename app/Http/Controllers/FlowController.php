@@ -121,7 +121,9 @@ class FlowController extends Controller
     public function update(Request $request, $id)
     {       
         $data = request()->except(['_token', '_method']);  
-        $this->destroy($id);
+       
+        $id =$data['id'];
+        Flow::destroy($id);        
         $res= $this->insertFlow( $data);
         $idFlow = $res[0]['id_flow'] ;
         $this->insert( $data, $idFlow);

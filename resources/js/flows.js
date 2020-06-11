@@ -155,7 +155,7 @@ function getCoordinates(id){
  * 
  */
 function ajaxCall(user){  
-    updateCoordenates();  
+   // updateCoordenates();  
     description =  $("input[id=flowName]").val();
     data = "";
     datos = [];
@@ -189,7 +189,8 @@ function ajaxCall(user){
                 description:   description,
                 _method: method,
                 data: datos,   
-                username: user 
+                username: user,
+                id:id,
             },
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
