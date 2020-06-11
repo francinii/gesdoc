@@ -13,6 +13,13 @@ class Classification extends Model
         return $this->belongsToMany('App\Document');
     }
 
+        /*
+    * An user belongs (or  own) to user
+    */
+    public function owner() {
+        return $this->belongsTo('App\User','username','username');
+    }
+
     /*
     * An user belongs (or  own) to many classifications 
     */
@@ -23,5 +30,8 @@ class Classification extends Model
     * create a ob
     *
     */
+    public function parentClassifications() {
+        return $this->belongsToMany('App\Classification','classification_classification','second_id','first_id');
+    }
     
 }

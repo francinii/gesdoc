@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -58,6 +59,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Flow');
     }
 
+        /**
+     * The user has many flows
+    */
+    public function classifications() {
+        return $this->hasMany('App\Classification');
+    }
+
     /**
      * Relationship many to many
     */
@@ -70,6 +78,13 @@ class User extends Authenticatable
     */
     public function stepUser() {
         return $this->belongsTo('App\StepUser');
+    }
+
+    /**
+     * One step belongs to a StepUser
+    */
+    public function getAccionDocuments($documentId) {
+        return $this->belongsToMany('App\Action','action_document_user','username','action_id');
     }
 
 }

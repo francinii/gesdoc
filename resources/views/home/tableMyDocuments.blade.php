@@ -27,7 +27,7 @@
                 @endforeach
                 @foreach ($classification->documents as $document)
                 <tr>
-                     
+
                      @if ($document->type=="doc")
                     <td class="text-center"><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
                     @elseif($document->type=="xls")

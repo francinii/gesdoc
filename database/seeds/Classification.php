@@ -59,5 +59,13 @@ class Classification extends Seeder
             'updated_at'=> '2020-05-02 00:00:00',
            
         ));
+        \DB::table('classifications')->insert(array(
+            'username'=>'116650288',
+            'description' =>"fotos",
+            'type'=>3,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',
+           
+        ));
     }
 }

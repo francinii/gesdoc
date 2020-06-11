@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Step extends Model
 {   
+
+
+    public $incrementing = false;
+    protected $primaryKey = ['id','flow_id'];
     /**
      * One step belongs to a flow
     */

@@ -225,6 +225,19 @@ return [
             'createDocument' => 'Crear documento',
             'share' => 'compartir',
         ],
+
+        'share' => [
+            'share'=>'Compartir',
+            'shareWithUser' => 'Compartir con usuarios',
+            'AsociatePermission' => 'Asociar Persmisos',
+            'user' =>'Usuario',
+            'name' =>'Nombre' ,
+            'email' =>'Correo'   ,                               
+            'delete' =>'Eliminar',
+            'owner' =>'Propietario',
+        ],
+        
+
     ],
 
 ];
