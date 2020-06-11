@@ -105,6 +105,12 @@ function openTable(){
        
 }
 
+
+/** 
+ * 
+ * Update the coordenates of each draggable
+ * 
+ */
 function updateCoordenates(){
 
     for (var i = 0; i < sessionStorage.length; i++){
@@ -125,19 +131,19 @@ function updateCoordenates(){
 }
 
 
-
+/**  
+ * Get the coordenates in axis X and axis.
+ * 
+ * @param {string} id - Id of the draggable
+ * @return {Array} coordenates - return an array with the x and y axis.
+ * 
+ */
 function getCoordinates(id){
     var coordenates = [];
     var elemento = document.getElementById(id);
-  //  var posicion = elemento.getBoundingClientRect();
-  //  console.log(posicion.top, posicion.right, posicion.bottom, posicion.left);
-  //for (let index = 0; index < arrayDraggable.length; index++) {
-     //   var pos = arrayDraggable[index].drag.position();
      transformStyle = elemento.style.transform;
-    // translateX = transformStyle.replace(/[^\d.]/g, '');
      var parOrdenado = transformStyle.replace(/[\A-Za-z()]/g, '');
      coordenates = parOrdenado.split(',');
-
      return coordenates;// return an array
 }
 
@@ -212,7 +218,9 @@ function ajaxCall(user){
     }
 }
 
+
 /**
+ * 
  * Send an ajax request in order to update an specific flow
  * 
  */
@@ -267,7 +275,13 @@ function ajaxUpdate() {
 }
 
 
-
+/**
+ * 
+ * Edit an specific resource. 
+ * @param {integer} idFlow - flow's id 
+ * @param {string} flowName - flow's name  
+ * 
+ */
 function ajaxEdit(idFlow,flowName) {
   
     //Global variable
@@ -326,8 +340,8 @@ $('#select_user_line').on('changed.bs.select', function (e, clickedIndex, isSele
 /**
  * Add to an specific table the selected users in a combobox.
  * @param {event} e - trigger  the event.
- * @param {int} clickedIndex - selected item.
- * @param {int} tableId - id of the table to add an user.
+ * @param {integer} clickedIndex - selected item.
+ * @param {integer} tableId - id of the table to add an user.
  * 
  */
 function select_user(e, clickedIndex, tableId){
@@ -814,20 +828,18 @@ function joinStep(div){
         if(validateBeginEnd(divFirst,divSecond)){
         //Create a line between each card step.
          bandera =   createLine(begin, end, idLine, labelName);  
-        //Id's line 
+        //line's id
             var identificador = divFirst+"-"+divSecond;
         //Storage the line to the  sessionStorage
             if(bandera)
                 storageLine(identificador, divFirst, divSecond,action, []);  
-        }        
-        
+        }               
         //Remove the focus class
         $("#"+divFirst).removeClass("card-shadow-info");
          $("#"+divSecond).removeClass("card-shadow-info");  
         reset(); 
         //Give the action click to the svg text
-      //  $("svg text").css("pointer-events","auto");   
-    
+      //  $("svg text").css("pointer-events","auto");     
     }
     if(divSecond == divFirst ){ 
         if(divFirst != ''){
@@ -1053,7 +1065,13 @@ $( "#CreateDescription" ).focus(function() {
   });
  
 
-
+/**
+ * 
+ * This function validates if a line is correctly define. (Ex: Elements that can't be join)
+ * @param {integer} begin - flow's id 
+ * @param {string} end - flow's name  
+ * 
+ */
   function validateBeginEnd(begin,end){
       var title = "Alerta";
       var description = "";
@@ -1075,12 +1093,28 @@ $( "#CreateDescription" ).focus(function() {
   }
 
 
+  /**
+ * 
+ * Shows a modal with an alert (Error, Succed, etc).
+ * 
+ * @param {string} title - Modal´s title
+ * @param {string} description - Modal´s description
+ * @param {boolean} bandera -shows or hdie the modal 
+ * 
+ */
   function alerta(title, description,bandera){
     $('#alertModalTitle').text(title);
     $('#alertModalDescription').text(description);
     bandera == false ? $("#alertModal").modal('show'): "";
   }
   
+/**
+ * 
+ * Validate if an action from the same div is duplicated.
+ * 
+ * @param {string} item - Object in the storage
+ * 
+ */
   function validateRepeatAction(item){
     var cont = 0;    
     var steps = item.steps;
@@ -1100,7 +1134,13 @@ $( "#CreateDescription" ).focus(function() {
         return cont >= 1? 1:0; //If is more equal than one means that there are some lines with the same action from the same step
 }
 
-
+/**
+ * 
+ * Validate if a flow is correct and send the request
+ * 
+ * @param {string} item - Object in the storage
+ * 
+ */
 function validateFlow(){
     stepDescription = $("#CreateDescription").val();
     flowName = $("#flowName").val();
@@ -1168,48 +1208,70 @@ return result;
 }
 
 
-//Return the unique values inside a array
 
-
+/**
+ * 
+ * Map an user and return an Array of users' object.
+ * 
+ * @param {Array} actionStepUser - array of users with ther actions.
+ * @param {string} id - Id of an specific step.
+ * 
+ * @return {Array} usersAux - return an array of users with their correspondent actions * 
+ */
 function mapUser(actionStepUser, id){
     var usersAux = [];
     var users =[];
     var actions = [];
     var item = '';
     if(typeof actionStepUser !== 'undefined'){ 
+        //Filter the actionsStepUser by id of the step
         actionsUsers= actionStepUser.filter(ast =>ast.step_id == id );
         actionsUsers.forEach(element => {
             if(!users.includes(element['username'])){
                 users.push(element['username']);
+                //Filter the actionsUser by username
                 us = actionsUsers.filter(user => user.username == element['username'] );
-                
+                    //Save each action of the user in the actions array
                     us.forEach(element => {
                         item = element;
                         actions.push("'" + element['action_id']+"'");
                     }),
+                    //Build a user object
                     user = {
                         username:item.username,
                         name: item.name,
                         email: item.email,
                         actions: actions,
                     }
+                    //Save the user in the array
                     usersAux.push(user);
+                    //Reset the actions array
                     actions =[];
-             } 
-           
+             }           
         });
+        //Reset the actions array
         users = [];
     }
     return usersAux;
 }
 
-
+/**
+ * 
+ * Map a step and return an Array of steps' object.
+ * 
+ * @param {Array} stepStep - array of steps.
+ * @param {string} id - Id of an specific step.
+ * 
+ * @return {Array} aux - return an array of steps (lines). 
+ */
 function mapStep(stepStep,id){ 
      aux = [];
     if(typeof stepStep !== 'undefined'){  
+        //Filter the stepStep by id of the step
         stepStep =  stepStep.filter(step1 =>step1.prev_step_id == id );  
         stepStep.forEach(element => {           
         id = element.prev_step_id + "-"+ element.next_step_id;
+         //Create a step'object (Here the steps correspond to a line).
             stepObject = {
                 begin:element.prev_step_id,
                 end: element.next_step_id,
@@ -1217,11 +1279,13 @@ function mapStep(stepStep,id){
                 description:element.description,
                 id: id,
             };
+         //Add a step object in the aux's array.
         aux.push(stepObject);
         begin = document.getElementById(stepObject.begin);
         end =document.getElementById(stepObject.end);  
+         //Create the line between two draggable divs
         bandera = createLine(begin, end, stepObject.id, stepObject.description);
-        if(bandera)
+        if(bandera)  //Save the line in the storage
             storageLine(stepObject.id, stepObject.begin, stepObject.end,element.id_action, []);
         });
   }
@@ -1230,7 +1294,9 @@ function mapStep(stepStep,id){
 
 
 /**
+ * 
  *  Update a specific flow
+ * 
  */
 function editFlow(data){
 
@@ -1286,8 +1352,10 @@ function editFlow(data){
             //storageLine(id, divFirst, divSecond,action, []);  
         });
 
-        //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
-        //Guarda las lineas en un array llamado array (Global)        
+        /** 
+         * Then create the lines with the beginning and ending included ( divFirst+'-'+ divSecond; ) and the name
+         * And Save the lines in the SessionStorage
+         */      
         steps.forEach(element => {
             var id = element['id']; 
             itemStorage = sessionStorage.getItem(id);
@@ -1300,17 +1368,19 @@ function editFlow(data){
             object = createObjectStep(id,description,users2,steps2,axisX,axisY);
             saveInStorage(object, id);
             traslateDrag(id, axisX,axisY);            
-        });      
-        
-        //Guarda la linea en el storage
-    
+        });     
         openCreate();
     }
 }
 
 
 
-
+/**
+ * 
+ * Reset All of Global  variables and the SessionStorage.
+ * Also reset the draggable divs and lines in the DOM
+ * 
+ */
 function clearAll(){
     //Global array
     arrayLines = Array(); 
@@ -1322,6 +1392,13 @@ function clearAll(){
 }
 
 
+/**
+ * Set the coordenates of each drag in the canvas
+ * 
+ * @param {string} id - Draggable´s id.
+ * @param {string} x - Axis X.
+ * @param {string} y - Axis Y.
+ */
 function traslateDrag(id, x,y){
     $('#'+id).css({
         "-webkit-transform":"translate("+x+"px,"+y+"px)",
