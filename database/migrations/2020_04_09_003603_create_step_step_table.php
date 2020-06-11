@@ -23,13 +23,8 @@ class CreateStepStepTable extends Migration
             $table->timestamps();
 
             $table->primary(['prev_step_id','next_step_id','prev_flow_id','next_flow_id'], 'step_step_pk');
-
-            $table->foreign('prev_step_id')->references('id')->on('steps')->onDelete('cascade');
-            $table->foreign('next_step_id')->references('id')->on('steps')->onDelete('cascade');
-
-            $table->foreign('prev_flow_id')->references('flow_id')->on('steps')->onDelete('cascade');
-            $table->foreign('next_flow_id')->references('flow_id')->on('steps')->onDelete('cascade');
-
+            $table->foreign('prev_step_id','prev_flow_id')->references('id','flow_id')->on('steps')->onDelete('cascade');
+            $table->foreign('next_step_id','next_flow_id')->references('id','flow_id')->on('steps')->onDelete('cascade');
             $table->foreign('id_action')->references('id')->on('actions')->onDelete('cascade');
 
         });

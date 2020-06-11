@@ -12,7 +12,7 @@ class Classification_Document extends Seeder
     public function run()
     {
         \DB::table('Classification_Document')->insert(array(
-            'classification_id'=>1,
+            'classification_id'=>5,
             'document_id'=>1,       
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',          
@@ -21,6 +21,13 @@ class Classification_Document extends Seeder
         \DB::table('Classification_Document')->insert(array(
             'classification_id'=>1,
             'document_id'=>2,       
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',          
+        ));
+        
+        \DB::table('Classification_Document')->insert(array(
+            'classification_id'=>2,
+            'document_id'=>3,       
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',          
         ));

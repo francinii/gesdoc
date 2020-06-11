@@ -21,18 +21,23 @@ Route::get('/', function () {
     
 });
 
-Auth::routes();
+
 
 Route::get('textEditor',  function () {
     return view('textEditor/textEditor');
 });
 
-
-Route::resource('home', 'HomeController');
-
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
+Route::get('home/showshare/{id}/{type}', 'HomeController@showShare');
+
+Route::get('home/share/{id}/{type}', 'HomeController@Share');
+
 Route::get('home/{table}/{id}', 'HomeController@refresh');
+
+Auth::routes();
+
+Route::resource('home', 'HomeController');
 
 Route::resource('roles', 'RoleController');
 

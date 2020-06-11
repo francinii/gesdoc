@@ -4574,6 +4574,7 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
+        'action_document_user' => __DIR__ . '/../..' . '/database/seeds/action_document_user.php',
         'andcarpi\\Popper\\Facades\\Popper' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/Facades/Popper.php',
         'andcarpi\\Popper\\Popper' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/Popper.php',
         'andcarpi\\Popper\\PopperServiceProvider' => __DIR__ . '/..' . '/andcarpi/laravel-popper/src/PopperServiceProvider.php',

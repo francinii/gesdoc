@@ -27,6 +27,14 @@ class Document extends Seeder
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',         
         ));
+        \DB::table('documents')->insert(array(
+            'flow_id' =>null, 
+            'username'=>'116650288',          
+            'description' =>"Doc 3",   
+            'type' =>"xls",  
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',         
+        ));
     }
 }
 

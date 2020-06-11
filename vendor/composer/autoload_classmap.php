@@ -4140,6 +4140,7 @@ return array(
     'Whoops\\Util\\SystemFacade' => $vendorDir . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
     'Whoops\\Util\\TemplateHelper' => $vendorDir . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
     'XdgBaseDir\\Xdg' => $vendorDir . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
+    'action_document_user' => $baseDir . '/database/seeds/action_document_user.php',
     'andcarpi\\Popper\\Facades\\Popper' => $vendorDir . '/andcarpi/laravel-popper/src/Facades/Popper.php',
     'andcarpi\\Popper\\Popper' => $vendorDir . '/andcarpi/laravel-popper/src/Popper.php',
     'andcarpi\\Popper\\PopperServiceProvider' => $vendorDir . '/andcarpi/laravel-popper/src/PopperServiceProvider.php',

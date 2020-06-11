@@ -227,11 +227,14 @@ return [
         ],
 
         'share' => [
+            'share'=>'Compartir',
             'shareWithUser' => 'Compartir con usuarios',
             'AsociatePermission' => 'Asociar Persmisos',
-            'editClassification' => 'Editar',
-            'createDocument' => 'Crear documento',
-            'share' => 'compartir',
+            'user' =>'Usuario',
+            'name' =>'Nombre' ,
+            'email' =>'Correo'   ,                               
+            'delete' =>'Eliminar',
+            'owner' =>'Propietario',
         ],
         
 

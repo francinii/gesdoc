@@ -27,4 +27,12 @@ class Document extends Model
         return $this->belongsToMany('App\Classfication');
     }
 
+    public function owner() {
+        return $this->belongsTo('App\User','username','username');
+    }
+ 
+    public function accions() {
+        return $this->belongsToMany('App\Action','action_document_user','document_id','action_id');
+    }
+
 }

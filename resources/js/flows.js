@@ -232,6 +232,7 @@ $('#select_user_line').on('changed.bs.select', function (e, clickedIndex, isSele
  */
 function select_user(e, clickedIndex, tableId){
     var evento = e.currentTarget[clickedIndex];
+    if(evento==null) return;
     var name = evento.innerHTML;
     var username = evento.attributes[1].value;
     var email = evento.attributes[2].value;
@@ -362,6 +363,7 @@ function openStepEdition(){
 function deleteUserTable(tableId, username){
     $('#'+tableId+username).remove();
     $('#'+username).prop('selected',false);
+    $('#select_document').selectpicker('refresh');
 }
 
 

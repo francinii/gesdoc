@@ -106,7 +106,9 @@ class FlowController extends Controller
       // return view('flows.table',compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
       // return FlowController::refresh();
       //return response()->json(compact('flows', 'users','departments','actions','flow','steps','step_step', 'step_user', 'action_step_user'));
-      $steps =  json_encode( $steps);
+      
+      $steps = json_encode($steps);
+      $steps=  json_decode( $steps);
      
     // $steps = json_decode(json_encode($steps), true);
     // $steps = json_encode($steps, JSON_FORCE_OBJECT);
