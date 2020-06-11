@@ -1238,9 +1238,9 @@ function mapUser(actionStepUser, id){
                     usersAux.push(user);
                     actions =[];
              } 
-             users = [];
-        });
            
+        });
+        users = [];
     }
     return usersAux;
 }
@@ -1341,10 +1341,8 @@ function editFlow(data){
             users2 = itemStorage.users; //get the users storaged
             object = createObjectStep(id,description,users2,steps2,axisX,axisY);
             saveInStorage(object, id);
-            traslateDrag(id, axisX,axisY);
-            
-        });
-       
+            traslateDrag(id, axisX,axisY);            
+        });      
         
         //Guarda la linea en el storage
     
