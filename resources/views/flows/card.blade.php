@@ -64,8 +64,10 @@
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
                         <th>Usuarios</th>    
-                        @foreach ($actions as $action)                  
+                        @foreach ($actions as $action)      
+                        @if ($action->type != 2)                
                         <th id = "{{$action->id}}" >{{$action->description}}</th>
+                        @endif
                         @endforeach             
                 </thead>
                 <tbody class="body_table_line" >    

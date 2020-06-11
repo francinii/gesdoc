@@ -65,7 +65,9 @@ function ajaxCreate() {
                 description: description,
                 permissions: permissions
             },
-
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -79,11 +81,13 @@ function ajaxCreate() {
                         " ha sido agregado satisfactoriamente",
                     "alert-success"
                 );
+                $("#cargandoDiv").css('display', 'none')
             },
 
             error: function(request, status, error) {
                 alert(request.responseText);
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }
@@ -123,7 +127,9 @@ function ajaxUpdate() {
                 description: description,
                 permissions: permissions
             },
-
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -137,11 +143,13 @@ function ajaxUpdate() {
                         " ha sido actualizado satisfactoriamente",
                     "alert-success"
                 );
+                $("#cargandoDiv").css('display', 'none')
             },
 
             error: function(request, status, error) {
                 alert(request.responseText);
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }

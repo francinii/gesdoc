@@ -14,7 +14,9 @@
               <label for="">Acción</label> 
               <select id="select_action"class="form-control" name="" >
                   @foreach ($actions as $action)
+                    @if($action->type == 0) <!-- Flows actions-->
                       <option value="{{$action->id}}" name ="{{$action->id}}" >{{$action->description}}</option>
+                    @endif
                   @endforeach
               </select>
           </div>  

@@ -40,6 +40,9 @@ function ajaxCreate() {
                 _token: $("input[name=_token]").val(),
                 description: description,            
             },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -48,11 +51,13 @@ function ajaxCreate() {
                 createDataTable("table");                
                 $("#create").modal("hide");
                 alerts("El departamento "+name+" ha sido agregado satisfactoriamente", "alert-success");
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 
                     alerts("Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
+                    $("#cargandoDiv").css('display', 'none')
                 
             }
         });
@@ -115,6 +120,9 @@ function ajaxUpdate() {
                 description: description,
 
             },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -123,10 +131,12 @@ function ajaxUpdate() {
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts("El departamento "+description+" ha sido actualizado satisfactoriamente", "alert-success");
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }

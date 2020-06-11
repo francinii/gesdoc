@@ -128,6 +128,9 @@ function ajaxCreate(){
                 currentTable:currentTable,
                 description: description,
             },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function (result) {
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
@@ -141,11 +144,13 @@ function ajaxCreate(){
                     "alert-success"
                 );
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
             },
         });
     }
@@ -293,6 +298,9 @@ function openClassification(id) {
             currentTable:currentTable,
             id: id,
         },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
         success: function (result) {
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
@@ -300,11 +308,13 @@ function openClassification(id) {
             createDataTable("table");
             $("#create").modal("hide");
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
         },
     });
 }
@@ -372,6 +382,9 @@ function ajaxUpdate() {
                 parentClassification:$("input[id=editClassification]").val(),
 
             },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {                
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
@@ -379,11 +392,13 @@ function ajaxUpdate() {
                 $("#edit").modal("hide");
                 alerts("La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }
