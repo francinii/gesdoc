@@ -9,6 +9,11 @@ class Step extends Model
     /**
      * One step belongs to a flow
     */
+
+    //Esto es necesario cuando un id no es de tipo int
+    public $incrementing = false;
+    //protected $primaryKey = ['id','flow_id'];
+
     public function flow() {
         return $this->belongsTo('App\Flow');
     }

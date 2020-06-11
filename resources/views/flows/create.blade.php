@@ -14,7 +14,7 @@
             <button  type="button" id="CreateSubmit" onclick="openTable()" class="btn btn-success ml-auto">
               <i class="fas fa-arrow-left"></i>
             </button> 
-            <button type="button" class="btn btn-primary float-right" onclick="ajaxCreate('{{ Auth::user()->username }}')">
+            <button type="button" class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">
               <i class="fas fa-plus-circle"> </i>
               Guardar flujo
             </button>

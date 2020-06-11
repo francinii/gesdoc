@@ -9,7 +9,6 @@
         </tr>
     </thead>
     <tbody>
-        <?php $usuario = ''?>
         @foreach ($flows as $flow)         
         <tr>
             <td class="text-center">{{$flow->id}}</td>

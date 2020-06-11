@@ -42,6 +42,9 @@ function ajaxCreate(user) {
                 user_id: user
             },
 
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -55,11 +58,13 @@ function ajaxCreate(user) {
                         " ha sido creaado satisfactoriamente",
                     "alert-success"
                 );
+                $("#cargandoDiv").css('display', 'none')
             },
 
             error: function(request, status, error) {
                 alert(request.responseText);
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }
@@ -126,6 +131,9 @@ function ajaxUpdate() {
                 flow_id: flow,
 
             },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
             success: function(result) {
                 $("#table").html(result);
                 $("#table")
@@ -134,10 +142,12 @@ function ajaxUpdate() {
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts("El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
+                $("#cargandoDiv").css('display', 'none')
             }
         });
     }

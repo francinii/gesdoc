@@ -3,19 +3,19 @@
  *
  * @global {integer} id - Global id //revisar si se sta usando
  * @global {string} array  - LeaderLine objects' array
- * @global {integer} step  - Necessary for the creation of id in the draggle createStep() method
+ * @global {integer} step  - Global count for each new draggable
  * @global {array} arrayDraggable - Draggable objects' array
  * @global {array} divFirst  - Use it in the joinStep() function  
  * @global {array} divSecond  - Use it in the joinStep() function 
  *
  */
 var id = 1; 
-var array = Array(); 
+var arrayLines = Array(); 
 var arrayDraggable = Array(); 
-var step = 1;
+var stepGlobal = 1; //global count for each step
 var divFirst = ""; 
 var divSecond = ""; 
-var idFlow = "";  // For update the same flow dont create each tine
+var idFlowForUpdate = "";  // For update the same flow dont create each tine
 var globalMode = 0;
 const DRAGGABLE_FINAL = "draggable_final";
 const DRAGGABLE_INICIO = "draggable_inicio";
@@ -29,14 +29,42 @@ const DRAGGABLE_INICIO = "draggable_inicio";
 $(document).ready(function (e){  
    // draggable =  $("#drag-container");
    // draggable.autoScroll = true;
+   clearStorage();
+});
+
+
+
+/** 
+ * Clear all the items inside the storage
+ * 
+ */
+function clearStorage(){
     var n = sessionStorage.length -1;
     while(n>=0) {
         key = sessionStorage.key(n);       
         sessionStorage.removeItem(key);
         n -=1;                  
-    }    
-});
+    } 
+}
 
+/** 
+ * Clean the nodes childs
+ * 
+ */
+function clearchildNodes(idDiv){  
+    while (idDiv.firstChild) {
+        idDiv.removeChild(idDiv.firstChild);
+    }
+}
+
+/** 
+ * Clean the arrows inside the canvas
+ * 
+ */
+function clearArrow(classDiv){  
+    $('.'+classDiv).remove();
+    $('.leader-line-defs').remove();    
+}
 
 /** 
  * Clean the inputs inside each form
@@ -56,6 +84,8 @@ function clearDescription() {
  * 
  */
 function openCreate(){
+    //Global variable
+  //  idFlowForUpdate = ''; 
     $("#flow-wrapper").hide(500);
     $("#create-wrapper").show(1000);
 }
@@ -67,18 +97,127 @@ function openCreate(){
  * 
  */
 function openTable(){
+    clearAll();
+    //Global variable
+    idFlowForUpdate = "";
     $("#create-wrapper").hide(1000);
     $("#flow-wrapper").show(500);
        
 }
 
+function updateCoordenates(){
+
+    for (var i = 0; i < sessionStorage.length; i++){
+        key = sessionStorage.key(i);
+        data = sessionStorage.getItem(key);
+         dato = JSON.parse(data);
+        var stepId = dato.id;
+        var description = dato.description;
+        users = dato.users;
+        steps = dato.steps;
+        var coordenates = getCoordinates(stepId);
+
+        var axisX = coordenates.length >0? coordenates[0]:'0';
+        var axisY = coordenates.length >1? coordenates[1]:'0'; 
+        object= createObjectStep(stepId,description,users,steps,axisX,axisY);
+        sessionStorage.setItem(stepId,JSON.stringify( object ));
+    }        
+}
+
+
+
+function getCoordinates(id){
+    var coordenates = [];
+    var elemento = document.getElementById(id);
+  //  var posicion = elemento.getBoundingClientRect();
+  //  console.log(posicion.top, posicion.right, posicion.bottom, posicion.left);
+  //for (let index = 0; index < arrayDraggable.length; index++) {
+     //   var pos = arrayDraggable[index].drag.position();
+     transformStyle = elemento.style.transform;
+    // translateX = transformStyle.replace(/[^\d.]/g, '');
+     var parOrdenado = transformStyle.replace(/[\A-Za-z()]/g, '');
+     coordenates = parOrdenado.split(',');
+
+     return coordenates;// return an array
+}
+
+
+
 /**
  * Send an ajax request in order to add a flow 
  * 
- * @param {integer} user - user id
+ * @param {string} user - user id
  * 
  */
-function ajaxCreate(user){    
+function ajaxCall(user){  
+    updateCoordenates();  
+    description =  $("input[id=flowName]").val();
+    data = "";
+    datos = [];
+    updateCoordenates();
+    valid = validateFlow();
+    var id = idFlowForUpdate;
+    var message = ''; 
+
+    if(valid==0){ 
+        for (var i = 0; i <= sessionStorage.length; i++){
+            key = sessionStorage.key(i);
+            data = sessionStorage.getItem(key);
+            datos.push(JSON.parse(data));
+        }
+        if(id != ''){
+            url = "flows/" + id + "";
+            method = "PATCH";
+            message= 'Elemento actualizado satisfactoriamente.';
+        }       
+        else {
+            url = "flows";
+            method = "";
+            message= 'Elemento agregado satisfactoriamente.';
+        }  
+        
+        $.ajax({
+            url: url,
+            method: "POST",
+            data: {
+                _token: $("input[name=_token]").val(),
+                description:   description,
+                _method: method,
+                data: datos,   
+                username: user 
+            },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
+            success: function(result) {  
+               openTable();        
+               alerta('Proceso exitoso', message,false);
+               // alerts(  "El flujo " +  description + " ha sido creado satisfactoriamente",
+               //"alert-success" );
+                $("#table").html(result);
+                $("#table").DataTable().destroy();
+                createDataTable("table");
+                $("#create").modal("hide");
+                idFlowForUpdate='';
+                $("#cargandoDiv").css('display', 'none')
+             
+            },
+            error: function(request, status, error) {
+                alert(request.responseText);
+                alerta("Ha ocurrido un error inesperado.", "alert-danger");
+                openTable();
+                $("#cargandoDiv").css('display', 'none')
+            }
+        }); 
+    }
+}
+
+/**
+ * Send an ajax request in order to update an specific flow
+ * 
+ */
+function ajaxUpdate() {
+
     description =  $("input[id=flowName]").val();
     data = "";
     datos = [];
@@ -91,85 +230,48 @@ function ajaxCreate(user){
             datos.push(JSON.parse(data));
         }
         $.ajax({
-            url: "flows",
+            url: "flows/{" + id + "}",
             method: "POST",
             data: {
                 _token: $("input[name=_token]").val(),
-                description:   description,
-                data: datos,   
-                username: user 
+                _method: "PATCH",
+                id: id,
+                description: description,
+                username: user
             },
-            beforeSend: function (xhr) { // Add this line
-                xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {
+            success: function(result) {                
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
                     .destroy();
                 createDataTable("table");
-                $("#create").modal("hide");
+                $("#edit").modal("hide");
                 alerts(
                     "El flujo " +
                         description +
-                        " ha sido creado satisfactoriamente",
+                        " ha sido actualizado satisfactoriamente",
                     "alert-success"
                 );
+                $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
                 alert(request.responseText);
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
-            }
-        }); 
+                $("#cargandoDiv").css('display', 'none')
+            }   
+        });
     }
-}
-
-/**
- * Send an ajax request in order to update an specific flow
- * 
- */
-function ajaxUpdate() {
-    var id = $("input[name=id]").val();
-    var description = $("input[id=description]").val();
-    var user = $("select[name=flowUsuario] option:selected").val();
-
-    $.ajax({
-        url: "flows/{" + id + "}",
-        method: "POST",
-        data: {
-            _token: $("input[name=_token]").val(),
-            _method: "PATCH",
-            id: id,
-            description: description,
-            username: user
-        },
-
-        success: function(result) {
-            $("#table").html(result);
-            $("#table")
-                .DataTable()
-                .destroy();
-            createDataTable("table");
-            $("#edit").modal("hide");
-            alerts(
-                "El flujo " +
-                    description +
-                    " ha sido actualizado satisfactoriamente",
-                "alert-success"
-            );
-        },
-
-        error: function(request, status, error) {
-            alert(request.responseText);
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
-        }
-    });
 }
 
 
 
 function ajaxEdit(idFlow,flowName) {
   
+    //Global variable
+    idFlowForUpdate = idFlow;
        $.ajax({
         url: "flows/{" + idFlow + "}",
         method: "GET",
@@ -181,25 +283,23 @@ function ajaxEdit(idFlow,flowName) {
         },
         beforeSend: function(){
             //CAMBIAR ESTA ALERTA POR POP APP
-            alerts("Espere por favor.", "alert-danger");
-        },
-
+           // alerts("Espere por favor.", "alert-danger");
+            $("#cargandoDiv").css('display', 'block')
+        },       
         success: function (response){
+           hideAlert();
             $("input[id=flowName]").val(flowName);
             // JSON.encode(response)
             editFlow(response);
+            $("#cargandoDiv").css('display', 'none')
         },
         done: function(response) {
-            //alert("funcionno");
-           // console.log(response);
-           // alert(response);
-          // return response;
         },
 
         error: function(request, status, error) {
             alert(request.responseText);
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
-         
+            $("#cargandoDiv").css('display', 'none')
         }
     });
 
@@ -272,7 +372,7 @@ function openPermissions(actions){
 
     $(".body_table_line").empty();
     var users = [];
-    cadena = "";
+    var cadena = "";
     stepId =$("#stepId").val();
     elemento = sessionStorage.getItem(stepId);
     elemento = JSON.parse(elemento);
@@ -281,7 +381,9 @@ function openPermissions(actions){
     habilitado = "";
     users.forEach(user => {
        cadena += '<tr><input type="hidden" id = "input'+user.username+'" value ="'+user.email+'"><td id = "'+user.username+'">'+user.name+'</td>';
-        actions.forEach(action => {
+
+       actions = actions.filter(act =>act.type == 0 || act.type == 1 );
+       actions.forEach(action => {
             idAction = "'" + action.id+"'";
             acciones =  user.actions;
         if(acciones !== undefined  || acciones > 0){
@@ -305,7 +407,7 @@ function openPermissions(actions){
  * 
  */
 function savePermissions(){
-    stepId =$("#stepId").val();
+    var stepId =$("#stepId").val();
     usernames ="";
     actionsByUser = [];
     users = [];
@@ -419,7 +521,8 @@ function deleteStep(step){
     var id = step.getAttribute('id');
     var index = 0; 
     var indices = Array();
-        array.forEach(element => {              
+        //Global array of lines
+        arrayLines.forEach(element => {              
             if(element.line.start.getAttribute('id') == id  || element.line.end.getAttribute('id') == id ){
                 element.line.remove();        
                 indices.push(index);
@@ -427,7 +530,8 @@ function deleteStep(step){
             index+=1;
         }); 
     for (var i = indices.length -1; i >= 0; i--){
-        array.splice(indices[i],1);
+        //Global arrayLines of lines
+        arrayLines.splice(indices[i],1);
     }
 
     for(let i=0; i<sessionStorage.length; i++) {       
@@ -454,24 +558,25 @@ function deleteStep(step){
  * @param {string} title - title of the modal
  * 
  */
+
 function editStep(step, title, mode){
+    //0 edit mode 1 create mode
     globalMode = mode; 
    
     $("#modal-body-step-back").hide(500);
-    $("#modal-body-step").show(500);   
-  
+    $("#modal-body-step").show(500);  
     $(".body_table").empty();
-
     var id = step;    
     var elemento = sessionStorage.getItem(id);
     elemento= JSON.parse(elemento);  
     $("#stepId").val(id);    
     $("#CreateDescription").val(elemento.description);    
    var titulo = title + " "+ $("#CreateDescription").val();
+
     $("#card-title").text(titulo);
         users = elemento.users;
         $('#select_document').find('option').prop('selected',false);
-    if(users.length > 0 ){
+    if(typeof users !== 'undefined'){
         users.forEach(element => {
             username =element.username;
             name = element.name;
@@ -482,7 +587,6 @@ function editStep(step, title, mode){
     }
    // steps = elemento.steps;
     globalMode == 1 ? formDisable(true):formDisable(false);
-
     $("#card").modal("show");
 }
 
@@ -603,8 +707,13 @@ function createStartEnd(id, text, class1 ){
    drag = 0;
     arrayDraggable.forEach(element => {
        dragId = element.id;
-       if(dragId == id)
-            drag = 1;
+       var desc = (dragId == DRAGGABLE_INICIO)?'Solo puede haver un elemento inicial':'Solo puede haber un elemento final';
+
+       if(dragId == id){
+           drag = 1;
+           alerta('Elemento existente',desc,false);
+       }
+            
     });   
     if(drag != 1){
         var contenido = 
@@ -627,10 +736,10 @@ function createStartEnd(id, text, class1 ){
  * @param {integer} id - Of the step (draggable#)
  * 
  */
-function createStepCard(id){
+function createStepCard(id, description){
     return '<div id = "'+id+'" class="card card_size "> '+
     '<div class="card-step card-header bg-dark justify-content-center">'+
-    '<div class = "w-100" ><input id ="text'+id+'" type="text" placeholder="Descripcion" disabled> </div> '+             
+    '<div class = "w-100" ><input id ="text'+id+'" class="textdraggable" type="text" value = "'+description+'" placeholder="Descripcion" disabled>  </div> '+             
     '<div class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-success" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
     '<i class="far fa-eye"></i> '+
     '</button> '+
@@ -653,9 +762,10 @@ function createStepCard(id){
  * 
  */
 function createStep(){
-    var id = 'draggable' + step; // id of the new step
-    contenido = createStepCard(id); // create a card step node
-    step += 1;  
+    //step global count for each step
+    var id = 'draggable' + stepGlobal; // id of the new step
+    contenido = createStepCard(id, ""); // create a card step node
+    stepGlobal += 1;  
     addElementToCanvas(id,contenido); // add the card step to the canvas
     saveInStorage(null, id); // save an empty step in the storage with the id 
     editStep(id, 'Crear un nuevo paso',0);    //Change the label text of the modal 
@@ -667,8 +777,8 @@ function createStep(){
  * 
  */
 function movimiento(){
-    //Array of Lines Objects
-    array.forEach(element => { 
+    //Array of Lines Objects GLobal
+    arrayLines.forEach(element => { 
         element.line.position();
     });
 }
@@ -704,7 +814,7 @@ function createDraggable(id){
  *  It joins to different card steps.
  *  Then draw a line between each step.
  * 
- *  @param {integer} id - id Of the step (draggable#)
+ *  @param {html} div - div html object
  */
 function joinStep(div){  
     var bandera =  false;  
@@ -743,12 +853,15 @@ function joinStep(div){
          $("#"+divSecond).removeClass("card-shadow-info");  
         reset(); 
         //Give the action click to the svg text
-        $("svg text").css("pointer-events","auto");   
+      //  $("svg text").css("pointer-events","auto");   
     
     }
-    if(divSecond == divFirst){
-        $("#"+divFirst).removeClass("card-shadow-info");
-        reset();
+    if(divSecond == divFirst ){ 
+        if(divFirst != ''){
+            $("#"+divFirst).removeClass("card-shadow-info");
+            reset();  
+        }       
+                         
     } 
 }
 
@@ -780,9 +893,10 @@ function storageLine(identificador, divFirst, divSecond,action, usersLine){
  *
  */
 function createLine(begin, end, idLine, labelName){
-    var bandera = false;
-
-    array.forEach(element => {
+var bandera = false;
+//Global array of lines 
+if(arrayLines)
+    arrayLines.forEach(element => {
          arr = element['id'].split('-');  
         var line = idLine.split('-');      
         if( arr[0]== line[0] && line[0] == DRAGGABLE_INICIO)
@@ -799,7 +913,9 @@ function createLine(begin, end, idLine, labelName){
         });
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
-        array.push({id: idLine, line: line});  
+        arrayLines.push({id: idLine, line: line});  
+         //Give the action click to the svg text
+        $("svg text").css("pointer-events","auto");   
         return true;
     }else {
         alerta('Alerta', 'El inicio no puede tener más de dos líneas',false);
@@ -903,16 +1019,17 @@ function deleteAction(){
     var indices = Array();
 
     /*Busca la linea a remover y la elimina del canvas  */
-      array.forEach(element => {              
+    //Global array
+      arrayLines.forEach(element => {              
           if(element.line.start.getAttribute('id') == begin && element.line.end.getAttribute('id') == end ){
             element.line.remove();        
              indices.push(index);
           }
           index+=1;
       });
-      /*Elimina del arreglo "array" la linea removida   del elemento */
+      /*Elimina del arreglo "arrayLines" la linea removida   del elemento */
     for (var i = indices.length -1; i >= 0; i--){
-        array.splice(indices[i],1);
+        arrayLines.splice(indices[i],1);
     }
     /* Elimina del storage la linea removida  */
     for(let i=0; i<sessionStorage.length; i++) {       
@@ -1002,14 +1119,12 @@ $( "#CreateDescription" ).focus(function() {
     $('#alertModalDescription').text(description);
     bandera == false ? $("#alertModal").modal('show'): "";
   }
-
-
   
-function validateRepeatAction(item){
-   var cont = 0;    
-   var steps = item.steps;
-   var arrayAux =steps; 
-   var bandera = -1;  
+  function validateRepeatAction(item){
+    var cont = 0;    
+    var steps = item.steps;
+    var arrayAux =steps; 
+    var bandera = -1;  
     steps.forEach(element => {
         if(element['action'] == '-1')
             bandera = 2;
@@ -1019,9 +1134,9 @@ function validateRepeatAction(item){
         });
     });
     if (bandera == 2) 
-        return 2
+        return 2; // There are lines without valid actions
     else 
-        return cont >= 1? 1:3;
+        return cont >= 1? 1:0; //If is more equal than one means that there are some lines with the same action from the same step
 }
 
 
@@ -1029,23 +1144,24 @@ function validateFlow(){
     stepDescription = $("#CreateDescription").val();
     flowName = $("#flowName").val();
     validFlow =validateFields(flowName, 'flowName', 'errFlow', 'Por favor, rellene este campo' )
-    //validStepField =validateFields(stepDescription, 'CreateDescription', 'errlabel', 'Por favor, rellene este campo' )
- 
-    // validField = validateFields();
-    if(validFlow ){
-       // if(validStepField){
-            keys = Object.keys(sessionStorage);
-            result = true;
+   var result = 0; //Todo esta bien
+
+    if(validFlow){
+            keys = Object.keys(sessionStorage);           
             hayInicio = false;
             hayFinal = false;
             validField = true; // valido hasta que se demuestre lo contrario
-            keys.forEach(element => {
-                item = sessionStorage.getItem(element);
+            for (let index = 0; index < keys.length; index++) {
+              
+                // result = keys.forEach(element => {
+                item = sessionStorage.getItem(keys[index]);
                 item = JSON.parse(item);
 
                 // Verify if the step has a description (except the beggining step and ending step)
                 if(  item['id'] != DRAGGABLE_INICIO &&  item['id'] != DRAGGABLE_FINAL ){
-                    validField = item['description'] != ''? true:false;
+                    $(".textdraggable").each(function(){
+                        validField =  ( $(this).val() !== '' )? true:false;
+                    });                   
                 }            
 
                 // Verify if a begin and end step exist in the flow          
@@ -1054,83 +1170,206 @@ function validateFlow(){
 
                 // Validate if the actions are not repeat it in each step. 
                 result = validateRepeatAction(item);
+
                 if(result == 1){
-                    description = 'El elemento ' +item['description']+ 'está asociado con las mismas acciones a varios pasos siguientes. Asegurese que cada línea que sale de un mismo paso tiene diferente acción.';
+                    description = 'El elemento ' +item['description']+ ' está asociado con las mismas acciones a varios pasos siguientes. Asegurese que cada línea que sale de un mismo paso tiene diferente acción.';
                     alerta('Error',description, false);
-                    return result;
+                    //return result;
+                    break;
                 } else if(result == 2){
                     description = 'El elemento ' +item['description']+ 'Tiene líneas sin acciones específicas, asegurese que todas las conexiones posean una acción que pueda ejecutarse.';
-                    alerta('Error',description, false);
-                    return result;
+                    alerta('Error',description, false);                    
+                    //return result;
+                    break;
                 }
                 // Validate if the fields are valid
                 else if (!validField) {
                     description = 'Hay elementos que no poseen una descripcion. Asegúrese que cada paso tiene una descripción no vacía.';
-                    alerta('Error',description, false);
-                    return false;
-                }  
-            });
+                    alerta('Error',description, false);                  
+                   // return 3;
+                   break;
+                }
+               
+           // });
+            }
             if(!hayInicio){
                 description = 'El flujo no tiene un elemento inicial. Asegurese de agregar un paso inicial.';
                 alerta('Error',description, false);
-                return false;
+                result = 6;                
             } else if(!hayFinal){
                 description = 'El flujo no tiene un elemento final. Asegurese de agregar un paso final.';
                 alerta('Error',description, false);
-                return false;
+                result = 4;                
             }  
-        //}else {
-           // description = 'Asegúrese de que todos los pasos tengan una descripción no vacía.';
-           // alerta('Error',description, false);
-           // return false;
-       // }
     }else {
         description = 'El flujo no posee una descripción. Asegúrese de que el nombre del flujo no esté vacío.';
         alerta('Error',description, false);
-        return false;
+        result = 5;
     }
 return result;  
 }
 
+
+//Return the unique values inside a array
+
+
+function mapUser(actionStepUser, id){
+    var usersAux = [];
+    var users =[];
+    var actions = [];
+    var item = '';
+    if(typeof actionStepUser !== 'undefined'){ 
+        actionsUsers= actionStepUser.filter(ast =>ast.step_id == id );
+        actionsUsers.forEach(element => {
+            if(!users.includes(element['username'])){
+                users.push(element['username']);
+                us = actionsUsers.filter(user => user.username == element['username'] );
+                
+                    us.forEach(element => {
+                        item = element;
+                        actions.push("'" + element['action_id']+"'");
+                    }),
+                    user = {
+                        username:item.username,
+                        name: item.name,
+                        email: item.email,
+                        actions: actions,
+                    }
+                    usersAux.push(user);
+                    actions =[];
+             } 
+             users = [];
+        });
+           
+    }
+    return usersAux;
+}
+
+
+function mapStep(stepStep,id){ 
+     aux = [];
+    if(typeof stepStep !== 'undefined'){  
+        stepStep =  stepStep.filter(step1 =>step1.prev_step_id == id );  
+        stepStep.forEach(element => {           
+        id = element.prev_step_id + "-"+ element.next_step_id;
+            stepObject = {
+                begin:element.prev_step_id,
+                end: element.next_step_id,
+                action: element.id_action,
+                description:element.description,
+                id: id,
+            };
+        aux.push(stepObject);
+        begin = document.getElementById(stepObject.begin);
+        end =document.getElementById(stepObject.end);  
+        bandera = createLine(begin, end, stepObject.id, stepObject.description);
+        if(bandera)
+            storageLine(stepObject.id, stepObject.begin, stepObject.end,element.id_action, []);
+        });
+  }
+   return aux;
+}
 
 
 /**
  *  Update a specific flow
  */
 function editFlow(data){
-    
-    
-    //obtener datos de la base de datos
-    //setearlo en el storage
-    // var data = ajaxEdit(idFlow);
-    
-    $flow = data.flow;
-    $steps = data.steps; //steps
-    console.log($steps);
-    $stepStep = data.step_step; //lines
-    console.log($stepStep);
-   
-    
-    $actionStepUser = data.action_step_user;
-    console.log($actionStepUser);
-    //Creamos el html del card    
-    $steps.forEach(element => {
-        id = element['id'];
-        contenido = createStepCard(id);
-    //agregamos primero todos los drag al canvas    
-        addElementToCanvas(id,contenido);
-    //De una agregamos los drag al storage
-    object = createObjectStep(stepId,description,users,steps,axisX,axisY)
-    saveInStorage(object, id);
-    });
-    
-  
 
-    //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
-    //Guarda las lineas en un array llamado array (Global)
-   // createLine(begin, end, idLine, labelName);
+    /**
+     *  Clean all the storage, array and draggablearray
+     */    
+    clearAll();    
+    
+    /**
+     * Get the database data and set at storage
+     */
+    var flow = data.flow;
+    var description = flow.description;
+    var steps = flow.steps;
+    var stepStep = data.step_step; //lines
+    var actionStepUser = data.action_step_user;
+    var users1 = [];
 
-    //Guarda la linea en el storage
-   // storageLine(identificador, divFirst, divSecond,action, usersLine)
-   openCreate();
+     /**
+     * Steps building
+     */    
+    if(typeof steps !== 'undefined'){
+        steps.forEach(element => {
+            var id = element['id'];
+            axisX =  element['axisX'];
+            axisY =  element['axisY'];
+            description = element['description'];
+            if(element['id'] == DRAGGABLE_FINAL)
+                contenido = createStartEnd(id, 'Final', 'bg-danger');
+            else if(element['id'] == DRAGGABLE_INICIO)
+                contenido =  createStartEnd(id, 'Inicio', 'bg-success');
+            else {
+                //Splice del id draggable# (to get the number of the draggable)
+                stepCount = id.slice(9);
+                stepCount = parseInt(stepCount);
+                if(stepGlobal <= stepCount){
+                    stepGlobal =stepCount + 1; //necessary to know the last step and continues counting
+                }     
+                 /**
+                 * create a card step node and Add the card step to the canvas
+                 */         
+                contenido = createStepCard(id,description);   
+                addElementToCanvas(id,contenido); 
+            }
+                
+            /**
+             * Add the dragas to the storage
+             */ 
+            users1 =  mapUser(actionStepUser,element['id']);
+            object = createObjectStep(id,description,users1,[],axisX,axisY);
+            saveInStorage(object, id);
+        
+            //storageLine(id, divFirst, divSecond,action, []);  
+        });
+
+        //Luego creamos las lineas  con el inicio, final, idLine ( divFirst+'-'+ divSecond; ) y nombre
+        //Guarda las lineas en un array llamado array (Global)        
+        steps.forEach(element => {
+            var id = element['id']; 
+            itemStorage = sessionStorage.getItem(id);
+            itemStorage=JSON.parse(itemStorage);
+            axisX =  element['axisX'];
+            axisY =  element['axisY'];  
+            description = element['description'];   
+            steps2 =  mapStep(stepStep, id);
+            users2 = itemStorage.users; //get the users storaged
+            object = createObjectStep(id,description,users2,steps2,axisX,axisY);
+            saveInStorage(object, id);
+            traslateDrag(id, axisX,axisY);
+            
+        });
+       
+        
+        //Guarda la linea en el storage
+    
+        openCreate();
+    }
+}
+
+
+
+
+function clearAll(){
+    //Global array
+    arrayLines = Array(); 
+    arrayDraggable = Array(); 
+    clearStorage();
+    idDiv = document.getElementById("drag-container");
+    clearchildNodes(idDiv);
+    clearArrow('leader-line');
+}
+
+
+function traslateDrag(id, x,y){
+    $('#'+id).css({
+        "-webkit-transform":"translate("+x+"px,"+y+"px)",
+        "-ms-transform":"translate("+x+"px,"+y+"px)",
+        "transform":"translate("+x+"px,"+y+"px)",
+    })
 }
