@@ -101,6 +101,8 @@ function openTable(){
     $("#flowName").val("");
     $("#create-wrapper").hide(1000);
     $("#flow-wrapper").show(500);
+
+    $("#confirmar").modal("hide");
        
 }
 
@@ -146,6 +148,11 @@ function getCoordinates(id){
      return coordenates;// return an array
 }
 
+function confirm(message){
+    $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
+    $("#confirmarButton").attr("onClick","openTable()");
+    $("#confirmar").modal("show");
+}
 
 
 /**

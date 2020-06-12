@@ -22,8 +22,8 @@ class CreateActionStepUserTable extends Migration
             $table->bigInteger('action_id')->unsigned();
             $table->primary(['step_id','flow_id','username','action_id'],'action_step_user_pk');
 
-            $table->foreign('step_id')->references('id')->on('steps')->onDelete('cascade');
-            $table->foreign('flow_id')->references('flow_id')->on('steps')->onDelete('cascade'); 
+            $table->foreign(['step_id','flow_id'])->references(['id','flow_id'])->on('steps')->onDelete('cascade');
+            //$table->foreign('flow_id')->references('flow_id')->on('steps')->onDelete('cascade'); 
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');            
             $table->timestamps();    

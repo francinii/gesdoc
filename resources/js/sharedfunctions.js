@@ -34,8 +34,8 @@ function createDataTable(table) {
 
 
 /**
- * This function is in charge of create the data table and give
- * them the all necesary attirbutes.
+ * This function shows a modal in order to confirm if you 
+ * really want to delete the element.
  * 
  * @param {integer} id -id of the element for delete
  * @param {string} url1 - url of the deleted element

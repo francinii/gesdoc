@@ -11,7 +11,7 @@
           </div> 
         </div> 
         <div class="col-md-11">
-            <button  type="button" id="CreateSubmit" onclick="openTable()" class="btn btn-success ml-auto">
+            <button  type="button" id="CreateSubmit" onclick="confirm('Todo el progreso se borrará si no ha sido guardado. ¿Desea salir del modo edición?  ')" class="btn btn-success ml-auto">
               <i class="fas fa-arrow-left"></i>
             </button> 
             <button type="button" class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">

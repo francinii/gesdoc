@@ -120,11 +120,9 @@ class FlowController extends Controller
      */
     public function update(Request $request, $id)
     {       
-        $data = request()->except(['_token', '_method']);  
-       
-        $id =$data['id'];
-        Flow::destroy($id);        
-        $res= $this->insertFlow( $data);
+        $data = request()->except(['_token', '_method']);        
+       // Flow::destroy($id);        
+        $res= $this->insertFlow($data);
         $idFlow = $res[0]['id_flow'] ;
         $this->insert( $data, $idFlow);
     
@@ -194,9 +192,14 @@ class FlowController extends Controller
      */  
     protected function insertFlow(array $datos)
     {    
+        $id = $datos['id'];
         $username = "'".$datos['username']."'";  
         $description = "'".$datos['description']."'";  
-        DB::select("call insert_flow($username, $description, @res, @id_flow)");
+        if($id == '')
+            DB::select("call insert_flow($username, $description, @res, @id_flow)");
+        else 
+            DB::select("call update_flow($id, $username, $description, @res, @id_flow)");
+
         $res = DB::select("SELECT @res as res;"); 
         $idFlow = DB::select("SELECT @id_flow as id_flow;"); 
         $res = json_decode(json_encode($res), true);

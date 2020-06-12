@@ -478,6 +478,40 @@ END
 DELIMITER ;
 
 
+
+
+-- PROCEDURE update a new flow
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `update_flow`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_flow`(IN `p_idFlow` int, IN `p_username` varchar(500), IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                  DELETE FROM `flows` WHERE id = p_idFlow;
+                  INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
+           COMMIT;
+            SET id_flow = LAST_INSERT_ID();
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
 -- PROCEDURE insert a new step to a flow
 -- return 0 success, 1 or 2 database error, 3 the department already exists
 -- ----------------------------
