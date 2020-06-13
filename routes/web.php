@@ -31,7 +31,7 @@ Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 Route::get('home/showshare/{id}/{type}', 'HomeController@showShare');
 
-Route::get('home/share/{id}/{type}', 'HomeController@Share');
+Route::post('home/share/{id}/{type}', 'HomeController@Share');
 
 Route::get('home/{table}/{id}', 'HomeController@refresh');
 

@@ -169,7 +169,10 @@ class HomeController extends Controller
 
      $dato = request()->except(['_token']);
 
+
     }
+
+    
 
     /**
      * @param  \Illuminate\Http\Request  $request
@@ -179,6 +182,8 @@ class HomeController extends Controller
     public function share(Request $request)
     {
         $dato = request()->except(['_token']);
+        $usersShare=$dato['usersShare'];
+
     }
 
     /**
@@ -214,9 +219,9 @@ class HomeController extends Controller
      * @param  \App\Permission  $permiso
      * @return \Illuminate\Http\Response
      */
-    public function show(Permission $permiso)
+    public function show()
     {
-        $dato = request()->except(['_token']);
+        
     }
 
     /**
@@ -242,7 +247,7 @@ class HomeController extends Controller
              $reviewAction=$action;
              $myActions=[];
             foreach ($documentInClassification as $documet) {                
-                if($documet->owner->username!== $user->username){
+                if($documet->owner->username!= $user->username){
                     $myActions=DB::select("SELECT `action_id` FROM `action_document_user` WHERE `document_id`=$documet->id and `username`='$user->username'");
                     $myActions = json_decode(json_encode($myActions), true);
                     $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();

@@ -482,7 +482,7 @@ function openShare(currentUsersShare){
       if(currentUsersShare[index].owner)$('#owner').val(currentUsersShare[index].username);
       appendUserTable(currentUsersShare[index].username, currentUsersShare[index].name, currentUsersShare[index].email, 'body_table',currentUsersShare[index].owner);
       $('#'+currentUsersShare[index].username).prop('selected',true);
-      var user=[];
+      var user={};
       user['username']=currentUsersShare[index].username;
       user['email']=currentUsersShare[index].email;
       user['name']=currentUsersShare[index].name;
@@ -526,7 +526,7 @@ function select_user(e, clickedIndex, tableId){
 
     if(seleccionado){
         appendUserTable(username, name, email, tableId,false);
-        var user=[];
+        var user={};
         user['username']=username;
         user['email']=email;
         user['name']=name;
@@ -681,19 +681,18 @@ function AjaxShare(){
     return;
     me.data("requestRunning", true);
     
-    var users=
+    var users =JSON.stringify(usersShare);
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
-        method: "get",
+        method: "post",
            
 
         data: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            _token: $("input[name=_token]").val(),
-            
+            _token: $("input[name=_token]").val(),            
             id:idselect,
             type:typeContextMenu,
-            
+            usersShare:usersShare,
 
 
         },
