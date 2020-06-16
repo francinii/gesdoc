@@ -35,7 +35,8 @@ class HomeController extends Controller
 
         $username = Auth::id();
         $classification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
-        $allClassifications = $this->classifications($classification);
+        $review=[];
+        $allClassifications = $this->treeClassifications($classification,$review);
         $departments = Department::all();
         $actions = Action::where('type', '=', 1)->get();
         return view('home.home', compact('classification', 'allClassifications', 'departments', 'actions','aver'));
@@ -83,7 +84,8 @@ class HomeController extends Controller
             $classification = $allClassifications;
         }
 
-        $allClassifications = $this->classifications($allClassifications);
+        $review=[];
+        $allClassifications = $this->treeClassifications($classification,$review);
         return view('home.tableMyDocuments', compact('classification', 'allClassifications'));
     }
 
@@ -103,7 +105,8 @@ class HomeController extends Controller
             $classification = $allClassifications;
         }
 
-        $allClassifications = $this->classifications($allClassifications);
+        $review=[];
+        $allClassifications = $this->treeClassifications($classification,$review);
         return view('home.tableShareDocuments', compact('classification', 'allClassifications'));
     }
 
@@ -183,6 +186,9 @@ class HomeController extends Controller
     {
         $dato = request()->except(['_token']);
         $usersShare=$dato['usersShare'];
+        $documentInClassificationid=$dato['documentInClassificationid'];
+        $type=$dato['typeContextMenu'];
+        
 
     }
 
@@ -236,44 +242,36 @@ class HomeController extends Controller
         $classification = Classification::where([['id', '=', $id]])->first();
         $owner=$classification->owner;
         $owner->owner=true;
-        $currentUsersShare[$classification->owner->username] = $owner;
-        $this->getUsersClassification($classification, $currentUsersShare, $review);
-        $review = [];
-        $documentInClassification=[];
-        $this->getDocumentsInClassification($classification, $documentInClassification, $review);
         $action= Action::where('type', '=', 1)->pluck('id')->toArray();
-        foreach ($currentUsersShare as $user) {           
-             $user->actions=[];
-             $reviewAction=$action;
-             $myActions=[];
-            foreach ($documentInClassification as $documet) {                
-                if($documet->owner->username!= $user->username){
-                    $myActions=DB::select("SELECT `action_id` FROM `action_document_user` WHERE `document_id`=$documet->id and `username`='$user->username'");
-                    $myActions = json_decode(json_encode($myActions), true);
-                    $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
-                    $reviewAction=array_intersect_assoc($reviewAction,$myActions);
-                    if(!count($reviewAction)) break;
-                }else{
-                    $reviewAction=[];
-                }
-            }
-            $user->actions= $reviewAction;
-            
+        $currentUsersShare[$classification->owner->username] = $owner;
+        $currentUsersShare[$classification->owner->username]->actions=[];        
+        $this->getUsersClassification($classification, $currentUsersShare, $review,$action);       
+        $review = [];        
+        $documentInClassificationid=[];
+        $this->getDocumentsInClassification($classification,$review, $documentInClassificationid,$currentUsersShare);
 
-        }
-
-       return compact('currentUsersShare');
+       return compact('currentUsersShare','documentInClassificationid');
     }
 
   
-    private function getDocumentsInClassification($classification,&$documentInClassification, &$review){
+    private function getDocumentsInClassification(&$classification,&$review, &$documentInClassificationid,&$currentUsersShare){
        if(!isset($review[$classification->id])){
-            foreach ($classification->documents as $document) {
-                $documentInClassification[$document->id]=$document;
-            }
             $review[$classification->id]=true;
+            if(count($classification->documents))
+            foreach ($currentUsersShare as $user) {         
+                $myActions=[];                
+                foreach ($classification->documents as $document) {
+                    $documentInClassificationid[$document->id]=$document->id;
+                    if($document->owner->username == $user->username) break;
+                    if(!count( $user->actions)) break;                    
+                    $myActions=DB::select("SELECT `action_id` FROM `action_document_user` WHERE `document_id`=$document->id and `username`='$user->username'");
+                    $myActions = json_decode(json_encode($myActions), true);
+                    $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
+                    $user->actions=array_intersect_assoc($user->actions,$myActions);
+                }
+            }            
             foreach ($classification->classifications as $subClassification) {
-               $this->getDocumentsInClassification($classification,$documentInClassification,$review);
+               $this->getDocumentsInClassification($subClassification,$review, $documentInClassificationid,$currentUsersShare);
             }
         }
 
@@ -283,19 +281,21 @@ class HomeController extends Controller
      * @param classification for find the user who can see
      * @return array of user
      */
-    private function getUsersClassification($classification, &$currentUsersShare, &$review)
+    private function getUsersClassification($classification, &$currentUsersShare, &$review,$action)
     {
         if (!isset($review[$classification->id])) {
             if ($classification->type <= 2) {     
-                if(!isset($currentUsersShare[$classification->owner->username]))          
-                $currentUsersShare[$classification->owner->username] = $classification->owner;
-
-                $review[$classification->id] = 1;
+                if(!isset($currentUsersShare[$classification->owner->username])){                    
+                    $currentUsersShare[$classification->owner->username] = $classification->owner;
+                    $currentUsersShare[$classification->owner->username]->actions=$action;
+                }   
+                    
                 
+                $review[$classification->id] = 1;                
             } else {
                 $parents=$classification->parentClassifications;
                 foreach ($classification->parentClassifications as $parentClassification) {
-                    $this->getUsersClassification($parentClassification,$currentUsersShare, $review);
+                    $this->getUsersClassification($parentClassification,$currentUsersShare, $review,$action);
                 }
 
             }
@@ -373,18 +373,20 @@ class HomeController extends Controller
     /**
      * @param object $classification
      */
-    private function classifications($classification)
+    private function treeClassifications($classification,&$review)
     {
-        $classifications;
-        $arrayClassifications = array();
+        if(!isset($review[$classification->id])){
+            $classifications;
+            $arrayClassifications = array();
 
-        $classifications['classification'] = $classification;
-
-        foreach ($classification->classifications as $subClassification) {
-            array_push($arrayClassifications, $this->classifications($subClassification));
+            $classifications['classification'] = $classification;
+            $review[$classification->id]=$classification->id;
+            foreach ($classification->classifications as $subClassification) {
+                array_push($arrayClassifications, $this->treeClassifications($subClassification,$review));
+            }
+            $classifications['classifications'] = $arrayClassifications;
+            return $classifications;
         }
-        $classifications['classifications'] = $arrayClassifications;
-        return $classifications;
 
     }
 

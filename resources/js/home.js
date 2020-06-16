@@ -7,9 +7,10 @@ var descriptionEdit;
 var typeContextMenu;
 var currentClassification;
 var listClassification = [];
-var allClassifications
-var usersShare=[]
-var currentTable="1" // 1 = my documents, 2 share with me, 3 my documents in flows
+var allClassifications;
+var usersShare=[];
+var documentsShare;
+var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
 /**
 * draw the route follow for the user  
 *
@@ -460,7 +461,8 @@ function showshare(){
 
         },
         success: function(result) {    
-            openShare(result.currentUsersShare);                        
+            openShare(result.currentUsersShare,result.documentInClassificationid);
+                              
             me.data("requestRunning", false);
         },
         error: function(request, status, error) {
@@ -473,7 +475,7 @@ function showshare(){
 
 }
 
-function openShare(currentUsersShare){
+function openShare(currentUsersShare,documentInClassificationid){
     $("#select_document option:selected").show();
     $("#select_document option:selected").prop("selected", false);    
     $(".body_table").empty();
@@ -490,7 +492,7 @@ function openShare(currentUsersShare){
       user['actions']=currentUsersShare[index].actions;
       usersShare.push(user);
   }
-
+    $('#documentsId').val(JSON.stringify(documentInClassificationid));
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
@@ -681,7 +683,7 @@ function AjaxShare(){
     return;
     me.data("requestRunning", true);
     
-    var users =JSON.stringify(usersShare);
+    
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
         method: "post",
@@ -691,8 +693,10 @@ function AjaxShare(){
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             _token: $("input[name=_token]").val(),            
             id:idselect,
+            currentClassification: currentClassification.id,
             type:typeContextMenu,
             usersShare:usersShare,
+            documentInClassificationid:JSON.parse($('#documentsId').val()),
 
 
         },

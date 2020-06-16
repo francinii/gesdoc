@@ -358,7 +358,7 @@ BEGIN
 	END;
             START TRANSACTION;
                    
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_description,3, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_description,3, NOW(),NOW());
                     SET p_id = LAST_INSERT_ID();
                     INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
             COMMIT;
@@ -367,7 +367,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call insert_classification('402340421','mi clasificacion',1,@res);
+-- call insert_classification('mi clasificacion',1,'402340421',@res);
 -- SELECT @res as res;
 
 
@@ -445,6 +445,88 @@ DELIMITER ;
 -- call delete_classification(2,'402340420',@res);
 -- SELECT @res as res;
 
+
+-- ----------------------------
+-- PROCEDURE insert a new classification
+-- return 0 success, 1 or 2 error in database, 3 the classification already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `share_classification`;
+DELIMITER ;;
+CREATE  PROCEDURE `insert_classification`(IN `p_id` int,In `p_currentClassification` int,IN `p_username` varchar(500),IN `p_documents` varchar(500),IN `p_actions` varchar(500),IN `p_owner` BOOLEAN,IN `p_delete` BOOLEAN, OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE p_classification Integer;
+  DECLARE p_documentOwner varchar(500);
+  DECLARE p_action Integer;
+  DECLARE p_document Integer;
+  DECLARE _nextDocument TEXT DEFAULT NULL;
+  DECLARE _nextlenDocument INT DEFAULT NULL;
+  DECLARE _nextAction TEXT DEFAULT NULL;
+  DECLARE _nextlenAction INT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+              SELECT id into p_classification FROM `classifications` WHERE `type`= 2 and `username`=p_username;
+              IF p_delete then
+                DELETE FROM `classification_classification` WHERE `first_id`=p_currentClassification and `second_id`=p_id;
+              ELSE
+                INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_classification,p_id,NOW(),NOW()) 
+                WHERE NOT EXISTS 
+                (SELECT * FROM `classification_classification` WHERE `first_id`=p_classification and `second_id`=p_id);
+              END IF;
+              IF p_owner then
+                UPDATE `classifications` SET `username`=p_username,`updated_at`=NOW() WHERE `id`=p_id;                
+              END IF;
+
+              iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
+                    LEAVE iterator;
+                    END IF;
+                    SET _nextDocument = SUBSTRING_INDEX(p_documents,',',1);
+                    SET _nextlenDocument = LENGTH(_nextDocument);
+                    SET p_document = CAST(TRIM(_nextDocument) AS UNSIGNED);
+                    SELECT `username` into p_documentOwner FROM `documents` WHERE `id`=p_document;
+                    if p_documentOwner!=p_username then
+                      iterator:
+                        LOOP 
+                            IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                            LEAVE iterator;
+                            END IF;
+                            SET _nextAction = SUBSTRING_INDEX(p_actions,',',1);
+                            SET _nextlenAction = LENGTH(_nextAction);
+                            SET p_action = CAST(TRIM(_nextAction) AS UNSIGNED);
+                            INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (p_action,p_document,p_username,NOW(),NOW());
+                            SET p_actions = INSERT(p_actions,1,_nextlenAction + 1,'');
+                        END LOOP;
+                    Else IF p_delete then
+                      SELECT id into p_classification FROM `classifications` WHERE `type`= 1 and `username`=p_username;
+                      INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_classification,p_id,NOW(),NOW()) 
+                      WHERE NOT EXISTS 
+                      (SELECT * FROM `classification_classification` WHERE `first_id`=p_classification and `second_id`=p_id);
+
+                    END IF;
+                    SET p_documents = INSERT(p_documents,1,_nextlenDocument + 1,'');
+                  END LOOP;
+            
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call insert_classification('mi clasificacion',1,'402340421',@res);
+-- SELECT @res as res;
 
 
 -- PROCEDURE insert a new flow

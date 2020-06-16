@@ -12,5 +12,8 @@ php artisan db:seed --class=State;
 php artisan db:seed --class=Action;
 php artisan db:seed --class=action_document_user;
 
+php artisan db:seed --class=action_classification_user;
+
 php artisan db:seed --class=Flow;
+
 -- php artisan db:seed --class=Step;
