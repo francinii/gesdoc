@@ -162,6 +162,10 @@ function confirm(message){
  * 
  */
 function ajaxCall(user){  
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
    // updateCoordenates();  
     description =  $("input[id=flowName]").val();
     data = "";
@@ -202,7 +206,8 @@ function ajaxCall(user){
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {  
+            success: function(result) { 
+                me.data("requestRunning", false); 
                openTable();        
                alerta('Proceso exitoso', message,false);
                // alerts('alerts', 'alert-content',  "El flujo " +  description + " ha sido creado satisfactoriamente",
@@ -216,6 +221,7 @@ function ajaxCall(user){
              
             },
             error: function(request, status, error) {
+                me.data("requestRunning", false);
                 alert(request.responseText);
                 alerta("Ha ocurrido un error inesperado.", "alert-danger");
                 openTable();
@@ -232,7 +238,9 @@ function ajaxCall(user){
  * 
  */
 function ajaxUpdate() {
-
+    var me = $(this);
+    if (me.data("requestRunning"))
+       return;
     description =  $("input[id=flowName]").val();
     data = "";
     datos = [];
@@ -257,7 +265,8 @@ function ajaxUpdate() {
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {                
+            success: function(result) { 
+                me.data("requestRunning", false);               
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -273,6 +282,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
+                me.data("requestRunning", false);
                 alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
@@ -289,7 +299,11 @@ function ajaxUpdate() {
  * @param {string} flowName - flow's name  
  * 
  */
-function ajaxEdit(idFlow,flowName) {     
+function ajaxEdit(idFlow,flowName) {   
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);  
     idFlowForUpdate = idFlow;  //Global variable idFlowForUpdate
        $.ajax({
         url: "flows/{" + idFlow + "}",
@@ -304,6 +318,7 @@ function ajaxEdit(idFlow,flowName) {
             $("#cargandoDiv").css('display', 'block')
         },       
         success: function (response){
+            me.data("requestRunning", false);
            hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
             editFlow(response);
@@ -313,6 +328,7 @@ function ajaxEdit(idFlow,flowName) {
         },
 
         error: function(request, status, error) {
+            me.data("requestRunning", false);
             alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')

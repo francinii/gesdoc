@@ -51,6 +51,10 @@ function validaCreate() {
  *
  */
 function ajaxCreate() {
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     if (validaCreate()) {
         description = $("input[id=CreateDescription]").val();
         var permissions = [];
@@ -69,6 +73,7 @@ function ajaxCreate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -85,6 +90,7 @@ function ajaxCreate() {
             },
 
             error: function(request, status, error) {
+                me.data("requestRunning", false);
                 alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
@@ -109,6 +115,9 @@ function validaEdit() {
  *
  */
 function ajaxUpdate() {
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
     if (validaEdit()) {
         var id = $("input[name=editId]").val();
         var description = $("input[id=editDescription]").val();
@@ -131,6 +140,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -147,6 +157,7 @@ function ajaxUpdate() {
             },
 
             error: function(request, status, error) {
+                me.data("requestRunning", false);
                 alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')

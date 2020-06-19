@@ -691,7 +691,7 @@ function selectAccion(username,action,evento){
 }
 
 function AjaxShare(){
-    var me = $(this);
+var me = $(this);
  if (me.data("requestRunning"))
     return;
     me.data("requestRunning", true);
