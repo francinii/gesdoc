@@ -133,6 +133,7 @@ function ajaxCreate(){
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
+                me.data("requestRunning", false);
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
 
@@ -144,13 +145,14 @@ function ajaxCreate(){
                         " ha sido agregado satisfactoriamente",
                     "alert-success"
                 );
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
         });
@@ -303,18 +305,18 @@ function openClassification(id) {
             $("#cargandoDiv").css('display', 'block')
         },
         success: function (result) {
+            me.data("requestRunning", false);
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-
             createDataTable("table");
-            $("#create").modal("hide");
-            me.data("requestRunning", false);
+            $("#create").modal("hide");            
             $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {
+            me.data("requestRunning", false);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
             $("#cargandoDiv").css('display', 'none')
         },
     });
@@ -386,19 +388,20 @@ function ajaxUpdate() {
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {                
+            success: function(result) {    
+                me.data("requestRunning", false);            
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
-                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
                 me.data("requestRunning", false);
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                alert(request.responseText);                
                 $("#cargandoDiv").css('display', 'none')
             }
         });
@@ -460,15 +463,17 @@ function showshare(){
 
 
         },
-        success: function(result) {    
+        success: function(result) {   
+            me.data("requestRunning", false); 
             openShare(result.currentUsersShare,result.documentInClassificationid);
                               
-            me.data("requestRunning", false);
+            
         },
         error: function(request, status, error) {
+            me.data("requestRunning", false);
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
         }
     });
 
@@ -489,6 +494,7 @@ function openShare(currentUsersShare,documentInClassificationid){
       user['email']=currentUsersShare[index].email;
       user['name']=currentUsersShare[index].name;
       user['owner']=currentUsersShare[index].owner;
+      user['type']='old'
       user['actions']=currentUsersShare[index].actions;
       usersShare.push(user);
   }
@@ -528,13 +534,19 @@ function select_user(e, clickedIndex, tableId){
 
     if(seleccionado){
         appendUserTable(username, name, email, tableId,false);
+        var index=usersShare.findIndex(x => x.username == username);
+        if(index>=0){
+            usersShare[index].type='old';
+        }else{
         var user={};
-        user['username']=username;
-        user['email']=email;
-        user['name']=name;
-        user['owner']=false;
-        user['actions']=[];
-        usersShare.push(user);
+            user['username']=username;
+            user['email']=email;
+            user['name']=name;
+            user['owner']=false;
+            user['type']='new';
+            user['actions']=[];
+            usersShare.push(user);
+        }
     }else {
         
         deleteUserTable(tableId,username);
@@ -579,27 +591,27 @@ function openPermissions(actions){
     habilitado = "";
     usersShare
   for (let index = 0; index < usersShare.length; index++) {
-    
-    cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
-    if(usersShare[index].owner){
-        cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
-        actions.forEach(action => {        
-            cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
-        });
-    }        
-    else{
-        cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
-        actions.forEach(action => {      
-            var actionIndex = usersShare[index].actions.indexOf(action.id); 
-            if (actionIndex !== -1)             
-                cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
-            else
-                cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'"></td>';
-        });
-    }
+    if(usersShare[index].type!='delete'){
+        cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
+        if(usersShare[index].owner){
+            cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
+            actions.forEach(action => {        
+                cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
+            });
+        }        
+        else{
+            cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
+            actions.forEach(action => {      
+                var actionIndex = usersShare[index].actions.indexOf(action.id); 
+                if (actionIndex !== -1)             
+                    cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
+                else
+                    cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'"></td>';
+            });
+        }
 
-    cadena += '</tr>';
-      
+        cadena += '</tr>';
+    }
   }   
     $(".body_table_line").append(cadena);
     $("#card-title").val('Agregar permisos a usuarios');
@@ -616,17 +628,17 @@ function backShareUsers(){
     $("#select_document option:selected").prop("selected", false);    
     $(".body_table").empty();
     for (let index = 0; index < usersShare.length; index++) {
-        if(usersShare[index].owner)$('#owner').val(usersShare[index].username);
-        appendUserTable(usersShare[index].username, usersShare[index].name, usersShare[index].email, 'body_table',usersShare[index].owner);
-        $('#'+usersShare[index].username).prop('selected',true);
-        
+        if(usersShare[index].type!='delete'){
+            if(usersShare[index].owner)$('#owner').val(usersShare[index].username);
+            appendUserTable(usersShare[index].username, usersShare[index].name, usersShare[index].email, 'body_table',usersShare[index].owner);
+            $('#'+usersShare[index].username).prop('selected',true);
+        }
     }
 
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
     $('#share').modal('show');
-
 
 }
 
@@ -643,8 +655,10 @@ function deleteUserTable(tableId, username){
         $('#'+tableId+username).remove();
         $('#'+username).prop('selected',false);
         $('#select_document').selectpicker('refresh');
+
         var index=usersShare.findIndex(x => x.username == username);
-        usersShare.splice(index, 1);
+        usersShare[index].type=='old'? usersShare[index].type='delete':  usersShare.splice(index, 1);
+
     
 }
 
@@ -662,7 +676,6 @@ function changeOwner(e,username){
     usersShare[index].edit=true;
     usersShare[oldeIndex].ver=true;
     usersShare[oldeIndex].edit=true;
-
 }
 
 function selectAccion(username,action,evento){
@@ -682,7 +695,8 @@ function AjaxShare(){
  if (me.data("requestRunning"))
     return;
     me.data("requestRunning", true);
-    
+    var index=usersShare.findIndex(x => x.owner == true);
+    var classificationOwner=usersShare[index].username;
     
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
@@ -692,22 +706,24 @@ function AjaxShare(){
         data: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             _token: $("input[name=_token]").val(),            
-            id:idselect,
+            idselect:idselect,
             currentClassification: currentClassification.id,
-            type:typeContextMenu,
+            typeContextMenu:typeContextMenu,
             usersShare:usersShare,
             documentInClassificationid:JSON.parse($('#documentsId').val()),
+            classificationOwner:classificationOwner,
 
 
         },
-        success: function(result) {    
+        success: function(result) {  
                                    
             me.data("requestRunning", false);
         },
         error: function(request, status, error) {
+            me.data("requestRunning", false);
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
         }
     });
 

@@ -11,7 +11,7 @@ class action_classification_user extends Seeder
      */
     public function run()
     {
-        \DB::table('action_document_user')->insert(array(
+        \DB::table('action_classification_user')->insert(array(
             'action_id'=>4,
             'classification_id'=>5,
             'username'=> "116650288",

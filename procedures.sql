@@ -447,21 +447,19 @@ DELIMITER ;
 
 
 -- ----------------------------
--- PROCEDURE insert a new classification
+-- PROCEDURE delete user for a classification
 -- return 0 success, 1 or 2 error in database, 3 the classification already exists
 -- ----------------------------
-DROP PROCEDURE IF EXISTS `share_classification`;
+DROP PROCEDURE IF EXISTS `delete_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_classification`(IN `p_id` int,In `p_currentClassification` int,IN `p_username` varchar(500),IN `p_documents` varchar(500),IN `p_actions` varchar(500),IN `p_owner` BOOLEAN,IN `p_delete` BOOLEAN, OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `delete_Share_Classification`(IN `p_id` int,In `p_id_parent` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_documents` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
-  DECLARE p_classification Integer;
-  DECLARE p_documentOwner varchar(500);
-  DECLARE p_action Integer;
-  DECLARE p_document Integer;
-  DECLARE _nextDocument TEXT DEFAULT NULL;
-  DECLARE _nextlenDocument INT DEFAULT NULL;
-  DECLARE _nextAction TEXT DEFAULT NULL;
-  DECLARE _nextlenAction INT DEFAULT NULL;
+  DECLARE _classification_owner varchar(500) DEFAULT NULL;
+  DECLARE _principal_classification INT DEFAULT NULL;
+  DECLARE _document_owner varchar(500) DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _document TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -469,54 +467,31 @@ BEGIN
     ROLLBACK;
 	END;
 
-  DECLARE EXIT HANDLER FOR SQLWARNING
-	BEGIN
-		-- ERROR
-    SET res = -2;
-    ROLLBACK;
-	END;
             START TRANSACTION;
-              SELECT id into p_classification FROM `classifications` WHERE `type`= 2 and `username`=p_username;
-              IF p_delete then
-                DELETE FROM `classification_classification` WHERE `first_id`=p_currentClassification and `second_id`=p_id;
-              ELSE
-                INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_classification,p_id,NOW(),NOW()) 
-                WHERE NOT EXISTS 
-                (SELECT * FROM `classification_classification` WHERE `first_id`=p_classification and `second_id`=p_id);
-              END IF;
-              IF p_owner then
-                UPDATE `classifications` SET `username`=p_username,`updated_at`=NOW() WHERE `id`=p_id;                
-              END IF;
-
+            
+                SELECT `username` into _classification_owner FROM `classifications` WHERE `id`=p_id;
+                IF _classification_owner=p_username THEN
+                   UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
+                END IF;
+                DELETE FROM `classification_classification` WHERE `first_id`=p_id_parent and `second_id`=p_id;
+                DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
               iterator:
                 LOOP
                     IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
                     LEAVE iterator;
                     END IF;
-                    SET _nextDocument = SUBSTRING_INDEX(p_documents,',',1);
-                    SET _nextlenDocument = LENGTH(_nextDocument);
-                    SET p_document = CAST(TRIM(_nextDocument) AS UNSIGNED);
-                    SELECT `username` into p_documentOwner FROM `documents` WHERE `id`=p_document;
-                    if p_documentOwner!=p_username then
-                      iterator:
-                        LOOP 
-                            IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
-                            LEAVE iterator;
-                            END IF;
-                            SET _nextAction = SUBSTRING_INDEX(p_actions,',',1);
-                            SET _nextlenAction = LENGTH(_nextAction);
-                            SET p_action = CAST(TRIM(_nextAction) AS UNSIGNED);
-                            INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (p_action,p_document,p_username,NOW(),NOW());
-                            SET p_actions = INSERT(p_actions,1,_nextlenAction + 1,'');
-                        END LOOP;
-                    Else IF p_delete then
-                      SELECT id into p_classification FROM `classifications` WHERE `type`= 1 and `username`=p_username;
-                      INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_classification,p_id,NOW(),NOW()) 
-                      WHERE NOT EXISTS 
-                      (SELECT * FROM `classification_classification` WHERE `first_id`=p_classification and `second_id`=p_id);
+                    SET _next = SUBSTRING_INDEX(p_documents,',',1);
+                    SET _nextlen = LENGTH(_next);
+                    SET _document = CAST(TRIM(_next) AS UNSIGNED);
+                    SELECT `username` into _document_owner FROM `documents` WHERE `id`=_document;
+                    IF _document_owner=p_username THEN
+                      select `id` into _principal_classification FROM `classifications` where `type`=1 and `username`=p_username;
+                      INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (_principal_classification,p_id,NOW(),NOW());
+                    ELSE
+                      DELETE FROM `action_document_user` WHERE `document_id`=_document and `username`=p_username;
 
                     END IF;
-                    SET p_documents = INSERT(p_documents,1,_nextlenDocument + 1,'');
+                    SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
                   END LOOP;
             
             COMMIT;
@@ -525,9 +500,114 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call insert_classification('mi clasificacion',1,'402340421',@res);
+-- call delete_Share_Classification(5, 4,'116650288','1','402340420',@res);
 -- SELECT @res as res;
 
+
+-- ----------------------------
+-- PROCEDURE add user for a classification
+-- return 0 success, 1 or 2 error in database, 3 the classification already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `add_Share_Classification`;
+DELIMITER ;;
+CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,In `p_id_parent` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _action TEXT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+      
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+                INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_id_parent,p_id,NOW(),NOW());
+                IF p_classification_owner=p_username THEN
+                  UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
+                ELSE
+                  iterator:
+                    LOOP
+                        IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                        LEAVE iterator;
+                        END IF;
+                        SET _next = SUBSTRING_INDEX(p_actions,',',1);
+                        SET _nextlen = LENGTH(_next);
+                        SET _action = CAST(TRIM(_next) AS UNSIGNED);
+                        INSERT INTO `action_classification_user`(`action_id`, `classification_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
+                        SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
+                      END LOOP;
+                END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call add_Share_Classification(5, 4,'116650288','4',@res);
+-- SELECT @res as res;
+
+
+
+-- ----------------------------
+-- PROCEDURE add user for a classification
+-- return 0 success, 1 or 2 error in database, 3 the classification already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `update_Share_Classification`;
+DELIMITER ;;
+CREATE  PROCEDURE `update_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _action TEXT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+      
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+              DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
+              IF p_classification_owner=p_username THEN
+                UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
+              ELSE
+                iterator:
+                  LOOP
+                      IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                      LEAVE iterator;
+                      END IF;
+                      SET _next = SUBSTRING_INDEX(p_actions,',',1);
+                      SET _nextlen = LENGTH(_next);
+                      SET _action = CAST(TRIM(_next) AS UNSIGNED);
+                      INSERT INTO `action_classification_user`(`action_id`, `classification_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
+                      SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
+                    END LOOP;
+              END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call update_Share_Classification(5,'116650288','4',@res);
+-- SELECT @res as res;
 
 -- PROCEDURE insert a new flow
 -- return 0 success, 1 or 2 database error, 3 the department already exists
