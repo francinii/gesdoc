@@ -14,23 +14,7 @@
              <label for="descriptionEdit">{{ __('app.home.edit.name') }}</label>
              <input type="text" class="form-control" id="descriptionEdit" placeholder="{{ __('app.home.edit.name') }}" name="descriptionEdit" value="">
             </div>
-            <div class="card">
-                <div class="card-header">{{ __('app.home.edit.move') }} <label id="editLableClassification"></label></div>
-                <div class="card-body">
-                
-                    
-                    <input id="editClassification" name="editClassification" type="hidden">
-            
-                   <span class="btn badge badge-danger badge-pill" onclick="editBackClassification()"><i class="fas fa-long-arrow-alt-left"></i></span>
-                  
-                 
-                  <div id="listEdit" class="list-group">                    
-                    
 
-                  </div>  
-                  
-                </div>
-            </div>
                    
          </form>
       </div>

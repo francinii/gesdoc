@@ -17,6 +17,7 @@
                             {{csrf_field()}}                             
                             <div class="form-group">
                                 <input id="owner" style="display:none">
+                                <input id="documentsId" style="display:none">
                                 <label class="control-label" for="searchUser">{{ __('app.home.share.shareWithUser') }}</label>                                                        
                                 <select id='select_document' class="form-control selectpicker"  data-live-search="true" multiple >                
                                 @foreach ($departments as $department)                                                            
@@ -60,8 +61,10 @@
                 <thead class="head_table thead-dark ">   
                         <th>{{ __('app.home.share.user') }}</th>
                         <th>{{ __('app.home.share.owner') }}</th>
-                        @foreach ($actions as $action)                  
-                        <th id = "{{$action->id}}" >{{$action->description}}</th>
+                        @foreach ($actions as $action) 
+                         @if ($action->id != 4)             
+                            <th id = "{{$action->id}}" >{{$action->description}}</th>
+                            @endif
                         @endforeach             
                 </thead>
                 <tbody class="body_table_line" >    

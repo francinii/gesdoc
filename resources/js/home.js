@@ -7,9 +7,9 @@ var descriptionEdit;
 var typeContextMenu;
 var currentClassification;
 var listClassification = [];
-var allClassifications
-var usersShare=[]
-var currentTable="1" // 1 = my documents, 2 share with me, 3 my documents in flows
+var allClassifications;
+var usersShare=[];
+var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
 /**
 * draw the route follow for the user  
 *
@@ -132,6 +132,7 @@ function ajaxCreate(){
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
+                me.data("requestRunning", false);
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
 
@@ -143,13 +144,14 @@ function ajaxCreate(){
                         " ha sido agregado satisfactoriamente",
                     "alert-success"
                 );
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
         });
@@ -172,108 +174,8 @@ function edit() {
     $("input[name=descriptionEdit]").val(descriptionEdit);
     
 
-    drawMoveEdit(currentClassification);
-
     $("#edit").modal("show");
 }
-/**
- * 
- * @param {array} classifications to drawn in move
- */
-
-function drawMoveEdit(classifications){
-    $("input[id=editClassification]").val(classifications.id);
-    $("label[id=editLableClassification]").text('"'+classifications.description+'"');
-    
-    $("#listEdit").empty();
-    classifications.classifications.forEach(function (classification, index) {
-        if(classification.id!=$("input[id=idEdit]").val())
-        $("#listEdit").append(
-            '<li id="listEdit-' + classification.id +'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">' +
-                classification.description +
-                '<span class="btn badge badge-secondary badge-pill"  onclick="editEnterClassification(' +
-                classification.id +
-                ')"><i class="fas fa-long-arrow-alt-right"></i></span>' +
-                "</li>"
-        );
-    });
-}
-
-/**
- * modal to edit, open a classification
- *
- * @param {Integer} id of the classification opend
- * 
- */
-
-function editEnterClassification(id) {
-    var review=[]
-    var openedClassification=editFindClassification(allClassifications['classification'],id,review);
-    if(openedClassification!=true && openedClassification!=null){
-        drawMoveEdit(openedClassification);
-    }
-}
-
-/**
- * modal to edit, back to the parent classification
- *@param {Object} allClassifications list of all classification
- */
-function editBackClassification() {
-    var review=[]
-    var openedClassification=editFindParentClassification(allClassifications['classification'], $("input[id=editClassification]").val(),review);
-    if(openedClassification!=true && openedClassification!=null){
-        drawMoveEdit(openedClassification);
-    }
-}
-/**
- * modal to edit, find the parent of a classification
- * @param {Object} Classification list of all classification
- * @param {Integer} id of the classification
- */
-function editFindParentClassification(Classification,id,review){
-    var openedClassification
-    if(Classification.id==id) 
-        return true;
-    if(review[Classification.id]==null){    
-
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            if(Classification.classifications[index].id==id)
-            return Classification;            
-        }
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            openedClassification=editFindParentClassification(Classification.classifications[index],id,review);
-            review[Classification.id]=1;
-            if(openedClassification!=null){
-                return openedClassification
-            }       
-        }
-    }
-}
-
-/**
- * modal to edit, find the classification
- * @param {Object} allClassification list of all classification
- * @param {Integer} id of the classification
- */
-function editFindClassification(Classification,id,review){
-    var openedClassification
-
-    if(review[Classification.id]==null){  
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            if(Classification.classifications[index].id==id)
-            return Classification.classifications[index];            
-        }
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            openedClassification=editFindClassification(Classification.classifications[index],id,review);
-            review[Classification.id]=1;      
-            if(openedClassification!=null){
-                return openedClassification
-            }
-        }
-    }
- 
- }
-
 
 
 /**
@@ -302,18 +204,18 @@ function openClassification(id) {
             $("#cargandoDiv").css('display', 'block')
         },
         success: function (result) {
+            me.data("requestRunning", false);
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-
             createDataTable("table");
-            $("#create").modal("hide");
-            me.data("requestRunning", false);
+            $("#create").modal("hide");            
             $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {
+            me.data("requestRunning", false);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
             $("#cargandoDiv").css('display', 'none')
         },
     });
@@ -379,25 +281,26 @@ function ajaxUpdate() {
                 currentClassification: currentClassification.id,
                 currentTable:currentTable,
                 description: description,
-                parentClassification:$("input[id=editClassification]").val(),
+        
 
             },
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {                
+            success: function(result) {    
+                me.data("requestRunning", false);            
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
-                me.data("requestRunning", false);
+                
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
-                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
                 me.data("requestRunning", false);
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                alert(request.responseText);                
                 $("#cargandoDiv").css('display', 'none')
             }
         });
@@ -459,14 +362,17 @@ function showshare(){
 
 
         },
-        success: function(result) {    
-            openShare(result.currentUsersShare);                        
-            me.data("requestRunning", false);
+        success: function(result) {   
+            me.data("requestRunning", false); 
+            openShare(result.currentUsersShare,result.documentInClassificationid,result.classificationInClassificationid);
+                              
+            
         },
         error: function(request, status, error) {
+            me.data("requestRunning", false);
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
         }
     });
 
@@ -482,15 +388,15 @@ function openShare(currentUsersShare){
       if(currentUsersShare[index].owner)$('#owner').val(currentUsersShare[index].username);
       appendUserTable(currentUsersShare[index].username, currentUsersShare[index].name, currentUsersShare[index].email, 'body_table',currentUsersShare[index].owner);
       $('#'+currentUsersShare[index].username).prop('selected',true);
-      var user=[];
+      var user={};
       user['username']=currentUsersShare[index].username;
       user['email']=currentUsersShare[index].email;
       user['name']=currentUsersShare[index].name;
       user['owner']=currentUsersShare[index].owner;
+      user['type']='old'
       user['actions']=currentUsersShare[index].actions;
       usersShare.push(user);
   }
-
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
@@ -526,13 +432,19 @@ function select_user(e, clickedIndex, tableId){
 
     if(seleccionado){
         appendUserTable(username, name, email, tableId,false);
-        var user=[];
-        user['username']=username;
-        user['email']=email;
-        user['name']=name;
-        user['owner']=false;
-        user['actions']=[];
-        usersShare.push(user);
+        var index=usersShare.findIndex(x => x.username == username);
+        if(index>=0){
+            usersShare[index].type='old';
+        }else{
+        var user={};
+            user['username']=username;
+            user['email']=email;
+            user['name']=name;
+            user['owner']=false;
+            user['type']='new';
+            user['actions']=[4];
+            usersShare.push(user);
+        }
     }else {
         
         deleteUserTable(tableId,username);
@@ -577,27 +489,29 @@ function openPermissions(actions){
     habilitado = "";
     usersShare
   for (let index = 0; index < usersShare.length; index++) {
-    
-    cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
-    if(usersShare[index].owner){
-        cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
-        actions.forEach(action => {        
-            cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
-        });
-    }        
-    else{
-        cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
-        actions.forEach(action => {      
-            var actionIndex = usersShare[index].actions.indexOf(action.id); 
-            if (actionIndex !== -1)             
-                cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
-            else
-                cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'"></td>';
-        });
-    }
+    if(usersShare[index].type!='delete'){
+        cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
+        if(usersShare[index].owner){
+            cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
+            actions.forEach(action => {  
+                if(action.id!=4)      
+                cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
+            });
+        }        
+        else{
+            cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
+            actions.forEach(action => {      
+                var actionIndex = usersShare[index].actions.indexOf(action.id); 
+                if(action.id!=4)
+                if (actionIndex !== -1)             
+                    cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
+                else
+                    cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'"></td>';
+            });
+        }
 
-    cadena += '</tr>';
-      
+        cadena += '</tr>';
+    }
   }   
     $(".body_table_line").append(cadena);
     $("#card-title").val('Agregar permisos a usuarios');
@@ -614,17 +528,17 @@ function backShareUsers(){
     $("#select_document option:selected").prop("selected", false);    
     $(".body_table").empty();
     for (let index = 0; index < usersShare.length; index++) {
-        if(usersShare[index].owner)$('#owner').val(usersShare[index].username);
-        appendUserTable(usersShare[index].username, usersShare[index].name, usersShare[index].email, 'body_table',usersShare[index].owner);
-        $('#'+usersShare[index].username).prop('selected',true);
-        
+        if(usersShare[index].type!='delete'){
+            if(usersShare[index].owner)$('#owner').val(usersShare[index].username);
+            appendUserTable(usersShare[index].username, usersShare[index].name, usersShare[index].email, 'body_table',usersShare[index].owner);
+            $('#'+usersShare[index].username).prop('selected',true);
+        }
     }
 
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
     $('#share').modal('show');
-
 
 }
 
@@ -641,8 +555,10 @@ function deleteUserTable(tableId, username){
         $('#'+tableId+username).remove();
         $('#'+username).prop('selected',false);
         $('#select_document').selectpicker('refresh');
+
         var index=usersShare.findIndex(x => x.username == username);
-        usersShare.splice(index, 1);
+        usersShare[index].type=='old'? usersShare[index].type='delete':  usersShare.splice(index, 1);
+
     
 }
 
@@ -656,11 +572,9 @@ function changeOwner(e,username){
     var list= $('#pemission-'+index+' td input:checkbox');
     $('#pemission-'+oldeOwner+' td input:checkbox').prop('disabled',false);
     $('#pemission-'+username+' td input:checkbox').prop('disabled',true);
-    usersShare[index].ver=true;
-    usersShare[index].edit=true;
-    usersShare[oldeIndex].ver=true;
-    usersShare[oldeIndex].edit=true;
-
+    usersShare[index].actions=[];
+    usersShare[oldeIndex].actions=[4];
+    
 }
 
 function selectAccion(username,action,evento){
@@ -676,35 +590,50 @@ function selectAccion(username,action,evento){
 }
 
 function AjaxShare(){
-    var me = $(this);
+var me = $(this);
  if (me.data("requestRunning"))
     return;
     me.data("requestRunning", true);
+    var classificationOwner=$('#owner').val();  
     
-    var users=
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
-        method: "get",
+        method: "post",
            
 
         data: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            _token: $("input[name=_token]").val(),
-            
-            id:idselect,
-            type:typeContextMenu,
-            
+            _token: $("input[name=_token]").val(),            
+            idselect:idselect,
+            currentClassification: currentClassification.id,
+            currentTable:currentTable,
+            typeContextMenu:typeContextMenu,
+            usersShare:usersShare,
+            classificationOwner:classificationOwner,
 
 
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
         },
         success: function(result) {    
-                                   
-            me.data("requestRunning", false);
+            me.data("requestRunning", false);  
+            $("#cargandoDiv").css('display', 'none')          
+            $("#table").DataTable().destroy();
+            $("#divTable").html(result);
+            createDataTable("table");
+            $("#share").modal("hide");
+            alerts('alerts', 'alert-content',"Usuarios agregados satisfactoriamente", "alert-success");
+            usersShare=[];           
+            
         },
+
         error: function(request, status, error) {
+            me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
-            me.data("requestRunning", false);
+            
         }
     });
 

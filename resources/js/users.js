@@ -75,6 +75,10 @@ function edit(user, email, name, roleId, departmentId) {
 }
 
 function obtenerDatos() {
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     var username = $("input[name=user_create]").val();
     $("#buscando").modal("show");
     $.ajax({
@@ -85,6 +89,7 @@ function obtenerDatos() {
             $("#cargandoDiv").css('display', 'block')
         },
         success: function (data) {
+            me.data("requestRunning", false);
             $("#buscando").modal("hide");
             var encondrado = data.encontrado;
             if (encondrado) {
@@ -98,6 +103,7 @@ function obtenerDatos() {
             $("#cargandoDiv").css('display', 'none')
         },
         error: function (request, status, error) {
+            me.data("requestRunning", false);
             $("#buscando").modal("hide");
             $("#alertModalTitle").text('Error');
             $("#alertModalDescription").text('Ha ocurrido un error inesperado.');
@@ -114,6 +120,10 @@ function obtenerDatos() {
  *
  */
 function ajaxUpdate() {
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     if (validaEdit()) {
         var id = $("input[id=user_edit]").val(); 
         var user=  $("input[id=user_edit]").val();     
@@ -145,6 +155,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
@@ -158,6 +169,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 $("#cargandoDiv").css('display', 'none')
@@ -220,6 +232,10 @@ function validaCreate() {
  *
  */
 function ajaxCreate() {
+    var me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     if (validaCreate()) {
         var user = $("input[name=user_create]").val();
         var name = $("input[name=name_create]").val();
@@ -247,6 +263,7 @@ function ajaxCreate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
@@ -260,6 +277,7 @@ function ajaxCreate() {
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function (request, status, error) {
+                me.data("requestRunning", false);
                 var user = request.responseJSON["errors"]["username"];
                 if (user[0] == "The username has already been taken.") {
                     $("input[name=user_create]").addClass("is-invalid");

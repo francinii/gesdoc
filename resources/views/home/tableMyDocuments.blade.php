@@ -14,18 +14,18 @@
             </thead>
             <tbody >
                 
-                @foreach ($classification->classifications as $classifications)
-                <tr onclick="openClassification({{$classifications->id}})">
+                @foreach ($classifications as $classification)
+                <tr onclick="openClassification({{$classification->id}})">
                    
                     <td class="text-center" ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
-                    <td class="text-center">{{$classifications->description}}</td>                           
-                    <td class="text-center">{{$classifications->created_at}}</td>  
-                    <td class="text-center">{{$classifications->updated_at}}</td>
-                    <td style="display:none;" class="text-center">{{$classifications->id}}</td>
+                    <td class="text-center">{{$classification->description}}</td>                           
+                    <td class="text-center">{{$classification->created_at}}</td>  
+                    <td class="text-center">{{$classification->updated_at}}</td>
+                    <td style="display:none;" class="text-center">{{$classification->id}}</td>
           
                 </tr>
                 @endforeach
-                @foreach ($classification->documents as $document)
+                @foreach ($mainClassification->documents as $document)
                 <tr>
 
                      @if ($document->type=="doc")
@@ -48,10 +48,8 @@
  </table>
  <script>
     $( document ).ready(function() {
-        var js_data = '<?php echo json_encode($classification); ?>';        
+        var js_data = '<?php echo json_encode($mainClassification); ?>';        
          currentClassification=JSON.parse(js_data );
-        var js_data = '<?php echo json_encode($allClassifications); ?>';        
-        allClassifications=JSON.parse(js_data );
          drawRoute();
     });
 </script>

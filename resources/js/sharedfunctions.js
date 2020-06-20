@@ -81,17 +81,18 @@ function ajaxDelete(id, url1,table){
             $("#cargandoDiv").css('display', 'block')
         },
         success: function(result) {  
+            me.data("requestRunning", false);
             $("#"+table).DataTable().destroy();         
             $("#"+divTable).html(result);            
             createDataTable(table);
             $("#confirmar").modal("hide");
             alerts('alerts', 'alert-content',"Elemento eliminado correctamente.", "alert-success");
-            me.data("requestRunning", false);
+            
             $("#cargandoDiv").css('display', 'none')
         },
-        error: function (request, status, error) {    
-            $("#confirmar").modal("hide");  
-            me.data("requestRunning", false);      
+        error: function (request, status, error) {  
+            me.data("requestRunning", false);    
+            $("#confirmar").modal("hide");                  
             alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
             alert(request.responseText);
             $("#cargandoDiv").css('display', 'none')

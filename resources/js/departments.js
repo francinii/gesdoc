@@ -29,6 +29,10 @@ function validaCreate() {
  *  
  */
 function ajaxCreate() {
+    ar me = $(this);
+ if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     if (validaCreate()) {       
         var description = $("input[name=nameCreate]").val();       
 
@@ -44,6 +48,7 @@ function ajaxCreate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -54,7 +59,7 @@ function ajaxCreate() {
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
-                
+                    me.data("requestRunning", false);
                     alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
                     $("#cargandoDiv").css('display', 'none')
@@ -105,6 +110,10 @@ function validaEdit() {
  */
 
 function ajaxUpdate() {
+    var me = $(this);
+    if (me.data("requestRunning"))
+    return;
+    me.data("requestRunning", true);
     if (validaEdit()) {
         var id = $("input[id=idEdit]").val();
         var description = $("input[name=nameEdit]").val();
@@ -124,6 +133,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -134,6 +144,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'none')
             },
             error: function(request, status, error) {
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 $("#cargandoDiv").css('display', 'none')
