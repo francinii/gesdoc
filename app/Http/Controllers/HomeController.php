@@ -6,6 +6,7 @@ use App\Action;
 use App\Classification;
 use App\Department;
 use App\Document;
+use App\Flow;
 use App\Http\Controllers\Controller;
 use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -37,8 +38,9 @@ class HomeController extends Controller
         $classification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
         $allClassifications = $this->classifications($classification);
         $departments = Department::all();
+        $flows  = Flow::all();
         $actions = Action::where('type', '=', 1)->get();
-        return view('home.home', compact('classification', 'allClassifications', 'departments', 'actions','aver'));
+        return view('home.home', compact('classification', 'allClassifications','flows', 'departments', 'actions','aver'));
     }
 
     /**

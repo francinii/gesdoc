@@ -601,3 +601,46 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
+
+
+
+
+
+
+
+-- PROCEDURE insert a new row to the document table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `insert_document`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_mode` int, IN `p_route` varchar(500), IN `p_content` longtext, IN `p_id_flow` int, IN `p_id_state` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `version` int,  OUT `res` TINYINT  UNSIGNED )
+BEGIN
+  DECLARE document_id Integer;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+                INSERT INTO `documents`(flow_id, state_id, username, description, type,	summary, code, version, created_at, updated_at ) VALUES (p_id_flow, p_id_state, p_username, p_description,p_type, p_summary, p_code, version,NOW(),NOW());
+                SET document_id =  LAST_INSERT_ID();
+                
+           
+            IF p_mode = 1 THEN
+                INSERT INTO `document_editable`(document_id, content, created_at, updated_at) VALUES (document_id, content, NOW(),NOW());
+             END IF; 
+            IF  p_mode = 2 THEN
+                INSERT INTO `document_storage`(document_id,	route, created_at, updated_at ) VALUES (document_id, p_route, NOW(),NOW());
+            END IF; 
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;

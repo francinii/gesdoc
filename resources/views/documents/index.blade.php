@@ -22,6 +22,7 @@
         </div>
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-9">
+            <input type="hidden" id = "docType">
             @include('partials.alert')
             @include('documents.table')
         </div>

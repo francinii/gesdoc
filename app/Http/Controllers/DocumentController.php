@@ -32,11 +32,8 @@ class DocumentController extends Controller
      */
     public function index()
     {
-      //  $usuario = Auth::user()->id;
-       // $flows =Flow::where('user_id', '=', $usuario)->get();
-        $documents = Document::all();
-        $flows = Flow::all();
-        return view('documents.index',compact('documents', 'flows'));
+      
+      
     }
 
     /**
@@ -74,15 +71,31 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $this->validator($request->all())->validate();
-        $datos = $request->except(['_token', 'user_id'], 'documents');
+       // $datos = $request->except(['_token', 'user_id'], 'documents');
         $document = $request->except('_token', 'documents');
-        $usuario =  $document['user_id'];
-        $idDocument = Document::insertGetId($datos);
-        
-            DB::table('document_user')->insert([
-                'document_id' => $idDocument,
-                'user_id' => $usuario ,
-            ]);
+        $username =  $document['user_id'];
+        $id_flow =  $document['flow_id'];        
+        $route =  $document['route'];
+        $content =  $document['content'];
+        $code =  $document['code'];
+        $summary =  $document['summary'];
+        $type =  $document['docType'];
+        $id_state =  $document['state_id'];
+        $description =  $document['description'];
+        $version =  $document['version'];
+        $mode =  $document['mode'];
+        //falta el type
+        DB::select("call insert_document($mode, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version, @res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] == 3) {
+            throw new DecryptException('El documento ya existe en la  base de datos');
+        }
+
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('Error al procesar la petición la base de datos');
+        }
+
         
 
         return DocumentController::refresh();

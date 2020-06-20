@@ -23,9 +23,14 @@ Route::get('/', function () {
 
 
 
-Route::get('textEditor',  function () {
-    return view('textEditor/textEditor');
+Route::get('documents/textEditor',  function () {
+    return view('documents/textEditor');
 });
+
+Route::get('documents/spreadSheetEditor',  function () {
+    return view('documents/spreadSheetEditor');
+});
+
 
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 

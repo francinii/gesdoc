@@ -289,7 +289,8 @@ function ajaxUpdate() {
  * @param {string} flowName - flow's name  
  * 
  */
-function ajaxEdit(idFlow,flowName) {     
+function ajaxEdit(idFlow,flowName) {   
+   
     idFlowForUpdate = idFlow;  //Global variable idFlowForUpdate
        $.ajax({
         url: "flows/{" + idFlow + "}",
@@ -303,13 +304,15 @@ function ajaxEdit(idFlow,flowName) {
         beforeSend: function(){
             $("#cargandoDiv").css('display', 'block')
         },       
-        success: function (response){
-           hideAlert('alerts');
+        success: function (response){          
+            hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
             editFlow(response);
             $("#cargandoDiv").css('display', 'none')
+           
         },
         done: function(response) {
+            
         },
 
         error: function(request, status, error) {
@@ -802,7 +805,7 @@ function addElementToCanvas(id,contenido){
 function createDraggable(id){
     drag =new PlainDraggable(document.getElementById(id), {
         onMove: function() { movimiento() },
-        zIndex: false,      
+        zIndex: false,        
     });    
     arrayDraggable.push({id: id, drag: drag}); 
 }
@@ -905,7 +908,10 @@ if(arrayLines)
             startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
             middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
             //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
+            
         });
+       
+      //  line.positionByWindowResize = false,
         line.setOptions({startSocket: 'auto', endSocket: 'auto'});
         line.show(); 
         arrayLines.push({id: idLine, line: line});  

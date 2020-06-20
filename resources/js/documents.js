@@ -26,46 +26,71 @@ function validaCreate() {
  * Send an ajax request in order to add a flow 
  * 
  * @param {integer} user - user id
+ * @param {integer} mode - define if is a document for edit or for storage.  0-edit 1-storage
  * 
  */
-function ajaxCreate(user) {
+function ajaxCreateDoc(user, mode) {
     if (validaCreate()) {
         var flow = $("#flowCreate option:selected").val();
         var descripcion = $("input[id=descriptionCreate]").val();
+        var summary = $("#summary").val();
+        var type = $("#docType").val();
+        var code  = $("#code").val();        
+        var version = 1;
+        var route;
+        var content;
+        if(type == 1)
+            docType = 'docx';
+        else if(type == 2)
+            docType = 'xlsx';      
+        
         $.ajax({
-            url: "documents",
+            url: "home",
             method: "POST",
             data: {
                 _token: $("input[name=_token]").val(),
                 description: descripcion,
                 flow_id: flow,
-                user_id: user
+                user_id: user,
+                state_id : 1,
+                summary: summary,
+                docType:docType,
+                code:code,
+                route:route,
+                content:content,
+                version:version,
+                mode:mode,
             },
 
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {
-                $("#table").html(result);
-                $("#table")
-                    .DataTable()
-                    .destroy();
+            success: function (result) {
+                $("#table").DataTable().destroy();
+                $("#divTable").html(result);
+
                 createDataTable("table");
                 $("#create").modal("hide");
                 alerts('alerts', 'alert-content',
                     "El documento " +
                         description +
-                        " ha sido creaado satisfactoriamente",
+                        " ha sido agregado satisfactoriamente",
                     "alert-success"
                 );
+                me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none');
+
+                
+               // window.location="documents/textEditor";
+               // window.location="documents/spreadSheetEditor";
+
+            },
+            error: function (request, status, error) {
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                alert(request.responseText);
+                me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
             },
-
-            error: function(request, status, error) {
-                alert(request.responseText);
-                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                $("#cargandoDiv").css('display', 'none')
-            }
         });
     }
 }
@@ -152,3 +177,54 @@ function ajaxUpdate() {
         });
     }
 }
+
+
+$("html")
+    .on("click", "#btnCreateDocument", function (e) {
+        var td = e.currentTarget;
+        typeContextMenu = "";
+        idselect = "";
+        descriptionEdit = "";
+        var top = e.pageY - 10;
+        var left = e.pageX - 90;
+
+        $("#context-menu-create")
+            .css({
+                display: "block",
+                top: top,
+                left: left,
+            })
+            .addClass("show");       
+        return false; //blocks default Webbrowser right click menu
+    })
+    .on("click", function () {
+        $("#context-menu-create").removeClass("show").hide();
+    });
+
+
+
+
+function newDocument(e){
+   var top = e.pageY - 10;
+    var left = e.pageX - 90;
+
+    $("#context-menu-create")
+        .css({
+            display: "block",
+            top: top,
+            left: left,
+        })
+        .addClass("show");
+}    
+
+
+
+function createDoc(type){
+    $('#docType').val(type);
+if(type == 1 || type == 2)
+    $('#createDocument').modal('show');    
+else if(type == 3)
+    $('#create').modal('show'); 
+}
+
+

@@ -7,6 +7,78 @@
   color: white;
 }
 
+.x-spreadsheet-toolbar {
+  width: 100% !important;
+}
+
+.x-spreadsheet-sheet {
+  width: 100% !important;
+}
+.x-spreadsheet-sheet .x-spreadsheet-overlayer {
+  width: 100% !important;
+}
+
+.button-group button.btn {
+  border-radius: 0rem;
+}
+.button-group .btn-success {
+  color: #fff !important;
+  background-color: #218838 !important;
+  border-color: #218838 !important;
+}
+.button-group .btn-info {
+  color: #fff !important;
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8 !important;
+}
+.button-group .btn-primary {
+  color: #fff !important;
+  background-color: #007bff !important;
+  border-color: #007bff !important;
+}
+.button-group .btn-danger {
+  color: #fff !important;
+  background-color: #c82333 !important;
+  border-color: #c82333 !important;
+}
+
+.btn-block + .btn-block {
+  margin: 0rem 0rem 0.5rem 0rem;
+}
+
+[type=file] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+[type=file] label {
+  margin: 0;
+}
+
+[type=file] + label {
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  margin-top: 0.5rem;
+  outline: none;
+  padding: 0.375rem 0.75rem;
+  position: relative;
+  transition: all 0.3s;
+  vertical-align: middle;
+}
+[type=file] + label.btn-3 {
+  border-radius: 0.25rem;
+  background-color: #17a2b8;
+  overflow: hidden;
+}
+[type=file] + label.btn-3 span {
+  display: inline-block;
+  height: 100%;
+  transition: all 0.3s;
+  width: 100%;
+}
+
 .circle {
   width: 80px;
   height: 80px;

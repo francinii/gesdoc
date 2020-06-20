@@ -16,14 +16,24 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->bigInteger('flow_id')->unsigned()->nullable();   
+            $table->bigInteger('flow_id')->unsigned()->nullable(); 
+            $table->bigInteger('state_id')->unsigned()->nullable();   
             $table->string('username');
             $table->string('description',500);
-            $table->string('type',500);         
+            $table->string('type',500);   //ejemplo png, xls, doc, txt etc.
+            
+            //Metadatos
+            $table->string('summary',1500);
+            $table->string('code',500);
+            $table->bigInteger('version')->unsigned();
+           // $table->string('route',500);
+            
             $table->timestamps();
 
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null');
+            $table->foreign('state_id')->references('id')->on('states')->onDelete('set null');
+           
 
           
         });

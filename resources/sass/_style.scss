@@ -3,7 +3,6 @@
 
 }
 
-
 .navbar-light {
     .navbar-nav{
         .nav-link {
@@ -13,6 +12,88 @@
 }
 
 
+.x-spreadsheet-toolbar{
+    width: 100% !important;
+}
+.x-spreadsheet-sheet{
+    width: 100% !important;
+    .x-spreadsheet-overlayer{
+        width: 100% !important;
+    }
+}
+
+
+
+.button-group {  
+    button.btn {
+        border-radius:0rem;        
+    }    
+    .btn-success {
+        color: #fff !important;
+        background-color: $success !important;
+        border-color:$success !important;
+    }
+    .btn-info {
+        color: #fff !important;
+        background-color: $info !important;
+        border-color: $info !important;
+    }
+    .btn-primary {
+        color: #fff !important;
+        background-color: $primary !important;
+        border-color: $primary !important;
+    }
+    .btn-danger {
+        color: #fff !important;
+        background-color: $danger !important;
+        border-color: $danger !important;
+    }
+
+    
+}
+
+
+.btn-block + .btn-block {
+    margin: 0rem 0rem .5rem 0rem;
+}
+
+[type="file"] {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+    label {
+        margin: 0;
+    }
+  }
+  
+  [type="file"] + label {     
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    margin-top: .5rem;
+    
+    outline: none;
+    padding: .375rem .75rem;
+    position: relative;
+    transition: all 0.3s;
+    vertical-align: middle;
+    
+
+    &.btn-3 {
+        border-radius: .25rem;
+        background-color: $info;        
+        overflow: hidden;
+        
+        span {
+          display: inline-block;
+          height: 100%;
+          transition: all 0.3s;
+          width: 100%;
+        }   
+      
+      }
+    }
 
 
 

@@ -60,7 +60,8 @@
         </div>
         <div class="modal-body" id = "modal-body-step-back" style="display:none">
             <button class="btn btn-info" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
-            <div class="card container inside_step " style="padding:1%">                
+            <div class="card container inside_step " style="padding:1%">    
+                <div><h5>Asociar permisos a usuarios</h5></div>            
                 <div id = "alertPermission" class="alert alert-dismissable" style="display: none">
                     <button type="button" class="close" onclick="hideAlert('alertPermission')">&times;</button>
                     <div id="alert-permission-content"> </div>    
@@ -77,10 +78,13 @@
                 <tbody class="body_table_line" >                         
                 </tbody>
                 </table>
+                <div class="form-group">
+                    <button data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
+                        <i class="fas fa-plus-circle"></i> Guardar los permisos
+                    </button>   
+                </div>  
             </div>   
-            <button data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
-                <i class="fas fa-plus-circle"></i> Guardar los permisos
-            </button>     
+            
         </div>
 
         <div class="modal-footer">     
