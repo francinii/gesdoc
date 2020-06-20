@@ -9,7 +9,6 @@ var currentClassification;
 var listClassification = [];
 var allClassifications;
 var usersShare=[];
-var documentsShare;
 var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
 /**
 * draw the route follow for the user  
@@ -175,108 +174,8 @@ function edit() {
     $("input[name=descriptionEdit]").val(descriptionEdit);
     
 
-    drawMoveEdit(currentClassification);
-
     $("#edit").modal("show");
 }
-/**
- * 
- * @param {array} classifications to drawn in move
- */
-
-function drawMoveEdit(classifications){
-    $("input[id=editClassification]").val(classifications.id);
-    $("label[id=editLableClassification]").text('"'+classifications.description+'"');
-    
-    $("#listEdit").empty();
-    classifications.classifications.forEach(function (classification, index) {
-        if(classification.id!=$("input[id=idEdit]").val())
-        $("#listEdit").append(
-            '<li id="listEdit-' + classification.id +'" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">' +
-                classification.description +
-                '<span class="btn badge badge-secondary badge-pill"  onclick="editEnterClassification(' +
-                classification.id +
-                ')"><i class="fas fa-long-arrow-alt-right"></i></span>' +
-                "</li>"
-        );
-    });
-}
-
-/**
- * modal to edit, open a classification
- *
- * @param {Integer} id of the classification opend
- * 
- */
-
-function editEnterClassification(id) {
-    var review=[]
-    var openedClassification=editFindClassification(allClassifications['classification'],id,review);
-    if(openedClassification!=true && openedClassification!=null){
-        drawMoveEdit(openedClassification);
-    }
-}
-
-/**
- * modal to edit, back to the parent classification
- *@param {Object} allClassifications list of all classification
- */
-function editBackClassification() {
-    var review=[]
-    var openedClassification=editFindParentClassification(allClassifications['classification'], $("input[id=editClassification]").val(),review);
-    if(openedClassification!=true && openedClassification!=null){
-        drawMoveEdit(openedClassification);
-    }
-}
-/**
- * modal to edit, find the parent of a classification
- * @param {Object} Classification list of all classification
- * @param {Integer} id of the classification
- */
-function editFindParentClassification(Classification,id,review){
-    var openedClassification
-    if(Classification.id==id) 
-        return true;
-    if(review[Classification.id]==null){    
-
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            if(Classification.classifications[index].id==id)
-            return Classification;            
-        }
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            openedClassification=editFindParentClassification(Classification.classifications[index],id,review);
-            review[Classification.id]=1;
-            if(openedClassification!=null){
-                return openedClassification
-            }       
-        }
-    }
-}
-
-/**
- * modal to edit, find the classification
- * @param {Object} allClassification list of all classification
- * @param {Integer} id of the classification
- */
-function editFindClassification(Classification,id,review){
-    var openedClassification
-
-    if(review[Classification.id]==null){  
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            if(Classification.classifications[index].id==id)
-            return Classification.classifications[index];            
-        }
-        for (let index = 0; index <  Classification.classifications.length; index++) {
-            openedClassification=editFindClassification(Classification.classifications[index],id,review);
-            review[Classification.id]=1;      
-            if(openedClassification!=null){
-                return openedClassification
-            }
-        }
-    }
- 
- }
-
 
 
 /**
@@ -382,7 +281,7 @@ function ajaxUpdate() {
                 currentClassification: currentClassification.id,
                 currentTable:currentTable,
                 description: description,
-                parentClassification:$("input[id=editClassification]").val(),
+        
 
             },
             beforeSend: function (xhr) { 
@@ -465,7 +364,7 @@ function showshare(){
         },
         success: function(result) {   
             me.data("requestRunning", false); 
-            openShare(result.currentUsersShare,result.documentInClassificationid);
+            openShare(result.currentUsersShare,result.documentInClassificationid,result.classificationInClassificationid);
                               
             
         },
@@ -480,7 +379,7 @@ function showshare(){
 
 }
 
-function openShare(currentUsersShare,documentInClassificationid){
+function openShare(currentUsersShare){
     $("#select_document option:selected").show();
     $("#select_document option:selected").prop("selected", false);    
     $(".body_table").empty();
@@ -498,7 +397,6 @@ function openShare(currentUsersShare,documentInClassificationid){
       user['actions']=currentUsersShare[index].actions;
       usersShare.push(user);
   }
-    $('#documentsId').val(JSON.stringify(documentInClassificationid));
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
@@ -544,7 +442,7 @@ function select_user(e, clickedIndex, tableId){
             user['name']=name;
             user['owner']=false;
             user['type']='new';
-            user['actions']=[];
+            user['actions']=[4];
             usersShare.push(user);
         }
     }else {
@@ -595,7 +493,8 @@ function openPermissions(actions){
         cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
         if(usersShare[index].owner){
             cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
-            actions.forEach(action => {        
+            actions.forEach(action => {  
+                if(action.id!=4)      
                 cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
             });
         }        
@@ -603,6 +502,7 @@ function openPermissions(actions){
             cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
             actions.forEach(action => {      
                 var actionIndex = usersShare[index].actions.indexOf(action.id); 
+                if(action.id!=4)
                 if (actionIndex !== -1)             
                     cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
                 else
@@ -672,10 +572,9 @@ function changeOwner(e,username){
     var list= $('#pemission-'+index+' td input:checkbox');
     $('#pemission-'+oldeOwner+' td input:checkbox').prop('disabled',false);
     $('#pemission-'+username+' td input:checkbox').prop('disabled',true);
-    usersShare[index].ver=true;
-    usersShare[index].edit=true;
-    usersShare[oldeIndex].ver=true;
-    usersShare[oldeIndex].edit=true;
+    usersShare[index].actions=[];
+    usersShare[oldeIndex].actions=[4];
+    
 }
 
 function selectAccion(username,action,evento){
@@ -695,8 +594,7 @@ var me = $(this);
  if (me.data("requestRunning"))
     return;
     me.data("requestRunning", true);
-    var index=usersShare.findIndex(x => x.owner == true);
-    var classificationOwner=usersShare[index].username;
+    var classificationOwner=$('#owner').val();  
     
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
@@ -708,19 +606,31 @@ var me = $(this);
             _token: $("input[name=_token]").val(),            
             idselect:idselect,
             currentClassification: currentClassification.id,
+            currentTable:currentTable,
             typeContextMenu:typeContextMenu,
             usersShare:usersShare,
-            documentInClassificationid:JSON.parse($('#documentsId').val()),
             classificationOwner:classificationOwner,
 
 
         },
-        success: function(result) {  
-                                   
-            me.data("requestRunning", false);
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
         },
+        success: function(result) {    
+            me.data("requestRunning", false);  
+            $("#cargandoDiv").css('display', 'none')          
+            $("#table").DataTable().destroy();
+            $("#divTable").html(result);
+            createDataTable("table");
+            $("#share").modal("hide");
+            alerts('alerts', 'alert-content',"Usuarios agregados satisfactoriamente", "alert-success");
+            usersShare=[];           
+            
+        },
+
         error: function(request, status, error) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
             

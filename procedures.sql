@@ -340,10 +340,9 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_classification`(IN `p_description` varchar(500),IN `p_current_classification` int,IN `p_username` varchar(500),OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `insert_classification`(IN `p_description` varchar(500),IN `p_username` varchar(500),OUT `res` TINYINT  UNSIGNED)
 BEGIN
-  DECLARE p_id Integer;
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+ 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
     SET res = -1;
@@ -359,15 +358,15 @@ BEGIN
             START TRANSACTION;
                    
                     INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_description,3, NOW(),NOW());
-                    SET p_id = LAST_INSERT_ID();
-                    INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
+                    
+                    
             COMMIT;
             -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
--- call insert_classification('mi clasificacion',1,'402340421',@res);
+-- call insert_classification('mi clasificacion','402340421',@res);
 -- SELECT @res as res;
 
 
@@ -377,7 +376,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_classification`;
 DELIMITER ;;
-CREATE   PROCEDURE `update_classification`( IN `p_description` varchar(500),IN `p_current_classification` int,IN `p_id` int, OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `update_classification`( IN `p_description` varchar(500),IN `p_id` int, OUT `res` TINYINT  UNSIGNED)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -394,56 +393,16 @@ BEGIN
 	END;
             START TRANSACTION;
                   UPDATE `classifications` SET `description`=p_description,`updated_at`=NOW() WHERE `id`=p_id;
-                  DELETE FROM `classification_classification` WHERE `second_id`=p_id;
-                  INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_current_classification,p_id,NOW(),NOW());
+                  
             COMMIT;
             -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
--- call update_classification(2,'mis documentos',1,@res);
+-- call update_classification('mis documentos',5,@res);
 -- SELECT @res as res;
 
-
--- ----------------------------
--- PROCEDURE delete a classification
--- return 0 success, 1 or 2 error in database
--- ----------------------------
-DROP PROCEDURE IF EXISTS `delete_classification`;
-DELIMITER ;;
-CREATE   PROCEDURE `delete_classification`(IN `p_id` int,IN `p_username` varchar(500), OUT `res` TINYINT  UNSIGNED)
-BEGIN
-  DECLARE owner_username varchar(500);
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		-- ERROR
-    SET res = -1;
-    ROLLBACK;
-	END;
-
-  DECLARE EXIT HANDLER FOR SQLWARNING
-	BEGIN
-		-- ERROR
-    SET res = -2;
-    ROLLBACK;
-	END;
-            START TRANSACTION;
-                  select username into owner_username  from `classifications` WHERE `id`=p_id; 
-                  IF owner_username=p_username then
-                    DELETE FROM `classifications` WHERE `id`=p_id;
-                    DELETE FROM `documents` WHERE NOT EXISTS (SELECT null from `classification_document` WHERE classification_document.document_id=documents.id) and documents.flow_id IS NULL;                    
-                  ELSE
-                    DELETE FROM `classification_classification` WHERE `second_id`=p_id;
-                  END IF;
-            COMMIT;
-            -- SUCCESS
-SET res = 0;
-END
-;;
-DELIMITER ;
--- call delete_classification(2,'402340420',@res);
--- SELECT @res as res;
 
 
 -- ----------------------------
@@ -452,55 +411,63 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `delete_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `delete_Share_Classification`(IN `p_id` int,In `p_id_parent` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_documents` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `delete_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_documents` text,IN `p_classification_owner` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _classification_owner varchar(500) DEFAULT NULL;
   DECLARE _principal_classification INT DEFAULT NULL;
-  DECLARE _document_owner varchar(500) DEFAULT NULL;
+  DECLARE _owner varchar(500) DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
-  DECLARE _document TEXT DEFAULT NULL;
+  DECLARE _value TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
     SET res = -1;
+  
+    ROLLBACK;
+	END;
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
     ROLLBACK;
 	END;
 
             START TRANSACTION;
             
                 SELECT `username` into _classification_owner FROM `classifications` WHERE `id`=p_id;
-                IF _classification_owner=p_username THEN
-                   UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
-                END IF;
-                DELETE FROM `classification_classification` WHERE `first_id`=p_id_parent and `second_id`=p_id;
-                DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
-              iterator:
-                LOOP
-                    IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
-                    LEAVE iterator;
-                    END IF;
-                    SET _next = SUBSTRING_INDEX(p_documents,',',1);
-                    SET _nextlen = LENGTH(_next);
-                    SET _document = CAST(TRIM(_next) AS UNSIGNED);
-                    SELECT `username` into _document_owner FROM `documents` WHERE `id`=_document;
-                    IF _document_owner=p_username THEN
-                      select `id` into _principal_classification FROM `classifications` where `type`=1 and `username`=p_username;
-                      INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (_principal_classification,p_id,NOW(),NOW());
-                    ELSE
-                      DELETE FROM `action_document_user` WHERE `document_id`=_document and `username`=p_username;
+                IF _classification_owner=p_username and p_classification_owner!='' THEN
+                  UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
 
-                    END IF;
-                    SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
-                  END LOOP;
-            
+                ELSEIF _classification_owner!=p_username THEN
+                   DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
+                ELSE
+                   DELETE FROM `classifications` WHERE `id`=p_id;            
+                  iterator:
+                    LOOP
+                        IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
+                        LEAVE iterator;
+                        END IF;
+                        SET _next = SUBSTRING_INDEX(p_documents,',',1);
+                        SET _nextlen = LENGTH(_next);
+                        SET _value = CAST(TRIM(_next) AS UNSIGNED);
+                        SELECT `username` into _owner FROM `documents` WHERE `id`=_value;
+                        IF _owner!=p_username THEN
+                          select `id` into _principal_classification FROM `classifications` where `type`=1 and `username`=_owner;
+                          INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_principal_classification,_value,NOW(),NOW());
+                        ELSE
+                          DELETE FROM `action_document_user` WHERE `document_id`=_value and `username`=p_username;
+                        END IF;
+                        SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
+                      END LOOP;  
+                END IF;       
             COMMIT;
             -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
--- call delete_Share_Classification(5, 4,'116650288','1','402340420',@res);
+-- call delete_Share_Classification(5,'402340420','1','',@res)
 -- SELECT @res as res;
 
 
@@ -510,7 +477,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `add_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,In `p_id_parent` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
 
   DECLARE _next TEXT DEFAULT NULL;
@@ -531,10 +498,7 @@ BEGIN
 	END;
 
             START TRANSACTION;
-                INSERT INTO `classification_classification`(`first_id`, `second_id`, `created_at`, `updated_at`) VALUES (p_id_parent,p_id,NOW(),NOW());
-                IF p_classification_owner=p_username THEN
-                  UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
-                ELSE
+                IF p_classification_owner!=p_username THEN
                   iterator:
                     LOOP
                         IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
@@ -553,7 +517,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call add_Share_Classification(5, 4,'116650288','4',@res);
+-- call add_Share_Classification(5,'116650288','4',@res);
 -- SELECT @res as res;
 
 
@@ -566,6 +530,7 @@ DROP PROCEDURE IF EXISTS `update_Share_Classification`;
 DELIMITER ;;
 CREATE  PROCEDURE `update_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
+  DECLARE _classification_owner varchar(500) DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _action TEXT DEFAULT NULL;
@@ -584,10 +549,12 @@ BEGIN
 	END;
 
             START TRANSACTION;
+              SELECT `username` into _classification_owner FROM `classifications` WHERE `id`=p_id;
               DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
-              IF p_classification_owner=p_username THEN
+              IF _classification_owner=p_username and p_classification_owner!=p_username THEN
                 UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
-              ELSE
+              END IF;
+              IF p_classification_owner!=p_username THEN
                 iterator:
                   LOOP
                       IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
