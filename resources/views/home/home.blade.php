@@ -12,6 +12,7 @@
 @stop
 @section('content')
 <div class="container-fluid">
+    <input type="hidden" id = "docType">
     <div class="row ">
         <div class="col-md-2">
             <div class="">               

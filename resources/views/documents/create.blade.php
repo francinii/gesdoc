@@ -16,6 +16,8 @@
             <label for="flowCreate">{{ __('app.documents.create.flow') }}</label>
             <div class="form-group"> 
               <select id="flowCreate"class="form-control" name="flowCreate" >
+                <option value="-1" name ="">Seleccione...</option>
+                 
                   @foreach ($flows ?? '' as $flow)
                     <option value="{{$flow->id}}" name ="flowCreate{{$flow->id}}">{{$flow->description}}</option>
                   @endforeach
@@ -32,7 +34,7 @@
           </form>    
         </div>
         <div class="modal-footer">
-        <button  type="button" id="CreateSubmit" onclick="ajaxCreateDoc({{ Auth::user()->id }}, 0)" class="btn btn-success">Agregar</button>
+        <button  type="button" id="CreateSubmit" onclick="ajaxCreateDoc({{ Auth::user()->username}}, 0)" class="btn btn-success">Agregar</button>
          </div>
         </div>
     </div>

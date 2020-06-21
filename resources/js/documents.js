@@ -37,15 +37,20 @@ function ajaxCreateDoc(user, mode) {
         var type = $("#docType").val();
         var code  = $("#code").val();        
         var version = 1;
-        var route;
-        var content;
+        var route = "";
+        var content = "";
         if(type == 1)
             docType = 'docx';
         else if(type == 2)
             docType = 'xlsx';      
         
+            if(mode == 1){
+                //Llamar a metodo para agregar documento
+                route = 'ruta';
+            }             
+           
         $.ajax({
-            url: "home",
+            url: "documents",
             method: "POST",
             data: {
                 _token: $("input[name=_token]").val(),
@@ -59,37 +64,39 @@ function ajaxCreateDoc(user, mode) {
                 route:route,
                 content:content,
                 version:version,
-                mode:mode,
+                mode:mode,                
             },
 
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
+                $("#cargandoDiv").css('display', 'none');
+                $("#createDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
-
-                createDataTable("table");
-                $("#create").modal("hide");
-                alerts('alerts', 'alert-content',
-                    "El documento " +
-                        description +
-                        " ha sido agregado satisfactoriamente",
-                    "alert-success"
-                );
-                me.data("requestRunning", false);
-                $("#cargandoDiv").css('display', 'none');
-
+                createDataTable("table");            
+                alerts('alerts', 'alert-content',"El documento " +  description +
+                        " ha sido agregado satisfactoriamente", "alert-success"  );
+                var type = $("#docType").val();            
+                if(type == 1){
+                    window.location="documents/textEditor";
+                }else {
+                    window.location="documents/spreadSheetEditor";
+                }
+                me.data("requestRunning", false);                
+                  
                 
-               // window.location="documents/textEditor";
-               // window.location="documents/spreadSheetEditor";
+               // 
+               // 
 
             },
             error: function (request, status, error) {
+                $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 me.data("requestRunning", false);
-                $("#cargandoDiv").css('display', 'none')
+                
             },
         });
     }

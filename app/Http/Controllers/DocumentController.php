@@ -11,9 +11,12 @@ use DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Traits\RefreshHomeTrait;
 
 class DocumentController extends Controller
 {
+
+    use RefreshHomeTrait;
     /*
     |--------------------------------------------------------------------------
     | Document Controller
@@ -73,32 +76,34 @@ class DocumentController extends Controller
         $this->validator($request->all())->validate();
        // $datos = $request->except(['_token', 'user_id'], 'documents');
         $document = $request->except('_token', 'documents');
-        $username =  $document['user_id'];
-        $id_flow =  $document['flow_id'];        
-        $route =  $document['route'];
-        $content =  $document['content'];
-        $code =  $document['code'];
-        $summary =  $document['summary'];
-        $type =  $document['docType'];
-        $id_state =  $document['state_id'];
-        $description =  $document['description'];
-        $version =  $document['version'];
-        $mode =  $document['mode'];
+       // $description = "'".$datos['description']."'"; 
+        $username = "'". $document['user_id']. "'";
+        $id_flow =  $document['flow_id']== '-1'? 'NULL': $document['flow_id'] ;   //int     
+        $route =  "'". $document['route'] . "'";
+        $content =   "'".$document['content'] ."'";
+        $code =   "'".$document['code'] ."'";
+        $summary =   "'".$document['summary'] ."'";
+        $type =  "'". $document['docType'] ."'";
+        $id_state =  $document['state_id']; //int
+        $description = "'".$document['description']."'";
+        $version =  $document['version']; //int
+        $mode =  $document['mode']; //int
+        
+        $classification = '1'; // Por defecto se agrega a la classifcacion 1 que es el principal
         //falta el type
-        DB::select("call insert_document($mode, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version, @res)");
+      //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
+        DB::select("call insert_document($mode, $classification, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
-            throw new DecryptException('El documento ya existe en la  base de datos');
+            throw new DecryptException('El documento ya existe en la base de datos');
         }
-
         if ($res[0]['res'] != 0) {
-            throw new DecryptException('Error al procesar la petición la base de datos');
+            throw new DecryptException('Error al procesar la petición en la base de datos');
         }
 
-        
-
-        return DocumentController::refresh();
+        return  $this->refresh('1', 0);
+       // return HomeController::refresh();
     }
 
     /**
@@ -151,16 +156,4 @@ class DocumentController extends Controller
         return DocumentController::refresh();
     }
 
-
-    /**
-     * Refresh the table on the view.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    private function refresh()
-    {
-        $documents = Document::all();
-        $flows = Flow::all();
-        return view('documents.table',compact('documents', 'flows'));        
-    }
 }
