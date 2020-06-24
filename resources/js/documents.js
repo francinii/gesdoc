@@ -57,6 +57,7 @@ function ajaxCreateDoc(user, mode) {
         var code  = $("#code").val();        
         var version = 1;
         var route = "";
+        var size = "";
         var content = "";
         if(type == 1)
             docType = 'docx';
@@ -78,7 +79,8 @@ function ajaxCreateDoc(user, mode) {
                 route:route,
                 content:content,
                 version:version,
-                mode:mode,                
+                size:size, 
+                mode:mode,                 
             },
 
             beforeSend: function (xhr) { 
