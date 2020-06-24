@@ -1,4 +1,4 @@
-<div id = "createDocument" class="modal fade" aria-hidden="true" tabindex="-1" role="dialog" >
+<div id = "uploadDocument" class="modal fade" aria-hidden="true" tabindex="-1" role="dialog" >
 
     <div class="modal-dialog modal-lg" role="document" >
         <div class="modal-content">
@@ -8,12 +8,7 @@
         </div>
         <div class="modal-body">   
           <form action="{{ action('DocumentController@index') }}" method="POST">
-          {{csrf_field()}}
-          
-            <div id= "docName" class="form-group">
-              <label for="descriptionCreate">{{ __('app.documents.create.name') }}</label>
-              <input type="text" class="form-control" id="descriptionCreate" placeholder="{{ __('app.documents.create.name') }}" name="descriptionCreate">
-            </div>   
+          {{csrf_field()}}       
 
             <div id= "docUpload" class="form-group">
               <label for="uploadLabel">Subir documento</label>   
@@ -31,16 +26,16 @@
             </div>            
             <div class="form-group">
               <label for="code">Código del documento</label>
-              <input type="text" class="form-control" id="code" placeholder="Código del documento" name="">
+              <input type="text" class="form-control" id="codeU" placeholder="Código del documento" name="">
             </div>                        
             <div class="form-group">
               <label for="summary">Resumen del contenido</label>
-              <textarea type="text" class="form-control" id="summary" placeholder="Resumen de contenido" name=""></textarea>
+              <textarea type="text" class="form-control" id="summaryU" placeholder="Resumen de contenido" name=""></textarea>
             </div>              
           </form>    
         </div>
         <div class="modal-footer">
-        <button  type="button" id="CreateSubmit" onclick="ajaxCreateDoc({{ Auth::user()->username}}, 0)" class="btn btn-success">Agregar</button>
+        <button  type="button" id="CreateSubmit" onclick="ajaxUploadDoc({{ Auth::user()->username}}, 1)" class="btn btn-success">Crear</button>
          </div>
         </div>
     </div>

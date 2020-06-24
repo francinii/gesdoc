@@ -49,9 +49,14 @@ class DocumentController extends Controller
     {
         $validacion = [
             'description' => ['required', 'string', 'max:500'],
-            'flow_id' => ['required', 'int'],
+            'flow_id' => ['required'],            
+            'code' => ['required', 'string', 'max:500'],
+            'summary' => ['required', 'string', 'max:1000'],
+            'docType' => ['required', 'string', 'max:500'],
+            'state_id' => ['required', 'int'],
+            'version' => ['required', 'int'],
+            'mode' => ['required', 'int'],
         ];
-
         return Validator::make($data, $validacion);
     }
 
@@ -73,10 +78,30 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validator($request->all())->validate();
+        //$this->validator($request->all())->validate();
        // $datos = $request->except(['_token', 'user_id'], 'documents');
         $document = $request->except('_token', 'documents');
-       // $description = "'".$datos['description']."'"; 
+        
+        $mode =  $document['mode'];        
+        if($mode == 1)
+        $this->uploadFile($document);
+        else {
+            $this->createDocument( $document);
+        }    
+        return  $this->refresh('1', 0);
+    }
+
+
+
+    private function uploadFile($document){
+        $mode = $document['mode'];
+
+        
+    }
+
+    private function createDocument( $document){
+        //$description = "'".$datos['description']."'"; 
+        $mode =  $document['mode'];
         $username = "'". $document['user_id']. "'";
         $id_flow =  $document['flow_id']== '-1'? 'NULL': $document['flow_id'] ;   //int     
         $route =  "'". $document['route'] . "'";
@@ -87,11 +112,10 @@ class DocumentController extends Controller
         $id_state =  $document['state_id']; //int
         $description = "'".$document['description']."'";
         $version =  $document['version']; //int
-        $mode =  $document['mode']; //int
-        
+
         $classification = '1'; // Por defecto se agrega a la classifcacion 1 que es el principal
         //falta el type
-      //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
+        //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
         DB::select("call insert_document($mode, $classification, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
@@ -101,9 +125,6 @@ class DocumentController extends Controller
         if ($res[0]['res'] != 0) {
             throw new DecryptException('Error al procesar la petición en la base de datos');
         }
-
-        return  $this->refresh('1', 0);
-       // return HomeController::refresh();
     }
 
     /**
@@ -154,6 +175,14 @@ class DocumentController extends Controller
     {
         Document::destroy($id);
         return DocumentController::refresh();
+    }
+
+
+    public function subirArchivo(Request $request)
+    {
+           //Recibimos el archivo y lo guardamos en la carpeta storage/app/public
+           $request->file('archivo')->store('public');
+          // dd("subido y guardado");
     }
 
 }

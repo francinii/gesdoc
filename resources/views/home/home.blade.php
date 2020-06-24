@@ -10,19 +10,24 @@
 @section('header')
 @include('layouts.header')
 @stop
+
 @section('content')
+
+<div class="page-content" id="content">
 <div class="container-fluid">
     <input type="hidden" id = "docType">
     <div class="row ">
         <div class="col-md-2">
             <div class="">               
                 <div class="">
-                    <div class="list-group">  
-                        <button id = "btnCreateDocument" type="button" class="btn btn-success btn-block " onclick="newDocument(this)" ><i class="fa fa-plus" aria-hidden="true"></i> Agregar </button>
-                         <input type="file" id="file" /> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"> </i> Importar documento</label>          
-                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(1)">{{ __('app.home.menu.option1') }}</button>
-                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(2)">{{ __('app.home.menu.option2') }}</button>
-                        <button type="button" class="btn btn-primary btn-block" onclick="openSheet(3)">{{ __('app.home.menu.option3') }}</button>                
+                    <div class="btn-group-vertical"> 
+                        <button type="button" class="btn btn-dark btn-block "><i class="" aria-hidden="true"></i> Documentos </button>
+                        
+                        <button id = "btnCreateDocument" type="button" class="btn btn-light btn-block " onclick="newDocument(this)" ><i class="fa fa-plus" aria-hidden="true"></i> Agregar </button>
+                        <button type="button" class="btn btn-light btn-bloc " onclick="createDoc(0)" ><i class="fa fa-upload" aria-hidden="true"></i>Importar Documento</button>        
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(1)">{{ __('app.home.menu.option1') }}</button>
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(2)">{{ __('app.home.menu.option2') }}</button>
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(3)">{{ __('app.home.menu.option3') }}</button>                
                     </div>         
                 </div>
             </div> 
@@ -48,10 +53,11 @@
 @include('home.contextMenu')
 @include('home.create')
 @include('documents.create')
+@include('documents.upload')
 @include('home.edit')
 @include('home.share')
 @include('partials.alertModal')
 @include('partials.search')
 @include('partials.confirm')
-
+</div>
 @stop

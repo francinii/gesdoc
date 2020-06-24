@@ -23,7 +23,9 @@
 
 <body>
 
+    
         @yield('header')
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-11" style= "height:70px"></div>
@@ -32,7 +34,11 @@
                 </div>
             </div>
         </div>
-        @yield('content')
+     
+         @yield('content')  
+        
+        
+        
 </body>  
    
 

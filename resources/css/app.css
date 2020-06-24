@@ -42,10 +42,6 @@
   border-color: #c82333 !important;
 }
 
-.btn-block + .btn-block {
-  margin: 0rem 0rem 0.5rem 0rem;
-}
-
 [type=file] {
   height: 0;
   overflow: hidden;

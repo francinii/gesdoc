@@ -1,3 +1,10 @@
+$(function() {
+    // Sidebar toggle behavior
+    $('#sidebarCollapse').on('click', function() {
+      $('#sidebar, #content').toggleClass('active');
+    });
+  });
+
 
 /**
  * This function is in charge of create the data table and give
