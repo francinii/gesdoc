@@ -327,8 +327,7 @@ class HomeController extends Controller
     }
 
     private function updateShare($user,$idselect,$type,$classificationOwner){
-        if($type=='classification'){
-           $classification=Classification::where('id', '=', '' . $idselect. '')->first();
+        if($type=='classification'){           
             $actionsString='';
             if(isset($user->actions)){
                 foreach ($user->actions as $action) {
@@ -336,14 +335,13 @@ class HomeController extends Controller
                 }
                 $actionsString=substr($actionsString, 0, -1);
             }
-            if( $user->owner=='false' and $user->username==$classification->username){
                 DB::select("call update_Share_Classification($idselect,'$user->username','$classificationOwner','$actionsString',@res)");
                 $res = DB::select("SELECT @res as res;");
                 $res = json_decode(json_encode($res), true);
                 if ($res[0]['res'] != 0) {
                     throw new DecryptException('error en la base de datos');
                 }
-            }
+            
         }
     }
 }
