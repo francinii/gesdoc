@@ -50,6 +50,10 @@
     $( document ).ready(function() {
         var js_data = '<?php echo json_encode($mainClassification); ?>';        
          currentClassification=JSON.parse(js_data );
+         var js_data = '<?php echo json_encode($myActions); ?>';        
+         var myActions=JSON.parse(js_data );
+         (myActions.findIndex(x => x == 'owner')!=-1)? isCurrentUserOwner=true:isCurrentUserOwner=false;
+         (isCurrentUserOwner || myActions.findIndex(x => x == 5))? CanCurrentUserEditar=true:CanCurrentUserEditar=false;
          drawRoute();
     });
 </script>

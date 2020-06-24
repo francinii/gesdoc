@@ -10,6 +10,8 @@ var listClassification = [];
 var allClassifications;
 var usersShare=[];
 var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
+var isCurrentUserOwner;
+var CanCurrentUserEditar; 
 /**
 * draw the route follow for the user  
 *
@@ -65,9 +67,11 @@ $("html")
             $("#deleteContext").hide();
             $("#shareContext").hide();
             $("#createDocumentContext").hide();
+            
+            
         if(currentTable==1){
            $("#createDocumentContext").show();
-            if(currentClassification.type==1 && td.className == "dataTables_empty" ){    
+            if(currentClassification.type==1 && td.className == "dataTables_empty"){    
                 $("#createClassificationContext").show();               
             }else if(currentClassification.type==1 ){
                 $("#createClassificationContext").show();

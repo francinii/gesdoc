@@ -46,8 +46,7 @@
     <div class="dropdown-menu dropdown-menu-sm"  id="context-menu-create"  >
         <button id="createTxt" class="btn btn-link dropdown-item" onclick="createDoc(1)" ><i class="fas fa-plus-circle"></i> Crear documento</button>
         <button id="createSheet" class="btn btn-link dropdown-item" onclick="createDoc(2)" ><i class="fas fa-plus-circle"></i> Crear hoja de cálculo</button>
-        <button id="createSheet" class="btn btn-link dropdown-item" onclick="createDoc(3)" ><i class="fas fa-plus-circle"></i> Crear Carpeta</button>
-  
+        <button id="createClassification" class="btn btn-link dropdown-item" onclick="createDoc(3)" ><i class="fas fa-plus-circle"></i> Crear Clasificación</button>
     </div>
 </div>
 @include('home.contextMenu')
