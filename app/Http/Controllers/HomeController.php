@@ -114,11 +114,11 @@ class HomeController extends Controller
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
-            throw new DecryptException('la clasificacion ya existe en la base de datos');
+            throw new DecryptException('La clasificación ya existe en la base de datos');
         }
 
         if ($res[0]['res'] != 0) {
-            throw new DecryptException('error en la base de datos');
+            throw new DecryptException('Error en la base de datos');
         }
 
         return $this->refresh($currentTable, $currentClassification);
