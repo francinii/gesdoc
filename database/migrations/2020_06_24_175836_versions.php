@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocumentEditableTable extends Migration
+class Versions extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateDocumentEditableTable extends Migration
      */
     public function up()
     {
-        Schema::create('document_editable', function (Blueprint $table) {
+        Schema::create('versions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('document_id')->unsigned(); 
-            $table->text('content');
+            $table->text('content'); //content or route depends on
+            $table->string('size',500);    //numero y unidad de medida mb gb etc   
+            $table->string('type',500);   //ejemplo png, xls, doc, txt etc.     
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     /**
@@ -29,6 +31,6 @@ class CreateDocumentEditableTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('document_editable');
+        Schema::dropIfExists('versions');
     }
 }

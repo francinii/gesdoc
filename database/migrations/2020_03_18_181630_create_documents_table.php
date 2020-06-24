@@ -19,13 +19,11 @@ class CreateDocumentsTable extends Migration
             $table->bigInteger('flow_id')->unsigned()->nullable(); 
             $table->bigInteger('state_id')->unsigned()->nullable();   
             $table->string('username');
-            $table->string('description',500);
-            $table->string('type',500);   //ejemplo png, xls, doc, txt etc.
-            
+            $table->string('description',500);                      
             //Metadatos
             $table->string('summary',1500);
             $table->string('code',500);
-            $table->bigInteger('version')->unsigned();
+          
            // $table->string('route',500);
             
             $table->timestamps();
