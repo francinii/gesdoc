@@ -60,15 +60,40 @@ $("html")
                 left: left,
             })
             .addClass("show");
-        if (td.className == "dataTables_empty") {
+            $("#createClassificationContext").hide();
             $("#editContext").hide();
             $("#deleteContext").hide();
             $("#shareContext").hide();
-        } else {
-            $("#editContext").show();
-            $("#deleteContext").show();
-            $("#shareContext").show();
+            $("#createDocumentContext").hide();
+        if(currentTable==1){
+           $("#createDocumentContext").show();
+            if(currentClassification.type==1 && td.className == "dataTables_empty" ){    
+                $("#createClassificationContext").show();               
+            }else if(currentClassification.type==1 ){
+                $("#createClassificationContext").show();
+                $("#editContext").show();
+                $("#deleteContext").show();
+                $("#shareContext").show();
+            }
+            else if(currentClassification.type==3 && td.className != "dataTables_empty"){
+                $("#editContext").show();
+                $("#deleteContext").show();
+                $("#shareContext").show();                
+            }
+        
+        }else if(currentTable==2){
+            if(currentClassification.type==2 && td.className != "dataTables_empty" ){    
+                $("#editContext").show();
+                $("#deleteContext").show();
+                $("#shareContext").show();               
+            }else if(currentClassification.type==3 && td.className != "dataTables_empty"){
+                $("#createDocumentContext").show();
+                $("#editContext").show();
+                $("#deleteContext").show();
+                $("#shareContext").show();                
+            }
         }
+ 
         return false; //blocks default Webbrowser right click menu
     })
     .on("click", function () {
