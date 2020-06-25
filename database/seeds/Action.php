@@ -14,14 +14,6 @@ class Action extends Seeder
         //Type 0 > It's for actions related to the flow
         //Type 1 >  It's for actions related to Documents
         //Type 2 > It's for the specific action begin (Beginning line in the flow)
-
-        $table->bigIncrements('id');
-            $table->string('description',500);
-            $table->string('state', 500);
-            $table->string('color', 500);
-            $table->unsignedTinyInteger('type');
-
-
         \DB::table('actions')->insert(array(
             'description' =>"Aceptar",
             'state' =>"Aceptado",
