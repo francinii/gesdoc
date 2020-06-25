@@ -44,6 +44,12 @@ class Action extends Seeder
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',      
         ));
+        \DB::table('actions')->insert(array(
+            'description' =>"Eliminar",
+            'type' =>1,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',      
+        ));
         
     }
 }

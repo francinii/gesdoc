@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\Action;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ trait RefreshHomeTrait{
         $username = Auth::id();
         if($currentClassification==0){
             $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
-            $myactions=['owner'];
+            $myActions=['owner'];
         }            
         else{
             $mainClassification = Classification::where([['id', '=', $currentClassification]])->first();
@@ -57,8 +58,7 @@ trait RefreshHomeTrait{
             }
             else{
                 $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$currentClassification and `username`='$username'");
-                $myActions = json_decode(json_encode($myActions), true);
-                $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
+
             }
         }
         if($mainClassification->type==3)
@@ -82,7 +82,7 @@ trait RefreshHomeTrait{
         $username = Auth::id();
         if($currentClassification==0){
             $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 2]])->first();            
-            $myactions=['owner'];
+            $myActions=['owner'];
         }
         else{
             $mainClassification = Classification::where([['id', '=', $currentClassification]])->first();
@@ -91,8 +91,7 @@ trait RefreshHomeTrait{
             }
             else{
                 $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$currentClassification and `username`='$username'");
-                $myActions = json_decode(json_encode($myActions), true);
-                $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
+
             }
         }
         if($mainClassification->type==3)
@@ -102,7 +101,7 @@ trait RefreshHomeTrait{
             $classifications = json_decode(json_encode($classifications), true);
             $classifications=Classification::whereIn('id', $classifications)->get();
         }
-        return view('home.tableMyDocuments', compact('mainClassification', 'classifications'));
+        return view('home.tableMyDocuments', compact('mainClassification', 'classifications','myActions'));
     }
 
     /**

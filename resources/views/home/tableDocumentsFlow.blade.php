@@ -48,10 +48,13 @@
  </table>
  <script>
     $( document ).ready(function() {
-        var js_data = '<?php echo json_encode($classification); ?>';        
+        var js_data = '<?php echo json_encode($mainClassification); ?>';        
          currentClassification=JSON.parse(js_data );
-        var js_data = '<?php echo json_encode($allClassifications); ?>';        
-        allClassifications=JSON.parse(js_data );
+         var js_data = '<?php echo json_encode($myActions); ?>';        
+         var myActions=JSON.parse(js_data );
+         (myActions.findIndex(x => x == 'owner')!=-1)? isCurrentUserOwner=true:isCurrentUserOwner=false;
+         (isCurrentUserOwner || myActions.findIndex(x => x == 5))? CanCurrentUserEditar=true:CanCurrentUserEditar=false;
+         (isCurrentUserOwner || myActions.findIndex(x => x == 6))? CanCurrentUserEditar=true:CanCurrentUserDetele=false;
          drawRoute();
     });
 </script>
