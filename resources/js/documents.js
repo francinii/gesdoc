@@ -364,6 +364,10 @@ function newDocument(e){
    var top = e.pageY - 10;
     var left = e.pageX - 90;
 
+    (currentTable==1  && currentClassification.type==1)?$("#createClassification").show():$("#createClassification").hide();
+    (currentTable==2  && currentClassification.type==3)?$("#createTxt").show():$("#createTxt").hide();
+    (currentTable==2  && currentClassification.type==3)?$("#createSheet").show():$("#createSheet").hide();
+
     $("#context-menu-create")
         .css({
             display: "block",
@@ -389,6 +393,9 @@ else if(type == 0){
    $('#uploadDocument').modal('show');    
 }
 else if(type == 3)
+
+    typeContextMenu='';
+    clearCreate();
     $('#create').modal('show'); 
 }
 

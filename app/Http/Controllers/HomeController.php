@@ -45,7 +45,8 @@ class HomeController extends Controller
         $departments = Department::all();
         $flows  = Flow::all();
         $actions = Action::where('type', '=', 1)->get();
-        return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions'));
+        $myActions=['owner'];
+        return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
     }
 
     /**

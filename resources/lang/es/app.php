@@ -223,6 +223,7 @@ return [
             'createClassification' => 'Crear clasificación',
             'editClassification' => 'Editar',
             'createDocument' => 'Crear documento',
+            'createSheet' => 'Crear hoja de cálculo',
             'share' => 'compartir',
         ],
 

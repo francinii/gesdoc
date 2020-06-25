@@ -10,10 +10,19 @@ var listClassification = [];
 var allClassifications;
 var usersShare=[];
 var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
+var isCurrentUserOwner;
+var CanCurrentUserEditar; 
+var CanCurrentUserDetele;
 /**
 * draw the route follow for the user  
 *
 */
+
+function definePermmisision(myActions){
+    (myActions.findIndex(x => x == 'owner')!=-1)? isCurrentUserOwner=true:isCurrentUserOwner=false;
+    (isCurrentUserOwner || myActions.findIndex(x => x.action_id == 5)!=-1)? CanCurrentUserEditar=true:CanCurrentUserEditar=false;
+    (isCurrentUserOwner || myActions.findIndex(x => x.action_id == 6)!=-1)? CanCurrentUserDetele=true:CanCurrentUserDetele=false;
+}
 function drawRoute() {
     var LastClassificacion = listClassification.slice(-1).pop();
 
@@ -65,34 +74,40 @@ $("html")
             $("#deleteContext").hide();
             $("#shareContext").hide();
             $("#createDocumentContext").hide();
-        if(currentTable==1){
-           $("#createDocumentContext").show();
-            if(currentClassification.type==1 && td.className == "dataTables_empty" ){    
-                $("#createClassificationContext").show();               
-            }else if(currentClassification.type==1 ){
+            $("#createSheetContext").hide();
+            
+                 
+            if(currentClassification.type==1 && td.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
+                $("#createDocumentContext").show();     
+                $("#createSheetContext").show();          
+            }else if(currentClassification.type==1 && currentTable==1 ){
+                $("#createClassificationContext").show();
+                $("#createDocumentContext").show();
+                $("#createSheetContext").show();
                 $("#editContext").show();
                 $("#deleteContext").show();
                 $("#shareContext").show();
             }
-            else if(currentClassification.type==3 && td.className != "dataTables_empty"){
+            else if(currentTable==2 && currentClassification.type==2 && td.className != "dataTables_empty" ){    
                 $("#editContext").show();
                 $("#deleteContext").show();
-                $("#shareContext").show();                
+                $("#shareContext").show();  
             }
-        
-        }else if(currentTable==2){
-            if(currentClassification.type==2 && td.className != "dataTables_empty" ){    
+            else if(currentClassification.type==3 && td.className != "dataTables_empty" && (isCurrentUserOwner || CanCurrentUserEditar)){
                 $("#editContext").show();
-                $("#deleteContext").show();
-                $("#shareContext").show();               
-            }else if(currentClassification.type==3 && td.className != "dataTables_empty"){
                 $("#createDocumentContext").show();
-                $("#editContext").show();
+                $("#createSheetContext").show();
                 $("#deleteContext").show();
                 $("#shareContext").show();                
-            }
-        }
+            }else if(isCurrentUserOwner || CanCurrentUserEditar){
+                $("#createDocumentContext").show();
+                $("#createSheetContext").show();
+            }      
+             
+
+
+        
  
         return false; //blocks default Webbrowser right click menu
     })

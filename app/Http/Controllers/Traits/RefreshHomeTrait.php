@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\Action;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -46,18 +47,28 @@ trait RefreshHomeTrait{
     public function refreshMyDocuments($currentClassification)
     {
         $username = Auth::id();
-        if($currentClassification==0)
-            $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();            
-        else
+        if($currentClassification==0){
+            $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
+            $myActions=['owner'];
+        }            
+        else{
             $mainClassification = Classification::where([['id', '=', $currentClassification]])->first();
+            if($username==$mainClassification->username){
+                $myActions=['owner'];
+            }
+            else{
+                $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$currentClassification and `username`='$username'");
 
+            }
+        }
         if($mainClassification->type==3)
             $classifications=[];
         else
             $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
         
-        
-        return view('home.tableMyDocuments', compact('mainClassification', 'classifications'));
+           if($username)
+            
+        return view('home.tableMyDocuments', compact('mainClassification', 'classifications','myActions'));
     }
 
     /**
@@ -69,10 +80,20 @@ trait RefreshHomeTrait{
     public function refreshShareDocuments($currentClassification)
     {
         $username = Auth::id();
-        if($currentClassification==0)
+        if($currentClassification==0){
             $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 2]])->first();            
-        else
+            $myActions=['owner'];
+        }
+        else{
             $mainClassification = Classification::where([['id', '=', $currentClassification]])->first();
+            if($username==$mainClassification->username){
+                $myActions=['owner'];
+            }
+            else{
+                $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$currentClassification and `username`='$username'");
+
+            }
+        }
         if($mainClassification->type==3)
             $classifications=[];
         else{
@@ -80,7 +101,7 @@ trait RefreshHomeTrait{
             $classifications = json_decode(json_encode($classifications), true);
             $classifications=Classification::whereIn('id', $classifications)->get();
         }
-        return view('home.tableMyDocuments', compact('mainClassification', 'classifications'));
+        return view('home.tableMyDocuments', compact('mainClassification', 'classifications','myActions'));
     }
 
     /**
