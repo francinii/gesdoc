@@ -17,7 +17,7 @@ class CreateDocumentsTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('flow_id')->unsigned()->nullable(); 
-            $table->bigInteger('state_id')->unsigned()->nullable();   
+            $table->bigInteger('action_id')->unsigned()->nullable();   
             $table->string('username');
             $table->string('description',500);                      
             //Metadatos
@@ -30,7 +30,7 @@ class CreateDocumentsTable extends Migration
 
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null');
-            $table->foreign('state_id')->references('id')->on('states')->onDelete('set null');
+            $table->foreign('action_id')->references('id')->on('actions')->onDelete('set null');
            
 
           

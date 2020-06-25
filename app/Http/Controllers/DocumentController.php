@@ -109,9 +109,9 @@ class DocumentController extends Controller
         $code =   "'".$document['code'] ."'";
         $summary =   "'".$document['summary'] ."'";
         $type =  "'". $document['docType'] ."'";
-        $id_state =  $document['state_id']; //int
+        $id_state =  1;//$document['state_id']; //int
         $description = "'".$document['description']."'";
-        $version =  $document['version']; //int
+        $version =  1; //$document['version']; //int
 
         $classification = '1'; // Por defecto se agrega a la classifcacion 1 que es el principal
         //falta el type
