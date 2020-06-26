@@ -392,16 +392,7 @@ function newDocument(e){
     $("#createSheet").show();
     }
     else if(currentTable==1  && currentClassification.type==3){
-        $("#createTxt").show();
-        $("#createSheet").show();
-        $("#createClassification").hide();
-    }
-    else if(currentTable==2  && currentClassification.type==3 &&  (isCurrentUserOwner || CanCurrentUserEditar)){
-        $("#createTxt").show();
-        $("#createSheet").show();
-        $("#createClassification").hide();
-    }else{
-        $("#createClassification").hide();
+        $("#createTxt").show();\
         $("#createTxt").hide();
         $("#createSheet").hide();
         $("#actionsMenu").show();
