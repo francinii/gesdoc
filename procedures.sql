@@ -666,6 +666,7 @@ BEGIN
 	END;
             START TRANSACTION;
                -- SET cursor = (SELECT * FROM versions WHERE flow_id = p_idFlow, identifier = p_identifier);
+               --  DELETE FROM `steps` WHERE flow_id = p_idFlow ;
                  INSERT INTO `steps`(flow_id, id, description, axisX, axisY, created_at,updated_at) VALUES (p_idFlow, p_identifier, p_description, p_axisx, p_axisy, NOW(),NOW());
             COMMIT;
           -- SUCCESS
@@ -779,3 +780,98 @@ DELIMITER ;
 
 
 
+
+
+-- PROCEDURE delete all of the steps
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_steps`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `delete_steps`(IN `p_idFlow` int,  OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+               DELETE FROM `steps` WHERE flow_id = p_idFlow ;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+-- PROCEDURE insert a new step to a flow
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_steps_steps`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `delete_steps_steps`(IN `p_idFlow` int,  OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+               DELETE FROM `step_step` WHERE flow_id = p_idFlow ;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+-- PROCEDURE insert a new step to a flow
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_action_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `delete_action_step_user`(IN `p_idFlow` int,  OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+               DELETE FROM `action_step_user` WHERE flow_id = p_idFlow ;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;

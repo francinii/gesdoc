@@ -222,6 +222,8 @@ class FlowController extends Controller
     protected function insertStep(array $steps, $id_flow)
     {   
         $res= -1;
+        //Delete the steps asociated to a flow
+        DB::select("call delete_steps($id_flow, @res)");                  
         foreach ($steps as $step) { 
             if($step !=null){
                 $identifier = "'". $step['id']."'";
@@ -247,6 +249,9 @@ class FlowController extends Controller
         $actions = Action::where('type', '=', 2)->get();
         $actionid = $actions[0]['id'];
         $res = -1;
+
+         //Delete the steps asociated to a flow
+         DB::select("call delete_steps_steps($id_flow, @res)");  
             //Falta validar los datos que esten que no este vacio etc
         $steps = array_key_exists('steps', $step) ? $step['steps']: null;            
         if($steps != null)
@@ -280,7 +285,8 @@ class FlowController extends Controller
         $users =  array_key_exists('users', $step) ?  $step['users']: null;    
         $res = -1; 
         $step_id = "'". $step['id']."'";
-        
+        //Delete the steps asociated to a flow
+        DB::select("call delete_steps_steps($id_flow, @res)"); 
         if($users != null){                   
             foreach ($users as $user) {   
                 $username =  "'".$user['username']."'";   
