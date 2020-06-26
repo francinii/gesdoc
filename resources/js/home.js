@@ -75,7 +75,8 @@ $("html")
             $("#shareContext").hide();
             $("#createDocumentContext").hide();
             $("#createSheetContext").hide();
-            
+            $("#actionsContextMenu").hide();
+ 
                  
             if(currentClassification.type==1 && td.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
@@ -103,6 +104,8 @@ $("html")
             }else if(isCurrentUserOwner || CanCurrentUserEditar){
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
+            }else{
+                $("#actionsContextMenu").show();
             }      
              
 
@@ -451,6 +454,7 @@ function openShare(currentUsersShare){
       user['owner']=currentUsersShare[index].owner;
       user['type']='old'
       user['actions']=currentUsersShare[index].actions;
+      user['current']=currentUsersShare[index].current;
       usersShare.push(user);
   }
     $('#select_document').selectpicker('refresh');
@@ -544,6 +548,14 @@ function openPermissions(actions){
     chequeado = "";
     habilitado = "";
     usersShare
+    var index=usersShare.findIndex(x => x.current == true);
+
+    var owner= usersShare[index].owner;   
+    var edit=usersShare[index].actions.findIndex(x => x == 5);
+    var deletePermission = usersShare[index].actions.findIndex(x => x == 6);
+    (owner ||edit!=-1)? edit=true:edit=false;
+    (owner ||deletePermission!=-1)? deletePermission=true:deletePermission=false;
+
   for (let index = 0; index < usersShare.length; index++) {
     if(usersShare[index].type!='delete'){
         cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';

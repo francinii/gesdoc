@@ -59,7 +59,7 @@ class Action extends Seeder
             'description' =>"Compartir",
             'state' =>"Compartido",
             'color' =>"#6c757d",
-            'type' =>1,
+            'type' =>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',      
         ));
@@ -67,7 +67,7 @@ class Action extends Seeder
             'description' =>"Subir",
             'state' =>"Subido",
             'color' =>"#17a2b8",
-            'type' =>1,
+            'type' =>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',      
         ));
@@ -75,7 +75,7 @@ class Action extends Seeder
             'description' =>"Descargar",
             'state' =>"Descargado",
             'color' =>"#fd7e14",
-            'type' =>1,
+            'type' =>3,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',      
         ));

@@ -5,4 +5,5 @@
   <button  id="editContext"  class="btn btn-link dropdown-item" onclick="edit()"><i class="fas fa-edit"></i> {{ __('app.home.contextMenu.editClassification') }}</button>
   <button id="deleteContext" class="btn btn-link dropdown-item" onclick="deletefile()"><i class="fas fa-trash-alt"></i> {{ __('app.home.contextMenu.delete') }}</button>
   <button id="shareContext"data-toggle="modal" class="btn btn-link dropdown-item" onclick="showshare()" ><i class="fas fa-share-alt-square"></i> {{ __('app.home.contextMenu.share') }}</button>
+  <button  class="btn btn-link dropdown-item" id="actionsContextMenu" disable><i class="fas fa-ban"></i> Sin acciones</button>
 </div>

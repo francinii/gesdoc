@@ -2,7 +2,7 @@
  * Clean the inputs
  * 
  */
-function clearDescription() {
+function clearDescriptionDoc() {
     $("input[name=descriptionCreate]").val("");
 }
 
@@ -11,7 +11,7 @@ function clearDescription() {
  *  This function validates the inputs of the create form in the browser
  *  
  */
-function validaCreate() {
+function validaCreateDoc() {
     var validado = true;
     if ($("input[name=descriptionCreate]").val() == "") {
         $("input[name=descriptionCreate]").addClass("is-invalid");
@@ -53,7 +53,7 @@ function ajaxCreateDoc(user, mode) {
 
     if (me.data("requestRunning"))
         return;
-    if (validaCreate()) {
+    if (validaCreateDoc()) {
         var flow = $("#flowCreate option:selected").val();
         var description = $("input[id=descriptionCreate]").val();
         var summary = $("#summary").val();
@@ -273,7 +273,7 @@ function ajaxUploadDoc(user, mode) {
  * @param {integer} flowId - flow id
  *  
  */
-function edit(id,name,flowId) {
+function editDoc(id,name,flowId) {
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -292,7 +292,7 @@ function edit(id,name,flowId) {
  *  This function validates the inputs of the edit form in the browser
  *  
  */
-function validaEdit() {
+function validaEditDoc() {
     var validado = true;
     if ($("input[name=descriptionEdit]").val() == "") {
         $("input[name=descriptionEdit]").addClass("is-invalid");
@@ -308,7 +308,7 @@ function validaEdit() {
  * Send an ajax request in order to update an specific flow 
  * 
  */
-function ajaxUpdateDocuments() {
+function ajaxUpdateDoc() {
     var me = $(this);
 
     if (me.data("requestRunning"))
@@ -385,10 +385,29 @@ $("html")
 function newDocument(e){
    var top = e.pageY - 10;
     var left = e.pageX - 90;
-
-    (currentTable==1  && currentClassification.type==1)?$("#createClassification").show():$("#createClassification").hide();
-    (currentTable==2  && currentClassification.type==3)?$("#createTxt").show():$("#createTxt").hide();
-    (currentTable==2  && currentClassification.type==3)?$("#createSheet").show():$("#createSheet").hide();
+    $("#actionsMenu").hide();
+    if(currentTable==1  && currentClassification.type==1){
+    $("#createClassification").show();
+    $("#createTxt").show();
+    $("#createSheet").show();
+    }
+    else if(currentTable==1  && currentClassification.type==3){
+        $("#createTxt").show();
+        $("#createSheet").show();
+        $("#createClassification").hide();
+    }
+    else if(currentTable==2  && currentClassification.type==3){
+        $("#createTxt").show();
+        $("#createSheet").show();
+        $("#createClassification").hide();
+    }else{
+        $("#createClassification").hide();
+        $("#createTxt").hide();
+        $("#createSheet").hide();
+        $("#actionsMenu").show();
+        
+    }
+   
 
     $("#context-menu-create")
         .css({

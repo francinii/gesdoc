@@ -211,10 +211,12 @@ class HomeController extends Controller
         $classification = Classification::where([['id', '=', $id]])->first();
         $owner=$classification->owner;
         $owner->owner=true;
+        $CurrentUsername = Auth::id();
+        ($CurrentUsername== $owner->username)? $owner->current=true : $owner->current=false;
         $action= Action::where('type', '=', 1)->pluck('id')->toArray();
         $currentUsersShare[$classification->owner->username] = $owner;
         $currentUsersShare[$classification->owner->username]->actions=[];       
-        $this->getUsersClassification($classification->id,$currentUsersShare);   
+        $this->getUsersClassification($classification->id,$currentUsersShare,$CurrentUsername);   
         
 
        return compact('currentUsersShare');
@@ -226,20 +228,21 @@ class HomeController extends Controller
      * @param review save the classification reviewed
      * @return idclassification id of the main classification
      */
-    private function getUsersClassification($idclassification,&$currentUsersShare)
+    private function getUsersClassification($idclassification,&$currentUsersShare,$CurrentUsername)
     {
-        
+        $CurrentUsername = Auth::id();
         $myUsers=DB::select("SELECT `username` FROM `action_classification_user` WHERE `classification_id`=$idclassification ");
         $myUsers = json_decode(json_encode($myUsers), true);
         $myUsers=User::whereIn('username', $myUsers)->get();
         foreach ($myUsers as $user) {
-            if(!isset($currentUsersShare[$user->username])){
-                $currentUsersShare[$user->username]=$user;
-                $currentUsersShare[$user->username]->owner=false;
+            if(!isset($currentUsersShare[$user->username])){                
+                $user->owner=false;
+                ($CurrentUsername== $user->username)? $user->current=true :$user->current=false;
                 $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$idclassification and `username`='$user->username'");
                 $myActions = json_decode(json_encode($myActions), true);
                 $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
-                $currentUsersShare[$user->username]->actions=$myActions;  
+                $user->actions=$myActions;  
+                $currentUsersShare[$user->username]=$user;
             }          
         }
 
