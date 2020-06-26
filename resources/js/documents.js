@@ -414,22 +414,23 @@ function newDocument(e){
 
 function createDoc(type){
     $('#docType').val(type);
-if(type == 1 || type == 2){   
-    $('#docName').css('display','block');  
-    $('#docUpload').css('display','none'); 
-     $('#createDocument').modal('show'); 
-}
-      
-else if(type == 0){
-    $('#docUpload').css('display','block'); 
-    $('#docName').css('display','none'); 
-   $('#uploadDocument').modal('show');    
-}
-else if(type == 3)
+    if(type == 1 || type == 2){   
+        $('#docName').css('display','block');  
+        $('#docUpload').css('display','none'); 
+        $('#createDocument').modal('show'); 
+    }
+        
+    else if(type == 0){
+        $('#docUpload').css('display','block'); 
+        $('#docName').css('display','none'); 
+    $('#uploadDocument').modal('show');    
+    }
+    else if(type == 3){
 
-    typeContextMenu='';
-    clearCreate();
-    $('#create').modal('show'); 
+            typeContextMenu='';
+            clearCreate();
+            $('#create').modal('show'); 
+    }
 }
 
 
