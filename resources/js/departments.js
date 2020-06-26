@@ -29,10 +29,10 @@ function validaCreate() {
  *  
  */
 function ajaxCreate() {
-    ar me = $(this);
+    var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     if (validaCreate()) {       
         var description = $("input[name=nameCreate]").val();       
 
@@ -45,10 +45,12 @@ function ajaxCreate() {
                 description: description,            
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -56,13 +58,14 @@ function ajaxCreate() {
                 createDataTable("table");                
                 $("#create").modal("hide");
                 alerts('alerts', 'alert-content',"El departamento "+name+" ha sido agregado satisfactoriamente", "alert-success");
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function(request, status, error) {
                     me.data("requestRunning", false);
+                    $("#cargandoDiv").css('display', 'none')
                     alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
-                    $("#cargandoDiv").css('display', 'none')
+                   
                 
             }
         });
@@ -113,7 +116,7 @@ function ajaxUpdate() {
     var me = $(this);
     if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     if (validaEdit()) {
         var id = $("input[id=idEdit]").val();
         var description = $("input[name=nameEdit]").val();
@@ -130,10 +133,12 @@ function ajaxUpdate() {
 
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -141,13 +146,14 @@ function ajaxUpdate() {
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"El departamento "+description+" ha sido actualizado satisfactoriamente", "alert-success");
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function(request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                $("#cargandoDiv").css('display', 'none')
+                
             }
         });
     }

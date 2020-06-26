@@ -78,7 +78,7 @@ function obtenerDatos() {
     var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     var username = $("input[name=user_create]").val();
     $("#buscando").modal("show");
     $.ajax({
@@ -86,10 +86,12 @@ function obtenerDatos() {
         url: "ldap/obtenerUsuario",
         data: { username: username },
         beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
             $("#cargandoDiv").css('display', 'block')
         },
         success: function (data) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             $("#buscando").modal("hide");
             var encondrado = data.encontrado;
             if (encondrado) {
@@ -100,17 +102,18 @@ function obtenerDatos() {
                 $("#alertModalDescription").text('Ha ocurrido un error inesperado.');
                 $("#alertModal").modal("show");
             }
-            $("#cargandoDiv").css('display', 'none')
+            
         },
         error: function (request, status, error) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             $("#buscando").modal("hide");
             $("#alertModalTitle").text('Error');
             $("#alertModalDescription").text('Ha ocurrido un error inesperado.');
             $("#alertModal").modal("show");
             $("input[name=name_create]").val("");
             $("input[name=email_create]").val("");
-            $("#cargandoDiv").css('display', 'none')
+            
         },
     });
 }
@@ -123,7 +126,7 @@ function ajaxUpdate() {
     var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     if (validaEdit()) {
         var id = $("input[id=user_edit]").val(); 
         var user=  $("input[id=user_edit]").val();     
@@ -152,10 +155,12 @@ function ajaxUpdate() {
                 password: password,
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 $("#table").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
@@ -166,13 +171,14 @@ function ajaxUpdate() {
                         " ha sido actualizado satisfactoriamente",
                     "alert-success"
                 );
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function (request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                $("#cargandoDiv").css('display', 'none')
+                
             },
         });
     }
@@ -235,7 +241,7 @@ function ajaxCreate() {
     var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     if (validaCreate()) {
         var user = $("input[name=user_create]").val();
         var name = $("input[name=name_create]").val();
@@ -260,10 +266,12 @@ function ajaxCreate() {
                 password: password,
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 $("#table").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
@@ -274,10 +282,11 @@ function ajaxCreate() {
                         " ha sido agregado satisfactoriamente",
                     "alert-success"
                 );
-                $("#cargandoDiv").css('display', 'none')
+               
             },
             error: function (request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 var user = request.responseJSON["errors"]["username"];
                 if (user[0] == "The username has already been taken.") {
                     $("input[name=user_create]").addClass("is-invalid");
@@ -286,7 +295,7 @@ function ajaxCreate() {
                     alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                     alert(request.responseText);
                 }
-                $("#cargandoDiv").css('display', 'none')
+                
             },
         });
     }

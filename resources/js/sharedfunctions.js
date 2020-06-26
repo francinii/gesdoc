@@ -66,7 +66,7 @@ function ajaxDelete(id, url1,table){
 
     if (me.data("requestRunning"))
         return;
-    me.data("requestRunning", true);
+    
 
     var array = table.split('-');
     table=array[0];
@@ -85,24 +85,27 @@ function ajaxDelete(id, url1,table){
             id:id,
         },
         beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
             $("#cargandoDiv").css('display', 'block')
         },
         success: function(result) {  
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             $("#"+table).DataTable().destroy();         
             $("#"+divTable).html(result);            
             createDataTable(table);
             $("#confirmar").modal("hide");
             alerts('alerts', 'alert-content',"Elemento eliminado correctamente.", "alert-success");
             
-            $("#cargandoDiv").css('display', 'none')
+            
         },
         error: function (request, status, error) {  
-            me.data("requestRunning", false);    
+            me.data("requestRunning", false);  
+            $("#cargandoDiv").css('display', 'none')  
             $("#confirmar").modal("hide");                  
             alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
             alert(request.responseText);
-            $("#cargandoDiv").css('display', 'none')
+            
         }
     });
 }

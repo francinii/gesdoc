@@ -165,7 +165,7 @@ function ajaxCall(user){
     var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
    // updateCoordenates();  
     description =  $("input[id=flowName]").val();
     data = "";
@@ -204,10 +204,12 @@ function ajaxCall(user){
                 id:id,
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) { 
                 me.data("requestRunning", false); 
+                $("#cargandoDiv").css('display', 'none')
                openTable();        
                alerta('Proceso exitoso', message,false);
                // alerts('alerts', 'alert-content',  "El flujo " +  description + " ha sido creado satisfactoriamente",
@@ -217,15 +219,16 @@ function ajaxCall(user){
                 createDataTable("table");
                 $("#create").modal("hide");
                 idFlowForUpdate='';
-                $("#cargandoDiv").css('display', 'none')
+                
              
             },
             error: function(request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alert(request.responseText);
                 alerta("Ha ocurrido un error inesperado.", "alert-danger");
                 openTable();
-                $("#cargandoDiv").css('display', 'none')
+                
             }
         }); 
     }
@@ -263,10 +266,12 @@ function ajaxUpdate() {
                 username: user
             },
             beforeSend: function (xhr) { 
+                 
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) { 
-                me.data("requestRunning", false);               
+                $("#cargandoDiv").css('display', 'none')  
+                me.data("requestRunning", false);  
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -279,13 +284,14 @@ function ajaxUpdate() {
                         " ha sido actualizado satisfactoriamente",
                     "alert-success"
                 );
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function(request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                $("#cargandoDiv").css('display', 'none')
+                
             }   
         });
     }
@@ -303,7 +309,7 @@ function ajaxEdit(idFlow,flowName) {
     var me = $(this);
  if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);  
+    
     idFlowForUpdate = idFlow;  //Global variable idFlowForUpdate
        $.ajax({
         url: "flows/{" + idFlow + "}",
@@ -315,14 +321,16 @@ function ajaxEdit(idFlow,flowName) {
             id: idFlow,
         },
         beforeSend: function(){
+            me.data("requestRunning", true);  
             $("#cargandoDiv").css('display', 'block')
         },       
         success: function (response){
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
            hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
             editFlow(response);
-            $("#cargandoDiv").css('display', 'none')
+            
            
         },
         done: function(response) {
@@ -331,9 +339,10 @@ function ajaxEdit(idFlow,flowName) {
 
         error: function(request, status, error) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-            $("#cargandoDiv").css('display', 'none')
+            
         }
     });
 

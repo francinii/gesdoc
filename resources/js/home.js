@@ -152,11 +152,12 @@ function ajaxCreate(){
 
     if (me.data("requestRunning"))
         return;
-    me.data("requestRunning", true);
+    
 
     if (validaCreate()) {
         var description = $("input[name=nameCreate]").val();
 
+        
         $.ajax({
             url: "home",
             method: "POST",
@@ -169,10 +170,12 @@ function ajaxCreate(){
                 description: description,
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
 
@@ -185,14 +188,15 @@ function ajaxCreate(){
                     "alert-success"
                 );
                 
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function (request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 
-                $("#cargandoDiv").css('display', 'none')
+                
             },
         });
     }
@@ -228,7 +232,7 @@ function openClassification(id) {
     var me = $(this);
     if (me.data("requestRunning"))
         return;    
-    me.data("requestRunning", true);
+    
 
     $.ajax({
         url: "home/"+currentTable+"/"+id,
@@ -241,22 +245,25 @@ function openClassification(id) {
             id: id,
         },
         beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
             $("#cargandoDiv").css('display', 'block')
         },
         success: function (result) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
             createDataTable("table");
             $("#create").modal("hide");            
-            $("#cargandoDiv").css('display', 'none')
+            
         },
         error: function (request, status, error) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
             
-            $("#cargandoDiv").css('display', 'none')
+           
         },
     });
 }
@@ -302,7 +309,7 @@ function ajaxUpdate() {
 
     if (me.data("requestRunning"))
         return;
-    me.data("requestRunning", true);
+    
 
     if (validaEdit()) {
         var id = $("input[id=idEdit]").val();
@@ -325,23 +332,26 @@ function ajaxUpdate() {
 
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {    
-                me.data("requestRunning", false);            
+                me.data("requestRunning", false);  
+                $("#cargandoDiv").css('display', 'none')          
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function(request, status, error) {
                 me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);                
-                $("#cargandoDiv").css('display', 'none')
+                
             }
         });
     }
@@ -381,7 +391,7 @@ function showshare(){
     var me = $(this);
     if (me.data("requestRunning"))
     return;
-    me.data("requestRunning", true);
+    
     
     usersShare=[];
     $("#modal-body-step-back").hide();
@@ -402,14 +412,20 @@ function showshare(){
 
 
         },
+        beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
+            $("#cargandoDiv").css('display', 'block')
+        },
         success: function(result) {   
             me.data("requestRunning", false); 
+            $("#cargandoDiv").css('display', 'none')
             openShare(result.currentUsersShare,result.documentInClassificationid,result.classificationInClassificationid);
                               
             
         },
         error: function(request, status, error) {
             me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
             alerts("Ha ocurrido un error inesperado.", "alert-danger");
             alert(request.responseText);
             
@@ -631,10 +647,10 @@ function selectAccion(username,action,evento){
 
 function AjaxShare(){
 var me = $(this);
- if (me.data("requestRunning"))
-    return;
-    me.data("requestRunning", true);
+ if (me.data("requestRunning"))    return;
+   
     var classificationOwner=$('#owner').val();  
+
     
     $.ajax({
         url: "home/share/"+idselect+"/"+typeContextMenu,
@@ -654,6 +670,7 @@ var me = $(this);
 
         },
         beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
             $("#cargandoDiv").css('display', 'block')
         },
         success: function(result) {    
