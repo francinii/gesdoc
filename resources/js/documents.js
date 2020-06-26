@@ -59,6 +59,7 @@ function ajaxCreateDoc(user, mode) {
         var route = "";
         var size = "";
         var content = "";
+        
         if(type == 1)
             docType = 'docx';
         else if(type == 2)

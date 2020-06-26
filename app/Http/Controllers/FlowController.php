@@ -175,9 +175,9 @@ class FlowController extends Controller
             //insertamos a la tabla de steps_steps
             if($step != null){
                   $this->insertStepStep($step, $idFlow);
-            //insertamos a la tabla de steps_users
-               // $this->insertStepUser( $datos,  $step, $idFlow);
-            //insertamos a la tabla de action_step_user
+                //insertamos a la tabla de steps_users
+                //$this->insertStepUser( $datos,  $step, $idFlow);
+                //insertamos a la tabla de action_step_user
                 $this->insertActionStepUser($step, $idFlow);
             }
               
@@ -195,10 +195,10 @@ class FlowController extends Controller
         $id = $datos['id'];
         $username = "'".$datos['username']."'";  
         $description = "'".$datos['description']."'";  
-        if($id == '')
-            DB::select("call insert_flow($username, $description, @res, @id_flow)");
-        else 
-            DB::select("call update_flow($id, $username, $description, @res, @id_flow)");
+            if($id == '')
+                DB::select("call insert_flow($username, $description, @res, @id_flow)");
+            else 
+                DB::select("call update_flow($id, $username, $description, @res, @id_flow)");
 
         $res = DB::select("SELECT @res as res;"); 
         $idFlow = DB::select("SELECT @id_flow as id_flow;"); 
