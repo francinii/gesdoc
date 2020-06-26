@@ -396,7 +396,7 @@ function newDocument(e){
         $("#createSheet").show();
         $("#createClassification").hide();
     }
-    else if(currentTable==2  && currentClassification.type==3){
+    else if(currentTable==2  && currentClassification.type==3 &&  (isCurrentUserOwner || CanCurrentUserEditar)){
         $("#createTxt").show();
         $("#createSheet").show();
         $("#createClassification").hide();
