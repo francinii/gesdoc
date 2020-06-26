@@ -630,10 +630,12 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-                  DELETE FROM `flows` WHERE id = p_idFlow;
-                  INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
+            UPDATE `flows` SET username = p_username, description = p_description, updated_at = NOW() where id =  p_idFlow;
+                --  DELETE FROM `flows` WHERE id = p_idFlow;
+               --   INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
            COMMIT;
-            SET id_flow = LAST_INSERT_ID();
+          --  SET id_flow = LAST_INSERT_ID();
+            SET id_flow = p_idFlow;
           -- SUCCESS
 SET res = 0;
 END
@@ -663,6 +665,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
+               -- SET cursor = (SELECT * FROM versions WHERE flow_id = p_idFlow, identifier = p_identifier);
                  INSERT INTO `steps`(flow_id, id, description, axisX, axisY, created_at,updated_at) VALUES (p_idFlow, p_identifier, p_description, p_axisx, p_axisy, NOW(),NOW());
             COMMIT;
           -- SUCCESS
@@ -741,7 +744,7 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_size` varchar(500), IN `p_classification` int, IN `p_route` varchar(500), IN `p_content` longtext, IN `p_id_flow` int, IN `p_id_action` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_version` int,  OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_size` varchar(500), IN `p_classification` int, IN `p_route` varchar(500), IN `p_content` longtext, IN `p_id_flow` int, IN `p_id_action` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_version` int, IN `p_identifier` varchar(500),  OUT `res` TINYINT  UNSIGNED )
 BEGIN
   DECLARE document_id Integer;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -760,7 +763,7 @@ BEGIN
                 INSERT INTO `documents`(flow_id, action_id, username, description,	summary, code, created_at, updated_at ) VALUES (p_id_flow, p_id_action, p_username, p_description, p_summary, p_code,NOW(),NOW());
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
-                INSERT INTO `versions`(document_id, content,size, type, version, created_at, updated_at) VALUES (document_id, content,p_size, p_type,p_version, NOW(),NOW());
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, type, version, created_at, updated_at) VALUES (document_id, p_id_flow, p_identifier, content,p_size, p_type,p_version, NOW(),NOW());
            
             
             COMMIT;

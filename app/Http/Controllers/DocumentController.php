@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Document;
+use App\StepStep;
 use App\Flow;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -101,6 +102,8 @@ class DocumentController extends Controller
 
     private function createDocument( $document){
         //$description = "'".$datos['description']."'"; 
+        
+
         $size =  "'".$document['size']. "'";
         $username = "'". $document['user_id']. "'";
         $id_flow =  $document['flow_id']== '-1'? 'NULL': $document['flow_id'] ;   //int     
@@ -113,10 +116,15 @@ class DocumentController extends Controller
         $description = "'".$document['description']."'";
         $version =  1; //$document['version']; //int
 
+
+        $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();
+        $identifier =  "'".$step->next_step_id."'";
+        
+
         $classification = '1'; // Por defecto se agrega a la classifcacion 1 que es el principal
         //falta el type
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($size, $classification, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version, @res)");
+        DB::select("call insert_document($size, $classification, $route, $content, $id_flow, $id_state, $username, $description, $type, $summary, $code, $version,$identifier, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {

@@ -15,12 +15,17 @@ class Versions extends Migration
     {
         Schema::create('versions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('document_id')->unsigned(); 
+            $table->bigInteger('document_id')->unsigned(); // fk doc
+            $table->bigInteger('flow_id')->unsigned()->nullable();  // fk step
+            $table->string('identifier');  //fk step
             $table->text('content'); //content or route depends on
             $table->string('size',500);    //numero y unidad de medida mb gb etc   
             $table->string('type',500);   //ejemplo png, xls, doc, txt etc. 
-            $table->decimal('version', 3, 1);   //ejemplo png, xls, doc, txt etc.     
+            $table->decimal('version', 3, 1);   //ejemplo png, xls, doc, txt etc.   
+             
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign(['flow_id','identifier'])->references(['flow_id','id'])->on('steps')->onDelete('cascade');
+           
             $table->timestamps();
         });        
     }
