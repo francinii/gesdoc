@@ -21,7 +21,7 @@ var CanCurrentUserDetele;
 function definePermmisision(myActions){
     (myActions.findIndex(x => x == 'owner')!=-1)? isCurrentUserOwner=true:isCurrentUserOwner=false;
     (isCurrentUserOwner || myActions.findIndex(x => x.action_id == 5)!=-1)? CanCurrentUserEditar=true:CanCurrentUserEditar=false;
-    (isCurrentUserOwner || myActions.findIndex(x => x.action_id == 6)!=-1)? CanCurrentUserDetele=true:CanCurrentUserDetele=false;
+    (isCurrentUserOwner || myActions.findIndex(x => x.action_id == 9)!=-1)? CanCurrentUserDetele=true:CanCurrentUserDetele=false;
 }
 function drawRoute() {
     var LastClassificacion = listClassification.slice(-1).pop();
@@ -552,25 +552,30 @@ function openPermissions(actions){
 
     var owner= usersShare[index].owner;   
     var edit=usersShare[index].actions.findIndex(x => x == 5);
-    var deletePermission = usersShare[index].actions.findIndex(x => x == 6);
-    (owner ||edit!=-1)? edit=true:edit=false;
-    (owner ||deletePermission!=-1)? deletePermission=true:deletePermission=false;
-
+    var deletePermission = usersShare[index].actions.findIndex(x => x == 9);
+    if(owner){ $('#shareOwner').show();}else{$('#shareOwner').hide(); }
+    if(owner || edit!=-1){edit=true; $('#share-5').show(); }else{ edit=false;  $('#share-5').hide();}
+    if(owner || deletePermission!=-1){deletePermission=true;  $('#share-9').show();}else{ deletePermission=false;  $('#share-9').hide();}
+   
   for (let index = 0; index < usersShare.length; index++) {
     if(usersShare[index].type!='delete'){
+        
         cadena += '<tr id="pemission-'+usersShare[index].username+'"><input type="hidden" id = "input'+usersShare[index].username+'" value ="'+usersShare[index].email+'"><td id = "'+usersShare[index].username+'">'+usersShare[index].name+'</td>';
         if(usersShare[index].owner){
+            if(owner)
             cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
             actions.forEach(action => {  
-                if(action.id!=4)      
+                if((action.id==5 && edit) || (action.id==9 && edit) || (owner && action.id!=4))      
                 cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
+               
             });
         }        
         else{
+            if(owner)
             cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
             actions.forEach(action => {      
                 var actionIndex = usersShare[index].actions.indexOf(action.id); 
-                if(action.id!=4)
+                if((action.id==5 && edit) || (action.id==9 && edit) || (owner && action.id!=4))
                 if (actionIndex !== -1)             
                     cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
                 else

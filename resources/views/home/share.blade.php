@@ -60,10 +60,10 @@
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
                         <th>{{ __('app.home.share.user') }}</th>
-                        <th>{{ __('app.home.share.owner') }}</th>
+                        <th id="shareOwner">{{ __('app.home.share.owner') }}</th>
                         @foreach ($actions as $action) 
                          @if ($action->id != 4)             
-                            <th id = "{{$action->id}}" >{{$action->description}}</th>
+                            <th id = "share-{{$action->id}}" >{{$action->description}}</th>
                             @endif
                         @endforeach             
                 </thead>
