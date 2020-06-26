@@ -115,10 +115,15 @@ class DocumentController extends Controller
         $id_state =  1;//$document['state_id']; //int
         $description = "'".$document['description']."'";
         $version =  1; //$document['version']; //int
+        $identifier =  "NULL";
 
 
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();
-        $identifier =  "'".$step->next_step_id."'";
+        
+        if($step !=null){
+            $identifier =  "'".$step[0]->next_step_id."'";
+        }
+            
         
 
         $classification = '1'; // Por defecto se agrega a la classifcacion 1 que es el principal

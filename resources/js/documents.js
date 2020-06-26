@@ -393,7 +393,7 @@ function newDocument(e){
     $("#createSheet").show();
     }
     else if(currentTable==1  && currentClassification.type==3){
-        $("#createTxt").show();\
+        $("#createTxt").show();
         $("#createTxt").hide();
         $("#createSheet").hide();
         $("#actionsMenu").show();
