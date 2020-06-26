@@ -49,6 +49,10 @@ function validaCreate() {
  * 
  */
 function ajaxCreateDoc(user, mode) {
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
     if (validaCreate()) {
         var flow = $("#flowCreate option:selected").val();
         var description = $("input[id=descriptionCreate]").val();
@@ -84,10 +88,12 @@ function ajaxCreateDoc(user, mode) {
             },
 
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function (result) {
                 $("#cargandoDiv").css('display', 'none');
+                me.data("requestRunning", false);   
                 $("#createDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
@@ -100,14 +106,15 @@ function ajaxCreateDoc(user, mode) {
                 }else {
                     window.location="documents/spreadSheetEditor";
                 }
-                 me.data("requestRunning", false);                
+                              
 
             },
             error: function (request, status, error) {
                 $("#cargandoDiv").css('display', 'none')
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                me.data("requestRunning", false);
+                
                 
             },
         });
@@ -123,7 +130,10 @@ function ajaxCreateDoc(user, mode) {
  * 
  */
 function ajaxUploadDoc(user, mode) {
+    var me = $(this);
 
+    if (me.data("requestRunning"))
+        return;
     
         var flow = $("#flowCreate option:selected").val();
         var description = $("input[id=descriptionCreate]").val();
@@ -159,9 +169,11 @@ function ajaxUploadDoc(user, mode) {
 
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
+                me.data("requestRunning", false);  
             },
             success: function (result) {
                 $("#cargandoDiv").css('display', 'none');
+                me.data("requestRunning", false);  
                 $("#createDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
@@ -174,14 +186,15 @@ function ajaxUploadDoc(user, mode) {
                 }else {
                     window.location="documents/spreadSheetEditor";
                 }
-                 me.data("requestRunning", false);                
+                               
 
             },
             error: function (request, status, error) {
                 $("#cargandoDiv").css('display', 'none')
+                me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                me.data("requestRunning", false);
+               
                 
             },
         });
@@ -295,7 +308,11 @@ function validaEdit() {
  * Send an ajax request in order to update an specific flow 
  * 
  */
-function ajaxUpdate() {
+function ajaxUpdateDocuments() {
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
     if (validaEdit()) {
         var id = $("input[id=idEdit]").val();
         var description = $("input[name=descriptionEdit]").val();
@@ -313,9 +330,12 @@ function ajaxUpdate() {
 
             },
             beforeSend: function (xhr) { 
+                me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
             success: function(result) {
+                $("#cargandoDiv").css('display', 'none')
+                me.data("requestRunning", false);
                 $("#table").html(result);
                 $("#table")
                     .DataTable()
@@ -323,12 +343,14 @@ function ajaxUpdate() {
                 createDataTable("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
-                $("#cargandoDiv").css('display', 'none')
+                
             },
             error: function(request, status, error) {
+                $("#cargandoDiv").css('display', 'none')
+                me.data("requestRunning", false);
                 alerts("Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
-                $("#cargandoDiv").css('display', 'none')
+                
             }
         });
     }
