@@ -40,6 +40,9 @@ Route::post('home/share/{id}/{type}', 'HomeController@Share');
 
 Route::get('home/{table}/{id}', 'HomeController@refresh');
 
+
+Route::get('documentFlow/historial/{id}', 'DocumentFlowController@historial');
+
 Auth::routes();
 
 Route::resource('home', 'HomeController');
@@ -53,3 +56,6 @@ Route::resource('flows', 'FlowController');
 Route::resource('documents', 'DocumentController');
 
 Route::resource('departments', 'DepartmentController');
+
+
+Route::resource('documentFlow', 'DocumentFlowController');

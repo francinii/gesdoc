@@ -11,10 +11,10 @@ use App\StepStep;
 use App\StepUser;
 use App\ActionStepUser;
 use DB;
-
+use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+
 
 class FlowController extends Controller
 {
