@@ -14,8 +14,8 @@
     @include('layouts.header') 
 @stop
 @section('content')
-    <?php $id = 2 ?>
-    <div class="container-fluid" id = "flow-wrapper">          
+    <?php-// $id = 2 ?>
+    <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
                 <h2 class="text-center">Mis documentos en flujo</h2>                     
      

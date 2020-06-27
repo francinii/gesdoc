@@ -1,50 +1,37 @@
 <div class="card">
     <div class="card-header ">
-      <span><b class="card-text card-title ">Version</b></span>
-            <span class="card-text ">1.0</span>       
+      <span><b class="card-text card-title ">Versión</b></span>
+            <span class="card-text ">{{ $verdoc->version }}</span>       
     </div>
     <div class="card-body">
      <div class="row">
-        <div class="col-8">          
+        <div class="col-12">      
           <div>
-            <span><b class="card-text ">{{ $version->version }}</b></span>
-            <span class="card-text ">1.0</span> 
+            <span><b class="card-text ">Fecha de creación:</b></span>
+            <span id = '' class="card-text">{{ $verdoc->created_at }}</span> 
           </div>
-          <div>
-            <span><b class="card-text ">Tamaño</b></span>
-            <span class="card-text "></span>
+          <div>            
+              <span><b class="card-text ">Última modificación:</b></span>
+              <span id = '' class="card-text">{{ $verdoc->updated_at }}</span>
           </div> 
           <div>
-            <span><b class="card-text ">Tipo</b></span>
-            <span class="card-text ">{{ $version->type }}</span>
-          </div>  
+            <span><b class="card-text ">Tipo:</b></span>
+            <span class="card-text ">{{ $verdoc->type }}</span>
+          </div>             
+        
           <div>
-            <span><b class="card-text ">Accion</b></span>
-            <span class="badge"  style= 'background-color:green; color:white' > Aprobado </span> <span>por</span>
-            <span><b class="card-text">Francini Corrales</b></span>
-          </div>  
-          <div>
-            <span><b class="card-text ">Departamento</b></span>
-            <span class="badge "> Rectoria </span> <span>por</span>              
-          </div>     
+            <span><b class="card-text ">Tamaño:</b></span>
+            <span class="card-text ">{{ $verdoc->size }}</span>
+          </div> 
         </div>  
-
-        <div class="col-4"> 
-        <input id = 'datatime' type= 'hidden' value = '{{ $version->updated_at }}'>          
-        <script>  date(); </script>
-            <div>            
-              <span><b class="card-text ">Fecha de modificación</b></span>
-              <span class="card-text date "></span>
-            </div>
-            <div>
-              <span><b class="card-text ">Hora</b></span>
-              <span class="card-text hour"></span> 
-            </div>
+        <div class="col-12">
+            <span><button onclick="openPanel(1,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-info"> <i class="fas fa-eye"></i> Ver</button></span>
+            <span><button onclick="openPanel(2,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i>Notas</button></span>
            
-              <span><a href="#" class="btn btn-warning">Notas</a></span>
-              <span><a href="#" class="btn btn-info">Descarga</a></span>
-           
+            <span><button onclick="openPanel(3,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-danger"><i class="fa fa-download"> Descarga</i></button></span>
+            <span><button onclick="openPanel(4,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-primary"> <i class="fas fa-clock">Acciones</i></button></span>  
         </div>
       </div>
     </div>
   </div>
+  <div>&nbsp;</div>

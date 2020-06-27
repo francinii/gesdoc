@@ -106,3 +106,8 @@ composer dump-autoload
 
 //Ver todas las rutas
 php artisan route:list
+
+
+
+
+  <iframe src="http://docs.google.com/gview?url=http://upgrade.com.mx/_docs/prueba.doc&embedded=true" style="width:600px; height:600px;" frameborder="0"></iframe>

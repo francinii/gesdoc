@@ -70,7 +70,7 @@ class User extends Authenticatable
      * Relationship many to many
     */
     public function documents() {
-        return $this->belongsToMany('App\Document');
+        return $this->hasMany('App\Document');
     }
 
     /**

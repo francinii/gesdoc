@@ -106,7 +106,7 @@ class DocumentController extends Controller
 
         $size =  "'".$document['size']. "'";
         $username = "'". $document['user_id']. "'";
-        $id_flow =  $document['flow_id']== '-1'? 'NULL': $document['flow_id'] ;   //int     
+        $id_flow =  $document['flow_id']== '-1'? -1: $document['flow_id'] ;   //int     
         $route =  "'". $document['route'] . "'";
         $content =   "'".$document['content'] ."'";
         $code =   "'".$document['code'] ."'";
@@ -115,12 +115,12 @@ class DocumentController extends Controller
         $id_state =  1;//$document['state_id']; //int
         $description = "'".$document['description']."'";
         $version =  1; //$document['version']; //int
-        $identifier =  "NULL";
+        $identifier =  "''";
 
 
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();
         
-        if($step !=null){
+        if(count($step) >0){
             $identifier =  "'".$step[0]->next_step_id."'";
         }
             

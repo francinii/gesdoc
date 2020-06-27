@@ -15,9 +15,10 @@ class CreateFlowsTable extends Migration
     {
         Schema::create('flows', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->bigIncrements('id');            
             $table->string('username');
             $table->string('description',500);
+            $table->boolean('state');
             $table->timestamps();
 
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade'); 

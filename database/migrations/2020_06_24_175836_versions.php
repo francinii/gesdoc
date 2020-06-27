@@ -14,10 +14,11 @@ class Versions extends Migration
     public function up()
     {
         Schema::create('versions', function (Blueprint $table) {
+            $table->engine = 'InnoDB'; 
             $table->bigIncrements('id');
             $table->bigInteger('document_id')->unsigned(); // fk doc
             $table->bigInteger('flow_id')->unsigned()->nullable();  // fk step
-            $table->string('identifier');  //fk step
+            $table->string('identifier')->nullable();  //fk step
             $table->text('content'); //content or route depends on
             $table->string('size',500);    //numero y unidad de medida mb gb etc   
             $table->string('type',500);   //ejemplo png, xls, doc, txt etc. 

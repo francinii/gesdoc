@@ -581,7 +581,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_flow`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_flow`(IN `p_username` varchar(500), IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_flow`(IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_state` boolean, OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -597,7 +597,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-                   INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
+                   INSERT INTO `flows`(username, description,state, created_at,updated_at) VALUES (p_username, p_description,p_state, NOW(),NOW());
            COMMIT;
             SET id_flow = LAST_INSERT_ID();
           -- SUCCESS
@@ -614,7 +614,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_flow`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_flow`(IN `p_idFlow` int, IN `p_username` varchar(500), IN `p_description` varchar(500), OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_flow`(IN `p_idFlow` int, IN `p_username` varchar(500), IN `p_description` varchar(500),IN `p_state` boolean, OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -630,7 +630,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-            UPDATE `flows` SET username = p_username, description = p_description, updated_at = NOW() where id =  p_idFlow;
+            UPDATE `flows` SET username = p_username, description = p_description, state = p_state, updated_at = NOW() where id =  p_idFlow;
                 --  DELETE FROM `flows` WHERE id = p_idFlow;
                --   INSERT INTO `flows`(username, description,created_at,updated_at) VALUES (p_username, p_description, NOW(),NOW());
            COMMIT;
@@ -747,6 +747,8 @@ DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
 CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_size` varchar(500), IN `p_classification` int, IN `p_route` varchar(500), IN `p_content` longtext, IN `p_id_flow` int, IN `p_id_action` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_version` int, IN `p_identifier` varchar(500),  OUT `res` TINYINT  UNSIGNED )
 BEGIN
+  DECLARE idFlow INTEGER ; 
+  DECLARE idIdentifier varchar(500); 
   DECLARE document_id Integer;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -760,11 +762,21 @@ BEGIN
     SET res = -2;
     ROLLBACK;
 	END;
+
             START TRANSACTION;
-                INSERT INTO `documents`(flow_id, action_id, username, description,	summary, code, created_at, updated_at ) VALUES (p_id_flow, p_id_action, p_username, p_description, p_summary, p_code,NOW(),NOW());
+            set idFlow = p_id_flow;
+            set idIdentifier = p_identifier;
+                IF  p_id_flow = -1 THEN
+                  set idFlow = NULL;
+                END IF;
+                IF  p_identifier = '' THEN
+                  set idIdentifier = NULL;
+                END IF;
+
+                INSERT INTO `documents`(flow_id, action_id, username, description,	summary, code, created_at, updated_at ) VALUES (idFlow, p_id_action, p_username, p_description, p_summary, p_code,NOW(),NOW());
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
-                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, type, version, created_at, updated_at) VALUES (document_id, p_id_flow, p_identifier, content,p_size, p_type,p_version, NOW(),NOW());
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, type, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier, p_content,p_size, p_type,p_version, NOW(),NOW());
            
             
             COMMIT;
@@ -875,3 +887,43 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
+
+
+-- VISTAS 
+
+DROP VIEW IF EXISTS view_flow_user ;
+CREATE VIEW view_flow_user AS 
+    SELECT DISTINCT  asu.username, asu.flow_id, f.description
+    FROM `action_step_user` asu, flows f
+    WHERE f.id = asu.flow_id
+
+
+
+-- DROP VIEW IF EXISTS view_document_version ;
+-- CREATE VIEW view_document_version AS 
+-- SELECT  doc.id as document_id, doc.flow_id, doc.action_id, doc.username, doc.description as document_description, doc.summary, doc.code, doc.created_at as document_create, doc.updated_at document_update,
+--  ver.id as version_id, ver.document_id as doc_ver_id, ver.identifier, ver.content, ver.size, ver.type, ver.version, ver.created_at as version_create, ver.updated_at as version_update,
+-- user.name, act.color, act.state, act.description as action_description
+--     FROM documents doc, versions ver, users user, actions act
+-- where doc.id =  ver.document_id
+    
+
+
+
+    
+-- DROP VIEW IF EXISTS view_document_version ;
+--  CREATE VIEW view_document_version AS 
+-- SELECT ver.id as version_id, ver.document_id, ver.identifier, ver.content, ver.size, ver.type, ver.version, ver.created_at as version_create, ver.updated_at as version_update,
+ -- doc.flow_id, doc.action_id, doc.username, doc.description as document_description, doc.summary, doc.code, doc.created_at as document_create, doc.updated_at document_update, user.name
+-- FROM versions ver 
+-- INNER JOIN 
+-- documents doc ON ver.document_id=doc.id
+-- INNER JOIN
+--     users user ON user.username = doc.username
+
+
+
+
+
+-- INSERT INTO `historials`(`action`, `username`, `user_id`, `description`, `document_id`, `document_name`, `version_id`, `flow_id`, `flow_name`, `created_at`, `updated_at`) VALUES (1,'DANNY VALERIO','402340420','El usuario Danny Valerio no trabajo el día de hoy en la tesis',1,'Prueba',1,1,'PFESA', NOW(),NOW())
+-- INSERT INTO `notes`(`version_id`, `content`, `created_at`, `updated_at`) VALUES (1,'NO vamos a terminar esto',NOW(),NOW())

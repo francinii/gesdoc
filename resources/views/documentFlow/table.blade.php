@@ -16,7 +16,7 @@
             <td class="text-center">{{$document->id}}</td>
             <td class="text-center">{{$document->description}}</td>
             <td class="text-center">{{$document->code}}</td>         
-            <td class="text-center"><h5><span class="badge" style= 'background-color:{{$document->state->color}}; color:white'>{{$document->state->description}}</span></h5></td>                                                 
+            <td class="text-center"><h5><span class="badge" style= 'background-color:{{$document->action->color}}; color:white'>{{$document->action->state}}</span></h5></td>                                                 
             <td class="text-center"></td>
             <td class="text-center">
                     <button onclick = ""  class="btn btn-info"  data-toggle="modal" >
