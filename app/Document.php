@@ -16,16 +16,16 @@ class Document extends Model
     /**
      * A document belongs to a flow
     */
-    public function state() {
-        return $this->belongsTo('App\State');
+    public function action() {
+        return $this->belongsTo('App\Action');
     }
 
     /**
      * Relationship many to many 
     */
-    public function users() {
-        return $this->belongsToMany('App\User');
-    }
+   // public function user() {
+   //     return $this->belongsTo('App\User','username','username');
+   // }
     
     /**
      * Relationship many to many 

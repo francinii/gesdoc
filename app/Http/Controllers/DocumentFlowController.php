@@ -10,7 +10,8 @@ use App\Department;
 use App\Document;
 use App\Version;
 use App\Action;
-use App\State;
+use App\Note;
+use App\Historial;
 use App\ViewFlowUser;
 use DB;
 use Auth;
@@ -94,10 +95,41 @@ class DocumentFlowController extends Controller
         //$flows =ViewFlowUser::where('username', '=', $usuario)->get();
         //$documents = Document::where('flow_id', '=', $flow)->get();  
         $versions = Version::where('document_id', '=', $doc)->get();
-        return view('documentFlow.historial',compact('doc', 'versions'));
+        $document = Document::where('id', '=', $doc)->get();
+        if(count($document)>0){
+            $document =  $document[0];
+        }else {
+            $document = null;
+        }
+        return view('documentFlow.historial',compact('doc', 'versions', 'document'));
   
     }
 
+
+    /**
+     * Display a panel of a resource.
+     *
+     * @param  \App\StepStep  $stepStep
+     * @return \Illuminate\Http\Response
+     */
+    public function openPanel(Request $request){
+        $datos = request()->except(['_token']);
+        $code =$datos['code'];
+
+        if ($code == 1){
+            return $this->preview($datos);
+
+        }else if($code == 2 ){
+            return $this->listNotes($datos);
+
+        }else if($code == 3){
+            return $this->downloadVersion($datos);
+
+        }else if($code == 4){
+            return $this->listVersionAction($datos);
+
+        }        
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -139,9 +171,7 @@ class DocumentFlowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function refresh($flow)
-    {
-
+    public function refresh($flow) {
         $usuario = Auth::user()->username;
         
         //$Flows = Flow::all();
@@ -153,5 +183,37 @@ class DocumentFlowController extends Controller
         //$flow = $flows->first()->flow_id;
         $documents = Document::where('flow_id', '=', $flow)->get();
         return view('documentFlow.table',compact('flow','flows', 'users','documents','actions'));
+    }
+
+
+
+
+    /**
+     * List the notes for a specific version.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listNotes($datos){
+        $version = $datos['version'];
+        $versionNum = $datos['versionNum'];
+        $notes = Note::where('version_id', '=', $version)->get();       
+        return view('documentFlow.notes',compact('version','notes','versionNum'));
+    }
+
+
+    public function listVersionAction($datos){
+        $version = $datos['version'];
+        $versionNum = $datos['versionNum'];
+        $actions = Historial::where('version_id', '=', $version)->get();       
+        return view('documentFlow.actionHistory',compact('version','actions','versionNum'));
+        
+    }
+
+    public function preview($datos){
+        
+    }
+
+    public function downloadVersion($datos){
+        
     }
 }

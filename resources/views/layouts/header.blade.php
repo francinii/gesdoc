@@ -15,9 +15,7 @@
             <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
             <a class="dropdown-item" href="{{ url('/departments') }}">Departamentos</a>
             <a class="dropdown-item" href="{{ url('/flows') }}">Flujos </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>          
+         </div>          
       </li>
 
       <li class="nav-item dropdown">
@@ -26,11 +24,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url('/documentFlow') }}">Mis flujos </a>
-          <a class="dropdown-item" href="{{ url('/documents') }}">Documentos</a>
-          <a class="dropdown-item" href="{{ url('/documents/textEditor') }}">Editor de texto</a>   
-          <a class="dropdown-item" href="{{ url('/documents/spreadSheetEditor') }}">Hoja de calculo</a>          
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>  
         </div>          
     </li>
         

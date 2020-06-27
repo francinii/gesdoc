@@ -2,7 +2,8 @@
     <thead class="thead-dark">
         <tr class="">
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.id') }}</th>
-            <th style="width: 50%"  class="text-center">{{ __('app.flows.table.description') }}</th>
+            <th style="width: 40%"  class="text-center">{{ __('app.flows.table.description') }}</th>
+            <th style="width: 10%"  class="text-center">Estado</th>
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.owner') }}</th>                    
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.edit') }}</th>
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.delete') }}</th>
@@ -13,6 +14,12 @@
         <tr>
             <td class="text-center">{{$flow->id}}</td>
             <td class="text-center">{{$flow->description}}</td>
+            @if($flow->state == 0)
+                <td class="text-center"><h5> <span class="badge bg-danger text-light">Inactivo</span></h5></td>
+            @endif
+            @if($flow->state == 1)
+                <td class="text-center"><h5><span class="badge bg-success text-light">Activo</span></h5></td>
+            @endif
             @foreach($users as $user)
             
                 @if($flow->username == $user->username )

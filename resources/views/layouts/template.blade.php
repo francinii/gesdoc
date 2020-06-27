@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  style = "height: 100vh;   " >
 
 <head>
     <meta charset="utf-8">
@@ -21,16 +21,16 @@
     @yield('head')
 </head>
 
-<body>
+<body style = "height:100vh; ">
 
     
         @yield('header')
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-11" style= "height:70px"></div>
+                <div class="col-11" style= "height:60px"></div>
                 <div id="cargandoDiv" style="display:none" class="col-1 justify-content-right">
-                    <img   src="../storage/app/cargando.gif" class="justify-content-right" alt="Cargando" width="70px">
+                    <img   src="../storage/app/cargando.gif" class="justify-content-right" alt="Cargando" width="60px">
                 </div>
             </div>
         </div>
