@@ -81,6 +81,39 @@ function historial(idDoc){
 
 
 
+function preview(idDoc){
+
+    $.ajax({
+        url: "documentFlow/preview/{" + idDoc + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idDoc: idDoc,
+            
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+            $("#content").html(result);
+      },
+
+        error: function(request, status, error) {
+          
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
+
+}
+
+
 
 /**
  *   
@@ -128,5 +161,20 @@ function openPanel(code, version,document,versionNum){
         }
     });
 
+
+}
+
+
+
+function modalOldDoc(opc){
+    if(doc== 1){ // preview version
+
+    }else if(doc == 2){ // next version
+
+    }
+}
+
+
+function modalNotes(version){
 
 }

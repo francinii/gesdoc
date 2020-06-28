@@ -90,6 +90,10 @@
       }
     }
 
-
-
-
+    .panel-preview {
+        .card {
+            .card-body{
+                    padding: 0rem !important;
+            }
+        }
+    }

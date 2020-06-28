@@ -82,18 +82,13 @@ class DocumentFlowController extends Controller
     /**
      * Display the specified historial of a resource.
      *
-     * @param  \App\StepStep  $stepStep
+     * 
      * @return \Illuminate\Http\Response
      */
     public function historial(Request $request)
     {
         $datos = request()->except(['_token']);
         $doc = $datos['idDoc'];
-        //$usuario = Auth::user()->username;
-        //$users = User::all();       
-       //$actions = Action::all();
-        //$flows =ViewFlowUser::where('username', '=', $usuario)->get();
-        //$documents = Document::where('flow_id', '=', $flow)->get();  
         $versions = Version::where('document_id', '=', $doc)->get();
         $document = Document::where('id', '=', $doc)->get();
         if(count($document)>0){
@@ -105,6 +100,19 @@ class DocumentFlowController extends Controller
   
     }
 
+    /**
+     * Display the specified version of a resource.
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function preview(Request $request){
+        $datos = request()->except(['_token']);
+        $doc = $datos['idDoc'];
+        //retrived just one row
+        $version = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
+        return view('documentFlow.preview',compact('doc', 'version'));
+    }
 
     /**
      * Display a panel of a resource.
@@ -117,7 +125,7 @@ class DocumentFlowController extends Controller
         $code =$datos['code'];
 
         if ($code == 1){
-            return $this->preview($datos);
+            return $this->previewVersion($datos);
 
         }else if($code == 2 ){
             return $this->listNotes($datos);
@@ -209,9 +217,12 @@ class DocumentFlowController extends Controller
         
     }
 
-    public function preview($datos){
+    public function previewVersion($datos){
         
     }
+    
+
+   
 
     public function downloadVersion($datos){
         
