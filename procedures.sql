@@ -745,7 +745,7 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_size` varchar(500), IN `p_classification` int, IN `p_route` varchar(500), IN `p_content` longtext, IN `p_id_flow` int, IN `p_id_action` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_version` int, IN `p_identifier` varchar(500),  OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`int, IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT,   OUT `res` TINYINT  UNSIGNED )
 BEGIN
   DECLARE idFlow INTEGER ; 
   DECLARE idIdentifier varchar(500); 
@@ -769,14 +769,14 @@ BEGIN
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
                 END IF;
-                IF  p_identifier = '' THEN
+                IF  p_identifier = -1 THEN
                   set idIdentifier = NULL;
                 END IF;
 
-                INSERT INTO `documents`(flow_id, action_id, username, description,	summary, code, created_at, updated_at ) VALUES (idFlow, p_id_action, p_username, p_description, p_summary, p_code,NOW(),NOW());
+                INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`) VALUES (idFlow, p_action_id, p_username, p_description, p_type, p_summary, p_code, p_languaje, p_others,NOW(),NOW());
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
-                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, type, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier, p_content,p_size, p_type,p_version, NOW(),NOW());
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,'',1, NOW(),NOW());
            
             
             COMMIT;
@@ -785,12 +785,58 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
+-- call insert_document('1',-1,-1,3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res)
+-- SELECT @res as res;
 
 
 
 
 
+-- PROCEDURE insert a new row to the document table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `update_document`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document`(IN `p_id` int,IN `p_classification` int,IN `p_currentClassification` int,   IN `p_id_flow` int,IN `p_identifier`int, IN `p_description` varchar(500),  IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500), OUT `res` TINYINT  UNSIGNED )
+BEGIN
+  DECLARE idFlow INTEGER ; 
+  DECLARE idIdentifier varchar(500);
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
 
+            START TRANSACTION;
+            set idFlow = p_id_flow;
+            set idIdentifier = p_identifier;
+                IF  p_id_flow = -1 THEN
+                  set idFlow = NULL;
+                END IF;
+                IF  p_identifier = -1 THEN
+                  set idIdentifier = NULL;
+                END IF;
+
+                UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
+                DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
+                INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
+                UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;
+           
+            
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call update_document(1,'1', 1,-1,-1,'doc1', 'doc1', 'doc1','ingles','',@res)
+-- SELECT @res as res;
 
 
 

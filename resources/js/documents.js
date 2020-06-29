@@ -4,6 +4,13 @@
  */
 function clearDescriptionDoc() {
     $("input[name=descriptionCreate]").val("");
+    $("input[name=descriptionCreate]").removeClass("is-invalid");
+    $("#code").val("");
+    $("#summary").val("");
+    $("#summary").removeClass("is-invalid");
+    $("#languaje").val("");
+    $("#languaje").removeClass("is-invalid");
+    $("#othres").removeClass("is-invalid");
 }
 
 
@@ -31,11 +38,11 @@ function validaCreateDoc() {
     } else {
         $("#docType").removeClass("is-invalid");
     }
-    if ($("#code").val() == "") {
-        $("#code").addClass("is-invalid");
+    if ($("#languaje").val() == "") {
+        $("#languaje").addClass("is-invalid");
         validado = false;
     } else {
-        $("#code").removeClass("is-invalid");
+        $("#languaje").removeClass("is-invalid");
     }
 
     return validado;
@@ -44,25 +51,23 @@ function validaCreateDoc() {
 /**
  * Send an ajax request in order to add a flow 
  * 
- * @param {integer} user - user id
  * @param {integer} mode - define if is a document for edit or for storage.  0-edit 1-storage
  * 
  */
-function ajaxCreateDoc(user, mode) {
+function ajaxCreateDoc(mode) {
     var me = $(this);
 
     if (me.data("requestRunning"))
         return;
     if (validaCreateDoc()) {
         var flow = $("#flowCreate option:selected").val();
-        var description = $("input[id=descriptionCreate]").val();
+        var classification = $("#classificationCreate option:selected").val();
+        var description = $("#descriptionCreate").val();
         var summary = $("#summary").val();
         var type = $("#docType").val();
         var code  = $("#code").val();        
-        var version = 1;
-        var route = "";
-        var size = "";
-        var content = "";
+        var languaje = $("#languaje").val();  
+        var othres = $("#othres").val();  ;
         
         if(type == 1)
             docType = 'docx';
@@ -74,17 +79,17 @@ function ajaxCreateDoc(user, mode) {
             method: "POST",
             data: {
                 _token: $("input[name=_token]").val(),
+                currentClassification: currentClassification.id,
+                currentTable:currentTable,
                 description: description,
                 flow_id: flow,
-                user_id: user,
+                classification:classification,
                 state_id : 1,
                 summary: summary,
                 docType:docType,
                 code:code,
-                route:route,
-                content:content,
-                version:version,
-                size:size, 
+                languaje:languaje,
+                othres:othres,
                 mode:mode,                 
             },
 
@@ -95,12 +100,6 @@ function ajaxCreateDoc(user, mode) {
             success: function (result) {
                 $("#cargandoDiv").css('display', 'none');
                 me.data("requestRunning", false);   
-                $("#createDocument").modal('hide'); 
-                $("#table").DataTable().destroy();
-                $("#divTable").html(result);
-                createDataTable("table");                          
-                alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");
                 var type = $("#docType").val();            
                 if(type == 1){
                     window.location="documents/textEditor";
@@ -123,51 +122,104 @@ function ajaxCreateDoc(user, mode) {
 }
 
 
+function clearDescriptionDoc() {
+    $("input[name=descriptionCreate]").val("");
+    $("input[name=descriptionCreate]").removeClass("is-invalid");
+    $("#code").val("");
+    $("#summary").val("");
+    $("#summary").removeClass("is-invalid");
+    $("#languaje").val("");
+    $("#languaje").removeClass("is-invalid");
+    $("#othres").removeClass("is-invalid");
+}
+
+
+/**
+ *  This function validates the inputs of the create form in the browser
+ *  
+ */
+function validaCreateDoc() {
+    var validado = true;
+    if ($("input[name=descriptionCreate]").val() == "") {
+        $("input[name=descriptionCreate]").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("input[name=descriptionCreate]").removeClass("is-invalid");
+    }
+    if ($("#summary").val() == "") {
+        $("#summary").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#summary").removeClass("is-invalid");
+    }
+    if ($("#docType").val() == "") {
+        $("#docType").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#docType").removeClass("is-invalid");
+    }
+    if ($("#languaje").val() == "") {
+        $("#languaje").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#languaje").removeClass("is-invalid");
+    }
+
+    return validado;
+}
+
 /**
  * Send an ajax request in order to upload a file to the server 
  * 
- * @param {integer} user - user id
+ * 
  * @param {integer} mode - define if is a document for edit or for storage.  0-edit 1-storage
  * 
  */
-function ajaxUploadDoc(user, mode) {
+function ajaxUploadDoc(mode) {
     var me = $(this);
 
     if (me.data("requestRunning"))
         return;
     
-        var flow = $("#flowCreate option:selected").val();
-        var description = $("input[id=descriptionCreate]").val();
+        var flow = $("#flowCreateU option:selected").val();
+        var classification = $("#classificationU option:selected").val();
+        var description = $("#nameU").val();
         var summary = $("#summaryU").val();
-        //var type = $("#docType").val();
+        var type = $("#docType").val();
         var code  = $("#codeU").val();        
-        var version = 1;
-        var docType = '';
-        var route = "";
-        var content = "";
-        var file1 = document.getElementById("file");
-        var archivo1 = file1.files[0];             
+        var languaje = $("#languajeU").val();  
+        var othres = $("#othresU").val();  
+
+        if(type == 1)
+            docType = 'docx';
+        else if(type == 2)
+            docType = 'xlsx';     
+    
+        var file1 = $('#file')[0]
+        var archivo = file1.files[0];            
         var formData = new FormData();
-        formData.append('archivo1',archivo1);
+        formData.append('X-CSRF-TOKEN"',$('meta[name="csrf-token"]').attr("content"));
+        formData.append('_token',$("input[name=_token]").val(),   );
+        formData.append('currentClassification',currentClassification.id);
+        formData.append('description',description);
+        formData.append('flow_id',flow);
+        formData.append('state_id',1);
+        formData.append('summary',summary);
+        formData.append('docType',docType);
+        formData.append('code',code);
+        formData.append('languaje',languaje);
+        formData.append('classification',classification);
+        formData.append('othres',othres);        
+        formData.append('mode',mode);
+        formData.append('archivo',archivo);
+
         $.ajax({
             url: "documents",
             method: "POST",
-            data: {
-                _token: $("input[name=_token]").val(),
-                description: description,
-                flow_id: flow,
-                user_id: user,
-                state_id : 1,
-                summary: summary,
-                docType:docType,
-                code:code,
-                route:route,
-                content:content,
-                version:version,
-                mode:mode,  
-                files: formData,                
-            },
-
+            processData: false,
+            contentType: false,
+            data: formData,
+            
             beforeSend: function (xhr) { 
                 $("#cargandoDiv").css('display', 'block')
                 me.data("requestRunning", false);  
@@ -175,18 +227,13 @@ function ajaxUploadDoc(user, mode) {
             success: function (result) {
                 $("#cargandoDiv").css('display', 'none');
                 me.data("requestRunning", false);  
-                $("#createDocument").modal('hide'); 
+                $("#uploadDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
                 createDataTable("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
                 "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");
-                var type = $("#docType").val();            
-                if(type == 1){
-                    window.location="documents/textEditor";
-                }else {
-                    window.location="documents/spreadSheetEditor";
-                }
+
                                
 
             },
@@ -199,69 +246,6 @@ function ajaxUploadDoc(user, mode) {
                 
             },
         });
-    
-  /*  if (1) {
-        var flow = $("#flowCreate option:selected").val();
-        var description = $("input[id=descriptionCreate]").val();
-        var summary = $("#summary").val();
-        var type = $("#docType").val();
-        var code  = $("#code").val();        
-        var version = 1;
-        var route = "";
-        var content = "";
-        if(type == 1)
-            docType = 'docx';
-        else if(type == 2)
-            docType = 'xlsx';   
-            
-            
-       // var file1 = document.getElementById("file");
-         //   var archivo1 = file1.files[0];             
-           // var formData = new FormData();
-           // formData.append('archivo1',archivo1);
-         
-        $.ajax({
-            url: "documents",
-            method: "POST",
-            data: {
-                _token: $("input[name=_token]").val(),
-                description: description,
-                flow_id: flow,
-                user_id: user,
-                state_id : 1,
-                summary: summary,
-                docType:docType,
-                code:code,
-                route:route,
-                content:content,
-                version:version,
-                mode:mode,
-               // files: formData,              
-            },
-
-            beforeSend: function (xhr) { 
-                $("#cargandoDiv").css('display', 'block')
-            },
-            success: function (result) {
-                $("#cargandoDiv").css('display', 'none');
-                $("#createDocument").modal('hide'); 
-                $("#table").DataTable().destroy();
-                $("#divTable").html(result);
-                createDataTable("table");                          
-                alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente.", "alert-success");
-                 me.data("requestRunning", false);   
-
-            },
-            error: function (request, status, error) {
-                $("#cargandoDiv").css('display', 'none')
-                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
-                me.data("requestRunning", false);
-                
-            },
-        });
-    }   */
 }
 
 
@@ -274,16 +258,30 @@ function ajaxUploadDoc(user, mode) {
  * @param {integer} flowId - flow id
  *  
  */
-function editDoc(id,name,flowId) {
+function editDoc() {
+    var flowId=currentTd.parentNode.childNodes[11].innerText;
+    var summaryEditDoc=currentTd.parentNode.childNodes[13].innerText;
+    var codeEditDoc=currentTd.parentNode.childNodes[15].innerText;
+    var languajeEditDoc=currentTd.parentNode.childNodes[17].innerText;    
+    var othresEditDoc=currentTd.parentNode.childNodes[19].innerText;
+    var classificationID=currentClassification.id;
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
     });
-    $("input[id=idEdit]").val(id);
-    $("input[name=descriptionEdit]").removeClass("is-invalid");
-    $("input[name=descriptionEdit]").val(name);
-    $("option[name=flowEdit" + flowId + "]").prop("selected", true);
-    $("#edit").modal("show");
+    $("#idEditDoc").val(idselect);
+    $("#descriptionEditDoc").removeClass("is-invalid");
+    $("#descriptionEditDoc").val(descriptionEdit);
+    
+
+    $("#codeEditDoc").val(codeEditDoc);
+    $("#languajeEditDoc").val(languajeEditDoc);
+    $("#summaryEditDoc").val(summaryEditDoc);
+    
+    $("#othresEditDoc").val(othresEditDoc);
+    $("option[name=flowEditDoc" + flowId + "]").prop("selected", true);
+    $("option[name=classificationEditDoc" + classificationID + "]").prop("selected", true);
+    $("#editDocument").modal("show");
 
 }
 
@@ -295,12 +293,25 @@ function editDoc(id,name,flowId) {
  */
 function validaEditDoc() {
     var validado = true;
-    if ($("input[name=descriptionEdit]").val() == "") {
-        $("input[name=descriptionEdit]").addClass("is-invalid");
+    if ($("#descriptionEditDoc").val() == "") {
+        $("descriptionEditDoc").addClass("is-invalid");
         validado = false;
     } else {
-        $("input[name=descriptionEdit]").removeClass("is-invalid");
+        $("descriptionEditDoc").removeClass("is-invalid");
     }
+    if ($("#summaryEditDoc").val() == "") {
+        $("#summaryEditDoc").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#summaryEditDoc").removeClass("is-invalid");
+    }
+    if ($("#languajeEditDoc").val() == "") {
+        $("#languajeEditDoc").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#languajeEditDoc").removeClass("is-invalid");
+    }
+
     return validado;
 }
 
@@ -310,49 +321,63 @@ function validaEditDoc() {
  * 
  */
 function ajaxUpdateDoc() {
-    var me = $(this);
+    
+
+   var me = $(this);
 
     if (me.data("requestRunning"))
         return;
-    if (validaEdit()) {
-        var id = $("input[id=idEdit]").val();
-        var description = $("input[name=descriptionEdit]").val();
-        var flow = $("#flowCreate option:selected").val();
+    if (validaEditDoc()) {
+        var id=$("#idEditDoc").val();
+        var flow = $("#flowEditDoc option:selected").val();
+        var classification = $("#classificationEditDoc option:selected").val();
+        var description = $("#descriptionEditDoc").val();
+        var summary = $("#summaryEditDoc").val();
+        var code  = $("#codeEditDoc").val();        
+        var languaje = $("#languajeEditDoc").val();  
+        var othres = $("#othresEditDoc").val();                   
+           
         $.ajax({
             url: "documents/{" + id + "}",
             method: "POST",
-
             data: {
                 _token: $("input[name=_token]").val(),
                 _method: "PATCH",
-                id: id,
+                id:id,
+                currentClassification: currentClassification.id,
+                currentTable:currentTable,
+                classification:classification,
                 description: description,
                 flow_id: flow,
-
+                summary: summary, 
+                code:code,
+                languaje:languaje,
+                othres:othres,           
             },
+
             beforeSend: function (xhr) { 
                 me.data("requestRunning", true);
                 $("#cargandoDiv").css('display', 'block')
             },
-            success: function(result) {
-                $("#cargandoDiv").css('display', 'none')
-                me.data("requestRunning", false);
-                $("#table").html(result);
-                $("#table")
-                    .DataTable()
-                    .destroy();
-                createDataTable("table");
-                $("#edit").modal("hide");
-                alerts('alerts', 'alert-content',"El departamento "+name+" ha sido actualizado satisfactoriamente", "alert-success");
-                
+            success: function (result) {
+                $("#cargandoDiv").css('display', 'none');
+                me.data("requestRunning", false);   
+                $("#editDocument").modal('hide'); 
+                $("#table").DataTable().destroy();
+                $("#divTable").html(result);
+                createDataTable("table");                          
+                alerts('alerts', 'alert-content',"El documento " +  description +
+                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success")                              
+
             },
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
-                alerts("Ha ocurrido un error inesperado.", "alert-danger");
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 alert(request.responseText);
                 
-            }
+                
+            },
         });
     }
 }
@@ -415,12 +440,14 @@ function newDocument(e){
 function createDoc(type){
     $('#docType').val(type);
     if(type == 1 || type == 2){   
+        clearDescriptionDoc();
         $('#docName').css('display','block');  
         $('#docUpload').css('display','none'); 
         $('#createDocument').modal('show'); 
     }
         
     else if(type == 0){
+        clearDescriptionDoc();
         $('#docUpload').css('display','block'); 
         $('#docName').css('display','none'); 
     $('#uploadDocument').modal('show');    
@@ -434,3 +461,17 @@ function createDoc(type){
 }
 
 
+function selectDoc(e){
+
+}
+$("#file").change(function(e){
+    var file1 = $('#file')[0]
+    var archivo = file1.files[0]; 
+    var fullname=archivo.name.split(".");
+    var type=fullname.pop();
+    var name='';
+    fullname.forEach(element => {
+        name+=element;
+    });
+    $('#nameU').val(name)
+});

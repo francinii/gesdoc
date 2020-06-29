@@ -38,6 +38,8 @@
                    
                   
         <div id="divTable">
+        {{csrf_field()}} 
+      
             @include('home.tableMyDocuments')
         </div>
         </div>
@@ -54,6 +56,7 @@
 @include('home.create')
 @include('documents.create')
 @include('documents.upload')
+@include('documents.edit')
 @include('home.edit')
 @include('home.share')
 @include('partials.alertModal')

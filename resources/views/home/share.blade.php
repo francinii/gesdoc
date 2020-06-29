@@ -14,7 +14,7 @@
                     <div id = "" class="card-body">
                         <div id = "create">                             
                         <form class="" action="" method="POST">
-                            {{csrf_field()}}                             
+                         
                             <div class="form-group">
                                 <input id="owner" style="display:none">
                                 <input id="documentsId" style="display:none">

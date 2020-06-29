@@ -53,7 +53,7 @@ class HomeController extends Controller
      * Get a validator for an incoming registration request.
      *
      * @param array $data
-     * @param bool $create
+     * @param bool $create is creating classfication
      * @return \Illuminate\Contracts\Validation\Validator
      */
 
@@ -68,7 +68,7 @@ class HomeController extends Controller
     }
     /**
      * transform a array to string
-     * @param array $create
+     * @param array $create is creating classfication
      * @return String
      */
     protected function myArray(array $dato, $create)

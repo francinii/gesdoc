@@ -13,6 +13,7 @@ var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in fl
 var isCurrentUserOwner;
 var CanCurrentUserEditar; 
 var CanCurrentUserDetele;
+var currentTd;
 /**
 * draw the route follow for the user  
 *
@@ -50,14 +51,14 @@ function drawRoute() {
  */
 $("html")
     .on("contextmenu", "td", function (e) {
-        var td = e.currentTarget;
+        currentTd = e.currentTarget;
         typeContextMenu = "";
         idselect = "";
         descriptionEdit = "";
-        if (td.className != "dataTables_empty") {
-            typeContextMenu =td.parentNode.childNodes[1].childNodes[1].innerText;
-            idselect = td.parentNode.childNodes[9].innerText;
-            descriptionEdit = td.parentNode.childNodes[3].innerText;
+        if (currentTd.className != "dataTables_empty") {
+            typeContextMenu =currentTd.parentNode.childNodes[1].childNodes[1].innerText;
+            idselect = currentTd.parentNode.childNodes[9].innerText;
+            descriptionEdit = currentTd.parentNode.childNodes[3].innerText;
         }
         var top = e.pageY - 10;
         var left = e.pageX - 90;
@@ -78,7 +79,7 @@ $("html")
             $("#actionsContextMenu").hide();
  
                  
-            if(currentClassification.type==1 && td.className == "dataTables_empty" && currentTable==1){    
+            if(currentClassification.type==1 && currentTd.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
                 $("#createDocumentContext").show();     
                 $("#createSheetContext").show();          
@@ -90,12 +91,12 @@ $("html")
                 $("#deleteContext").show();
                 $("#shareContext").show();
             }
-            else if(currentTable==2 && currentClassification.type==2 && td.className != "dataTables_empty" ){    
+            else if(currentTable==2 && currentClassification.type==2 && currentTd.className != "dataTables_empty" ){    
                 $("#editContext").show();
                 $("#deleteContext").show();
                 $("#shareContext").show();  
             }
-            else if(currentClassification.type==3 && td.className != "dataTables_empty" && (isCurrentUserOwner || CanCurrentUserEditar)){
+            else if(currentClassification.type==3 && currentTd.className != "dataTables_empty" && (isCurrentUserOwner || CanCurrentUserEditar)){
                 $("#editContext").show();
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
@@ -128,6 +129,7 @@ $("#context-menu button").on("click", function () {
  */
 function clearCreate() {
     $("input[name=nameCreate]").val("");
+    $("input[name=nameCreate]").removeClass("is-invalid");
 }
 
 /**
@@ -210,7 +212,10 @@ function ajaxCreate(){
  *
  * 
  */
-function edit() {
+function edit(){
+    if(typeContextMenu!='classification')
+    editDoc()
+    else{
     $("select option:selected").each(function () {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -219,9 +224,8 @@ function edit() {
     $("input[id=idEdit]").val(idselect);
     $("input[name=descriptionEdit]").removeClass("is-invalid");
     $("input[name=descriptionEdit]").val(descriptionEdit);
-    
-
     $("#edit").modal("show");
+    }
 }
 
 

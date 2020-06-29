@@ -36,12 +36,10 @@ Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 Route::get('home/showshare/{id}/{type}', 'HomeController@showShare');
 
-Route::post('home/share/{id}/{type}', 'HomeController@Share');
 
 Route::get('home/{table}/{id}', 'HomeController@refresh');
 
-
-Route::get('documentFlow/historial/{id}', 'DocumentFlowController@historial');
+Route::post('home/share/{id}/{type}', 'HomeController@Share');
 
 Route::get('documentFlow/historial/panel/{id}', 'DocumentFlowController@openPanel');
 

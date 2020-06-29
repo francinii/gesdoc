@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Versions extends Migration
+class CreateVersionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,7 +21,7 @@ class Versions extends Migration
             $table->string('identifier')->nullable();  //fk step
             $table->text('content'); //content or route depends on
             $table->string('size',500);    //numero y unidad de medida mb gb etc   
-            $table->string('type',500);   //ejemplo png, xls, doc, txt etc. 
+            $table->string('status',500);   //ejemplo png, xls, doc, txt etc. 
             $table->decimal('version', 3, 1);   //ejemplo png, xls, doc, txt etc.   
              
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');

@@ -149,17 +149,26 @@ return [
         ],
     ],
 
-    'documents' => [    
+    'documents' => [ 
+        'general' =>[
+            'name' => 'Nombre del documento',              
+            'code' => 'Código del documento en la organización',
+            'languaje' => 'Idioma del contenido', 
+            'summary' => 'Resumen de contenido',    
+            'othres' => 'Otros datos',  
+
+        ],
         'create' => [  
-            'title' => 'Nuevo documento',  
-            'name' => 'Nombre del documento',  
-            'flow' => 'Asociar un flujo',                  
+            'title' => 'Nuevo documento',
+            'flow' => 'Asociar un flujo', 
+            'classification' => 'Asociar una classificación',   
+            
         ],
 
         'edit' => [
             'title' => 'Editar documento',  
-            'name' => 'Nombre del documento', 
-            'flow' => 'Flujo asociado',  
+            'flow' => 'Flujo asociado',
+            'classification' => 'Classificación asociada',   
         ],
 
         'index' => [
@@ -202,6 +211,12 @@ return [
 
         'table' => [
             'id' => 'Id',
+            'summary' => 'summary',
+            'code' => 'code',
+            'flow_id' => 'flow_id',
+            'languaje' => 'languaje',
+            'others' => 'others',
+            'classification' => 'classification',
             'type' => 'tipo',
             'description' => 'Nombre',
             'create'=> 'Creado',
