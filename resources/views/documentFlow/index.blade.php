@@ -14,11 +14,7 @@
     @include('layouts.header') 
 @stop
 @section('content')
-<<<<<<< HEAD
   
-=======
-  <?php // $id = 2 ?>
->>>>>>> 53128fa300601071a0fdd31d8b47ce061d9f9928
     <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
                 <h2 class="text-center">Mis documentos en flujo</h2>        
