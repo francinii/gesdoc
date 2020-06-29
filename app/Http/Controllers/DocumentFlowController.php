@@ -77,60 +77,7 @@ class DocumentFlowController extends Controller
         return $this->refresh($flow);
     }
 
-
-
-    /**
-     * Display the specified historial of a resource.
-     *
-     * @param  \App\StepStep  $stepStep
-     * @return \Illuminate\Http\Response
-     */
-    public function historial(Request $request)
-    {
-        $datos = request()->except(['_token']);
-        $doc = $datos['idDoc'];
-        //$usuario = Auth::user()->username;
-        //$users = User::all();       
-       //$actions = Action::all();
-        //$flows =ViewFlowUser::where('username', '=', $usuario)->get();
-        //$documents = Document::where('flow_id', '=', $flow)->get();  
-        $versions = Version::where('document_id', '=', $doc)->get();
-        $document = Document::where('id', '=', $doc)->get();
-        if(count($document)>0){
-            $document =  $document[0];
-        }else {
-            $document = null;
-        }
-        return view('documentFlow.historial',compact('doc', 'versions', 'document'));
-  
-    }
-
-
-    /**
-     * Display a panel of a resource.
-     *
-     * @param  \App\StepStep  $stepStep
-     * @return \Illuminate\Http\Response
-     */
-    public function openPanel(Request $request){
-        $datos = request()->except(['_token']);
-        $code =$datos['code'];
-
-        if ($code == 1){
-            return $this->preview($datos);
-
-        }else if($code == 2 ){
-            return $this->listNotes($datos);
-
-        }else if($code == 3){
-            return $this->downloadVersion($datos);
-
-        }else if($code == 4){
-            return $this->listVersionAction($datos);
-
-        }        
-    }
-
+   
     /**
      * Show the form for editing the specified resource.
      *
@@ -185,9 +132,6 @@ class DocumentFlowController extends Controller
         return view('documentFlow.table',compact('flow','flows', 'users','documents','actions'));
     }
 
-
-
-
     /**
      * List the notes for a specific version.
      *
@@ -200,6 +144,110 @@ class DocumentFlowController extends Controller
         return view('documentFlow.notes',compact('version','notes','versionNum'));
     }
 
+    public function listNotesModal(Request $request){
+        $datos = request()->except(['_token']);
+        $version = $datos['version'];
+        $versionNum = $datos['versionNum'];
+        $notes = Note::where('version_id', '=', $version)->get();       
+        return view('documentFlow.notesContent',compact('version','notes','versionNum'));
+    }
+
+     /**
+     * Display the specified historial of a resource.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function historial(Request $request)
+    {
+        $datos = request()->except(['_token']);
+        $doc = $datos['idDoc'];
+        $versions = Version::where('document_id', '=', $doc)->get();
+        $document = Document::where('id', '=', $doc)->get();
+        if(count($document)>0){
+            $document =  $document[0];
+        }else {
+            $document = null;
+        }
+        return view('documentFlow.historial',compact('doc', 'versions', 'document'));
+  
+    }
+
+    /**
+     * Display the preview view in the historial screen
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function preview(Request $request){
+        $datos = request()->except(['_token']);
+        $doc = $datos['idDoc'];
+        //retrived just one row the actual version
+        $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
+        //retrived the version before the actual version
+        $oldVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->skip(1)->take(1)->first(); 
+      //  $oldVersion = $actualVersion;
+        return view('documentFlow.preview',compact('doc', 'actualVersion', 'oldVersion'));
+    }
+
+
+
+    /**
+     * Show the next or preview version in the left panel of preview mode
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function nextVersion(Request $request){
+        $datos = request()->except(['_token']);
+        $opc = $datos['opc'];
+        $version = $datos['version_num'];
+        $version = (double) $version;
+        $doc = (int )$datos['idDoc'];
+        if($opc == '1')
+            $version--; 
+        else if($opc == '2')
+            $version++; 
+
+        $allVersions = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->get();     
+        $oldVersion = Version::where('document_id', '=', $doc)->where('version', '=', $version)->first(); 
+        $tam = $allVersions->count();
+        if($tam > 0){ 
+            if($version == 0){           
+               $oldVersion =  $allVersions[0];
+            }          
+            else if($version > $allVersions[0]->version ){
+                $oldVersion =  $allVersions[$tam-1];
+            }
+        }
+       
+        return view('documentFlow.oldVersion',compact('doc','oldVersion'));
+    }
+
+    /**
+     * Display a panel of a resource.
+     *
+     * @param  \App\StepStep  $stepStep
+     * @return \Illuminate\Http\Response
+     */
+    public function openPanel(Request $request){
+        $datos = request()->except(['_token']);
+        $code =$datos['code'];
+
+        if ($code == 1){
+            return $this->previewVersion($datos);
+
+        }else if($code == 2 ){
+            return $this->listNotes($datos);
+
+        }else if($code == 3){
+            return $this->downloadVersion($datos);
+
+        }else if($code == 4){
+            return $this->listVersionAction($datos);
+
+        }        
+    }
+
 
     public function listVersionAction($datos){
         $version = $datos['version'];
@@ -209,11 +257,26 @@ class DocumentFlowController extends Controller
         
     }
 
-    public function preview($datos){
-        
-    }
+    public function previewVersion($datos){
+        $datos = request()->except(['_token']);
+        $idVersion = $datos['version'];
+        $versionNum = $datos['versionNum'];
 
+        //retrived just one row the actual version
+        $version = Version::where('id', '=', $idVersion)->first();
+        //retrived the version before the actual version
+        return view('documentFlow.previewHistory',compact('version', 'versionNum'));
+       
+    }
     public function downloadVersion($datos){
         
     }
+
+
+
+
+
+
+
+
 }
