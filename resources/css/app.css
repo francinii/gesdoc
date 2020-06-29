@@ -75,7 +75,7 @@
   width: 100%;
 }
 
-.panel-preview .card .card-body {
+#panel-preview .card .card-body, #panel-actual .card .card-body {
   padding: 0rem !important;
 }
 

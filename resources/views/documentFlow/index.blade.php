@@ -17,8 +17,7 @@
   
     <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
-                <h2 class="text-center">Mis documentos en flujo</h2>                     
-     
+                <h2 class="text-center">Mis documentos en flujo</h2>        
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
                     <select id='selectDoc' class="form-control selectpicker"  data-live-search="true"  >                
@@ -26,8 +25,7 @@
                         <option  id = "{{$flow->flow_id}}" value = "{{$flow->flow_id}}">{{$flow->description}}</option>
                     @endforeach                                    
                     </select>                           
-                  </div> 
-                
+                  </div>                 
             </div>
             <div  class="col-md-12">&nbsp</div>
             <div class="col-11">
