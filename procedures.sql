@@ -747,9 +747,9 @@ DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
 CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`varchar(500), IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT,   OUT `res` TINYINT  UNSIGNED )
 BEGIN
-  DECLARE idFlow INTEGER ; 
-  DECLARE idIdentifier varchar(500); 
-  DECLARE document_id Integer;
+  DECLARE idFlow INT DEFAULT NULL;
+  DECLARE idIdentifier varchar(500) DEFAULT NULL; 
+  DECLARE document_id INT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -769,7 +769,7 @@ BEGIN
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
                 END IF;
-                IF  p_identifier = -1 THEN
+                IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
                 END IF;
 
@@ -785,7 +785,8 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call insert_document('1',1,'draggable1',3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res)
+-- call insert_document('1',-1,-1,3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res);
+-- call insert_document('6',6,'draggable1',3,'402340420', 'prueba', 'docx', 'ad', 'doc1','doc1','asd','0KB','', @res);
 -- SELECT @res as res;
 
 
@@ -819,7 +820,7 @@ BEGIN
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
                 END IF;
-                IF  p_identifier = -1 THEN
+                IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
                 END IF;
 
