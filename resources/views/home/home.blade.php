@@ -13,6 +13,7 @@
 
 @section('content')
 
+
 <div class="page-content" id="content">
 <div class="container-fluid">
     <input type="hidden" id = "docType">
@@ -27,7 +28,8 @@
                         <button type="button" class="btn btn-light btn-bloc " onclick="createDoc(0)" ><i class="fa fa-upload" aria-hidden="true"></i>Importar Documento</button>        
                         <button type="button" class="btn btn-light btn-block" onclick="openSheet(1)">{{ __('app.home.menu.option1') }}</button>
                         <button type="button" class="btn btn-light btn-block" onclick="openSheet(2)">{{ __('app.home.menu.option2') }}</button>
-                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(3)">{{ __('app.home.menu.option3') }}</button>                
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(3)">{{ __('app.home.menu.option3') }}</button>   
+                                     
                     </div>         
                 </div>
             </div> 

@@ -35,17 +35,16 @@ Route::get('documents/spreadSheetEditor',  function () {
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 Route::get('home/showshare/{id}/{type}', 'HomeController@showShare');
-
-
 Route::get('home/{table}/{id}', 'HomeController@refresh');
-
 Route::post('home/share/{id}/{type}', 'HomeController@Share');
+
 
 
 Route::get('documentFlow/historial/{id}', 'DocumentFlowController@historial');
 Route::get('documentFlow/preview/{id}', 'DocumentFlowController@preview');
 Route::get('documentFlow/historial/panel/{id}', 'DocumentFlowController@openPanel');
 Route::get('documentFlow/nextVersion/{id}', 'DocumentFlowController@nextVersion');
+
 
 //notesModal
 Route::get('documentFlow/notesModal/{id}', 'DocumentFlowController@listNotesModal');

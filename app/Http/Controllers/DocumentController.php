@@ -176,7 +176,6 @@ class DocumentController extends Controller
         if ($res[0]['res'] != 0) {
             throw new DecryptException('Error al procesar la petición en la base de datos');
         }
-        return $this->refresh($currentTable, $currentClassification);
     }
 
     /**
@@ -247,6 +246,8 @@ class DocumentController extends Controller
             throw new DecryptException('Error al procesar la petición en la base de datos');
         }
         
+
+
         return $this->refresh($currentTable, $currentClassification);
     }
 
@@ -262,4 +263,12 @@ class DocumentController extends Controller
         return DocumentController::refresh();
     }
 
+    public function download($file){
+
+        $route="public/Hr4fyNgLSiMUWe1ZfU3jflnevK1ZCe0QcQi9dXIo.xlsx";
+        $pathToFile=storage_path("app/$route");     
+        return response()->file($pathToFile);
+    }
+
 }
+

@@ -40,10 +40,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        // $roles = Role::all();
+        $roles = Role::all();
         $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
         return view('roles.index', compact('roles', 'permissions'));
+
     }
 
   /**
