@@ -185,7 +185,10 @@ class DocumentFlowController extends Controller
         $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
         //retrived the version before the actual version
         $oldVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->skip(1)->take(1)->first(); 
-      //  $oldVersion = $actualVersion;
+        if(!$oldVersion){
+            $oldVersion = $actualVersion;
+        }
+        //  $oldVersion = $actualVersion;
         return view('documentFlow.preview',compact('doc', 'actualVersion', 'oldVersion'));
     }
 

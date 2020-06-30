@@ -65,3 +65,5 @@ Route::resource('departments', 'DepartmentController');
 
 
 Route::resource('documentFlow', 'DocumentFlowController');
+
+Route::resource('record', 'HistorialController');

@@ -785,7 +785,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call insert_document('1',-1,-1,3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res)
+-- call insert_document('1',1,'draggable1',3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res)
 -- SELECT @res as res;
 
 
