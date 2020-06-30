@@ -159,7 +159,7 @@ class DocumentController extends Controller
         $othres="'".$document['othres']."'";
         $identifier =  "-1";    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
-        $classification=$document['classification']!='-1'?"'".$document['classification']."'":"'".$mainClassification->id."'";
+        $classification=$document['classification']!='-1'?$document['classification']:$mainClassification->id;
         $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
         if(count($step) >0){
