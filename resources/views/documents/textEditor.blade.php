@@ -2,7 +2,6 @@
 
 @section('title', 'Editor')
 @section('head')
-
 <link rel="stylesheet" type="text/css" href="{{ asset('../resources/extensions/CKEDITOR5/sample/styles.css') }}" >
 <script src="{{ asset('../resources/extensions/CKEDITOR5/build/ckeditor.js') }}"></script>
 <script src="{{ asset('../resources/js/textEditor.js') }}" defer></script>
@@ -12,9 +11,8 @@
 @include('layouts.header')
 @stop
 @section('content')
-<div class="container-fluid">
-   
-   <div class="row  justify-content-center">   
+<div class="container-fluid">   
+   <div class="row  justify-content-center">  
     
     <div class="col-md-12 button-group">
         <div class="centered"> 
@@ -45,7 +43,7 @@
                     <div class="">                       
                         <div class="document-editor__toolbar"></div>
                     </div>
-                    <div class=" row-editor">
+                    <div class="row-editor">
                         <div class="editor"></div>
                     </div>
                 </div>
