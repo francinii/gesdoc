@@ -25,7 +25,6 @@
 
     
         @yield('header')
-
         <div class="container-fluid">
             <div class="row">
                 <div class="col-11" style= "height:60px"></div>
@@ -33,8 +32,7 @@
                     <img   src="../storage/app/cargando.gif" class="justify-content-right" alt="Cargando" width="60px">
                 </div>
             </div>
-        </div>
-     
+        </div>     
          @yield('content')  
         
         
