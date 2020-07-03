@@ -13,8 +13,10 @@
                         <span  class=""><button onclick="nextVersion(2,'{{ $oldVersion->version }}', {{$doc}})" class="btn-sm btn btn-danger" > <i class="fa fa-chevron-right"></i></button></span>   
                     </div>
                 </div> 
-                <div class="col-4">                                 
-                    <span  class=" float-right" ><button onclick="modalNotes({{ $oldVersion->id }},{{$oldVersion->version}} )" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> Notas</button></span>                 
+                <div  class="col-4">   
+                    <div id = "actualVersionButton">                           
+                        <span  class=" float-right" ><button title = "Notas" onclick="modalNotes({{ $oldVersion->id }},{{$oldVersion->version}} )" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>                 
+                    </div>   
                 </div>      
             </div>
         </div>

@@ -5,8 +5,9 @@
     @include('documentFlow.actualVersion') 
 </div>
 <div class="modal fade" id="modal-notes">   
-    @include('documentFlow.notesModal') 
+    @include('documentFlow.notesModal')    
 </div>
-
-
+  
+<div class="modal fade" id="modal-edit-version"> 
+</div>    
 

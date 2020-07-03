@@ -49,6 +49,11 @@ Route::get('documentFlow/nextVersion/{id}', 'DocumentFlowController@nextVersion'
 //notesModal
 Route::get('documentFlow/notesModal/{id}', 'DocumentFlowController@listNotesModal');
 
+//notesModal
+Route::get('documentFlow/modalEditVersion/{id}', 'DocumentFlowController@modalEditVersion');
+Route::get('documentFlow/flowProcess/{id}', 'DocumentFlowController@flowProcess');
+
+
 Auth::routes();
 
 Route::resource('home', 'HomeController');

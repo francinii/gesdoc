@@ -21,7 +21,7 @@
     @yield('head')
 </head>
 
-<body style = "height:100vh; ">
+<body style = "">
 
     
         @yield('header')

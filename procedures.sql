@@ -776,7 +776,7 @@ BEGIN
                 INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`) VALUES (idFlow, p_action_id, p_username, p_description, p_type, p_summary, p_code, p_languaje, p_others,NOW(),NOW());
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
-                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,'',1, NOW(),NOW());
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,1,1, NOW(),NOW());
            
             
             COMMIT;
@@ -936,15 +936,112 @@ END
 DELIMITER ;
 
 
--- VISTAS 
-
-DROP VIEW IF EXISTS view_flow_user ;
-CREATE VIEW view_flow_user AS 
-    SELECT DISTINCT  asu.username, asu.flow_id, f.description
-    FROM `action_step_user` asu, flows f
-    WHERE f.id = asu.flow_id
 
 
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `insert_version`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_version`(IN `p_document_id` int,  IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_size` varchar(500),IN `p_content` LONGTEXT,  IN `p_version` double,  IN `p_status` boolean,  OUT `res` TINYINT  UNSIGNED )
+BEGIN                                                                -- document_id, flow_id, identifier, content,size, status, version, created_at, updated_at
+  DECLARE idFlow INT DEFAULT NULL;
+  DECLARE idIdentifier varchar(500) DEFAULT NULL; 
+  DECLARE document_id INT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+              SET idFlow = p_id_flow;
+              SET idIdentifier = p_identifier;
+              SET document_id =p_document_id;
+
+                IF  p_id_flow = -1 THEN
+                  set idFlow = NULL;
+                END IF;
+                IF  p_identifier = '-1' THEN
+                  set idIdentifier = NULL;
+                END IF;
+               
+
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (p_document_id, idFlow, idIdentifier, p_content, p_size, p_status, p_version, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+
+
+-- PROCEDURE update the doc when the next step is the final step
+DROP PROCEDURE IF EXISTS `update_version_final`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_version_final`(IN `p_id_doc` int, IN `p_id_version` int, OUT `res` TINYINT  UNSIGNED )
+BEGIN
+  DECLARE idFlow INTEGER ; 
+  DECLARE idIdentifier varchar(500);
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+              UPDATE `documents` SET `flow_id`=NULL,`updated_at`=NOW() WHERE `id`=p_id_doc;
+              UPDATE `versions` SET `status`=false,`updated_at`=NOW() WHERE `id`=p_id_version;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+
+
+-- PROCEDURE update the doc when the next step is the final step
+DROP PROCEDURE IF EXISTS `update_version_status`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_version_status`(IN `p_id_version` int, IN `p_status` boolean, OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;              
+              UPDATE `versions` SET `status`=p_status,`updated_at`=NOW() WHERE `id`=p_id_version;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
 
 -- DROP VIEW IF EXISTS view_document_version ;
 -- CREATE VIEW view_document_version AS 
@@ -974,3 +1071,27 @@ CREATE VIEW view_flow_user AS
 
 -- INSERT INTO `historials`(`action`, `username`, `user_id`, `description`, `document_id`, `document_name`, `version_id`, `flow_id`, `flow_name`, `created_at`, `updated_at`) VALUES (1,'DANNY VALERIO','402340420','El usuario Danny Valerio no trabajo el día de hoy en la tesis',1,'Prueba',1,1,'PFESA', NOW(),NOW())
 -- INSERT INTO `notes`(`version_id`, `content`, `created_at`, `updated_at`) VALUES (1,'NO vamos a terminar esto',NOW(),NOW())
+
+
+
+-- VISTAS 
+
+DROP VIEW IF EXISTS view_flow_user ;
+CREATE VIEW view_flow_user AS 
+    SELECT DISTINCT  asu.username, asu.flow_id, f.description, f.state
+    FROM `action_step_user` asu, flows f
+    WHERE f.id = asu.flow_id and f.state = 1
+;;
+DELIMITER ;
+
+
+DROP VIEW IF EXISTS view_action_step_step_user ;
+CREATE VIEW view_action_step_step_user AS 
+SELECT ss.id_action,asu.step_id, asu.flow_id, asu.username, ac.description
+from step_step ss, action_step_user asu, actions ac
+WHERE ss.id_action = asu.action_id 
+AND  ss.prev_step_id =  asu.step_id 
+AND asu.flow_id = ss.prev_flow_id
+AND ac.id = ss.id_action
+;;
+DELIMITER ;

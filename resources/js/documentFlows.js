@@ -164,17 +164,14 @@ function nextVersion(opc, version_num, idDoc){
     $.ajax({
         url: "documentFlow/nextVersion/{" + idDoc + "}",
         method: "GET",
-        headers: {
-           
+        headers: {           
           },
         data: {
            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
            _token: $("input[name=_token]").val(),
            opc:opc,
            version_num:version_num,
-           idDoc:idDoc,
-
-            
+           idDoc:idDoc,            
         },
         beforeSend: function (xhr) { 
             $("#cargandoDiv").css('display', 'block')
@@ -184,8 +181,7 @@ function nextVersion(opc, version_num, idDoc){
             $("#panel-preview").html(result);      
         },
 
-        error: function(request, status, error) {
-          
+        error: function(request, status, error) {          
             alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
@@ -207,9 +203,7 @@ function modalNotes(version, versionNum){
            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
            _token: $("input[name=_token]").val(),
            version:version,
-           versionNum:versionNum,
-
-            
+           versionNum:versionNum,            
         },
         beforeSend: function (xhr) { 
             $("#cargandoDiv").css('display', 'block')
@@ -217,17 +211,81 @@ function modalNotes(version, versionNum){
         success: function(result) {
             $("#cargandoDiv").css('display', 'none');
             $("#modal-body-notes").html(result);
-            $('#modal-notes').modal('show');     
-            
+            $('#modal-notes').modal('show');                 
         },
-
-        error: function(request, status, error) {
-          
+        error: function(request, status, error) {          
             alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
     });
+}
 
+
+function modalEdit(version, versionNum){
+
+    $.ajax({
+        url: "documentFlow/modalEditVersion/{" + version + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           version:version,
+           versionNum:versionNum,            
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+            $("#modal-edit-version").html(result);
+            $('#modal-edit-version').modal('show');                 
+        },
+        error: function(request, status, error) {          
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
+        
+}
+
+
+function hideModal(mod){
+    $('#'+mod).modal('hide'); 
+}
+
+function flowProcess(version){
+    var action = $("select[name=action_create] option:selected").val();
+
+    $.ajax({
+        url: "documentFlow/flowProcess/{" + version + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           version:version,   
+           action:action,
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+           // $("#modal-edit-version").html(result);
+            $('#modal-edit-version').modal('hide');                 
+        },
+        error: function(request, status, error) {          
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
 
 }

@@ -42,6 +42,10 @@
   border-color: #c82333 !important;
 }
 
+#actualVersionButton span button.btn {
+  border-radius: 0rem;
+}
+
 [type=file] {
   height: 0;
   overflow: hidden;
