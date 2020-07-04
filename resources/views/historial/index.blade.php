@@ -18,7 +18,7 @@
         <div class="row  justify-content-center"> 
             
             <div  class="col-md-12">&nbsp</div>
-            <div class="col-9">
+            <div class="col-11">
                 @include('partials.alert')
                 @include('historial.table')                
             </div>

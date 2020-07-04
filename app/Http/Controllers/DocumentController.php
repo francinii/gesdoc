@@ -154,7 +154,13 @@ class DocumentController extends Controller
         $code =   "'".$document['code'] ."'";
         $summary =   "'".$document['summary'] ."'";
         $type =  "'". $document['docType'] ."'";
-        $id_state =  3;//$document['state_id']; //int
+        if($id_flow == -1){
+            $id_state =  3; //Si no esta en flujo queda como Nuevo
+        }else {
+            $id_state =  10; //Estado en Flujo
+        }
+
+        
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
         $others="'".$document['others']."'";

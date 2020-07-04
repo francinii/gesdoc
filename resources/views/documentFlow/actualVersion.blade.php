@@ -2,14 +2,16 @@
         <div class="card-header bg-danger">
             <div class="row">
                 <div class="col-12">
-                    <div>
+                    <div id = "actualVersionButton">
                         <input type="hidden" id="actualVersion" value = '{{$actualVersion->version}}'>
                         <span> <b class="text-light">Version actual </b></span>
                         <span class="card-text text-light "> </span>
-                        <span  class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> Notas</button></span>  
-                        <span  class=" float-right"><button onclick="download({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-danger" > <i class="fas fa-download"></i> Descargar</button></span>  
-                        <span  class=" float-right"><button onclick="upload()" class="btn-sm btn btn-info" > <i class="fas fa-upload"></i> Subir</button></span>  
-                        <span  class=" float-right"><button onclick="save({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-success" > <i class="fas fa-save"></i> Guardar</button></span>    
+                        
+                        <span  title = "Notas" class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>  
+                        <span  title = "Descargar" class=" float-right"><button onclick="download({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-secondary" > <i class="fas fa-download"></i> </button></span>  
+                        <span  title = "Subir" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>  
+                        <span  title = "Editar" class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-info" > <i class="fas fa-edit"></i> </button></span>
+                        <span  title = "Guardar" class=" float-right"><button onclick="save({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-success" > <i class="fas fa-save"></i> </button></span>    
                     </div>                                          
                                                                         
                 </div>            

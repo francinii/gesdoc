@@ -13,6 +13,9 @@ use App\Action;
 use App\Note;
 use App\Historial;
 use App\ViewFlowUser;
+use App\ActionStepUser;
+use App\StepStep;
+use App\ViewActionStepStepUser;
 use DB;
 use Auth;
 
@@ -124,9 +127,10 @@ class DocumentFlowController extends Controller
         //$Flows = Flow::all();
         $users = User::all();
        
-          $actions = Action::all();
+        $actions = Action::all();
        // $flowsUser = ViewFlowUser::all();
-        $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+        $flows =ViewFlowUser::where('username', '=', $usuario)
+        ->get();
         //$flow = $flows->first()->flow_id;
         $documents = Document::where('flow_id', '=', $flow)->get();
         return view('documentFlow.table',compact('flow','flows', 'users','documents','actions'));
@@ -151,6 +155,41 @@ class DocumentFlowController extends Controller
         $notes = Note::where('version_id', '=', $version)->get();       
         return view('documentFlow.notesContent',compact('version','notes','versionNum'));
     }
+
+
+    public function modalEditVersion(Request $request){
+        $usuario = Auth::user()->username;
+        $datos = request()->except(['_token']);
+        $version = $datos['version'];
+        $versionNum = $datos['versionNum'];
+        $version = Version::where('id', '=', $version)->first();
+        $stepId = $version->identifier;
+        $flowId = $version->flow_id;
+
+        // $stepstep = StepStep::where('prev_flow_id', '=', $flowId)
+       // ->where('prev_step_id', $stepId)->get();
+        
+      //  $actionStepUser = ActionStepUser::where('flow_id', '=', $flowId)
+      //  ->where('step_id', $stepId)
+      //  ->where('username',  $usuario)->get(); 
+
+     // $stepstep = StepStep::where('prev_flow_id', '=', $flowId)
+      //->where('prev_step_id', $stepId)->pluck('id_action')->toArray();
+
+        ///$actionStepUser = ActionStepUser::where('flow_id', '=', $flowId)
+       // ->where('step_id', $stepId)
+       // ->where('username',  $usuario)->pluck('action_id')->toArray(); 
+       $actionStepUser = ViewActionStepStepUser::where('username','=', $usuario)
+       ->where('step_id', $stepId)
+       ->where('flow_id', $flowId)
+       ->get();
+
+    
+
+        return view('documentFlow.modalEditVersion',compact('version','actionStepUser','versionNum'));
+
+    }
+
 
      /**
      * Display the specified historial of a resource.
@@ -257,7 +296,6 @@ class DocumentFlowController extends Controller
         $versionNum = $datos['versionNum'];
         $actions = Historial::where('version_id', '=', $version)->get();       
         return view('documentFlow.actionHistory',compact('version','actions','versionNum'));
-        
     }
 
     public function previewVersion($datos){
@@ -275,6 +313,77 @@ class DocumentFlowController extends Controller
         
     }
 
+
+
+    function flowProcess(Request $request){
+        $datos = request()->except(['_token']);
+        $idVersion = $datos['version'];
+        $action = (int) $datos['action'];
+        $text_notas =  "'" . $datos['text_notas']. "'"; 
+        $isCheck = $datos['isCheck'];
+        
+        $version = Version::where('id', '=', $idVersion)->first();
+        $document_id = $version->document_id;
+        $flow_id = (int) $version->flow_id;
+        $previewStep =  $version->identifier;
+        $size =  "'" .$version->size . "'";
+        $content = "'".$version->content. "'"; 
+        $status = true;
+
+        //Get the next identifier
+        $identifier = StepStep::where('prev_flow_id', '=', $flow_id)->where('prev_step_id', '=', $previewStep)
+        ->where('id_action', '=', $action)
+        ->first();
+
+        //Get the next version
+        $identifier =  $identifier->next_step_id;
+        $version = (double) $version->version;
+        $version++;
+
+//If the next step is the final step then
+        if($identifier  == 'draggable_final'){
+            $flow_id = -1;
+            $identifier = '-1';
+            
+            //estado de la version a finalizado update de la version
+            //estado del documento a finalizado update del documento  
+            DB::select("call update_version_final( $document_id, $idVersion, @res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] == 3) {
+                throw new DecryptException('El documento ya existe en la base de datos');
+            }
+            else if ($res[0]['res'] != 0) {
+               throw new DecryptException('Error al procesar la petición en la base de datos');
+            }
+            if($isCheck && $text_notas != '' )
+                DB::select("call insert_note($idVersion, $text_notas, @res)");
+                $status = 11;
+                DB::select("call update_document_status($document_id, $status , @res)");
+        }
+        else{
+            $status = 0;
+            $identifier =  "'" . $identifier . "'" ;
+            DB::select("call update_version_status($idVersion, $status, @res)");
+            DB::select("call insert_version($document_id, $flow_id, $identifier,$size, $content, $version, $status, @res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] == 3) {
+                throw new DecryptException('El documento ya existe en la base de datos');
+            }
+            if ($res[0]['res'] != 0) {
+                throw new DecryptException('Error al procesar la petición en la base de datos');
+            }
+
+            if($isCheck && $text_notas != '' )
+                DB::select("call insert_note($idVersion, $text_notas, @res)");
+        }
+//Else 
+
+
+    
+        
+  }
 
 
 

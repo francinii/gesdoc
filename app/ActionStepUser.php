@@ -10,11 +10,11 @@ class ActionStepUser extends Model
     //You change the name by Laravel defines by default
     protected $table = 'action_step_user';
 
-    public function stepUsers() {
-        return $this->hasMany('App\StepUser');
-    }
+//   public function stepUsers() {
+ //       return $this->hasMany('App\StepUser');
+  //  }
 
-    public function actions() {
-        return $this->hasMany('App\Action');
+    public function action() {
+        return $this->belongsTo('App\Action');
     }
 }

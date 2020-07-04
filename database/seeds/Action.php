@@ -14,6 +14,8 @@ class Action extends Seeder
         //Type 0 > It's for actions related to the flow
         //Type 1 >  It's for actions related to Documents
         //Type 2 > It's for the specific action begin (Beginning line in the flow)
+        //Type 3 > ??
+        //Type 4> Estado del documento  en flujo finalizado
         \DB::table('actions')->insert(array(
             'description' =>"Aceptar",
             'state' =>"Aceptado",
@@ -88,5 +90,22 @@ class Action extends Seeder
             'updated_at'=> '2020-05-02 00:00:00',      
         ));
         
+        \DB::table('actions')->insert(array(
+            'description' =>"En flujo",
+            'state' =>"En flujo",
+            'color' =>"#007bff",
+            'type' =>4,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',      
+        ));
+
+        \DB::table('actions')->insert(array(
+            'description' =>"Finalizar",
+            'state' =>"Finalizado",
+            'color' =>"#dc3545",
+            'type' =>4,
+            'created_at'=> '2020-05-02 00:00:00',
+            'updated_at'=> '2020-05-02 00:00:00',      
+        ));
     }
 }
