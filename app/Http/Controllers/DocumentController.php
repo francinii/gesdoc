@@ -9,6 +9,7 @@ use App\Document;
 use App\StepStep;
 use App\Flow;
 use App\Classification;
+use App\User;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
@@ -118,7 +119,7 @@ class DocumentController extends Controller
         $id_state =  3;//$document['state_id']; //int
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
-        $othres="'".$document['othres']."'";
+        $others="'".$document['others']."'";
         $identifier =  "-1";    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
         $classification=$document['classification']!='-1'?"'".$document['classification']."'":"'".$mainClassification->id."'";
@@ -129,7 +130,7 @@ class DocumentController extends Controller
         }  
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$othres,$size,$content, @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -156,7 +157,7 @@ class DocumentController extends Controller
         $id_state =  3;//$document['state_id']; //int
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
-        $othres="'".$document['othres']."'";
+        $others="'".$document['others']."'";
         $identifier =  "-1";    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
         $classification=$document['classification']!='-1'?$document['classification']:$mainClassification->id;
@@ -167,7 +168,7 @@ class DocumentController extends Controller
         }  
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$othres,$size,$content, @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -222,12 +223,12 @@ class DocumentController extends Controller
         $summary =   "'".$document['summary'] ."'";
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
-        $othres="'".$document['othres']."'";
+        $others="'".$document['others']."'";
         $identifier =  "-1";    
         $username = Auth::id();    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
         $classification=$document['classification']!='-1'?"'".$document['classification']."'":"'".$mainClassification->id."'";
-        
+        $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
         if(count($step) >0){
             $identifier =  "'".$step[0]->next_step_id."'";
@@ -236,7 +237,7 @@ class DocumentController extends Controller
         
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call update_document($id,$classification, $currentClassification,$id_flow,$identifier,$description, $summary, $code,$languaje,$othres,@res)");
+        DB::select("call update_document($id,$username,$classification, $currentClassification,$id_flow,$identifier,$description, $summary, $code,$languaje,$others,@res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -252,6 +253,52 @@ class DocumentController extends Controller
     }
 
     /**
+     * @param id of the document or classification
+     * @param type  document or classification
+     * @return array of user
+     */
+    public function showShare($id)
+    {
+        $currentUsersShare = [];
+        $review = [];
+        $Document = Document::where([['id', '=', $id]])->first();
+        $owner=$Document->owner;
+        $owner->owner=true;
+        $CurrentUsername = Auth::id();
+        ($CurrentUsername== $owner->username)? $owner->current=true : $owner->current=false;
+        $currentUsersShare[$owner->username] = $owner;
+        $currentUsersShare[$owner->username]->actions=[];       
+        $this->getUsersDocuments($Document->id,$currentUsersShare,$CurrentUsername);   
+        
+
+       return compact('currentUsersShare');
+    }
+
+    
+     /**
+     * @param classification for find the user who can see
+     * @param currentUsersShare array to save users
+     * @param review save the classification reviewed
+     * @return idclassification id of the main classification
+     */
+    private function getUsersDocuments($idDocument,&$currentUsersShare,$CurrentUsername)
+    {        
+        
+        $myUsers=DB::table('action_document_user')->select('username')->where('document_id','=', $idDocument)->pluck('username')->toArray();
+        $myUsers=User::whereIn('username', $myUsers)->get();
+        foreach ($myUsers as $user) {
+            if(!isset($currentUsersShare[$user->username])){                
+                $user->owner=false;
+                ($CurrentUsername== $user->username)? $user->current=true :$user->current=false;
+                $myActions=  DB::table('action_document_user')->select('action_id')->where([['document_id','=', $idDocument],['username','=',$user->username]])->pluck('action_id')->toArray();
+                $user->actions=$myActions;  
+                $currentUsersShare[$user->username]=$user;
+            }          
+        }
+
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Document  $document
@@ -259,16 +306,110 @@ class DocumentController extends Controller
      */
     public function destroy($id)
     {
-        Document::destroy($id);
-        return DocumentController::refresh();
+        $user = auth()->user(); 
+        $array = explode('-', $id);
+        $idselect = (int) $array[0];
+        $action = $array[1];
+        $currentClassification = (int) $array[2];
+        $currentTable = (int) $array[3];
+        
+        if($action=="1")
+        $this->DeleteShare($user,$idselect,null,$currentClassification);
+        else
+        $this->remove($user,$idselect,$currentClassification);
+
+        return $this->refresh($currentTable, $currentClassification);
     }
 
-    public function download($file){
+    private function DeleteShare($user,$idselect,$Owner,$currentClassification){
 
-        $route="public/Hr4fyNgLSiMUWe1ZfU3jflnevK1ZCe0QcQi9dXIo.xlsx";
-        $pathToFile=storage_path("app/$route");     
-        return response()->file($pathToFile);
+        DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+    
     }
+
+    private function remove($user,$idselect,$currentClassification){
+
+        DB::select("call remove_document($idselect,'$user->username',$currentClassification,@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * Save the users to share a documents
+     */
+
+    public function share(Request $request)
+    {
+        $dato = request()->except(['_token']);
+        $usersShare=$dato['usersShare'];
+        $type=$dato['typeContextMenu'];
+        $idselect=$dato['idselect'];     
+        $Owner=$dato['Owner'];
+        $currentTable=$dato['currentTable'];
+        $currentClassification=$dato['currentClassification'];
+
+        foreach ($usersShare as $user) {
+            $user=(object)$user;
+            if($user->type=='delete')
+                $this->DeleteShare($user,$idselect,$Owner);
+            if($user->type=='new')
+                $this->addShare($user,$idselect,$Owner);
+            if($user->type=='old')
+                $this->updateShare($user,$idselect,$Owner);
+        }
+        return $this->refresh($currentTable, $currentClassification);
+        
+    }
+    
+
+
+    private function addShare($user,$idselect,$Owner){
+        
+            $actionsString='';
+            if(isset($user->actions)){
+                foreach ($user->actions as $action) {
+                    $actionsString.="$action,";
+                }
+                $actionsString=substr($actionsString, 0, -1);
+            }
+            DB::select("call add_Share_document($idselect,'$user->username','$Owner','$actionsString',@res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] != 0) {
+                throw new DecryptException('error en la base de datos');
+            }
+     
+      
+    }
+
+    private function updateShare($user,$idselect,$Owner){
+                 
+            $actionsString='';
+            if(isset($user->actions)){
+                foreach ($user->actions as $action) {
+                    $actionsString.="$action,";
+                }
+                $actionsString=substr($actionsString, 0, -1);
+            }
+                DB::select("call update_Share_document($idselect,'$user->username','$Owner','$actionsString',@res)");
+                $res = DB::select("SELECT @res as res;");
+                $res = json_decode(json_encode($res), true);
+                if ($res[0]['res'] != 0) {
+                    throw new DecryptException('error en la base de datos');
+                }
+            
+        }
+
 
 }
 

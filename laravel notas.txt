@@ -108,6 +108,9 @@ composer dump-autoload
 php artisan route:list
 
 
-
+/// para ver erres sql 
+GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 
   <iframe src="http://docs.google.com/gview?url=http://upgrade.com.mx/_docs/prueba.doc&embedded=true" style="width:600px; height:600px;" frameborder="0"></iframe>

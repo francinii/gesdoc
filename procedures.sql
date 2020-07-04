@@ -371,7 +371,7 @@ DELIMITER ;
 
 
 -- ----------------------------
--- PROCEDURE delete a classification
+-- PROCEDURE update a classification
 -- return 0 success, 1 or 2 error in database
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_classification`;
@@ -411,11 +411,10 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `delete_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `delete_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_documents` text,IN `p_classification_owner` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `delete_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_documents` LONGTEXT,IN `p_classification_owner` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _classification_owner varchar(500) DEFAULT NULL;
   DECLARE _principal_classification INT DEFAULT NULL;
-  DECLARE _owner varchar(500) DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _value TEXT DEFAULT NULL;
@@ -439,10 +438,12 @@ BEGIN
                 IF _classification_owner=p_username and p_classification_owner!='' THEN
                   UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
 
-                ELSEIF _classification_owner!=p_username THEN
-                   DELETE FROM `action_classification_user` WHERE `classification_id`=p_id and `username`=p_username;
-                ELSE
-                   DELETE FROM `classifications` WHERE `id`=p_id;            
+                ELSE    
+                  IF p_classification_owner!='' THEN
+                    DELETE FROM `action_classification_user` WHERE `classification_id`=p_id  and `username`=p_username;
+                  ELSE
+                    DELETE FROM `classifications` WHERE `id`=p_id;
+                  END IF;             
                   iterator:
                     LOOP
                         IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
@@ -451,14 +452,13 @@ BEGIN
                         SET _next = SUBSTRING_INDEX(p_documents,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _value = CAST(TRIM(_next) AS UNSIGNED);
-                        SELECT `username` into _owner FROM `documents` WHERE `id`=_value;
-                        IF _owner!=p_username THEN
-                          select `id` into _principal_classification FROM `classifications` where `type`=1 and `username`=_owner;
-                          INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_principal_classification,_value,NOW(),NOW());
-                        ELSE
+                        IF p_classification_owner!='' THEN
                           DELETE FROM `action_document_user` WHERE `document_id`=_value and `username`=p_username;
-                        END IF;
-                        SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
+                        ELSE
+                          DELETE FROM `documents` WHERE `id`=_value and `flow_id` IS NULL;
+                          DELETE FROM `action_document_user` WHERE `document_id`=_value;
+                          
+                        END IF;  
                       END LOOP;  
                 END IF;       
             COMMIT;
@@ -471,18 +471,73 @@ DELIMITER ;
 -- SELECT @res as res;
 
 
+-- ---------------------------------------
+-- procedura remove a share clasification 
+-- return 0 success, 1 or 2 error in database, 3 the classification already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `remove_Classification`;
+DELIMITER ;;
+CREATE  PROCEDURE `remove_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_documents` LONGTEXT, OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _classification_owner varchar(500) DEFAULT NULL;
+  DECLARE _principal_classification INT DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _value TEXT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+  
+    ROLLBACK;
+	END;
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+            
+                            
+              DELETE FROM `action_classification_user` WHERE `username` =p_username and `classification_id`=p_id;          
+              iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
+                      LEAVE iterator;
+                    END IF;
+                    SET _next = SUBSTRING_INDEX(p_documents,',',1);
+                    SET _nextlen = LENGTH(_next);
+                    SET _value = CAST(TRIM(_next) AS UNSIGNED);
+                    DELETE FROM `action_document_user` WHERE `document_id`=_value and `username` =p_username;
+                END LOOP;  
+                     
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call remove_Classification(5,'402340420','1','',@res)
+-- SELECT @res as res;
+
+
 -- ----------------------------
 -- PROCEDURE add user for a classification
 -- return 0 success, 1 or 2 error in database, 3 the classification already exists
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `add_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_documents` LONGTEXT,IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
-
+  DECLARE _classification INT DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _action TEXT DEFAULT NULL;
+  DECLARE _nextDoc TEXT DEFAULT NULL;
+  DECLARE _nextlenDoc INT DEFAULT NULL;
+  DECLARE _document TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -492,38 +547,51 @@ BEGIN
       
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+ 
 		-- ERROR
     SET res = -2;
     ROLLBACK;
 	END;
 
             START TRANSACTION;
-                IF p_classification_owner!=p_username THEN
-                  iterator:
-                    LOOP
-                        IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
-                        LEAVE iterator;
-                        END IF;
-                        SET _next = SUBSTRING_INDEX(p_actions,',',1);
-                        SET _nextlen = LENGTH(_next);
-                        SET _action = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `action_classification_user`(`action_id`, `classification_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
-                        SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
-                      END LOOP;
-                END IF;
+              IF p_classification_owner!=p_username THEN
+              SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+              iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                    LEAVE iterator;
+                    END IF;
+                    SET _next = SUBSTRING_INDEX(p_actions,',',1);
+                    SET _nextlen = LENGTH(_next);
+                    SET _action = CAST(TRIM(_next) AS UNSIGNED);                            
+                    INSERT INTO `action_classification_user`(`action_id`, `classification_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
+                    SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
+                END LOOP;
+              iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_documents)) = 0 OR p_documents IS NULL THEN
+                    LEAVE iterator;
+                    END IF;
+                    SET _nextDoc = SUBSTRING_INDEX(p_documents,',',1);
+                    SET _nextlenDoc = LENGTH(_nextDoc);
+                    SET _document = CAST(TRIM(_nextDoc) AS UNSIGNED);
+                    DELETE FROM `classification_document` WHERE `classification_id`=_classification and `document_id`=_document;                  
+                  SET p_documents = INSERT(p_documents,1,_nextlenDoc + 1,'');
+                END LOOP;
+              END IF;
             COMMIT;
             -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
--- call add_Share_Classification(5,'116650288','4',@res);
+-- call add_Share_Classification(7,'402340420','116650288','1','4',@res)
 -- SELECT @res as res;
 
 
 
 -- ----------------------------
--- PROCEDURE add user for a classification
+-- PROCEDURE update a user share a classification
 -- return 0 success, 1 or 2 error in database, 3 the classification already exists
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_Share_Classification`;
@@ -543,6 +611,7 @@ BEGIN
       
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+  
 		-- ERROR
     SET res = -2;
     ROLLBACK;
@@ -573,8 +642,10 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call update_Share_Classification(5,'116650288','4',@res);
+
+-- call update_Share_Classification(9,'402340420','402340420','',@res)
 -- SELECT @res as res;
+
 
 -- PROCEDURE insert a new flow
 -- return 0 success, 1 or 2 database error, 3 the department already exists
@@ -740,8 +811,8 @@ DELIMITER ;
 
 
 
-
--- PROCEDURE insert a new row to the document table
+-- ------------
+-- PROCEDURE insert a cretate a nuew documet
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
@@ -793,12 +864,13 @@ DELIMITER ;
 
 
 
--- PROCEDURE insert a new row to the document table
+-- PROCEDURE update a documents
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `update_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document`(IN `p_id` int,IN `p_classification` int,IN `p_currentClassification` int,   IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_description` varchar(500),  IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500), OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_currentClassification` int,   IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_description` varchar(500),  IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500), OUT `res` TINYINT  UNSIGNED )
 BEGIN
+  DECLARE _document_owner INT DEFAULT NULL;
   DECLARE idFlow INTEGER ; 
   DECLARE idIdentifier varchar(500);
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -823,10 +895,12 @@ BEGIN
                 IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
                 END IF;
-
+                SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;   
                 UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
-                DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
-                INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
+                IF _document_owner=p_username THEN
+                  DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
+                  INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
+                END IF;
                 UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;
            
             
@@ -838,6 +912,246 @@ END
 DELIMITER ;
 -- call update_document(1,'1', 1,-1,-1,'doc1', 'doc1', 'doc1','ingles','',@res)
 -- SELECT @res as res;
+
+
+-- ----------------------------
+-- PROCEDURE remove a share documento 
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `remove_document`;
+DELIMITER ;;
+CREATE   PROCEDURE `remove_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int, OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;                   
+                  DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;                  
+                  DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call remove_document(1,'402340421',1,@res);
+-- SELECT @res as res;
+
+
+
+-- ----------------------------
+-- PROCEDURE remove a share documento 
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `clone_document`;
+DELIMITER ;;
+CREATE   PROCEDURE `clone_document`(IN `p_id` int,IN `p_classification` int,IN `p_content` LONGTEXT, OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE document_id INT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION; 
+
+            INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`)            
+            SELECT  `flow_id`, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =1;
+            SET document_id =  LAST_INSERT_ID(); 
+            INSERT INTO `versions`(`document_id`, `flow_id`, `identifier`, `content`, `size`, `status`, `version`, `created_at`, `updated_at`)
+            SELECT document_id, `flow_id`, `identifier`, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
+            WHERE `document_id`=p_id and `version`=(SELECT max(`version`) FROM `versions` where `document_id`= p_id );
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call clone_document(1,1,'',@res);
+-- SELECT @res as res;
+
+
+
+-- ----------------------------
+-- PROCEDURE remove a share documento 
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_Share_document`;
+DELIMITER ;;
+CREATE   PROCEDURE `delete_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_owner` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _document_owner INT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+
+                SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;
+                IF _document_owner=p_username and p_owner!='' THEN
+                  UPDATE `documents` SET `username`=p_owner,`updated_at`=Now() WHERE `id`=p_id;
+                ELSE 
+                  IF p_owner!='' THEN
+                    DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
+                    DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
+                  ELSE 
+                    DELETE FROM `documents` WHERE `id`=_value and `flow_id` IS NULL;
+                    DELETE FROM `action_document_user` WHERE `document_id`=_value;
+                  END IF;
+                END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call delete_Share_document(1,'402340421',1,@res);
+-- SELECT @res as res;
+
+
+
+-- ----------------------------
+-- PROCEDURE add  a usar fro share documento 
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+
+DROP PROCEDURE IF EXISTS `add_Share_document`;
+DELIMITER ;;
+CREATE  PROCEDURE `add_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _classification INT DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _action TEXT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+      
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+                SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+                INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());
+                IF p_owner!=p_username THEN                
+                  iterator:
+                    LOOP
+                        IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                        LEAVE iterator;
+                        END IF;
+                        SET _next = SUBSTRING_INDEX(p_actions,',',1);
+                        SET _nextlen = LENGTH(_next);
+                        SET _action = CAST(TRIM(_next) AS UNSIGNED);
+                        INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
+                        SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
+                      END LOOP;
+                END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call add_Share_document(5,'116650288','4',@res);
+-- SELECT @res as res;
+
+
+
+
+
+-- ----------------------------
+-- PROCEDURE update a user share a document
+-- return 0 success, 1 or 2 error in database, 3 the document already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `update_Share_document`;
+DELIMITER ;;
+CREATE  PROCEDURE `update_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _owner varchar(500) DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _action TEXT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+      
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+
+            START TRANSACTION;
+              SELECT `username` into _owner FROM `documents` WHERE `id`=p_id;
+              DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
+              IF _owner=p_username and p_owner!=p_username THEN
+                UPDATE `documents` SET `username`=p_Owner,`updated_at`=Now() WHERE `id`=p_id;
+              END IF;
+              IF p_owner!=p_username THEN
+                iterator:
+                  LOOP
+                      IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
+                      LEAVE iterator;
+                      END IF;
+                      SET _next = SUBSTRING_INDEX(p_actions,',',1);
+                      SET _nextlen = LENGTH(_next);
+                      SET _action = CAST(TRIM(_next) AS UNSIGNED);
+                      INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
+                      SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
+                    END LOOP;
+              END IF;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call update_Share_document(1,'402340420','116650288','4,5',@res)
+-- call update_Share_document(9,'402340420','402340420','',@res)
+-- SELECT @res as res;
+
+
+
+
 
 
 

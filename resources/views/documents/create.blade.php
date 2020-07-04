@@ -12,7 +12,7 @@
           
             <div id= "docName" class="form-group">
               <label for="descriptionCreate">{{ __('app.documents.general.name') }}</label>
-              <input type="text" class="form-control" id="descriptionCreate" placeholder="{{ __('app.documents.create.name') }}" name="descriptionCreate">
+              <input type="text" class="form-control" id="descriptionCreate" placeholder="{{ __('app.documents.general.name') }}" name="descriptionCreate">
             </div>   
 
             <label for="flowCreate">{{ __('app.documents.create.flow') }}</label>
@@ -35,19 +35,19 @@
             </div>            
             <div class="form-group">
               <label for="code">{{ __('app.documents.general.code') }}</label>
-              <input type="text" class="form-control" id="code" placeholder="Código del documento" name="">
+              <input type="text" class="form-control" id="code" placeholder="{{ __('app.documents.general.code') }}" name="">
             </div>
             <div class="form-group">
               <label for="languaje">{{ __('app.documents.general.languaje') }}</label>
-              <input type="text" class="form-control" id="languaje" placeholder="Idioma del  contenido" name=""></textarea>
+              <input type="text" class="form-control" id="languaje" placeholder="{{ __('app.documents.general.languaje') }}" name=""></textarea>
             </div>                         
             <div class="form-group">
               <label for="summary">{{ __('app.documents.general.summary') }}</label>
-              <textarea type="text" class="form-control" id="summary" placeholder="Resumen de contenido" name=""></textarea>
+              <textarea type="text" class="form-control" id="summary" placeholder="{{ __('app.documents.general.summary') }}" name=""></textarea>
             </div>
             <div class="form-group">
-              <label for="othres">{{ __('app.documents.general.othres') }}</label>
-              <textarea type="text" class="form-control" id="othres" placeholder="Otros datos" name=""></textarea>
+              <label for="others">{{ __('app.documents.general.others') }}</label>
+              <textarea type="text" class="form-control" id="others" placeholder="Otros datos" name=""></textarea>
             </div>    
 
           </form>    

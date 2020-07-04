@@ -23,16 +23,16 @@
                 @foreach ($classifications as $classification)
                 <tr onclick="openClassification({{$classification->id}})">
                    
-                    <td class="text-center" ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
-                    <td class="text-center">{{$classification->description}}</td>                           
-                    <td class="text-center">{{$classification->created_at}}</td>  
-                    <td class="text-center">{{$classification->updated_at}}</td>
-                    <td style="display:none;" class="text-center">{{$classification->id}}</td>
-                    <td style="display:none;" class="text-center"></td>
-                    <td style="display:none;" class="text-center"></td>
-                    <td style="display:none;" class="text-center"></td>
-                    <td style="display:none;" class="text-center"></td>
-                    <td style="display:none;" class="text-center"></td>
+                    <td class="text-center principalTd" ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
+                    <td class="text-center principalTd">{{$classification->description}}</td>                           
+                    <td class="text-center principalTd" >{{$classification->created_at}}</td>  
+                    <td class="text-center principalTd">{{$classification->updated_at}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$classification->id}}</td>
+                    <td style="display:none;" class="text-center principalTd"></td>
+                    <td style="display:none;" class="text-center principalTd"></td>
+                    <td style="display:none;" class="text-center principalTd"></td>
+                    <td style="display:none;" class="text-center principalTd"></td>
+                    <td style="display:none;" class="text-center principalTd"></td>
                     
                     
                     
@@ -43,23 +43,23 @@
                 <tr>
 
                      @if ($document->type=="docx" || $document->type=="doc")
-                    <td class="text-center"><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
+                    <td class="text-center principalTd"><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
                     @elseif($document->type=="xlsx" || $document->type=="xls")
-                    <td class="text-center"><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                    <td class="text-center principalTd"><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @elseif($document->type=="ppt")
                     <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @else
                     <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @endif
-                    <td class="text-center">{{$document->description}}</td>                           
-                    <td class="text-center">{{$document->created_at}}</td>  
-                    <td class="text-center">{{$document->updated_at}}</td>
-                    <td style="display:none;" class="text-center">{{$document->id}}</td>
-                    <td style="display:none;" class="text-center">{{$document->flow_id}}</td>
-                    <td style="display:none;" class="text-center">{{$document->summary}}</td>
-                    <td style="display:none;" class="text-center">{{$document->code}}</td>
-                    <td style="display:none;" class="text-center">{{$document->languaje}}</td>
-                    <td style="display:none;" class="text-center">{{$document->others}}</td>
+                    <td class="text-center principalTd">{{$document->description}}</td>                           
+                    <td class="text-center principalTd">{{$document->created_at}}</td>  
+                    <td class="text-center principalTd">{{$document->updated_at}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$document->id}}</td>
+                    <td style="display:none;" class="text-center principalTd ">{{$document->flow_id}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$document->summary}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$document->code}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$document->languaje}}</td>
+                    <td style="display:none;" class="text-center principalTd">{{$document->others}}</td>
                     
           
                 </tr>

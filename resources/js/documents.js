@@ -10,7 +10,7 @@ function clearDescriptionDoc() {
     $("#summary").removeClass("is-invalid");
     $("#languaje").val("");
     $("#languaje").removeClass("is-invalid");
-    $("#othres").removeClass("is-invalid");
+    $("#others").removeClass("is-invalid");
 }
 
 
@@ -67,7 +67,7 @@ function ajaxCreateDoc(mode) {
         var type = $("#docType").val();
         var code  = $("#code").val();        
         var languaje = $("#languaje").val();  
-        var othres = $("#othres").val();  ;
+        var others = $("#others").val();  ;
         
         if(type == 1)
             docType = 'docx';
@@ -89,7 +89,7 @@ function ajaxCreateDoc(mode) {
                 docType:docType,
                 code:code,
                 languaje:languaje,
-                othres:othres,
+                others:others,
                 mode:mode,                 
             },
 
@@ -130,7 +130,7 @@ function clearDescriptionDoc() {
     $("#summary").removeClass("is-invalid");
     $("#languaje").val("");
     $("#languaje").removeClass("is-invalid");
-    $("#othres").removeClass("is-invalid");
+    $("#others").removeClass("is-invalid");
 }
 
 
@@ -188,7 +188,7 @@ function ajaxUploadDoc(mode) {
         var type = $("#docType").val();
         var code  = $("#codeU").val();        
         var languaje = $("#languajeU").val();  
-        var othres = $("#othresU").val();  
+        var others = $("#othersU").val();  
 
         if(type == 1)
             docType = 'docx';
@@ -209,7 +209,7 @@ function ajaxUploadDoc(mode) {
         formData.append('code',code);
         formData.append('languaje',languaje);
         formData.append('classification',classification);
-        formData.append('othres',othres);        
+        formData.append('others',others);        
         formData.append('mode',mode);
         formData.append('archivo',archivo);
 
@@ -263,8 +263,9 @@ function editDoc() {
     var summaryEditDoc=currentTd.parentNode.childNodes[13].innerText;
     var codeEditDoc=currentTd.parentNode.childNodes[15].innerText;
     var languajeEditDoc=currentTd.parentNode.childNodes[17].innerText;    
-    var othresEditDoc=currentTd.parentNode.childNodes[19].innerText;
+    var othersEditDoc=currentTd.parentNode.childNodes[19].innerText;
     var classificationID=currentClassification.id;
+    
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);
@@ -278,9 +279,23 @@ function editDoc() {
     $("#languajeEditDoc").val(languajeEditDoc);
     $("#summaryEditDoc").val(summaryEditDoc);
     
-    $("#othresEditDoc").val(othresEditDoc);
+    $("#othersEditDoc").val(othersEditDoc);
     $("option[name=flowEditDoc" + flowId + "]").prop("selected", true);
-    $("option[name=classificationEditDoc" + classificationID + "]").prop("selected", true);
+    if(currentTable==2){
+     var option='<option value="'+currentClassification.id+'" name ="DefaulclassificationEditDoc">'+currentClassification.description+'</option>'; 
+     $("#classificationEditDoc").append(option);
+     $("option[name=DefaulclassificationEditDoc]").prop("selected", true);
+     $("#classificationEditDoc").prop("disabled", true );
+    }else{
+        $( "option[name=DefaulclassificationEditDoc]" ).remove();
+        $("#classificationEditDoc").prop("disabled", false);
+        $("option[name=classificationEditDoc" + classificationID + "]").prop("selected", true);
+    }
+    
+   
+ 
+
+    
     $("#editDocument").modal("show");
 
 }
@@ -335,7 +350,7 @@ function ajaxUpdateDoc() {
         var summary = $("#summaryEditDoc").val();
         var code  = $("#codeEditDoc").val();        
         var languaje = $("#languajeEditDoc").val();  
-        var othres = $("#othresEditDoc").val();                   
+        var others = $("#othersEditDoc").val();                   
            
         $.ajax({
             url: "documents/{" + id + "}",
@@ -352,7 +367,7 @@ function ajaxUpdateDoc() {
                 summary: summary, 
                 code:code,
                 languaje:languaje,
-                othres:othres,           
+                others:others,           
             },
 
             beforeSend: function (xhr) { 
@@ -419,10 +434,19 @@ function newDocument(e){
     }
     else if(currentTable==1  && currentClassification.type==3){
         $("#createTxt").show();
+        $("#createSheet").show();
+        $("#createClassification").hide();
+    }
+    else if(currentTable==2  && currentClassification.type==3 && (isCurrentUserOwner || CanCurrentUserEditar)){
+        $("#createTxt").show();
+        $("#createSheet").show();
+        $("#createClassification").hide();
+    }
+    else{
         $("#createTxt").hide();
         $("#createSheet").hide();
+        $("#createClassification").hide();
         $("#actionsMenu").show();
-        
     }
    
 
@@ -475,3 +499,8 @@ $("#file").change(function(e){
     });
     $('#nameU').val(name)
 });
+
+function clone(){
+   
+    
+}
