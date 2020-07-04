@@ -3,8 +3,7 @@
       <div class="modal-content">
         <div class="modal-header">  
             @if ( !empty($versionNum))
-        <h2 id= "card-title" class="text-center">Acciones sobre el flujo de
-           la version {{$versionNum}}</h2>
+              <h2 id= "card-title" class="text-center">Acciones sobre el flujo de la version {{$versionNum}}</h2>
             @endif    
       
           <button type="close" class="close" data-dismiss="modal"> 
@@ -27,15 +26,12 @@
               @endforeach                                
           </select>         
         </div>
-        <div class="form-group">
-          <label for="role_edit"><b>Con modificaciones</b></label>
-       
-        </div>
-          
-        <div class="form-group">
+        <div class="form-group">           
+              <input type="checkbox" id ='checkboxNota' onclick="isCheckNote(this)" > Agregar notas
+        </div>          
+        <div class="form-group" id = 'textNote' style = 'display:none'>
           <label for=""><b>Notas</b></label>
-            <textarea class="form-control" >
-            </textarea>
+            <textarea id = "text_notas" class="form-control" ></textarea>
         </div>
          
       </div>

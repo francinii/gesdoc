@@ -1043,6 +1043,61 @@ END
 ;;
 DELIMITER ;
 
+
+
+
+-- PROCEDURE update the doc when the next step is the final step
+DROP PROCEDURE IF EXISTS `update_document_status`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document_status`(IN `p_id_document` int, IN `p_status` int, OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;              
+              UPDATE `documents` SET `action_id`=p_status,`updated_at`=NOW() WHERE `id`=p_id_document;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+-- PROCEDURE update the doc when the next step is the final step
+DROP PROCEDURE IF EXISTS `insert_note`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_note`(IN version int,IN content text, OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;              
+                INSERT INTO `notes`(version_id, content, created_at, updated_at) VALUES (version, content, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
 -- DROP VIEW IF EXISTS view_document_version ;
 -- CREATE VIEW view_document_version AS 
 -- SELECT  doc.id as document_id, doc.flow_id, doc.action_id, doc.username, doc.description as document_description, doc.summary, doc.code, doc.created_at as document_create, doc.updated_at document_update,

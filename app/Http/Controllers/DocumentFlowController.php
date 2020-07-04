@@ -319,7 +319,9 @@ class DocumentFlowController extends Controller
         $datos = request()->except(['_token']);
         $idVersion = $datos['version'];
         $action = (int) $datos['action'];
-
+        $text_notas =  "'" . $datos['text_notas']. "'"; 
+        $isCheck = $datos['isCheck'];
+        
         $version = Version::where('id', '=', $idVersion)->first();
         $document_id = $version->document_id;
         $flow_id = (int) $version->flow_id;
@@ -353,7 +355,11 @@ class DocumentFlowController extends Controller
             }
             else if ($res[0]['res'] != 0) {
                throw new DecryptException('Error al procesar la petición en la base de datos');
-            }         
+            }
+            if($isCheck && $text_notas != '' )
+                DB::select("call insert_note($idVersion, $text_notas, @res)");
+                $status = 11;
+                DB::select("call update_document_status($document_id, $status , @res)");
         }
         else{
             $status = 0;
@@ -368,6 +374,9 @@ class DocumentFlowController extends Controller
             if ($res[0]['res'] != 0) {
                 throw new DecryptException('Error al procesar la petición en la base de datos');
             }
+
+            if($isCheck && $text_notas != '' )
+                DB::select("call insert_note($idVersion, $text_notas, @res)");
         }
 //Else 
 

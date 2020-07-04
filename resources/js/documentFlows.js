@@ -42,6 +42,18 @@ select.addEventListener('change',
 });
 
 
+function isCheckNote(event){
+    // $('#checkboxNota').change(function() {
+        if($(event).is(":checked")) {
+            $('#textNote').css("display", 'block');
+        }else {
+            $('#textNote').css("display", 'none');
+        }
+    // $('#textbox1').val($(this).is(':checked'));        
+   // });
+}
+   
+
 
 function historial(idDoc){
 
@@ -260,7 +272,8 @@ function hideModal(mod){
 
 function flowProcess(version){
     var action = $("select[name=action_create] option:selected").val();
-
+    var text_notas = $('#text_notas').val();
+    var isCheck = $('#checkboxNota').is(":checked");
     $.ajax({
         url: "documentFlow/flowProcess/{" + version + "}",
         method: "GET",
@@ -272,6 +285,8 @@ function flowProcess(version){
            _token: $("input[name=_token]").val(),
            version:version,   
            action:action,
+           text_notas: text_notas,
+           isCheck: isCheck,
         },
         beforeSend: function (xhr) { 
             $("#cargandoDiv").css('display', 'block')
