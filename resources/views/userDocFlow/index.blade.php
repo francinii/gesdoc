@@ -20,7 +20,7 @@
                 <h2 class="text-center">Mis documentos en flujo</h2>        
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
-                    <select id='selectDoc' class="form-control selectpicker"  data-live-search="true"  >                
+                    <select id='selectDoc2' class="form-control selectpicker"  data-live-search="true"  >                
                     @foreach ($flows as $flow)      
                         <option  id = "{{$flow->flow_id}}" value = "{{$flow->flow_id}}">{{$flow->description}}</option>
                     @endforeach                                    

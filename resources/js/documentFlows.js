@@ -1,6 +1,7 @@
 
 
 var select = document.getElementById('selectDoc');
+if(select){
 select.addEventListener('change',
   function(){
     var selectedOption = this.options[select.selectedIndex];
@@ -40,7 +41,54 @@ select.addEventListener('change',
     });
   
 });
+}
 
+
+
+//Version para usuarios
+
+var select2 = document.getElementById('selectDoc2');
+if(select2){
+    select2.addEventListener('change',
+    function(){
+        var selectedOption = this.options[select2.selectedIndex];
+    // alert(selectedOption.value + ': ' + selectedOption.text);
+        var idFlow = selectedOption.value;
+
+        $.ajax({
+            url: "userDocFlow/{" + idFlow + "}",
+            method: "GET",
+            headers: {
+            
+            },
+            data: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            _token: $("input[name=_token]").val(),
+            idFlow: idFlow,
+                
+            },
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+            },
+            success: function(result) {
+                $("#cargandoDiv").css('display', 'none');
+                $("#table").html(result);
+                $("#table").DataTable().destroy();
+                
+                createDataTable("table");            
+            
+            },
+
+            error: function(request, status, error) {
+            
+                alert(request.responseText);
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                $("#cargandoDiv").css('display', 'none')
+            }
+        });
+    
+    });
+}
 
 function isCheckNote(event){
     // $('#checkboxNota').change(function() {

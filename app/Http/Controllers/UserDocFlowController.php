@@ -71,6 +71,9 @@ class UserDocFlowController extends Controller
      */
     public function show(Request $request)
     {
+        $datos = request()->except(['_token']);
+        $flow = $datos['idFlow'];
+        return $this->refresh($flow);
         
     }
 
@@ -107,6 +110,22 @@ class UserDocFlowController extends Controller
     public function destroy(DocumentFlow $documentFlow)
     {
         //
+    }
+
+
+    public function refresh($flow) {
+        $usuario = Auth::user()->username;
+        
+        //$Flows = Flow::all();
+        $users = User::all();
+       
+        $actions = Action::all();
+       // $flowsUser = ViewFlowUser::all();
+        $flows =ViewFlowUser::where('username', '=', $usuario)
+        ->get();
+        //$flow = $flows->first()->flow_id;
+        $documents = Document::where('flow_id', '=', $flow)->get();
+        return view('userDocFlow.table',compact('flow','flows', 'users','documents','actions'));
     }
 
 }

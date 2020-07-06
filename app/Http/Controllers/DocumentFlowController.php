@@ -33,7 +33,8 @@ class DocumentFlowController extends Controller
         $users = User::all();        
         $actions = Action::all();
         $flow = '';
-        $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+     //   $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+     $flows =Flow::where('username', '=', $usuario)->get();
         if($flows->isNotEmpty()){
             $flow = $flows->first()->flow_id;
         }
@@ -384,18 +385,18 @@ class DocumentFlowController extends Controller
 
 
 
-  function managmentDocFlow(){
-    $usuario = Auth::user()->username;        
-    $users = User::all();        
-    $actions = Action::all();
-    $flow = '';
-    $flows =ViewFlowUser::where('username', '=', $usuario)->get();
-    if($flows->isNotEmpty()){
-        $flow = $flows->first()->flow_id;
-    }   
-    $documents = Document::where('flow_id', '=', $flow)->get();
-    return view('documentFlow.managmentDocFlow',compact('flow','flows', 'users','documents','actions'));
-  }
+//function managmentDocFlow(){
+    //$usuario = Auth::user()->username;        
+    //$users = User::all();        
+    //$actions = Action::all();
+    //$flow = '';
+    //$flows =ViewFlowUser::where('username', '=', $usuario)->get();
+   // if($flows->isNotEmpty()){
+     //   $flow = $flows->first()->flow_id;
+    //}   
+   // $documents = Document::where('flow_id', '=', $flow)->get();
+  //  return view('documentFlow.managmentDocFlow',compact('flow','flows', 'users','documents','actions'));
+ // }
 
 
   function location(Request $request){
