@@ -15,8 +15,8 @@
               <input type="file" id="file" /> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"></i> Importar documento</label>            
             </div>  
             <div class="form-group">
-              <label for="nameU">Nombreo del documento</label>
-              <input type="text" class="form-control" id="nameU" placeholder="Nombre del documento" name="">
+              <label for="nameU">{{ __('app.documents.general.name') }}</label>
+              <input type="text" class="form-control" id="nameU" placeholder="{{ __('app.documents.general.name') }}" name="">
             </div>
 
             <label for="flowCreateU">{{ __('app.documents.create.flow') }}</label>
@@ -38,20 +38,20 @@
               </select>
             </div>             
             <div class="form-group">
-              <label for="codeU">Código del documento en organizacion</label>
-              <input type="text" class="form-control" id="codeU" placeholder="Código del documento" name="">
+              <label for="codeU">{{ __('app.documents.general.code') }}</label>
+              <input type="text" class="form-control" id="codeU" placeholder="{{ __('app.documents.general.code') }}" name="">
             </div>
             <div class="form-group">
-              <label for="languajeU">Idioma del contenido</label>
-              <input type="text" class="form-control" id="languajeU" placeholder="Idioma de contenido" name=""></textarea>
+              <label for="languajeU">{{ __('app.documents.general.languaje') }}</label>
+              <input type="text" class="form-control" id="languajeU" placeholder="{{ __('app.documents.general.languaje') }}" name=""></textarea>
             </div>                         
             <div class="form-group">
-              <label for="summaryU">Resumen del contenido</label>
-              <textarea type="text" class="form-control" id="summaryU" placeholder="Resumen de contenido" name=""></textarea>
+              <label for="summaryU">{{ __('app.documents.general.summary') }}</label>
+              <textarea type="text" class="form-control" id="summaryU" placeholder="{{ __('app.documents.general.summary') }}" name=""></textarea>
             </div>
             <div class="form-group">
-              <label for="othresU">Otros datos</label>
-              <textarea type="text" class="form-control" id="othresU" placeholder="Otros datos" name=""></textarea>
+              <label for="othersU">{{ __('app.documents.general.others') }}</label>
+              <textarea type="text" class="form-control" id="othersU" placeholder="{{ __('app.documents.general.others') }}" name=""></textarea>
             </div>               
           </form>    
         </div>

@@ -38,7 +38,7 @@ function drawRoute() {
         $("#tableTitle").append(
             '<button type="button" onclick="BackClassification(' +
                 classification.id +
-                ')" class="btn btn-light text-left">' +
+                ')" oncontextmenu="openContextMenu(event);return false;" class="btn btn-light text-left">' +
                 classification.description +
                 ' <i class="fas fa-angle-right"></i></button>'
         );
@@ -50,7 +50,7 @@ function drawRoute() {
  *
  */
 $("html")
-    .on("contextmenu", "td", function (e) {
+    .on("contextmenu", "td.principalTd " , function (e) {
         currentTd = e.currentTarget;
         typeContextMenu = "";
         idselect = "";
@@ -60,16 +60,7 @@ $("html")
             idselect = currentTd.parentNode.childNodes[9].innerText;
             descriptionEdit = currentTd.parentNode.childNodes[3].innerText;
         }
-        var top = e.pageY - 10;
-        var left = e.pageX - 90;
 
-        $("#context-menu")
-            .css({
-                display: "block",
-                top: top,
-                left: left,
-            })
-            .addClass("show");
             $("#createClassificationContext").hide();
             $("#editContext").hide();
             $("#deleteContext").hide();
@@ -77,7 +68,9 @@ $("html")
             $("#createDocumentContext").hide();
             $("#createSheetContext").hide();
             $("#actionsContextMenu").hide();
- 
+            $("#removeContext").hide();
+            $("#cloneContext").hide();
+            
                  
             if(currentClassification.type==1 && currentTd.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
@@ -88,19 +81,20 @@ $("html")
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
                 $("#editContext").show();
+                if(typeContextMenu!='classification') $("#cloneContext").show();
                 $("#deleteContext").show();
                 $("#shareContext").show();
             }
             else if(currentTable==2 && currentClassification.type==2 && currentTd.className != "dataTables_empty" ){    
-                $("#editContext").show();
-                $("#deleteContext").show();
+                $("#removeContext").show();
                 $("#shareContext").show();  
             }
             else if(currentClassification.type==3 && currentTd.className != "dataTables_empty" && (isCurrentUserOwner || CanCurrentUserEditar)){
                 $("#editContext").show();
+                if(typeContextMenu!='classification') $("#cloneContext").show();
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
-                $("#deleteContext").show();
+                if(isCurrentUserOwner || CanCurrentUserDetele) $("#deleteContext").show();               
                 $("#shareContext").show();                
             }else if(isCurrentUserOwner || CanCurrentUserEditar){
                 $("#createDocumentContext").show();
@@ -110,7 +104,16 @@ $("html")
             }      
              
 
-
+            var top = e.pageY - 10;
+            var left = e.pageX - 90;
+    
+            $("#context-menu")
+                .css({
+                    display: "block",
+                    top: top,
+                    left: left,
+                })
+                .addClass("show");
         
  
         return false; //blocks default Webbrowser right click menu
@@ -119,9 +122,48 @@ $("html")
         $("#context-menu").removeClass("show").hide();
     });
 
+function openContextMenu(e){
+
+    $("#deleteContext").hide();
+    $("#shareContext").hide();
+    $("#createDocumentContext").hide();
+    $("#createSheetContext").hide();
+    $("#actionsContextMenu").hide();
+    $("#removeContext").hide();
+    $("#cloneContext").hide();
+    $("#editContext").hide()
+    $("#createClassificationContext").hide();
+    if(currentClassification.type==1 || currentClassification.type==2){
+        $("#actionsContextMenu").show();
+       
+    }else{
+        typeContextMenu='classification';
+        idselect=currentClassification.id;
+        descriptionEdit=currentClassification.description;
+        
+        if(isCurrentUserOwner || CanCurrentUserEditar) $("#editContext").show();
+        
+        $("#shareContext").show();
+
+    }
+    var top = e.pageY - 10;
+    var left = e.pageX - 90;
+
+    $("#context-menu")
+        .css({
+            display: "block",
+            top: top,
+            left: left,
+        })
+        .addClass("show");
+        return false;  //blocks default Webbrowser right click menu
+}
+
 $("#context-menu button").on("click", function () {
     $(this).parent().removeClass("show").hide();
 });
+
+
 
 /**
  * Clean the create form
@@ -280,6 +322,7 @@ function openClassification(id) {
 * @param {Integer} id of the classification opend
 */
 function BackClassification(id) {
+ 
     var LastClassificacion = listClassification.slice(-1).pop();
 
     if (LastClassificacion.id != id) {
@@ -289,6 +332,7 @@ function BackClassification(id) {
         }
         openClassification(id);
     }
+    
 }
 
 /**
@@ -366,17 +410,26 @@ function ajaxUpdate() {
 
 /**
  * delete a clasification or document select
+ * @param {Integer} action action 0 remove 1 delete
  */
 
-function deletefile(){
+function deletefile(action){
+    if(action)
     var mensaje='Desea eliminar ';
-    if(typeContextMenu=='classification'){
+    else
+    var mensaje='Desea quitar ';
+
+    if(typeContextMenu=='classification' && action){
         mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
-    }else{
+    }else if(typeContextMenu!='classification' ){
         mensaje+="el documento "+descriptionEdit
+    }else{
+        mensaje+="la clasificacion "+descriptionEdit
     }
-    var id=idselect+"-"+typeContextMenu+"-"+currentClassification.id+"-"+currentTable;
-    confirmDelete(id,'home','table-divTable',mensaje)
+    var id=idselect+"-"+action+"-"+currentClassification.id+"-"+currentTable;
+    var url;
+    (typeContextMenu=='classification')? url='home':url='documents';
+    confirmDelete(id,url,'table-divTable',mensaje)
 
 }
 
@@ -404,10 +457,10 @@ function showshare(){
     $("#modal-body-step-back").hide();
     $("#modal-body-step").show();
     
-
+    var url=(typeContextMenu=='classification')?"home/showshare/classification/"+idselect:"documents/showshare/document/"+idselect;
     
     $.ajax({
-        url: "home/showshare/"+idselect+"/"+typeContextMenu,
+        url: url,
         method: "get",
        
 
@@ -461,6 +514,10 @@ function openShare(currentUsersShare){
       user['current']=currentUsersShare[index].current;
       usersShare.push(user);
   }
+    var index=usersShare.findIndex(x => x.current == true);
+    var owner= usersShare[index].owner;   
+    var deletePermission = usersShare[index].actions.findIndex(x => x == 9);
+    if(!owner && deletePermission==-1) $( ".deleteShareUserButton" ).remove();
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
@@ -513,6 +570,10 @@ function select_user(e, clickedIndex, tableId){
         
         deleteUserTable(tableId,username);
     }
+    var index=usersShare.findIndex(x => x.current == true);
+    var owner= usersShare[index].owner;   
+    var deletePermission = usersShare[index].actions.findIndex(x => x == 9);
+    if(!owner && deletePermission==-1)  $( ".deleteShareUserButton" ).remove();
 }
 /**
  * Add to the UserTable a new User with this information: username, name, email.
@@ -523,7 +584,7 @@ function select_user(e, clickedIndex, tableId){
  * 
  */
 function appendUserTable(username, name, email, tableId,owner){
-    var index=usersShare.length;
+   
    if(owner){
    $("."+tableId).append(
     "<tr id ='" +  tableId + username +  "'><td>" + username +  "</td><td>" + name + "</td><td>" + email +
@@ -536,7 +597,7 @@ function appendUserTable(username, name, email, tableId,owner){
    else
     $("."+tableId).append(
         "<tr id ='" +  tableId + username +  "'><td>" + username +  "</td><td>" + name + "</td><td>" + email +
-        "</td><td id='deleteShareUser'><button class ='btn btn-danger delete' onclick= deleteUserTable('"+ tableId +"','"+username+"') type ='button' ><i class='fas fa-trash-alt'></i></button></td></tr>"
+        "</td><td id='deleteShareUser'><button class ='btn btn-danger delete  deleteShareUserButton' onclick= deleteUserTable('"+ tableId +"','"+username+"') type ='button' ><i class='fas fa-trash-alt'></i></button></td></tr>"
     );
   }
 
@@ -552,11 +613,12 @@ function openPermissions(actions){
     chequeado = "";
     habilitado = "";
     usersShare
-    var index=usersShare.findIndex(x => x.current == true);
 
+    var index=usersShare.findIndex(x => x.current == true);
     var owner= usersShare[index].owner;   
     var edit=usersShare[index].actions.findIndex(x => x == 5);
     var deletePermission = usersShare[index].actions.findIndex(x => x == 9);
+
     if(owner){ $('#shareOwner').show();}else{$('#shareOwner').hide(); }
     if(owner || edit!=-1){edit=true; $('#share-5').show(); }else{ edit=false;  $('#share-5').hide();}
     if(owner || deletePermission!=-1){deletePermission=true;  $('#share-9').show();}else{ deletePermission=false;  $('#share-9').hide();}
@@ -579,7 +641,7 @@ function openPermissions(actions){
             cadena +='<td ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')"><br></td>'
             actions.forEach(action => {      
                 var actionIndex = usersShare[index].actions.indexOf(action.id); 
-                if((action.id==5 && edit) || (action.id==9 && edit) || (owner && action.id!=4))
+                if((action.id==5 && edit) || (action.id==9 && deletePermission) || (owner && action.id!=4))
                 if (actionIndex !== -1)             
                     cadena += '<td ><input type ="checkbox" class="form-check-input" onchange="selectAccion('+usersShare[index].username+','+action.id+',this)"  id = "'+usersShare[index].username+'-'+action.id+'" checked></td>';
                 else
@@ -612,6 +674,10 @@ function backShareUsers(){
         }
     }
 
+    var index=usersShare.findIndex(x => x.current == true);
+    var owner= usersShare[index].owner;   
+    var deletePermission = usersShare[index].actions.findIndex(x => x == 9);
+    if(!owner && deletePermission==-1) $( ".deleteShareUserButton" ).remove();
     $('#select_document').selectpicker('refresh');
     $("#modal-body-share").show();
     $("#modal-body-share-back").hide();
@@ -667,14 +733,14 @@ function selectAccion(username,action,evento){
 }
 
 function AjaxShare(){
+
 var me = $(this);
  if (me.data("requestRunning"))    return;
    
-    var classificationOwner=$('#owner').val();  
-
-    
+    var Owner=$('#owner').val();     
+    var url=(typeContextMenu=='classification')?"home/share/classification/"+idselect:"documents/share/document/"+idselect
     $.ajax({
-        url: "home/share/"+idselect+"/"+typeContextMenu,
+        url: url,
         method: "post",
            
 
@@ -686,7 +752,7 @@ var me = $(this);
             currentTable:currentTable,
             typeContextMenu:typeContextMenu,
             usersShare:usersShare,
-            classificationOwner:classificationOwner,
+            Owner:Owner,
 
 
         },

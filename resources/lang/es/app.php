@@ -155,7 +155,7 @@ return [
             'code' => 'Código del documento en la organización',
             'languaje' => 'Idioma del contenido', 
             'summary' => 'Resumen de contenido',    
-            'othres' => 'Otros datos',  
+            'others' => 'Otros datos',  
 
         ],
         'create' => [  
@@ -235,11 +235,13 @@ return [
 
         'contextMenu' => [
             'delete' => 'Eliminar',
+            'remove' => 'Quitar',
             'createClassification' => 'Crear clasificación',
             'editClassification' => 'Editar',
             'createDocument' => 'Crear documento',
             'createSheet' => 'Crear hoja de cálculo',
             'share' => 'compartir',
+            'copy' => 'Hacer una copia',
         ],
 
         'share' => [

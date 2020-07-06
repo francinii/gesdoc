@@ -27,7 +27,8 @@
             <label for="classificationEditDoc">{{ __('app.documents.edit.classification') }}</label>
             <div class="form-group"> 
               <select id="classificationEditDoc"class="form-control" name="classificationEditDoc" >
-                <option value="-1" name ="">{{ __('app.home.table.defaultClassification') }}</option>                 
+                <option value="-1" name ="">{{ __('app.home.table.defaultClassification') }}</option>
+                
                 @foreach ($classifications as $classification)
                     <option value="{{$classification->id}}" name ="classificationEditDoc{{$classification->id}}">{{$classification->description}}</option>
                 @endforeach
@@ -46,8 +47,8 @@
               <textarea type="text" class="form-control" id="summaryEditDoc" placeholder="Resumen de contenido" name=""></textarea>
             </div>
             <div class="form-group">
-              <label for="othresEditDoc">{{ __('app.documents.general.othres') }}</label>
-              <textarea type="text" class="form-control" id="othresEditDoc" placeholder="Otros datos" name=""></textarea>
+              <label for="othersEditDoc">{{ __('app.documents.general.others') }}</label>
+              <textarea type="text" class="form-control" id="othersEditDoc" placeholder="Otros datos" name=""></textarea>
             </div>    
 
           </form>    

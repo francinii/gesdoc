@@ -187,16 +187,56 @@ class HomeController extends Controller
      */
     public function destroy($id)
     {
-        $username = $user = auth()->user(); 
+        $user = auth()->user(); 
         $array = explode('-', $id);
         $idselect = (int) $array[0];
-        $type = $array[1];
+        $action = $array[1];
         $currentClassification = (int) $array[2];
         $currentTable = (int) $array[3];
-
-        $this->DeleteShare($user,$idselect,$type,null);
+        
+        if($action=="1")
+        $this->DeleteShare($user,$idselect,null);
+        else
+        $this->remove($user,$idselect);
 
         return $this->refresh($currentTable, $currentClassification);
+    }
+
+
+    private function DeleteShare($user,$idselect,$classificationOwner){
+        $classification = Classification::where([['id', '=', $idselect]])->first();
+        $documentInClassificationid=$this->getThingsInClassification($classification);
+        $documentsString='';
+        foreach ($documentInClassificationid as $documentId) {
+            $documentsString.="$documentId,";
+        }
+        $documentsString=substr($documentsString, 0, -1);
+
+        DB::select("call delete_Share_Classification($idselect,'$user->username','$documentsString','$classificationOwner',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+    
+    }
+
+    private function remove($user,$idselect){
+        $classification = Classification::where([['id', '=', $idselect]])->first();
+        $documentInClassificationid=$this->getThingsInClassification($classification);
+        $documentsString='';
+        foreach ($documentInClassificationid as $documentId) {
+            $documentsString.="$documentId,";
+        }
+        $documentsString=substr($documentsString, 0, -1);
+
+        DB::select("call remove_Classification($idselect,'$user->username','$documentsString',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+
     }
 
     /**
@@ -204,7 +244,7 @@ class HomeController extends Controller
      * @param type  document or classification
      * @return array of user
      */
-    public function showShare($id, $type)
+    public function showShare($id)
     {
         $currentUsersShare = [];
         $review = [];
@@ -213,7 +253,6 @@ class HomeController extends Controller
         $owner->owner=true;
         $CurrentUsername = Auth::id();
         ($CurrentUsername== $owner->username)? $owner->current=true : $owner->current=false;
-        $action= Action::where('type', '=', 1)->pluck('id')->toArray();
         $currentUsersShare[$classification->owner->username] = $owner;
         $currentUsersShare[$classification->owner->username]->actions=[];       
         $this->getUsersClassification($classification->id,$currentUsersShare,$CurrentUsername);   
@@ -230,17 +269,14 @@ class HomeController extends Controller
      */
     private function getUsersClassification($idclassification,&$currentUsersShare,$CurrentUsername)
     {
-        $CurrentUsername = Auth::id();
-        $myUsers=DB::select("SELECT `username` FROM `action_classification_user` WHERE `classification_id`=$idclassification ");
-        $myUsers = json_decode(json_encode($myUsers), true);
+        
+        $myUsers=DB::table('action_classification_user')->select('username')->where('classification_id','=', $idclassification)->pluck('username')->toArray();
         $myUsers=User::whereIn('username', $myUsers)->get();
         foreach ($myUsers as $user) {
             if(!isset($currentUsersShare[$user->username])){                
                 $user->owner=false;
                 ($CurrentUsername== $user->username)? $user->current=true :$user->current=false;
-                $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$idclassification and `username`='$user->username'");
-                $myActions = json_decode(json_encode($myActions), true);
-                $myActions=Action::whereIn('id', $myActions)->pluck('id')->toArray();
+                $myActions=  DB::table('action_classification_user')->select('action_id')->where([['classification_id','=', $idclassification],['username','=',$user->username]])->pluck('action_id')->toArray();
                 $user->actions=$myActions;  
                 $currentUsersShare[$user->username]=$user;
             }          
@@ -274,64 +310,52 @@ class HomeController extends Controller
         $usersShare=$dato['usersShare'];
         $type=$dato['typeContextMenu'];
         $idselect=$dato['idselect'];     
-        $classificationOwner=$dato['classificationOwner'];
+        $classificationOwner=$dato['Owner'];
         $currentTable=$dato['currentTable'];
         $currentClassification=$dato['currentClassification'];
 
         foreach ($usersShare as $user) {
             $user=(object)$user;
             if($user->type=='delete')
-                $this->DeleteShare($user,$idselect,$type,$classificationOwner);
+                $this->DeleteShare($user,$idselect,$classificationOwner);
             if($user->type=='new')
-                $this->addShare($user,$idselect,$type,$classificationOwner);
+                $this->addShare($user,$idselect,$classificationOwner);
             if($user->type=='old')
-                $this->updateShare($user,$idselect,$type,$classificationOwner);
+                $this->updateShare($user,$idselect,$classificationOwner);
         }
         return $this->refresh($currentTable, $currentClassification);
         
     }
     
-    private function DeleteShare($user,$idselect,$type,$classificationOwner){
-        if($type=='classification'){
-            $classification = Classification::where([['id', '=', $idselect]])->first();
-            $documentInClassificationid=$this->getThingsInClassification($classification);
 
-            $documentsString='';
-            foreach ($documentInClassificationid as $documentId) {
-                $documentsString.="$documentId,";
-            }
-            $documentsString=substr($documentsString, 0, -1);
 
-            DB::select("call delete_Share_Classification($idselect,'$user->username','$documentsString','$classificationOwner',@res)");
-            $res = DB::select("SELECT @res as res;");
-            $res = json_decode(json_encode($res), true);
-            if ($res[0]['res'] != 0) {
-                throw new DecryptException('error en la base de datos');
-            }
+    private function addShare($user,$idselect,$classificationOwner){
+        $classification = Classification::where([['id', '=', $idselect]])->first();
+        $documentInClassificationid=$this->getThingsInClassification($classification);
+        $documentsString='';
+        foreach ($documentInClassificationid as $documentId) {
+            $documentsString.="$documentId,";
         }
-    }
-
-    private function addShare($user,$idselect,$type,$classificationOwner){
-        if($type=='classification'){
-            $actionsString='';
-            if(isset($user->actions)){
-                foreach ($user->actions as $action) {
-                    $actionsString.="$action,";
-                }
-                $actionsString=substr($actionsString, 0, -1);
+        $documentsString=substr($documentsString, 0, -1);
+        $actionsString='';
+        if(isset($user->actions)){
+            foreach ($user->actions as $action) {
+                $actionsString.="$action,";
             }
-            DB::select("call add_Share_Classification($idselect,'$user->username','$classificationOwner','$actionsString',@res)");
-            $res = DB::select("SELECT @res as res;");
-            $res = json_decode(json_encode($res), true);
-            if ($res[0]['res'] != 0) {
-                throw new DecryptException('error en la base de datos');
-            }
+            $actionsString=substr($actionsString, 0, -1);
         }
+        DB::select("call add_Share_Classification($idselect,'$user->username','$classificationOwner','$documentsString','$actionsString',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+     
       
     }
 
-    private function updateShare($user,$idselect,$type,$classificationOwner){
-        if($type=='classification'){           
+    private function updateShare($user,$idselect,$classificationOwner){
+                 
             $actionsString='';
             if(isset($user->actions)){
                 foreach ($user->actions as $action) {
@@ -347,5 +371,5 @@ class HomeController extends Controller
                 }
             
         }
-    }
+    
 }
