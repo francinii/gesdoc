@@ -15,6 +15,7 @@ use App\Historial;
 use App\ViewFlowUser;
 use App\ActionStepUser;
 use App\StepStep;
+use App\Step;
 use App\ViewActionStepStepUser;
 use DB;
 use Auth;
@@ -32,7 +33,8 @@ class DocumentFlowController extends Controller
         $users = User::all();        
         $actions = Action::all();
         $flow = '';
-        $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+     //   $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+     $flows =Flow::where('username', '=', $usuario)->get();
         if($flows->isNotEmpty()){
             $flow = $flows->first()->flow_id;
         }
@@ -378,17 +380,42 @@ class DocumentFlowController extends Controller
             if($isCheck && $text_notas != '' )
                 DB::select("call insert_note($idVersion, $text_notas, @res)");
         }
-//Else 
-
-
-    
-        
   }
 
 
 
 
+//function managmentDocFlow(){
+    //$usuario = Auth::user()->username;        
+    //$users = User::all();        
+    //$actions = Action::all();
+    //$flow = '';
+    //$flows =ViewFlowUser::where('username', '=', $usuario)->get();
+   // if($flows->isNotEmpty()){
+     //   $flow = $flows->first()->flow_id;
+    //}   
+   // $documents = Document::where('flow_id', '=', $flow)->get();
+  //  return view('documentFlow.managmentDocFlow',compact('flow','flows', 'users','documents','actions'));
+ // }
 
+
+  function location(Request $request){
+      //ubicacion de la ultima version
+      // usuarios asociados a la ultima version
+      $datos = request()->except(['_token']);
+      $doc = $datos['idDoc'];
+      $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
+      $identifier = $actualVersion->identifier;
+      $flowId = $actualVersion->flow_id;
+      $step = Step::where('flow_id', '=', $flowId)
+      ->where('id', '=', $identifier)->first();
+
+      $users = ActionStepUser::where('flow_id', '=', $flowId)
+      ->where('step_id', '=', $identifier)->pluck('username')->toArray();
+      $users = User::whereIn('username', $users)->get();
+   
+      return view('documentFlow.location',compact('users', 'step'));
+  }
 
 
 }

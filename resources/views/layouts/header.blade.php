@@ -11,10 +11,10 @@
             Administracion de sistema
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ url('/roles') }}">Roles</a>
-            <a class="dropdown-item" href="{{ url('/users') }}">Usuarios</a>
-            <a class="dropdown-item" href="{{ url('/departments') }}">Departamentos</a>
-            <a class="dropdown-item" href="{{ url('/flows') }}">Flujos </a>
+            <a class="dropdown-item" href="{{ url('/roles') }}">Administración de Roles</a>
+            <a class="dropdown-item" href="{{ url('/users') }}">Administración de Usuarios</a>
+            <a class="dropdown-item" href="{{ url('/departments') }}">Administración de Departamentos</a>
+            <a class="dropdown-item" href="{{ url('/flows') }}">Adminsitración de Flujos </a>
          </div>          
       </li>
 
@@ -23,7 +23,8 @@
           Gestión de documentos
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{ url('/documentFlow') }}">Mis flujos </a>
+          <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Gestión de documentos en Flujo </a>
+          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos en Flujo  </a>
           <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>  
         </div>          
     </li>

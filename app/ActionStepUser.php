@@ -17,4 +17,8 @@ class ActionStepUser extends Model
     public function action() {
         return $this->belongsTo('App\Action');
     }
+
+    public function user() {
+        return $this->belongsTo('App\User','username');
+    }
 }
