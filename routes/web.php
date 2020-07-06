@@ -45,7 +45,6 @@ Route::get('documentFlow/preview/{id}', 'DocumentFlowController@preview');
 Route::get('documentFlow/historial/panel/{id}', 'DocumentFlowController@openPanel');
 Route::get('documentFlow/nextVersion/{id}', 'DocumentFlowController@nextVersion');
 
-
 //notesModal
 Route::get('documentFlow/notesModal/{id}', 'DocumentFlowController@listNotesModal');
 
@@ -53,6 +52,10 @@ Route::get('documentFlow/notesModal/{id}', 'DocumentFlowController@listNotesModa
 Route::get('documentFlow/modalEditVersion/{id}', 'DocumentFlowController@modalEditVersion');
 Route::get('documentFlow/flowProcess/{id}', 'DocumentFlowController@flowProcess');
 
+Route::get('documentFlow/location/{id}', 'DocumentFlowController@location');
+
+
+Route::resource('userDocFlow', 'UserDocFlowController');
 
 Auth::routes();
 
@@ -70,5 +73,6 @@ Route::resource('departments', 'DepartmentController');
 
 
 Route::resource('documentFlow', 'DocumentFlowController');
+
 
 Route::resource('record', 'HistorialController');

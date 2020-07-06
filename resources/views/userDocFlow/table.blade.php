@@ -5,10 +5,9 @@
             <th style="width: 10%"  class="text-center">Código</th> 
             <th style="width: 50%"  class="text-center">Documento</th>  
                                
-            <th style="width: 10%"  class="text-center">Estado</th>                       
+            <th style="width: 10%"  class="text-center">Úlitma versión</th>            
             <th style="width:10%"  class="text-center">Vista Previa</th>
             <th style="width: 10%"  class="text-center">Versiones</th>
-            <th style="width:10%"  class="text-center">Ubicación</th> 
         </tr>
     </thead>
     <tbody>        
@@ -29,12 +28,7 @@
                 <button onclick = "historial({{$document->id}})"  class="btn btn-warning"  data-toggle="modal" >
                     <i class="fas fa-file"></i>
                 </button>
-            </td>    
-            <td class="text-center">
-                <button onclick = "locationModal({{$document->id}})"  class="btn btn-primary"  data-toggle="modal" >
-                    <i class="fa fa-location-arrow"></i>
-                </button>
-            </td>    
+            </td>      
         </tr>
         @endforeach
     </tbody>

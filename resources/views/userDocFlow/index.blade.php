@@ -30,16 +30,12 @@
             <div  class="col-md-12">&nbsp</div>
             <div class="col-11">
                 @include('partials.alert')
-                @include('documentFlow.table')                
+                @include('userDocFlow.table')                
             </div>
         </div> 
     </div>
     @include('partials.alertModal') 
     @include('documentFlow.create')
-    <div id="locationModal">
-       
-    </div>
-    
        
     <script src="{{ asset('../resources/js/documentFlows.js') }}" defer></script>
 

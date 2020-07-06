@@ -304,3 +304,35 @@ function flowProcess(version){
     });
 
 }
+
+
+
+function locationModal(idDoc){
+    
+    $.ajax({
+        url: "documentFlow/location/{" + idDoc + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idDoc: idDoc,
+            
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block');
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+            $("#locationModal").html(result);  
+            $("#locationModalS").modal('show');             
+        },
+        error: function(request, status, error) {          
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
+}
