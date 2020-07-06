@@ -10,6 +10,7 @@ function clearDescriptionDoc() {
     $("#summary").removeClass("is-invalid");
     $("#languaje").val("");
     $("#languaje").removeClass("is-invalid");
+    $("#others").val("");
     $("#others").removeClass("is-invalid");
 }
 
@@ -122,15 +123,17 @@ function ajaxCreateDoc(mode) {
 }
 
 
-function clearDescriptionDoc() {
-    $("input[name=descriptionCreate]").val("");
-    $("input[name=descriptionCreate]").removeClass("is-invalid");
-    $("#code").val("");
-    $("#summary").val("");
-    $("#summary").removeClass("is-invalid");
-    $("#languaje").val("");
-    $("#languaje").removeClass("is-invalid");
-    $("#others").removeClass("is-invalid");
+function clearUploadDoc() {
+    $("#nameU").val("");
+    $("#nameU").removeClass("is-invalid");
+    $("#codeU").val("");
+    $("#summaryU").val("");
+    $("#summaryU").removeClass("is-invalid");
+    $("#languajeU").val("");
+    $("#languajeU").removeClass("is-invalid");
+    $("#othersU").val("");
+    $("#othersU").removeClass("is-invalid");
+    $("#file").val("");
 }
 
 
@@ -138,19 +141,19 @@ function clearDescriptionDoc() {
  *  This function validates the inputs of the create form in the browser
  *  
  */
-function validaCreateDoc() {
+function validaUploadDoc() {
     var validado = true;
-    if ($("input[name=descriptionCreate]").val() == "") {
-        $("input[name=descriptionCreate]").addClass("is-invalid");
+    if ($("#nameU").val() == "") {
+        $("#nameU").addClass("is-invalid");
         validado = false;
     } else {
-        $("input[name=descriptionCreate]").removeClass("is-invalid");
+        $("#nameU").removeClass("is-invalid");
     }
-    if ($("#summary").val() == "") {
-        $("#summary").addClass("is-invalid");
+    if ($("#summaryU").val() == "") {
+        $("#summaryU").addClass("is-invalid");
         validado = false;
     } else {
-        $("#summary").removeClass("is-invalid");
+        $("#summaryU").removeClass("is-invalid");
     }
     if ($("#docType").val() == "") {
         $("#docType").addClass("is-invalid");
@@ -158,11 +161,11 @@ function validaCreateDoc() {
     } else {
         $("#docType").removeClass("is-invalid");
     }
-    if ($("#languaje").val() == "") {
-        $("#languaje").addClass("is-invalid");
+    if ($("#languajeU").val() == "") {
+        $("#languajeU").addClass("is-invalid");
         validado = false;
     } else {
-        $("#languaje").removeClass("is-invalid");
+        $("#languajeU").removeClass("is-invalid");
     }
 
     return validado;
@@ -180,7 +183,7 @@ function ajaxUploadDoc(mode) {
 
     if (me.data("requestRunning"))
         return;
-    
+    if (validaCreateDoc()) {
         var flow = $("#flowCreateU option:selected").val();
         var classification = $("#classificationU option:selected").val();
         var description = $("#nameU").val();
@@ -201,6 +204,7 @@ function ajaxUploadDoc(mode) {
         formData.append('X-CSRF-TOKEN"',$('meta[name="csrf-token"]').attr("content"));
         formData.append('_token',$("input[name=_token]").val(),   );
         formData.append('currentClassification',currentClassification.id);
+        formData.append('currentTable',currentTable);
         formData.append('description',description);
         formData.append('flow_id',flow);
         formData.append('state_id',1);
@@ -246,6 +250,7 @@ function ajaxUploadDoc(mode) {
                 
             },
         });
+    }
 }
 
 
@@ -471,7 +476,7 @@ function createDoc(type){
     }
         
     else if(type == 0){
-        clearDescriptionDoc();
+        clearUploadDoc();
         $('#docUpload').css('display','block'); 
         $('#docName').css('display','none'); 
     $('#uploadDocument').modal('show');    
@@ -501,6 +506,42 @@ $("#file").change(function(e){
 });
 
 function clone(){
-   
+    var me = $(this);
+    if (me.data("requestRunning"))
+        return;
+    var description= descriptionEdit;
+    $.ajax({
+        url: "documents/clone/{" + idselect + "}",
+        method: "get",
+        data: {
+            _token: $("input[name=_token]").val(),
+            id:idselect,
+            currentClassification: currentClassification.id,
+            currentTable:currentTable,          
+        },
+
+        beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function (result) {
+            $("#cargandoDiv").css('display', 'none');
+            me.data("requestRunning", false);   
+            $("#table").DataTable().destroy();
+            $("#divTable").html(result);
+            createDataTable("table");                          
+            alerts('alerts', 'alert-content',"El documento " +  description +
+            " ha clonado", "alert-success")                              
+
+        },
+        error: function (request, status, error) {
+            $("#cargandoDiv").css('display', 'none')
+            me.data("requestRunning", false);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            alert(request.responseText);
+            
+            
+        },
+    });
     
 }

@@ -420,6 +420,7 @@ BEGIN
   DECLARE _value TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+
 		-- ERROR
     SET res = -1;
   
@@ -427,6 +428,7 @@ BEGIN
 	END;
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+
 		-- ERROR
     SET res = -2;
     ROLLBACK;
@@ -437,7 +439,6 @@ BEGIN
                 SELECT `username` into _classification_owner FROM `classifications` WHERE `id`=p_id;
                 IF _classification_owner=p_username and p_classification_owner!='' THEN
                   UPDATE `classifications` SET `username`=p_classification_Owner,`updated_at`=Now() WHERE `id`=p_id;
-
                 ELSE    
                   IF p_classification_owner!='' THEN
                     DELETE FROM `action_classification_user` WHERE `classification_id`=p_id  and `username`=p_username;
@@ -452,13 +453,14 @@ BEGIN
                         SET _next = SUBSTRING_INDEX(p_documents,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _value = CAST(TRIM(_next) AS UNSIGNED);
+                        
                         IF p_classification_owner!='' THEN
                           DELETE FROM `action_document_user` WHERE `document_id`=_value and `username`=p_username;
                         ELSE
                           DELETE FROM `documents` WHERE `id`=_value and `flow_id` IS NULL;
-                          DELETE FROM `action_document_user` WHERE `document_id`=_value;
-                          
+                          DELETE FROM `action_document_user` WHERE `document_id`=_value;                          
                         END IF;  
+                        SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
                       END LOOP;  
                 END IF;       
             COMMIT;
@@ -468,6 +470,7 @@ END
 ;;
 DELIMITER ;
 -- call delete_Share_Classification(5,'402340420','1','',@res)
+-- call delete_Share_Classification(5,'402340420','2,4,9,10,11,12,13','',@res)
 -- SELECT @res as res;
 
 
@@ -511,6 +514,7 @@ BEGIN
                     SET _nextlen = LENGTH(_next);
                     SET _value = CAST(TRIM(_next) AS UNSIGNED);
                     DELETE FROM `action_document_user` WHERE `document_id`=_value and `username` =p_username;
+                    SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
                 END LOOP;  
                      
             COMMIT;
@@ -816,11 +820,14 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`varchar(500), IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT,   OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`varchar(500), IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT, IN `p_users` TEXT ,  OUT `res` TINYINT  UNSIGNED )
 BEGIN
   DECLARE idFlow INT DEFAULT NULL;
   DECLARE idIdentifier varchar(500) DEFAULT NULL; 
   DECLARE document_id INT DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _user TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -848,7 +855,17 @@ BEGIN
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
                 INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,1,1, NOW(),NOW());
-           
+                iterator:
+                  LOOP
+                      IF LENGTH(TRIM(p_users)) = 0 OR p_users IS NULL THEN
+                      LEAVE iterator;
+                      END IF;
+                      SET _next = SUBSTRING_INDEX(p_users,',',1);
+                      SET _nextlen = LENGTH(_next);
+                      SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                      INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,document_id,_user,NOW(),NOW());
+                      SET p_users = INSERT(p_users,1,_nextlen + 1,'');
+                    END LOOP;
             
             COMMIT;
           -- SUCCESS
@@ -955,9 +972,12 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `clone_document`;
 DELIMITER ;;
-CREATE   PROCEDURE `clone_document`(IN `p_id` int,IN `p_classification` int,IN `p_content` LONGTEXT, OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `clone_document`(IN `p_id` int,IN `p_classification` int,IN `p_content` LONGTEXT,IN `p_users` TEXT , OUT `res` TINYINT  UNSIGNED)
 BEGIN
-  DECLARE document_id INT DEFAULT NULL;
+  DECLARE _document_id INT DEFAULT NULL;
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _user TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -974,11 +994,23 @@ BEGIN
             START TRANSACTION; 
 
             INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`)            
-            SELECT  `flow_id`, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =1;
-            SET document_id =  LAST_INSERT_ID(); 
+            SELECT  `flow_id`, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =p_id;
+            SET _document_id =  LAST_INSERT_ID(); 
             INSERT INTO `versions`(`document_id`, `flow_id`, `identifier`, `content`, `size`, `status`, `version`, `created_at`, `updated_at`)
-            SELECT document_id, `flow_id`, `identifier`, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
+            SELECT _document_id, `flow_id`, `identifier`, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
             WHERE `document_id`=p_id and `version`=(SELECT max(`version`) FROM `versions` where `document_id`= p_id );
+            INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, _document_id, NOW(), NOW());
+            iterator:
+                  LOOP
+                      IF LENGTH(TRIM(p_users)) = 0 OR p_users IS NULL THEN
+                      LEAVE iterator;
+                      END IF;
+                      SET _next = SUBSTRING_INDEX(p_users,',',1);
+                      SET _nextlen = LENGTH(_next);
+                      SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                      INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,_document_id,_user,NOW(),NOW());
+                      SET p_users = INSERT(p_users,1,_nextlen + 1,'');
+                    END LOOP;
             COMMIT;
             -- SUCCESS
 SET res = 0;
@@ -1022,8 +1054,8 @@ BEGIN
                     DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
                     DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
                   ELSE 
-                    DELETE FROM `documents` WHERE `id`=_value and `flow_id` IS NULL;
-                    DELETE FROM `action_document_user` WHERE `document_id`=_value;
+                    DELETE FROM `documents` WHERE `id`=p_id and `flow_id` IS NULL;
+                    DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
                   END IF;
                 END IF;
             COMMIT;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use File;
 use App\Action;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
@@ -117,5 +118,14 @@ trait RefreshHomeTrait{
         $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();
         $allClassifications=$this->classifications($allClassifications);
         return view('home.tableDocumentsFlow', compact('classification','allClassifications'));*/
+    }
+
+    public function deletefiles($document)
+    {
+        $contents=DB::table('versions')->select('version','content')->where('document_id','=', $document)->whereNull('flow_id')->pluck('content')->toArray();
+      foreach ($contents as  $content) {        
+        $file = storage_path('app/'.$content);
+        File::delete($file);
+      }
     }
 }

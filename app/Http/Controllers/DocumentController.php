@@ -10,6 +10,9 @@ use App\StepStep;
 use App\Flow;
 use App\Classification;
 use App\User;
+use File;
+use Storage;
+use Illuminate\Support\Facades\Input;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
@@ -90,17 +93,19 @@ class DocumentController extends Controller
     {
         //$this->validator($request->all())->validate();
        // $datos = $request->except(['_token', 'user_id'], 'documents');
-        $document = $request->except('_token');
-        
-        $mode =  $document['mode'];     
-        $this->validator($request->all(),true)->validate();   
+        $document = $request->except('_token');        
+        $mode =  $document['mode'];    
+        $this->validator($request->all(),true)->validate();
+        $currentClassification = $document['currentClassification'];
+        $currentTable = $document['currentTable']; 
+       
         if($mode == 1){        
         $this->uploadFile($document,$request->file('archivo'));
         }
         else {
             $this->createDocument( $document);
         }    
-        return  $this->refresh('1', 0);
+        return  $this->refresh($currentTable, $currentClassification);
     }
 
 
@@ -123,6 +128,12 @@ class DocumentController extends Controller
         $identifier =  "-1";    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
         $classification=$document['classification']!='-1'?"'".$document['classification']."'":"'".$mainClassification->id."'";
+        $myUsers=DB::table('action_classification_user')->select('username')->where('classification_id','=', $classification)->groupBy('username')->pluck('username')->toArray();   
+        $UsersString='';
+        foreach ($myUsers as $User) {
+            $UsersString.="$User,";
+        }
+        $UsersString=substr($UsersString, 0, -1);
         $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
         if(count($step) >0){
@@ -130,7 +141,7 @@ class DocumentController extends Controller
         }  
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content, @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,'$UsersString', @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -158,15 +169,19 @@ class DocumentController extends Controller
             $id_state =  3; //Si no esta en flujo queda como Nuevo
         }else {
             $id_state =  10; //Estado en Flujo
-        }
-
-        
+        }        
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
         $others="'".$document['others']."'";
         $identifier =  "-1";    
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();    
         $classification=$document['classification']!='-1'?$document['classification']:$mainClassification->id;
+        $myUsers=DB::table('action_classification_user')->select('username')->where('classification_id','=', $classification)->groupBy('username')->pluck('username')->toArray();   
+        $UsersString='';
+        foreach ($myUsers as $User) {
+            $UsersString.="$User,";
+        }
+        $UsersString=substr($UsersString, 0, -1);
         $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
         if(count($step) >0){
@@ -174,7 +189,7 @@ class DocumentController extends Controller
         }  
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content, @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,'$UsersString', @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -328,7 +343,8 @@ class DocumentController extends Controller
     }
 
     private function DeleteShare($user,$idselect,$Owner,$currentClassification){
-
+        if($Owner==null) $this->deletefiles($idselect);            
+        
         DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',@res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
@@ -377,7 +393,12 @@ class DocumentController extends Controller
         
     }
     
-
+    /**
+     * @param  user user for add to document
+     * @param idselect id of the document
+     * @param owner of de document
+     * add  the users to share a documents
+     */
 
     private function addShare($user,$idselect,$Owner){
         
@@ -398,6 +419,13 @@ class DocumentController extends Controller
       
     }
 
+    /**
+     * @param  user user for add to document
+     * @param idselect id of the document
+     * @param owner of de document
+     * update  the users to share a documents
+     */
+
     private function updateShare($user,$idselect,$Owner){
                  
             $actionsString='';
@@ -414,8 +442,45 @@ class DocumentController extends Controller
                     throw new DecryptException('error en la base de datos');
                 }
             
+    }
+
+    
+    /**
+     * @param  id of the document
+     * clone a document for id
+     */
+    public function clone($id){
+        $dato = request()->except(['_token']);
+        $idselect=$dato['id'];
+        $currentClassification=$dato['currentClassification'];
+        $currentTable=$dato['currentTable'];
+        $myUsers=DB::table('action_classification_user')->select('username')->where('classification_id','=', $currentClassification)->groupBy('username')->pluck('username')->toArray();   
+        $UsersString='';
+        foreach ($myUsers as $User) {
+            $UsersString.="$User,";
+        }
+        $UsersString=substr($UsersString, 0, -1);
+
+        $content=DB::table('versions')->select('version','content')->where('document_id','=', $idselect)->orderBy('version', 'desc')->pluck('content')->toArray();
+        $file = storage_path('app/'.$content[0]);
+        $exists = File::exists($file);
+        if($exists && $content[0]!=''){
+        $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);    
+        $name=uniqid();
+        $route='public/'.$name.'.'.$ext;
+        $destination = storage_path('app/'.$route);    
+        $success = File::copy($file,$destination);
+        $content=$route;
+        }else $content=$content[0];
+        
+        DB::select("call clone_document($idselect,$currentClassification,'$content','$UsersString',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
         }
 
-
+        return $this->refresh($currentTable, $currentClassification);
+    }
 }
 

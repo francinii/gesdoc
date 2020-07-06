@@ -50,7 +50,8 @@ function drawRoute() {
  *
  */
 $("html")
-    .on("contextmenu", "td.principalTd " , function (e) {
+    .on("contextmenu", "table  td " , function (e) {
+        
         currentTd = e.currentTarget;
         typeContextMenu = "";
         idselect = "";
@@ -422,7 +423,7 @@ function deletefile(action){
     if(typeContextMenu=='classification' && action){
         mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
     }else if(typeContextMenu!='classification' ){
-        mensaje+="el documento "+descriptionEdit
+        mensaje+="el documento "+descriptionEdit+ ", seguran en su pestaña de flujos"
     }else{
         mensaje+="la clasificacion "+descriptionEdit
     }
