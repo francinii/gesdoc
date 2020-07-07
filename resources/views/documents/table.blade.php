@@ -1,4 +1,4 @@
-<table id='table' class="table table-responsive table-striped">
+<table id='table' class="table table-striped">
     <thead class="thead-dark">
         <tr class="">
             <th style="width: 10%"  class="text-center">{{ __('app.documents.table.id') }}</th>

@@ -6,7 +6,7 @@
           <button type="close" class="close" data-dismiss="modal">  X </button>
       </div>
       <div class="modal-body">   
-        <form action="{{ action('RoleController@index') }}" method="POST">
+        <form action="{{ action('RoleController@index') }}" method="POST" onkeydown="return event.key != 'Enter';">
         {{csrf_field()}}
           <div class="form-group">
             <label for="role">{{ __('app.roles.create.name') }}</label>

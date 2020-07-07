@@ -234,7 +234,7 @@ function ajaxUploadDoc(mode) {
                 $("#uploadDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
-                createDataTable("table");                          
+                createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
                 "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");
 
@@ -385,7 +385,7 @@ function ajaxUpdateDoc() {
                 $("#editDocument").modal('hide'); 
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
-                createDataTable("table");                          
+                createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
                 "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success")                              
 
@@ -529,7 +529,7 @@ function clone(){
             me.data("requestRunning", false);   
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-            createDataTable("table");                          
+            createDataTableHome("table");                          
             alerts('alerts', 'alert-content',"El documento " +  description +
             " ha clonado", "alert-success")                              
 

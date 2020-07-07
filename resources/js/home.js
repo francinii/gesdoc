@@ -227,7 +227,7 @@ function ajaxCreate(){
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
 
-                createDataTable("table");
+                createDataTableHome("table");
                 $("#create").modal("hide");
                 alerts('alerts', 'alert-content',
                     "La clasificacion " +
@@ -303,7 +303,7 @@ function openClassification(id) {
             $("#cargandoDiv").css('display', 'none')
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-            createDataTable("table");
+            createDataTableHome("table");
             $("#create").modal("hide");            
             
         },
@@ -392,7 +392,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'none')          
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
-                createDataTable("table");
+                createDataTableHome("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 
@@ -766,7 +766,7 @@ var me = $(this);
             $("#cargandoDiv").css('display', 'none')          
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-            createDataTable("table");
+            createDataTableHome("table");
             $("#share").modal("hide");
             alerts('alerts', 'alert-content',"Usuarios agregados satisfactoriamente", "alert-success");
             usersShare=[];           

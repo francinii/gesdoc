@@ -1,19 +1,19 @@
 <div id="tableTitle"></div>
-<table id='table' class="table table-responsive table-striped"  width="100%" >
+<table id='table' class="table table-striped"  width="100%" >
 
             <thead class="thead-dark" >
                 <tr>
                    
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
                     <th style="width: 55%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
-                    <th style="width: 15%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
-                    <th  style="width: 15%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.id') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.flow_id') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.summary') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.code') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.languaje') }}</th>
-                    <th  style="display:none;" style="width: 5%"  class="text-center" >{{ __('app.home.table.others') }}</th>
+                    <th style="width: 20%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
+                    <th  style="width: 20%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.id') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.flow_id') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.summary') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.code') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.languaje') }}</th>
+                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.others') }}</th>
                     
                 </tr>
             </thead>

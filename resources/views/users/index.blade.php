@@ -20,7 +20,7 @@
             </button>  
         </div>
         <div  class="col-md-12">&nbsp</div>
-        <div class="col-md-9">
+        <div class="col-md-9 ">
             @include('partials.alert')
             @include('users.table')
             

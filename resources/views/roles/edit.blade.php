@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="POST">
+        <form action="" method="POST" onkeydown="return event.key != 'Enter';">
         
            <div class="form-group">
             <input name="editId" type="hidden">
