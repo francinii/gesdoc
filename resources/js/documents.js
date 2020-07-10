@@ -134,6 +134,8 @@ function clearUploadDoc() {
     $("#othersU").val("");
     $("#othersU").removeClass("is-invalid");
     $("#file").val("");
+    $("#file").removeClass("is-invalid");
+    $("#file_message").html("");
 }
 
 
@@ -167,7 +169,26 @@ function validaUploadDoc() {
     } else {
         $("#languajeU").removeClass("is-invalid");
     }
+    var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png",'xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf']; 
+    var file1 = $('#file')[0]
+    var archivo = file1.files[0];
+    var index;
+    if(typeof archivo !== 'undefined'){
+    var fullname=archivo.name.split(".");
+    var type=fullname.pop();
+    index=_validFileExtensions.findIndex(x => x == type);
+    }else{
+        index=-1;
+    }
 
+    if(index==-1){
+        $("#file").addClass("is-invalid");
+        $("#file_message").html("tipo de archivo invalido");
+        validado = false;
+    }else{
+        $("#file").removeClass("is-invalid");
+        $("#file_message").html("");
+    }
     return validado;
 }
 
@@ -183,7 +204,7 @@ function ajaxUploadDoc(mode) {
 
     if (me.data("requestRunning"))
         return;
-    if (validaCreateDoc()) {
+    if (validaUploadDoc()) {
         var flow = $("#flowCreateU option:selected").val();
         var classification = $("#classificationU option:selected").val();
         var description = $("#nameU").val();
@@ -192,14 +213,19 @@ function ajaxUploadDoc(mode) {
         var code  = $("#codeU").val();        
         var languaje = $("#languajeU").val();  
         var others = $("#othersU").val();  
+        var file1 = $('#file')[0]
+        var archivo = file1.files[0]; 
 
         if(type == 1)
             docType = 'docx';
         else if(type == 2)
-            docType = 'xlsx';     
+            docType = 'xlsx';
+        else{
+            var fullname=archivo.name.split(".");
+            docType=fullname.pop();
+        }     
     
-        var file1 = $('#file')[0]
-        var archivo = file1.files[0];            
+           
         var formData = new FormData();
         formData.append('X-CSRF-TOKEN"',$('meta[name="csrf-token"]').attr("content"));
         formData.append('_token',$("input[name=_token]").val(),   );
@@ -296,7 +322,7 @@ function editDoc() {
         $("#classificationEditDoc").prop("disabled", false);
         $("option[name=classificationEditDoc" + classificationID + "]").prop("selected", true);
     }
-    
+   
    
  
 
@@ -331,6 +357,7 @@ function validaEditDoc() {
     } else {
         $("#languajeEditDoc").removeClass("is-invalid");
     }
+
 
     return validado;
 }
@@ -470,15 +497,13 @@ function createDoc(type){
     $('#docType').val(type);
     if(type == 1 || type == 2){   
         clearDescriptionDoc();
-        $('#docName').css('display','block');  
-        $('#docUpload').css('display','none'); 
+
         $('#createDocument').modal('show'); 
     }
         
     else if(type == 0){
         clearUploadDoc();
-        $('#docUpload').css('display','block'); 
-        $('#docName').css('display','none'); 
+
     $('#uploadDocument').modal('show');    
     }
     else if(type == 3){
@@ -544,4 +569,17 @@ function clone(){
         },
     });
     
+}
+
+function advancedSearchfilter(colum,element){
+   var dataTable= $("#table").DataTable()
+  
+    if ( dataTable.column(colum).search() !== element.value ) {
+        dataTable
+            .column(colum)
+            .search( element.value )
+            .draw();
+    }
+
+
 }

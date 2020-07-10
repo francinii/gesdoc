@@ -40,15 +40,16 @@ function createDataTable(table) {
 }
 
 function createDataTableHome(table) {
-    $("#" + table).dataTable({
+
+    $("#" + table).DataTable({
         lengthChange: false,
-        scrollY: "50vh",
+        scrollY: "60vh",
         scrollCollapse: true,
         paging: false,
         language: {
             decimal: "",
             emptyTable: "No hay información",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            info: "",
             infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
             infoFiltered: "(Filtrado de _MAX_ total entradas)",
             infoPostFix: "",
@@ -66,6 +67,7 @@ function createDataTableHome(table) {
             }
         }
     });
+    
 }
 
 
@@ -122,7 +124,11 @@ function ajaxDelete(id, url1,table){
             $("#cargandoDiv").css('display', 'none')
             $("#"+table).DataTable().destroy();         
             $("#"+divTable).html(result);            
-            createDataTable(table);
+            if (typeof currentClassification !== 'undefined') {
+                createDataTableHome("table");
+            }else{
+                createDataTable("table");
+            }
             $("#confirmar").modal("hide");
             alerts('alerts', 'alert-content',"Elemento eliminado correctamente.", "alert-success");
             
@@ -168,6 +174,7 @@ function hideAlert(id){
 $(document).ready(function() {
     if (typeof currentClassification !== 'undefined') {
         createDataTableHome("table");
+        
     }else{
         createDataTable("table");
     }
