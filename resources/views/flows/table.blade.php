@@ -6,7 +6,7 @@
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.owner') }}</th>  
             <th style="width: 15%"  class="text-center">Estado</th>       
             <th style="width: 10%"  class="text-center">Permisos</th>           
-            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.edit') }}</th>
+            <th style="width: 10%"  class="text-center">Ver/Editar Flujo</th>
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.delete') }}</th>
         </tr>
     </thead>
@@ -47,11 +47,14 @@
             
 
             <td class="text-center">
-                @if($flow->state == 0)              
-         
-                    <button onclick = "ajaxEdit('{{$flow->id}}', '{{$flow->description}}')"  class="btn btn-success"  data-toggle="modal" >
+                @if($flow->state == 0)     
+                    <button title ="Editar flujo" onclick = "ajaxEdit('{{$flow->id}}', '{{$flow->description}}',0)"  class="btn btn-success"  data-toggle="modal" >
                         <i class="fas fa-edit"></i>
                     </button>  
+                @else
+                    <button title ="Ver flujo" onclick = "ajaxEdit('{{$flow->id}}', '{{$flow->description}}',1)"  class="btn btn-info"  data-toggle="modal" >
+                        <i class="fas fa-eye"></i>
+                    </button>
                 @endif
             </td>
             <td class="text-center">

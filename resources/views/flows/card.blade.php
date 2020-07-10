@@ -77,8 +77,8 @@
                 <tbody class="body_table_line" >                         
                 </tbody>
                 </table>
-                <div class="form-group">
-                    <button data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
+                <div class="form-group" id ='btnSavePermissions'>
+                    <button  data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
                         <i class="fas fa-plus-circle"></i> Guardar los permisos
                     </button>   
                 </div>  
@@ -87,8 +87,8 @@
         </div>
 
         <div class="modal-footer">     
-            <div class="col-md-9 text-right">
-                <button data-toggle="modal" class=" float-right btn btn-success" onclick="hideModalCardSave()" data-target="">
+            <div id ='hideModalCardSave' class="col-md-9 text-right">
+                <button  data-toggle="modal" class=" float-right btn btn-success" onclick="hideModalCardSave()" data-target="">
                     <i class="fas fa-plus-circle"></i> Guardar
                 </button>    
               </div>  

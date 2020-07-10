@@ -17,6 +17,7 @@ var divFirst = "";
 var divSecond = ""; 
 var idFlowForUpdate = "";  // For update the same flow dont create each tine
 var globalMode = 0;
+var editionMode = 0;
 const DRAGGABLE_FINAL = "draggable_final";
 const DRAGGABLE_INICIO = "draggable_inicio";
 
@@ -81,11 +82,21 @@ function clearDescription() {
 
 /** 
  * Show the screen that allow you to create a flow
- * 
+ *  @param editMode 1- active flow (edit mode has to be inactive )   0- inactive flow (edit mode has to be active ) 
  */
-function openCreate(){   
+function openCreate(editMode){
+    editionMode = editMode; //Set the general edition mode create view or edit  
     $("#flow-wrapper").hide();
     $("#create-wrapper").show();
+    if(editMode == 1){
+        $("#button-actions").remove();
+        $("#btnSavePermissions").remove();
+        $("#hideModalCardSave").remove();
+        $("#line-modal .modal-footer").remove();  
+        $("#select_action").attr('disabled',true);  
+             
+        $('#flowName').attr('disabled',true);
+    }
 }
 
 
@@ -95,16 +106,46 @@ function openCreate(){
  * 
  */
 function openTable(){
-    clearAll();
+    window.location="flows";
+   // clearAll();
+   
     //Global variable
-    idFlowForUpdate = "";
-    $("#flowName").val("");
-    $("#create-wrapper").hide();
-    $("#flow-wrapper").show();
+   // idFlowForUpdate = "";
+   // $("#flowName").val("");
+    //$("#create-wrapper").hide();
+   // $("#flow-wrapper").show();
 
-    $("#confirmar").modal("hide");
+  // $("#confirmar").modal("hide");
+  // ajaxFlowIndex();
        
 }
+
+
+function ajaxFlowIndex() {
+      
+        $.ajax({
+            url: "flows",
+            method: "GET",
+            data: {
+                _token: $("input[name=_token]").val(),
+                _method: "PATCH",                
+            },
+            beforeSend: function (xhr) { 
+               
+                $("#cargandoDiv").css('display', 'block')
+            },
+            success: function(result) {
+                $("#cargandoDiv").css('display', 'none')
+                $("#content-flow-wrapper").html(result);
+                
+            },
+            error: function(request, status, error) {   
+                $("#cargandoDiv").css('display', 'none')            
+            }
+        });    
+}
+
+
 
 
 /** 
@@ -303,9 +344,11 @@ function ajaxUpdate() {
  * Edit an specific resource. 
  * @param {integer} idFlow - flow's id 
  * @param {string} flowName - flow's name  
+ * @param {int} editMode - 0 flow is inactive (EditMode) 1- flow is active you can edit it.
  * 
  */
-function ajaxEdit(idFlow,flowName) {   
+function ajaxEdit(idFlow,flowName, editMode) {   
+    editionMode =  editMode;
     var me = $(this);
  if (me.data("requestRunning"))
     return;
@@ -329,7 +372,7 @@ function ajaxEdit(idFlow,flowName) {
             $("#cargandoDiv").css('display', 'none')
            hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
-            editFlow(response);
+            editFlow(response,editMode);
             
            
         },
@@ -495,7 +538,10 @@ function savePermissions(){
  * 
  */
 function openStepEdition(){  
-    savePermissions();
+    if(editionMode == 0){
+        savePermissions();
+    }
+    
     $("#modal-body-step-back").hide(500);
     $("#modal-body-step").show(500);
     $("#card-title").val('Edición del departamento');
@@ -748,17 +794,18 @@ function createStartEnd(id, text, class1 ){
            alerta('Elemento existente',desc,false);
        }
             
-    });   
+    });  
+    var  buttonLink = '';
+    if(editionMode == 0){
+       buttonLink =  '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">' +
+    '<i class="fas fa-link"></i></button>'; 
+    }
+    
     if(drag != 1){
         var contenido = 
         '<div id ="'+id+'" class="special_card card">' +
             '<div class="card-step card-header '+class1+'">' +
-            '<label>'+text+' </label>' +
-            '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">' +
-                '<i class="fas fa-link"></i>' +
-            '</button>'+
-        '</div>'+
-        '</div>';
+            '<label>'+text+' </label>' + buttonLink + '</div>'+'</div>';
         addElementToCanvas(id,contenido);
         saveInStorage(null, id);
     }    
@@ -771,21 +818,26 @@ function createStartEnd(id, text, class1 ){
  * 
  */
 function createStepCard(id, description){
+    var  buttonLink = '';
+    if(editionMode == 0){
+        buttonLink = '<button type="button" class="btn btn-info" onclick="editStep(\`'+id+'\`, \`Editar\`, 0)"> '+
+        '<i class="fas fa-edit"></i> '+
+        '</button> '+
+        '<button type="button" class="btn btn-danger" onclick="deleteStep('+id+')">'+
+        '<i class="fa fa-trash"></i> '+
+        '</button> '+
+        '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">'+
+        '<i class="fas fa-link"></i> '+
+        '</button>';
+    }
+
     return '<div id = "'+id+'" class="card card_size "> '+
     '<div class="card-step card-header bg-dark justify-content-center">'+
     '<div class = "w-100" ><input id ="text'+id+'" class="textdraggable" type="text" value = "'+description+'" placeholder="Descripcion" disabled>  </div> '+             
     '<div class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-success" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
     '<i class="far fa-eye"></i> '+
-    '</button> '+
-    '<button type="button" class="btn btn-info" onclick="editStep(\`'+id+'\`, \`Editar\`, 0)"> '+
-    '<i class="fas fa-edit"></i> '+
-    '</button> '+
-    '<button type="button" class="btn btn-danger" onclick="deleteStep('+id+')">'+
-    '<i class="fa fa-trash"></i> '+
-    '</button> '+
-    '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">'+
-    '<i class="fas fa-link"></i> '+
-    '</button></div> '+
+    '</button> '+ buttonLink +
+    '</div> '+
     '</div>'+
     '</div>' ; 
 }
@@ -1348,7 +1400,7 @@ function mapStep(stepStep,id){
  *  Update a specific flow
  * 
  */
-function editFlow(data){
+function editFlow(data, editMode){
 
     /**
      *  Clean all the storage, array and draggablearray
@@ -1418,7 +1470,7 @@ function editFlow(data){
             saveInStorage(object, id);
             traslateDrag(id, axisX,axisY);            
         });     
-        openCreate();
+        openCreate(editMode,editMode);
     }
 }
 /**

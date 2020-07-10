@@ -63,6 +63,7 @@ Route::get('documentFlow/location/{id}', 'DocumentFlowController@location');
 //flow/active/
 
 Route::get('flow/active/{id}', 'FlowController@activeFlow');
+Route::get('flow/refresh/', 'FlowController@refresh');
 Route::get('flow/permission/{id}', 'FlowController@permissionModal');
 Route::get('flow/permissionTable/{id}', 'FlowController@permissionTable');
 Route::get('flow/savePermissionsModal/{id}', 'FlowController@savePermissionsModal');
