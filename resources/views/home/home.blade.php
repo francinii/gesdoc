@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('head')
-<link rel="stylesheet"    href="{{ asset('../resources/css/home.css') }}">
+<link rel="stylesheet"    href="{{ asset('../resources/css/advancedSearch.css') }}">
 
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
 <script src="{{ asset('../resources/js/home.js') }}" defer></script>
