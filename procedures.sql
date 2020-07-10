@@ -1386,7 +1386,7 @@ DELIMITER ;
 
 
 
---PROCEDURE delete an action step users 
+-- PROCEDURE delete an action step users 
 -- return 0 success, 1 or 2 database error, 3 the department already exists
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `delete_an_action_step_user`;
