@@ -1,9 +1,7 @@
 <div id="tableTitle"></div>
-<table id='table' class="table table-striped"  width="100%" >
-
+<table id='table' class="table table-hover display nowrap"   >
             <thead class="thead-dark" >
-                <tr>
-                   
+                <tr>                   
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
                     <th style="width: 55%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
                     <th style="width: 20%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
@@ -14,14 +12,11 @@
                     <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.code') }}</th>
                     <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.languaje') }}</th>
                     <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.others') }}</th>
-                    
                 </tr>
             </thead>
-            <tbody >
-                
+            <tbody >                
                 @foreach ($classifications as $classification)
-                <tr onclick="openClassification({{$classification->id}})">
-                   
+                <tr onclick="openClassification({{$classification->id}})" data-toggle="tooltip" data-placement="top" title="{{ __('app.home.table.numberDocuments') }} {{$classification->documents->count()}}">                   
                     <td class="text-center " ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
                     <td class="text-center ">{{$classification->description}}</td>                           
                     <td class="text-center " >{{$classification->created_at}}</td>  
@@ -31,15 +26,11 @@
                     <td style="display:none;" class="text-center "></td>
                     <td style="display:none;" class="text-center "></td>
                     <td style="display:none;" class="text-center "></td>
-                    <td style="display:none;" class="text-center "></td>
-                    
-                    
-                    
-          
+                    <td style="display:none;" class="text-center "></td>                  
                 </tr>
                 @endforeach
                 @foreach ($mainClassification->documents as $document)
-                <tr>
+                <tr  data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
 
                      @if ($document->type=="docx" || $document->type=="doc")
                     <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>

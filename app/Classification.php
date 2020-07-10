@@ -19,5 +19,7 @@ class Classification extends Model
     public function owner() {
         return $this->belongsTo('App\User','username','username');
     }
+
+
     
 }

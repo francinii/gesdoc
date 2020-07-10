@@ -10,6 +10,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Classification;
+use App\Document;
 
 trait RefreshHomeTrait{
 
@@ -31,7 +32,7 @@ trait RefreshHomeTrait{
                 return $this->refreshShareDocuments($currentClassification);
                 break;
             case '3':
-                return $this->refreshDocumentsFlow($currentClassification);
+                return $this->refreshDocuments($currentClassification);
                 break;
             default:
                 # code...
@@ -111,19 +112,28 @@ trait RefreshHomeTrait{
      * @return \Illuminate\Http\Response
      * @param int $currentClassification
      */
-    public function refreshDocumentsFlow($currentClassification)
+    public function refreshDocuments($currentClassification)
     {
-            /*$username = Auth::id();
-        $classification = Classification::where([['id', '=',$currentClassification]])->first();
-        $allClassifications=Classification::where([['username', '=',''.$username.''],['is_start', '=',true]])->first();
-        $allClassifications=$this->classifications($allClassifications);
-        return view('home.tableDocumentsFlow', compact('classification','allClassifications'));*/
+        $username = Auth::id();
+        $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->get();
+        $myActions=[4];
+        $ShareClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 2]])->get();
+        $Classifications=$ShareClassification->merge($mainClassification);     
+        $mainClassification=$mainClassification[0];
+        $Shareclassifications=DB::select("SELECT `classification_id`  FROM `action_classification_user` WHERE `username`=$username ");
+        $Shareclassifications = json_decode(json_encode($Shareclassifications), true);
+        $Shareclassifications=Classification::whereIn('id', $Shareclassifications)->get();
+        $Classifications=$Classifications->merge($Shareclassifications);
+        $myclassifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
+        $Classifications=$Classifications->merge($myclassifications);
+
+        return view('home.tableDocuments', compact('mainClassification', 'Classifications','myActions'));
     }
 
     public function deletefiles($document)
     {
         $contents=DB::table('versions')->select('version','content')->where('document_id','=', $document)->whereNull('flow_id')->pluck('content')->toArray();
-      foreach ($contents as  $content) {        
+        foreach ($contents as  $content) {        
         $file = storage_path('app/'.$content);
         File::delete($file);
       }

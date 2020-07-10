@@ -113,9 +113,12 @@ class DocumentController extends Controller
     private function uploadFile($document,$file){
         
         $username=Auth::id();
-        $type =  "'". $file->extension()."'";
-        $content="'".$file->store('public')."'";
-
+        $type =  $file->extension();
+        if($type=='')  $type = $document['docType'];
+        $name=$file->getClientOriginalName();
+        $hasname=md5($username.$name.uniqid());
+        $content="'".$file->storeAS('public',$hasname.'.'.$type)."'";
+        $type =  "'". $type ."'";
         $size =  "'". $file->getSize()."'";
         $username = Auth::id();
         $id_flow =  $document['flow_id']== '-1'? -1: $document['flow_id'] ;   //int    
@@ -465,8 +468,10 @@ class DocumentController extends Controller
         $file = storage_path('app/'.$content[0]);
         $exists = File::exists($file);
         if($exists && $content[0]!=''){
-        $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);    
-        $name=uniqid();
+        $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);
+        $username = Auth::id();
+        $name= $content[0];       
+        $name=$hasname=md5($username.$name.uniqid());
         $route='public/'.$name.'.'.$ext;
         $destination = storage_path('app/'.$route);    
         $success = File::copy($file,$destination);

@@ -15,7 +15,8 @@ return [
         'edit' => 'Editar', 
         'delete' => 'Borrar', 
         'accept' => 'Aceptar', 
-        'cancel' => 'Cancelar',             
+        'cancel' => 'Cancelar',
+        'select'=> 'Seleccione...',             
     ],
 
     'roles' => [    
@@ -152,7 +153,7 @@ return [
     'documents' => [ 
         'general' =>[
             'name' => 'Nombre del documento',              
-            'code' => 'Código del documento en la organización',
+            'code' => 'Código del documento',
             'languaje' => 'Idioma del contenido', 
             'summary' => 'Resumen de contenido',    
             'others' => 'Otros datos',  
@@ -203,6 +204,8 @@ return [
 
         'index' => [
             'title' => 'Departamentos del sistema',
+            'advancedSearch' => 'Busqueda avanzada',
+            'otherFilters' => 'Otros',
         ],
 
         'list' => [
@@ -211,11 +214,12 @@ return [
 
         'table' => [
             'id' => 'Id',
-            'summary' => 'summary',
-            'code' => 'code',
-            'flow_id' => 'flow_id',
-            'languaje' => 'languaje',
-            'others' => 'others',
+            'summary' => 'Resumen',
+            'code' => 'Codigo',
+            'flow_id' => 'Flujo',
+            'languaje' => 'Idioma',
+            'numberDocuments' => 'Numero de Documentos:',
+            'others' => 'Otros',
             'classification' => 'classification',
             'type' => 'tipo',
             'description' => 'Nombre',
@@ -230,6 +234,9 @@ return [
             'option1' => 'Mis documentos',
             'option2' => 'Compartidos conmigo',
             'option3' => 'Mis flujos',
+            'option4' => 'Documentos',
+            'option5' => 'Agregar',
+            'option6' => 'Importar Documento',
             
         ],
 

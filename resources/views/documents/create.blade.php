@@ -15,8 +15,9 @@
               <input type="text" class="form-control" id="descriptionCreate" placeholder="{{ __('app.documents.general.name') }}" name="descriptionCreate">
             </div>   
 
-            <label for="flowCreate">{{ __('app.documents.create.flow') }}</label>
+           
             <div class="form-group"> 
+            <label for="flowCreate">{{ __('app.documents.create.flow') }}</label>
               <select id="flowCreate"class="form-control" name="flowCreate" >
                 <option value="-1" name ="">Seleccione...</option>                 
                   @foreach ($flows ?? '' as $flow)
@@ -24,8 +25,9 @@
                   @endforeach
               </select>
             </div> 
-            <label for="classificationCreate">{{ __('app.documents.create.classification') }}</label>
+            
             <div class="form-group"> 
+            <label for="classificationCreate">{{ __('app.documents.create.classification') }}</label>
               <select id="classificationCreate"class="form-control" name="flowCreate" >
               <option value="-1" name ="">{{ __('app.home.table.defaultClassification') }}</option>                   
                 @foreach ($classifications as $classification)

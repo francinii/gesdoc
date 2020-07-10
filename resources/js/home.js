@@ -9,11 +9,12 @@ var currentClassification;
 var listClassification = [];
 var allClassifications;
 var usersShare=[];
-var currentTable="1"; // 1 = my documents, 2 share with me, 3 my documents in flows
+var currentTable="1"; // 1 = my documents, 2 share with me, 3 advancedSearch
 var isCurrentUserOwner;
 var CanCurrentUserEditar; 
 var CanCurrentUserDetele;
 var currentTd;
+var dataTable;
 /**
 * draw the route follow for the user  
 *
@@ -90,14 +91,14 @@ $("html")
                 $("#removeContext").show();
                 $("#shareContext").show();  
             }
-            else if(currentClassification.type==3 && currentTd.className != "dataTables_empty" && (isCurrentUserOwner || CanCurrentUserEditar)){
+            else if(currentClassification.type==3 && currentTd.className != "dataTables_empty" && currentTable!=3 && (isCurrentUserOwner || CanCurrentUserEditar)){
                 $("#editContext").show();
                 if(typeContextMenu!='classification') $("#cloneContext").show();
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
                 if(isCurrentUserOwner || CanCurrentUserDetele) $("#deleteContext").show();               
                 $("#shareContext").show();                
-            }else if(isCurrentUserOwner || CanCurrentUserEditar){
+            }else if((isCurrentUserOwner || CanCurrentUserEditar)&& currentTable!=3 ){
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
             }else{
@@ -105,8 +106,8 @@ $("html")
             }      
              
 
-            var top = e.pageY - 10;
-            var left = e.pageX - 90;
+            var top = e.pageY;
+            var left = e.pageX;
     
             $("#context-menu")
                 .css({
@@ -236,7 +237,6 @@ function ajaxCreate(){
                     "alert-success"
                 );
                 
-                
             },
             error: function (request, status, error) {
                 me.data("requestRunning", false);
@@ -305,7 +305,7 @@ function openClassification(id) {
             $("#divTable").html(result);
             createDataTableHome("table");
             $("#create").modal("hide");            
-            
+            showAdvancedSearch(1);
         },
         error: function (request, status, error) {
             me.data("requestRunning", false);
@@ -781,5 +781,42 @@ var me = $(this);
             
         }
     });
+
+}
+
+function showAdvancedSearch(action){
+    
+   if(action){
+       if(currentTable==3){ 
+        $("#descriptionFilter").val("");
+        $("#classificationFilter option:selected").prop("selected", false); 
+        $("#codeFilter").val("");
+        $("#dateCreateFilter").val("");
+        $("#dateModificated").val("");
+        $("#flowFilter option:selected").prop("selected", false);
+        $("#languajeFilter").val("");
+        $("#summaryFilter").val("");
+        $("#othersFilter").val("");
+        var dataTable= $("#table").DataTable()
+        dataTable.column(5).data().sort().unique().each( function ( d, j ) {
+            $("#classificationFilter").append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+        dataTable.column(6).data().sort().unique().each( function ( d, j ) {
+            if(d!="")
+            $("#flowFilter").append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+        $('#advancedSearch').show();
+       }else{
+        $('#advancedSearch').hide();
+       }
+   }else{
+        if(currentTable==3){ 
+            $('#advancedSearch').hide()
+            openSheet(1); 
+        }else{
+            openSheet(3); 
+        }
+   
+   }   
 
 }

@@ -42,10 +42,12 @@ class HomeController extends Controller
         $username = Auth::id();
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
         $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
+        
         $departments = Department::all();
-        $flows  = Flow::all();
+        $flows  = Flow::where('username', '=', '' . $username . '')->get();;
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
+
         return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
     }
 

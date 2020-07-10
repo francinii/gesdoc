@@ -12,11 +12,16 @@
 
             <div id= "docUpload" class="form-group">
               <label for="uploadLabel">Subir documento</label>   
-              <input type="file" id="file" /> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"></i> Importar documento</label>            
-            </div>  
+              <input type="file" id="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,text/plain, application/pdf, image/*"/> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"></i> Importar documento</label>
+              <span class="text-danger" role="alert">
+                  <strong id="file_message"></strong>
+              </span> 
+            </div>
+
             <div class="form-group">
               <label for="nameU">{{ __('app.documents.general.name') }}</label>
               <input type="text" class="form-control" id="nameU" placeholder="{{ __('app.documents.general.name') }}" name="">
+
             </div>
 
             <label for="flowCreateU">{{ __('app.documents.create.flow') }}</label>
