@@ -44,7 +44,7 @@ class HomeController extends Controller
         $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
         
         $departments = Department::all();
-        $flows  = Flow::where('username', '=', '' . $username . '')->get();;
+        $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
 

@@ -264,5 +264,23 @@ return [
         
 
     ],
+    'record'=>[
+        'index'=>[
+            'title'=>'Historial de acciones'
+        ],
+        'table'=>[
+            'user'=>'Usuario',
+            'action'=>'Acción',
+            'description'=>'Descripción',
+            'document'=>'Documento',
+            'version'=>'Versión',
+            'Flow'=>'Flujo',
+            'create'=> 'Creado',
+            'modified'=> 'Modificado',
+
+        ]
+
+
+    ]
 
 ];
