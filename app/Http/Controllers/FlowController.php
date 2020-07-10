@@ -46,7 +46,8 @@ class FlowController extends Controller
         $users = User::all();
         $departments = Department::all();
         $actions = Action::all();
-        return view('Flows.index',compact('flows', 'users','departments','actions'));
+        $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        return view('Flows.index',compact('flows', 'users','departments','actions','filterActions'));
     }
 
     /**
@@ -153,7 +154,8 @@ class FlowController extends Controller
         $users = User::all();
         $departments = Department::all();
         $actions = Action::all();
-        return view('flows.table',compact('flows', 'users','departments','actions'));
+        $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        return view('flows.table',compact('flows', 'users','departments','actions', 'filterActions'));
     }
 
 
@@ -304,4 +306,140 @@ class FlowController extends Controller
         }
         return json_decode(json_encode($res), true);
     }
+
+
+
+    protected function activeFlow(Request $request){
+        $data = request()->except(['_token']);  
+        $id_flow = (int) $data['idFlow']; 
+        $active =  (int) $data['active']; 
+        DB::select("call active_flow($id_flow, $active, @res)");
+                            $res=DB::select("SELECT @res as res;");   
+        //Procedimiento activar o desactivar
+      return $this->refresh();
+    }
+
+    protected function permissionModal(Request $request){
+        $identifier = null;
+        $data = request()->except(['_token']);  
+        $flowId = (int) $data['idFlow']; 
+        if(array_key_exists('identifier', $data)){
+            $identifier =  $data['identifier']; 
+        }
+        $allusers = User::all();
+        $departments = Department::all();
+        $steps = Step::where('flow_id', '=', $flowId)->get();                    
+        $flow= Flow::where('id', '=', $flowId)->first();
+        $actions = Action::all();
+        //get the flow element
+            $step = Step::where('flow_id', '=', $flowId)
+            ->where('id', '!=', 'draggable_inicio')
+            ->where('id', '!=', 'draggable_final')
+            ->first();
+            
+            //$step = Step::where('flow_id', '=', $flowId)->first();
+            $actionStepUser = ActionStepUser::where('flow_id', '=', $flowId)->where('step_id', '=', $step->id)->get(); 
+
+            $usersArray = ActionStepUser::where('flow_id', '=', $flowId)->where('step_id', '=', $step->id)->pluck('username')->toArray();
+            $users = User::whereIn('username', $usersArray)->get();
+            return view('flows.permission',compact('flow', 'users','actionStepUser','actions', 'steps','step','allusers', 'departments','usersArray'));
+    }
+
+
+    protected function permissionTable(Request $request){
+       
+        $data = request()->except(['_token']);  
+        return $this->refreshTablePermission($data);
+        
+    }   
+
+
+    protected function refreshTablePermission($data){
+        $identifier = null;
+        $flowId = (int) $data['idFlow']; 
+        if(array_key_exists('identifier', $data)){
+            $identifier =  $data['identifier']; 
+        }
+        $allusers = User::all();
+        $departments = Department::all();
+        $steps = Step::where('flow_id', '=', $flowId)->get();                    
+        $flow= Flow::where('id', '=', $flowId)->first();
+        $actions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        $step = Step::where('flow_id', '=', $flowId)->where('id', '=', $identifier)->first();    
+        
+        $usersArray = ActionStepUser::where('flow_id', '=', $flowId)
+        ->where('step_id', '=', $identifier)->pluck('username')->toArray();
+        $users = User::whereIn('username', $usersArray)->get();
+
+        $actionStepUser = ActionStepUser::where('flow_id', '=', $flowId)
+        ->where('step_id', '=', $identifier)
+        ->orderBy('action_id', 'ASC')->get(); 
+
+        return view('flows.permissionTable',compact('flow', 'users','actionStepUser','actions', 'steps','step','allusers','departments','usersArray'));
+       
+
+    }
+
+    protected function savePermissionsModal(Request $request){
+        $auxUserArray = [];
+        $data = request()->except(['_token']);  
+        $flowId = (int) $data['idFlow'];      
+        $identifier = $data['identifier'] ; 
+        $actionStepUser =  $data['actionStepUser'];  
+        $count = 0;   
+        
+        foreach ($actionStepUser as $asu) { 
+            $username =   $asu[0] ;         
+            array_push($auxUserArray,$username);
+            $identifier =$data['identifier'] ; 
+
+            //Get an arrat of actions from the DB
+            $actionsArray = ActionStepUser::where('flow_id', '=', $flowId)
+            ->where('step_id', '=', $identifier)
+            ->where('username', '=', $username)
+            ->pluck('action_id')->toArray(); 
+            
+
+            //Fin which elements are not in the html table
+            $direfenceArray  =array_diff($actionsArray, $asu);
+            $identifier1 ="'". $data['identifier'] . "'" ; 
+            $username1 = "'".$username . "'";  
+
+            //Delete the elements in the database
+            foreach ($direfenceArray as $act) {
+                $action =  $act;                              
+                DB::select("call delete_an_action_step_user($flowId,$identifier1,$username1,$action, @res)");
+                $res=DB::select("SELECT @res as res;");   
+            }
+
+            //Add the new elements to the database
+            foreach ($asu as $act) {                  
+                if($count>0){
+                    $action = (int) $act;
+                    DB::select("call insert_update_action_step_user($identifier1, $flowId, $username1,$action, @res)");
+                    $res=DB::select("SELECT @res as res;");   
+                }
+                $count++;
+            }
+            $count =0;
+        }
+
+        // IN case of user is delete completly from the html table
+        
+        $usersArray = ActionStepUser::where('flow_id', '=', $flowId)
+        ->where('step_id', '=', $identifier)
+        ->groupBy('username')
+        ->pluck('username')->toArray();  
+        $direfenceArray  =array_diff($usersArray, $auxUserArray);
+        foreach ($direfenceArray as $user) {
+            $username1 =  "'".$user . "'";  
+                                   
+            DB::select("call delete_action_step_user_by_user($flowId,$identifier1,$username1, @res)");
+            $res=DB::select("SELECT @res as res;");   
+        }
+
+
+        return $this->refreshTablePermission($data);
+    }
+    
 }

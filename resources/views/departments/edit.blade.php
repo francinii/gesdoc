@@ -17,7 +17,7 @@
          </form>
       </div>
       <div class="modal-footer">  
-      <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>   
+      <button type="button" onclick="ajaxUpdate()" id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>   
       </div>
     </div>
  </div>

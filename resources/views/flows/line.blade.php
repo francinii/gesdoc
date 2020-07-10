@@ -12,7 +12,7 @@
             </div> 
             <div id ="div-selector-action" class="form-group">
               <label for="">Acción</label> 
-              <select id="select_action"class="form-control" name="" >
+              <select id="select_action" class="form-control" name="" >
                   @foreach ($actions as $action)
                     @if($action->type == 0) <!-- Flows actions-->
                       <option value="{{$action->id}}" name ="{{$action->id}}" >{{$action->description}}</option>
@@ -23,12 +23,13 @@
         </form> 
         
         <div class="modal-footer">            
-          <button type="button" onclick="deleteAction() "id="deleteLine" class="btn btn-danger">
+          <button type="button" onclick="deleteAction()" id="deleteLine" class="btn btn-danger">
                   <i class="fas fa-trash-alt">Eliminar linea </i> 
           </button>   
-          <button type="button" onclick="saveAction() "id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>
+          <button type="button" onclick="saveAction()" id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>
         </div>
       </div>
    </div>
   </div>
+</div>
   

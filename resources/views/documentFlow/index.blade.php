@@ -17,12 +17,12 @@
   
     <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
-                <h2 class="text-center">Mis documentos en flujo</h2>        
+                <h2 class="text-center">Gestión de documentos en flujo</h2>        
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
                     <select id='selectDoc' class="form-control selectpicker"  data-live-search="true"  >                
                     @foreach ($flows as $flow)      
-                        <option  id = "{{$flow->flow_id}}" value = "{{$flow->flow_id}}">{{$flow->description}}</option>
+                        <option  id = "{{$flow->id}}" value = "{{$flow->id}}">{{$flow->description}}</option>
                     @endforeach                                    
                     </select>                           
                   </div>                 

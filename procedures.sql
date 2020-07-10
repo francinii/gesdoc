@@ -798,7 +798,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-                 INSERT INTO `action_step_user`(created_at, 	updated_at, step_id, flow_id, username, action_id ) VALUES (NOW(),NOW(),p_id, p_id_flow, p_username, p_action);
+                 INSERT INTO `action_step_user`(created_at,updated_at, step_id, flow_id, username, action_id ) VALUES (NOW(),NOW(),p_id, p_id_flow, p_username, p_action);
             COMMIT;
           -- SUCCESS
 SET res = 0;
@@ -806,6 +806,109 @@ END
 ;;
 DELIMITER ;
 
+
+-- PROCEDURE update the action step user table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `update_action_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_action_step_user`(IN `p_step_id` varchar(500),IN `p_id_flow` int, IN `p_username` varchar(500), IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
+                                              
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+
+
+              UPDATE `action_step_user` SET action_id = p_action, updated_at =NOW()
+              WHERE flow_id= p_id_flow and step_id= p_step_id and username= p_username;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+-- PROCEDURE update the action step user table
+-- return 0 success, 1 or 2 database error, 3 the row already exists
+DROP PROCEDURE IF EXISTS `insert_update_action_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_update_action_step_user`(IN `p_step_id` varchar(500),IN `p_id_flow` int, IN `p_username` varchar(500), IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
+                                              
+BEGIN
+ DECLARE _exist INT DEFAULT NULL;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;    
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+            SELECT  COUNT(action_id) into _exist FROM `action_step_user`WHERE flow_id= p_id_flow and step_id= p_step_id and username= p_username and action_id = p_action ;   
+            IF _exist = 0 THEN
+                 CALL insert_action_step_user(p_step_id, p_id_flow, p_username, p_action, @res);            
+            -- ELSE
+            --     CALL update_action_step_user(p_step_id, p_id_flow, p_username, p_action, @res);
+            END IF;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+
+-- PROCEDURE  delete_action_step_user_by_user
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_action_step_user_by_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `delete_action_step_user_by_user`(IN p_idFlow int, IN p_identifier varchar(500), IN p_username varchar(500),  OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+               DELETE FROM `action_step_user` WHERE flow_id = p_idFlow and step_id = p_identifier and username = p_username ;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
 
 
 
@@ -1219,7 +1322,7 @@ DELIMITER ;
 
 
 
--- PROCEDURE insert a new step to a flow
+-- PROCEDURE delete all of the actions step users by flow
 -- return 0 success, 1 or 2 database error, 3 the department already exists
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `delete_action_step_user`;
@@ -1249,6 +1352,37 @@ END
 ;;
 DELIMITER ;
 
+
+
+--PROCEDURE delete an action step users 
+-- return 0 success, 1 or 2 database error, 3 the department already exists
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_an_action_step_user`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `delete_an_action_step_user`(IN `p_idFlow` int, IN `p_idStep` varchar(500), IN `p_user` varchar(500),IN `p_action` int, OUT `res` TINYINT  UNSIGNED)
+                                               
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
+
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;
+               DELETE FROM `action_step_user` WHERE flow_id = p_idFlow and  username = p_user and step_id = p_idStep and action_id = p_action ;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
 
 
 
@@ -1411,6 +1545,42 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
+
+
+
+
+-- PROCEDURE change the active flow status 
+DROP PROCEDURE IF EXISTS `active_flow`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `active_flow`(IN `p_id_flow` int, IN `p_status` TINYINT, OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;              
+              UPDATE `flows` SET `state`=p_status, `updated_at`=NOW() WHERE `id`=p_id_flow;
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+
+
+
+
 
 -- DROP VIEW IF EXISTS view_document_version ;
 -- CREATE VIEW view_document_version AS 

@@ -16,7 +16,7 @@
             </div> 
             <label for="flowUsuario">{{ __('app.flows.edit.property') }}</label>              
             <div class="form-group">
-                <select id="flowUsuario"class="form-control" name="flowUsuario" >
+                <select id="flowUsuario" class="form-control" name="flowUsuario" >
                     @foreach ($users as $user)
                         <option value="{{$user->id}}" name ="flowUsuario{{$user->id}}" >{{$user->name}}</option>
                     @endforeach

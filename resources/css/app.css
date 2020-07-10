@@ -160,4 +160,8 @@
   text-align: center;
 }
 
+.body_table_permission tr td {
+  text-align: center !important;
+}
+
 /*# sourceMappingURL=app.css.map */

@@ -10,8 +10,16 @@
           </button>
       </div>
       <div class="modal-body" id = "modal-body-edit">
-      <p> El documento se encuentra actualmente en el paso:  <b>{{ $step->description }}</b>  </p>             
-          <label for="">Usuarios asociados al paso: <b>{{ $step->description }}</b></label> 
+        @if ( !empty($step))
+            <p> El documento se encuentra actualmente en el paso:  <b>{{ $step->description }}</b>  </p> 
+            <label for="">Usuarios asociados al paso: <b>{{ $step->description }}</b></label>  
+            @else 
+            <p> El documento no está asociado a un paso en el flujo.</p>
+            <label for="">Usuarios asociados al paso</label>  
+          @endif   
+          
+
+         
           <table id='' class="table table-responsive table-striped" style="display:table">
             <thead class="head_table thead-dark ">   
                 <th>Usuario</th>    
@@ -33,7 +41,7 @@
       </div>
       <div class="modal-footer">     
           <span class=" text-right">
-              <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModal('locationModal')" data-target="">
+              <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModal('locationModalS')" data-target="">
                   <i class=""></i>Cerrar
               </button>       
           </span>           

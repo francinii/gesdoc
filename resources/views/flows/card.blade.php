@@ -18,11 +18,10 @@
                             <div class="form-group ">
                                 <label class="control-label" for="CreateDescription"> Descripción del Departamento</label>
                                 <input type="text" class="form-control " id="CreateDescription" placeholder="Descripcion" name="CreateDescription">
-                            </div>                                      
-                              
+                            </div>                         
                             <div class="form-group">
                                 <label class="control-label" for="searchUser">Usuarios asociados</label>                                                        
-                                <select id='select_document' class="form-control selectpicker"  data-live-search="true" multiple >                
+                                <select id='select_document' class="form-control selectpicker"  multiple data-selected-text-format="count" data-live-search="true" multiple >                
                                 @foreach ($departments as $department)                                                            
                                 <optgroup label="{{$department->description}}" >      
                                     @foreach ($users as $user)
@@ -70,7 +69,7 @@
                 <thead class="head_table thead-dark ">   
                         <th>Usuarios</th>    
                         @foreach ($actions as $action)      
-                        @if ($action->type != 2)                
+                        @if ($action->type == 0  || $action->type == 1 )                
                         <th id = "{{$action->id}}" >{{$action->description}}</th>
                         @endif
                         @endforeach             
