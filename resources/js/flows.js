@@ -93,8 +93,7 @@ function openCreate(editMode){
         $("#btnSavePermissions").remove();
         $("#hideModalCardSave").remove();
         $("#line-modal .modal-footer").remove();  
-        $("#select_action").attr('disabled',true);  
-             
+        $("#select_action").attr('disabled',true);               
         $('#flowName').attr('disabled',true);
     }
 }
@@ -107,46 +106,14 @@ function openCreate(editMode){
  */
 function openTable(){
     window.location="flows";
-   // clearAll();
-   
+   // clearAll();   
     //Global variable
    // idFlowForUpdate = "";
    // $("#flowName").val("");
     //$("#create-wrapper").hide();
    // $("#flow-wrapper").show();
-
-  // $("#confirmar").modal("hide");
-  // ajaxFlowIndex();
-       
+  // $("#confirmar").modal("hide");       
 }
-
-
-function ajaxFlowIndex() {
-      
-        $.ajax({
-            url: "flows",
-            method: "GET",
-            data: {
-                _token: $("input[name=_token]").val(),
-                _method: "PATCH",                
-            },
-            beforeSend: function (xhr) { 
-               
-                $("#cargandoDiv").css('display', 'block')
-            },
-            success: function(result) {
-                $("#cargandoDiv").css('display', 'none')
-                $("#content-flow-wrapper").html(result);
-                
-            },
-            error: function(request, status, error) {   
-                $("#cargandoDiv").css('display', 'none')            
-            }
-        });    
-}
-
-
-
 
 /** 
  * 

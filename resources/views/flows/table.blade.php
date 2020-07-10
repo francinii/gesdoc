@@ -58,12 +58,14 @@
                 @endif
             </td>
             <td class="text-center">
+                @if($flow->state == 0)  
                 <form method="POST" action="{{url('/flows/'.$flow->id)}}">
                     <button type="button" onclick="confirmDelete({{$flow->id}} ,'flows','table','¿Desea eliminar el flujo: {{$flow->description}}?')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>
                 </form>
+                @endif
             </td>
         </tr>
         @endforeach
