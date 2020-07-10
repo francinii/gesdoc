@@ -1,4 +1,4 @@
-<table id='table' class="table table-responsive table-striped" cellspacing="0" width="100%">
+<table id='table' class="table table-striped" cellspacing="0" width="100%">
             <thead class="thead-dark">
                 <tr class="">
                     <th style="width: 10%"  class="text-center">{{ __('app.roles.table.id') }}</th>

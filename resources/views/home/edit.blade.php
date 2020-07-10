@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="POST">
+        <form action="" method="POST" onkeydown="return event.key != 'Enter';">
           <input type="hidden" id="idEdit">        
            <div class="form-group">            
              <label for="descriptionEdit">{{ __('app.home.edit.name') }}</label>

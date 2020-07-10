@@ -39,6 +39,35 @@ function createDataTable(table) {
     });
 }
 
+function createDataTableHome(table) {
+    $("#" + table).dataTable({
+        lengthChange: false,
+        scrollY: "50vh",
+        scrollCollapse: true,
+        paging: false,
+        language: {
+            decimal: "",
+            emptyTable: "No hay información",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+            infoFiltered: "(Filtrado de _MAX_ total entradas)",
+            infoPostFix: "",
+            thousands: ",",
+            lengthMenu: "Mostrar _MENU_ Entradas",
+            loadingRecords: "Cargando...",
+            processing: "Procesando...",
+            search: "Buscar:",
+            zeroRecords: "Sin resultados encontrados",
+            paginate: {
+                first: "Primero",
+                last: "Ultimo",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
+}
+
 
 /**
  * This function shows a modal in order to confirm if you 
@@ -137,5 +166,11 @@ function hideAlert(id){
  *  
  */
 $(document).ready(function() {
-    createDataTable("table");
+    if (typeof currentClassification !== 'undefined') {
+        createDataTableHome("table");
+    }else{
+        createDataTable("table");
+    }
+
+
 });

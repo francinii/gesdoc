@@ -211,6 +211,12 @@ class HomeController extends Controller
             $documentsString.="$documentId,";
         }
         $documentsString=substr($documentsString, 0, -1);
+        if($classificationOwner==null){
+            foreach ($documentInClassificationid as $documentId) {
+                $this->deletefiles($documentId);
+            }
+        }
+        
 
         DB::select("call delete_Share_Classification($idselect,'$user->username','$documentsString','$classificationOwner',@res)");
         $res = DB::select("SELECT @res as res;");

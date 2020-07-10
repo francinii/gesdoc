@@ -39,9 +39,8 @@
         @include('partials.alert')
                    
                   
-        <div id="divTable">
-        {{csrf_field()}} 
-      
+        <div id="divTable" class="table-responsive">
+        {{csrf_field()}}       
             @include('home.tableMyDocuments')
         </div>
         </div>

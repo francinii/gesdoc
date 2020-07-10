@@ -50,7 +50,8 @@ function drawRoute() {
  *
  */
 $("html")
-    .on("contextmenu", "td.principalTd " , function (e) {
+    .on("contextmenu", "table  td " , function (e) {
+        
         currentTd = e.currentTarget;
         typeContextMenu = "";
         idselect = "";
@@ -226,7 +227,7 @@ function ajaxCreate(){
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
 
-                createDataTable("table");
+                createDataTableHome("table");
                 $("#create").modal("hide");
                 alerts('alerts', 'alert-content',
                     "La clasificacion " +
@@ -302,7 +303,7 @@ function openClassification(id) {
             $("#cargandoDiv").css('display', 'none')
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-            createDataTable("table");
+            createDataTableHome("table");
             $("#create").modal("hide");            
             
         },
@@ -391,7 +392,7 @@ function ajaxUpdate() {
                 $("#cargandoDiv").css('display', 'none')          
                 $("#table").DataTable().destroy();
                 $("#divTable").html(result);
-                createDataTable("table");
+                createDataTableHome("table");
                 $("#edit").modal("hide");
                 alerts('alerts', 'alert-content',"La clasificación "+description+" ha sido actualizado satisfactoriamente", "alert-success");
                 
@@ -422,7 +423,7 @@ function deletefile(action){
     if(typeContextMenu=='classification' && action){
         mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
     }else if(typeContextMenu!='classification' ){
-        mensaje+="el documento "+descriptionEdit
+        mensaje+="el documento "+descriptionEdit+ ", seguran en su pestaña de flujos"
     }else{
         mensaje+="la clasificacion "+descriptionEdit
     }
@@ -765,7 +766,7 @@ var me = $(this);
             $("#cargandoDiv").css('display', 'none')          
             $("#table").DataTable().destroy();
             $("#divTable").html(result);
-            createDataTable("table");
+            createDataTableHome("table");
             $("#share").modal("hide");
             alerts('alerts', 'alert-content',"Usuarios agregados satisfactoriamente", "alert-success");
             usersShare=[];           

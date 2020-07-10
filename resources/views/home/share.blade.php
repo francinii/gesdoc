@@ -29,7 +29,7 @@
                                 @endforeach                                    
                                 </select>                           
                               </div>           
-                              <table id='tablelist' class="table table-responsive table-striped" style="display:table">
+                              <table id='tablelist' class="table table-striped" style="display:table">
                                 <thead class="head_table thead-dark ">   
                                     <th>{{ __('app.home.share.user') }}</th>    
                                     <th>{{ __('app.home.share.name') }}</th>      
@@ -57,7 +57,7 @@
         <div class="modal-body" id = "modal-body-share-back" style="display:none">
             <button class="btn btn-info" onclick="backShareUsers()" > <i class= "fas fa-arrow-left"></i></button>
             <div class="card container inside_step " style="padding:1%">                
-                <table id='tableLine' class="table table-responsive table-striped" style="display:table">
+                <table id='tableLine' class="table  table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
                         <th>{{ __('app.home.share.user') }}</th>
                         <th id="shareOwner">{{ __('app.home.share.owner') }}</th>
