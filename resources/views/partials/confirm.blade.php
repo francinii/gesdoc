@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer">
       <button type="button"  id="confirmarButton" class="btn btn-success">Confirmar</button>
-      <button type="button"  class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancelar</button>
+      <button type="button"  id="hideConfirmButton"  class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancelar</button>
       </div>
     </div>
   </div>

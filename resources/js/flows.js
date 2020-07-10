@@ -84,8 +84,8 @@ function clearDescription() {
  * 
  */
 function openCreate(){   
-    $("#flow-wrapper").hide(500);
-    $("#create-wrapper").show(1000);
+    $("#flow-wrapper").hide();
+    $("#create-wrapper").show();
 }
 
 
@@ -99,8 +99,8 @@ function openTable(){
     //Global variable
     idFlowForUpdate = "";
     $("#flowName").val("");
-    $("#create-wrapper").hide(1000);
-    $("#flow-wrapper").show(500);
+    $("#create-wrapper").hide();
+    $("#flow-wrapper").show();
 
     $("#confirmar").modal("hide");
        
@@ -384,7 +384,7 @@ function select_user(e, clickedIndex, tableId){
     if(seleccionado){
         appendUserTable(username, name, email, tableId);
     }else {
-        deleteUserTable(tableId,username);
+        deleteUserTable(tableId,username,'select_document');
     }
 }
 
@@ -398,11 +398,12 @@ function select_user(e, clickedIndex, tableId){
  * 
  */
 function appendUserTable(username, name, email, tableId){
-    $("."+tableId).append(
+    select_document = "select_document";
+    $("."+tableId).append(                                     
         "<tr id ='" +  tableId + username +  "'><td>" + username +  "</td><td>" + name + "</td><td>" + email +
-        "</td><td><button class ='btn btn-danger delete' onclick= deleteUserTable('"+ tableId +"','"+username+"') type ='button' ><i class='fas fa-trash-alt'></i></button></td></tr>"
+        "</td><td><button class ='btn btn-danger delete' onclick=deleteUserTable('"+tableId +"','"+username+"','"+select_document+"') type ='button' ><i class='fas fa-trash-alt'></i></button></td></tr>"
     );
-  }
+}
 
 
 /**
@@ -489,7 +490,6 @@ function savePermissions(){
         "alert-success" );
 }
 
-
 /**
  * Open the modal that show the edit step part. 
  * 
@@ -511,10 +511,12 @@ function openStepEdition(){
  * @param {string} username - id of the user that is going to be deleted
  * 
  */
-function deleteUserTable(tableId, username){
+function deleteUserTable(tableId, username, selectP){
     $('#'+tableId+username).remove();
-    $('#'+username).prop('selected',false);
-    $('#select_document').selectpicker('refresh');
+    $('#'+selectP +' #'+username).prop('selected',false);
+    $('#'+selectP +' #'+username).attr('selected',false);
+    $('#'+selectP).selectpicker('refresh');
+    //$('#select_document').selectpicker('refresh');
 }
 
 
@@ -583,7 +585,10 @@ function deleteStep(step){
  * 
  */
 
-function editStep(step, title, mode){
+function editStep(step, title, mode) {
+     $('#select_document').find('option').prop('selected',false);
+     //$('#select_document').find('option').attr('selected',false);
+     $('#select_document').selectpicker('refresh');
     //0 edit mode 1 create mode
     globalMode = mode; 
    
@@ -599,19 +604,24 @@ function editStep(step, title, mode){
 
     $("#card-title").text(titulo);
         users = elemento.users;
-        $('#select_document').find('option').prop('selected',false);
+       
+
     if(typeof users !== 'undefined'){
         users.forEach(element => {
             username =element.username;
             name = element.name;
             email = element.email;
             appendUserTable(username, name, email, 'body_table');
-            $('#select_document #'+username).prop('selected',true);
+           // $('#select_document'+username).prop('selected',true);
+        //  $('#'+username).attr('selected',true);
+          $('#'+username).prop('selected',true);
         });
     }
    // steps = elemento.steps;
     globalMode == 1 ? formDisable(true):formDisable(false);
+    $('#select_document').selectpicker('refresh');
     $("#card").modal("show");
+
 }
 
 /**
@@ -1387,8 +1397,7 @@ function editFlow(data){
              */ 
             users1 =  mapUser(actionStepUser,element['id']);
             object = createObjectStep(id,description,users1,[],axisX,axisY);
-            saveInStorage(object, id);
-        
+            saveInStorage(object, id);        
             //storageLine(id, divFirst, divSecond,action, []);  
         });
 
@@ -1412,9 +1421,6 @@ function editFlow(data){
         openCreate();
     }
 }
-
-
-
 /**
  * 
  * Reset All of Global  variables and the SessionStorage.
@@ -1431,7 +1437,6 @@ function clearAll(){
     clearArrow('leader-line');
 }
 
-
 /**
  * Set the coordenates of each drag in the canvas
  * 
@@ -1445,4 +1450,254 @@ function traslateDrag(id, x,y){
         "-ms-transform":"translate("+x+"px,"+y+"px)",
         "transform":"translate("+x+"px,"+y+"px)",
     })
+}
+/**
+ * Active or desactive the flow
+ * 
+ */
+actFlow ="";
+function activeFlowModal(e, id, flow){
+    actFlow = e;
+    var select = document.getElementById(id);
+    var selectedOption = actFlow.options[select.selectedIndex];
+    var active = selectedOption.value;
+    var message = 'Siel flujo todos los archivos adjuntos a los pasos serán eliminados del flujo ¿Desea continuar?'
+    $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
+    $("#confirmarButton").attr("onClick","activeFlow("+active+","+flow+")");
+    $("#hideConfirmButton").attr("onClick","hideConfirmButton("+active+","+flow+","+id+")");
+    $("#confirmar").modal("show");
+}
+
+function hideConfirmButton(active, flow, select){
+
+    if( active == 0 ){
+        $("#active"+flow).attr('selected', true);
+        $("#active"+flow).prop('selected', 'selected');
+       $("#inactive"+flow).removeAttr("selected");
+            
+    }
+    else {
+        $("#active"+flow).removeAttr('selected');
+        $("#inactive"+flow).attr('selected', true);
+        $("#inactive"+flow).prop('selected', 'selected');
+ 
+    }
+    $("#confirmar").modal("hide");
+}
+
+function activeFlow(active, idFlow){
+   // $("#selectFlow").val();
+
+   idFlow;
+    $.ajax({
+        url: "flow/active/{" + idFlow + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idFlow: idFlow,
+           active: active,
+            
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+            $("#table").html(result);
+            $("#table").DataTable().destroy();
+            alerts('alerts', 'alert-content',"La actividad del flujo fue modificada correctamente.", "alert-success");
+            createDataTable("table");   
+            $("#confirmar").modal("hide");         
+           
+        },
+
+        error: function(request, status, error) {
+           
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
+}
+
+
+function permissionModal(idFlow, actions){
+    var actions2 = [];
+    actions2 = actions;
+    var identifier = $('#idPermissionModal').val();
+    
+    idFlow;
+    $.ajax({
+        url: "flow/permission/{" + idFlow + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idFlow: idFlow, 
+           identifier: identifier,             
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+            
+            $("#permissionModal").html(result);
+            $('#selectUserPermission').selectpicker();
+            $('#selectUserPermission').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                select_permission(e, clickedIndex , 'body_table_permission',actions2);
+            });
+            $("#permissionModalS").modal('show');         
+        },
+
+        error: function(request, status, error) {           
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
+
+}
+
+
+function permissionModalTable(idFlow, actions2){
+    var identifier = $('#idPermissionModal').val();
+    
+    $.ajax({
+        url: "flow/permissionTable/{" + idFlow + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idFlow: idFlow, 
+           identifier: identifier,             
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+           // $('#selectUserPermission').remove();
+
+            $("#permissionModalS #permtable").html(result);
+            $('#selectUserPermission').selectpicker();
+            $('#selectUserPermission').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                select_permission(e, clickedIndex , 'body_table_permission',actions2);
+            }); 
+                            
+        },
+
+        error: function(request, status, error) {           
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none');
+
+          
+        }
+    });
+
+}
+
+
+function select_permission(e, clickedIndex, tableId,actions2){
+    var evento = e.currentTarget[clickedIndex];
+    if(evento==null) return;
+    var name = evento.innerHTML;
+    var username = evento.attributes[0].value;
+   // var email = evento.attributes[2].value;
+    var seleccionado = evento.selected;
+
+    if(seleccionado){
+        appendPermissionTable(username, name,tableId,actions2);
+    }else {
+        deleteUserTable(tableId,username,'selectUserPermission');
+    }
+}
+
+
+
+function appendPermissionTable(username, name, tableId,actions2){
+    var select_permission1 = 'selectUserPermission';
+    var cadena = '';
+    var count = 0;
+    actions2.forEach(act => {
+        //Ternary operator
+        
+   
+      cadena += '<td ><input id = "'+act.id+'" type ="checkbox" class="form-check-input"></td>'
+      count++;
+     
+        
+    });
+
+    $("."+tableId).append(
+        "<tr id ='" +  tableId + username +  "'><td id = '"+ username +"' >" + username +  "</td><td>" + name + "</td>" +
+        cadena+"<td><button class ='btn btn-danger delete' onclick= deleteUserTable('"+ tableId +"','"+username+"','"+select_permission1+"') type ='button' ><i class='fas fa-trash-alt'></i></button></td></tr>"
+    );
+}
+
+
+
+function savePermissionsModal(idFlow, saveMode){
+    actionStepUser = [];
+    identifier = $('#idPermissionModal').val();
+    $('#tablePermission #body_table_permission tr').each(function () {  
+        username  = $(this).find("td").eq(0).attr('id');
+        actSteUs = [];
+        actSteUs.push(username);
+        $.each($("input:checked", this), function(){
+            actSteUs.push($(this).attr('id'));
+        }); 
+        actionStepUser.push(actSteUs);        
+    });
+
+    $.ajax({
+        url: "flow/savePermissionsModal/{" + idFlow + "}",
+        method: "GET",        
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idFlow: idFlow, 
+           identifier: identifier,   
+           actionStepUser:actionStepUser,
+
+        },
+        beforeSend: function (xhr) { 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            $("#cargandoDiv").css('display', 'none');
+           // $('#selectUserPermission').remove();
+
+            $("#permissionModalS #permtable").html(result);
+            $('#selectUserPermission').selectpicker();
+            $('#selectUserPermission').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                select_permission(e, clickedIndex , 'body_table_permission',actions2);       
+            });                        
+            if(saveMode == 1){
+                $("#permissionModalS").modal("hide");
+            }    
+        },
+        error: function(request, status, error) {           
+            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none');
+            $("#permissionModalS").modal("hide");
+          
+        }
+    });
+    
 }

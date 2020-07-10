@@ -25,7 +25,7 @@
                     <i class="fas fa-plus-circle"></i> {{ __('app.buttons.add') }}
                 </button>    
             </div>
-            <div  class="col-md-12">&nbsp</div>
+            <div  class="col-md-12">&nbsp;</div>
             <div class="col-9">
                 @include('partials.alert')
                 @include('flows.table')                
@@ -40,5 +40,10 @@
     @include('flows.create')
     @include('flows.line')
    
+    <div id="permissionModal">
+
+    </div>
+
+
     <script src="{{ asset('../resources/js/flows.js') }}" defer></script>
 @stop
