@@ -1335,6 +1335,7 @@ function mapUser(actionStepUser, id){
  */
 function mapStep(stepStep,id){ 
      aux = [];
+    
     if(typeof stepStep !== 'undefined'){  
         //Filter the stepStep by id of the step
         stepStep =  stepStep.filter(step1 =>step1.prev_step_id == id );  
@@ -1353,6 +1354,7 @@ function mapStep(stepStep,id){
         begin = document.getElementById(stepObject.begin);
         end =document.getElementById(stepObject.end);  
          //Create the line between two draggable divs
+        
         bandera = createLine(begin, end, stepObject.id, stepObject.description);
         if(bandera)  //Save the line in the storage
             storageLine(stepObject.id, stepObject.begin, stepObject.end,element.id_action, []);
@@ -1412,32 +1414,37 @@ function editFlow(data, editMode){
             }
                 
             /**
-             * Add the dragas to the storage
+             * Add the draggables to the storage
              */ 
             users1 =  mapUser(actionStepUser,element['id']);
             object = createObjectStep(id,description,users1,[],axisX,axisY);
-            saveInStorage(object, id);        
+            saveInStorage(object, id); 
+            traslateDrag(id, axisX,axisY);        
             //storageLine(id, divFirst, divSecond,action, []);  
         });
 
         /** 
          * Then create the lines with the beginning and ending included ( divFirst+'-'+ divSecond; ) and the name
          * And Save the lines in the SessionStorage
-         */      
+         */   
+        openCreate(editMode);   
         steps.forEach(element => {
+          
             var id = element['id']; 
             itemStorage = sessionStorage.getItem(id);
             itemStorage=JSON.parse(itemStorage);
             axisX =  element['axisX'];
             axisY =  element['axisY'];  
-            description = element['description'];   
+            description = element['description']; 
+           
             steps2 =  mapStep(stepStep, id);
             users2 = itemStorage.users; //get the users storaged
             object = createObjectStep(id,description,users2,steps2,axisX,axisY);
+            
             saveInStorage(object, id);
-            traslateDrag(id, axisX,axisY);            
+           // traslateDrag(id, axisX,axisY);  
         });     
-        openCreate(editMode,editMode);
+       
     }
 }
 /**
