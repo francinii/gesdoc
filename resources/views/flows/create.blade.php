@@ -1,19 +1,19 @@
 <div class="container-fluid " id = "create-wrapper"  style="display:none">    
     <div class="row  justify-content-center">         
-        <div  class="col-md-11">
-          <div class="float-lg-left">                
-          </div>          
+        <div class="col-md-11">
+            <div class="float-lg-left">  </div>          
         </div>
-        <div  class="col-md-11 container">
-          <div class="form-group row">
+        <div  class="col-md-11 container">         
+          <div class="form-group row">            
               <label class="control-label col-2" for="flowName"> {{ __('app.flows.create.name') }} </label>
               <input type="text" class="form-control col-10" id="flowName" placeholder="{{ __('app.flows.create.name') }}" name="flowName">
           </div> 
-        </div> 
-        <div class="col-md-11">
-            <button  type="button" id="CreateSubmit" onclick="confirm('Todo el progreso se borrará si no ha sido guardado. ¿Desea salir del modo edición?  ')" class="btn btn-success ml-auto">
-              <i class="fas fa-arrow-left"></i>
-            </button> 
+        </div>         
+        <div class="col-md-11" >      
+          <button  type="button" id="CreateSubmit" onclick="confirm('Todo el progreso se borrará si no ha sido guardado. ¿Desea salir del modo edición?  ')" class="btn btn-success ml-auto">
+            <i class="fas fa-arrow-left"></i>
+          </button> 
+          <span id='button-actions' class="float-right">      
             <button type="button" class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">
               <i class="fas fa-plus-circle"> </i>
               Guardar flujo
@@ -30,10 +30,11 @@
               <i class="fas fa-plus-circle"> </i>
               Agregar inicio
             </button> 
+          </span>
         </div>
+
         <div class="col-md-10">&nbsp;</div>
-        <div id = "steps" class="col-10" >              
-        </div>              
+        <div id = "steps" class="col-10" > </div>              
     </div> 
     <!--Inicio del flujo de trabajo -->   
     <div class="row justify-content-center">  

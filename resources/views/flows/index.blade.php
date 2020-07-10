@@ -21,7 +21,7 @@
         </div>    
         <div class="row  justify-content-center"> 
             <div class="col-md-9 text-right">
-                <button data-toggle="modal" class=" float-right btn btn-success" onclick="openCreate()" data-target="">
+                <button data-toggle="modal" class=" float-right btn btn-success" onclick="openCreate(0)" data-target="">
                     <i class="fas fa-plus-circle"></i> {{ __('app.buttons.add') }}
                 </button>    
             </div>
