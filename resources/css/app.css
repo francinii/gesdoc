@@ -117,10 +117,8 @@
 }
 
 .row #drag-container {
-  overflow: scroll;
   background-color: #e4e4e4;
   min-height: 600px;
-  margin-bottom: 5%;
 }
 
 .card-step {
@@ -140,7 +138,7 @@
 
 .card_size {
   padding: 0;
-  width: 20%;
+  width: 10%;
 }
 
 .special_card {
@@ -162,6 +160,20 @@
 
 .body_table_permission tr td {
   text-align: center !important;
+}
+
+.staticPosition {
+  position: relative !important;
+  z-index: 10;
+  background-color: white;
+}
+
+#drag-container-wrapper {
+  padding: 0px;
+}
+
+#drag-container-bottom {
+  padding-bottom: 5%;
 }
 
 /*# sourceMappingURL=app.css.map */

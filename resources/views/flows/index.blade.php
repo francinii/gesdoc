@@ -3,23 +3,27 @@
 @section('head')
     <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
-    <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
+    <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script> 
+    <script src="{{ asset('../resources/extensions/animDrag/anim-event.min.js') }}"></script>  
+     
 
         <!-- Para el select con search -->
 @stop
 
 @section('title', 'Flujos') 
 
-@section('header')
-    @include('layouts.header') 
-@stop
+    @section('header')
+    <div class="staticPosition" >  
+        @include('layouts.header') 
+    </div>
+    @stop
+
 @section('content')
-    <?php $id = 2 ?>
-    <div class="container-fluid" id = "flow-wrapper">
-        <div class="row  justify-content-center">         
+    <div class="container-fluid " id = "flow-wrapper">
+        <div class="row justify-content-center ">         
             <h2 class="text-center">{{ __('app.flows.index.title') }}</h2>                      
         </div>    
-        <div class="row  justify-content-center"> 
+        <div class="row  justify-content-center "> 
             <div class="col-md-9 text-right">
                 <button data-toggle="modal" class=" float-right btn btn-success" onclick="openCreate(0)" data-target="">
                     <i class="fas fa-plus-circle"></i> {{ __('app.buttons.add') }}

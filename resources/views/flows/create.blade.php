@@ -1,5 +1,6 @@
-<div class="container-fluid " id = "create-wrapper"  style="display:none">    
-    <div class="row  justify-content-center">         
+<div class="container-fluid" id = "create-wrapper"  style="display:none">    
+    <div class="   staticPosition" >   
+      <div class = "row  justify-content-center" style="background-color: white">
         <div class="col-md-11">
             <div class="float-lg-left">  </div>          
         </div>
@@ -32,15 +33,24 @@
             </button> 
           </span>
         </div>
-
         <div class="col-md-10">&nbsp;</div>
-        <div id = "steps" class="col-10" > </div>              
+        <div id = "steps" class="col-10" > </div> 
+        
+        
+        </div>
     </div> 
     <!--Inicio del flujo de trabajo -->   
-    <div class="row justify-content-center">  
-      <div class="col-11" id= 'drag-container'  >         
-      </div>
-    </div>    
+    <div class="row justify-content-center"> 
+      <div class="col-1 staticPosition"></div>
+      <div class="col-10" id= 'drag-container-wrapper'>
+          <div id = 'drag-container-scrollable' style="width: 100%; height:600px; overflow:scroll"  >  
+              <div class="" id= 'drag-container' style="width: 200%; height:200%"  >         
+              </div>
+          </div>
+      </div> 
+      <div class="col-1 staticPosition"></div>      
+    </div> 
+    <div id="drag-container-bottom" class="row staticPosition"> &nbsp;</div>   
 </div>
 
 

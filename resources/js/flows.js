@@ -34,6 +34,12 @@ $(document).ready(function (e){
 });
 
 
+//window.addEventListener('load', function() {
+    //'use strict';  
+    //movementLine();
+  
+  //});
+
 
 /** 
  * Clear all the items inside the storage
@@ -96,6 +102,8 @@ function openCreate(editMode){
         $("#select_action").attr('disabled',true);               
         $('#flowName').attr('disabled',true);
     }
+
+    
 }
 
 
@@ -340,6 +348,7 @@ function ajaxEdit(idFlow,flowName, editMode) {
            hideAlert('alerts');
             $("input[id=flowName]").val(flowName);
             editFlow(response,editMode);
+           
             
            
         },
@@ -833,7 +842,29 @@ function movimiento(){
     //Array of Lines Objects GLobal
     arrayLines.forEach(element => { 
         element.line.position();
+        ///Nuevo
+        //containerDrag = document.getElementById("drag-container-wrapper").target;
+        //containerDrag.addEventListener('scroll', function() {
+        //    element.line.position();
+       // });
     });
+}
+
+
+function movementLine(){
+     // var containerDrag = document.getElementById("drag-container-scrollable");
+
+      //  containerDrag.addEventListener('scroll', AnimEvent.add(function() {          
+      //      line.position();      
+      //  }), false);
+   
+    var containerDrag = document.getElementById("drag-container-scrollable");
+    containerDrag.addEventListener('scroll', AnimEvent.add(function() {     
+    arrayLines.forEach(element => {             
+            element.line.position(); 
+    });   
+    }), false);
+      
 }
 
 
@@ -858,9 +889,21 @@ function addElementToCanvas(id,contenido){
 function createDraggable(id){
     drag =new PlainDraggable(document.getElementById(id), {
         onMove: function() { movimiento() },
-        zIndex: false,        
-    });    
+        zIndex: false,    
+        autoScroll:true,    
+        
+    }); 
+
+    //drag.autoScroll = true;
+
+    //var doc = document.getElementById("drag-container");
+    //doc.scrollTop = doc.scrollHeight;
+
+    //drag.containment = {width: '10000', height: '10000'};  
+   //drag.autoScroll = true;
+    
     arrayDraggable.push({id: id, drag: drag}); 
+   
 }
 
 /**
@@ -960,15 +1003,26 @@ if(arrayLines)
             // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
             startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
             middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
-            //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})
-            
-        });
+            //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})    
+              
+        });   
+        line.positionByWindowResize =false;
+        movementLine();
+       // var containerDrag = document.getElementById("drag-container-scrollable");
+
+      //  containerDrag.addEventListener('scroll', AnimEvent.add(function() {          
+      //      line.position();      
+      //  }), false);
+     
+              
        
       //  line.positionByWindowResize = false,
-        line.setOptions({startSocket: 'auto', endSocket: 'auto'});
+        line.setOptions({startSocket: 'auto', endSocket: 'auto', positionByWindowResize: true});
         line.show(); 
         arrayLines.push({id: idLine, line: line});  
          //Give the action click to the svg text
+          ///Nuevo
+
         $("svg text").css("pointer-events","auto");   
         return true;
     }else {
@@ -976,7 +1030,6 @@ if(arrayLines)
         return false;
     }    
 }
-
 
 var lineaSeleccionada = null;
 var elementoSeleccionada = null;
