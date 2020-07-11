@@ -279,8 +279,14 @@ return [
             'modified'=> 'Modificado',
 
         ]
+    ],
 
-
+    'login' => [
+        'username'=>'Usuario',
+        'password'=>'Contraseña',
+        'login'=>'Iniciar sesión',
+        'rememberMe' =>'Recuerdame',
+        'signUp' =>'Entrar',
     ]
 
 ];
