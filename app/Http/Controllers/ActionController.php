@@ -16,7 +16,11 @@ class ActionController extends Controller
     | This controller is responsible for handling the actions' resources. That 
     | includes listening, showing, storing, creating and updating
     |
-    */
+    */    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     /**

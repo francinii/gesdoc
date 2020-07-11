@@ -8,6 +8,24 @@ use Illuminate\Http\Request;
 
 class StepStepController extends Controller
 {
+
+/*
+    |--------------------------------------------------------------------------
+    | StepStep Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the roles' resources. That
+    | includes listening, showing, storing, creating and updating the system's
+    | roles.
+    |
+     */
+  
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     /**
      * Display a listing of the resource.
      *

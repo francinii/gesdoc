@@ -20,6 +20,10 @@ class HistorialController extends Controller
     | permissions.
     |
     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
 

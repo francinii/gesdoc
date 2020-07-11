@@ -21,7 +21,22 @@ use Auth;
 
 class UserDocFlowController extends Controller
 {
-            /**
+
+/*
+    |--------------------------------------------------------------------------
+    | UserDocFlow Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling the users' resources. That 
+    | includes listening, showing, storing, creating and updating the users
+    | in the system.
+    |
+    */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

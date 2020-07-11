@@ -125,7 +125,7 @@
   min-height: 600px;
 }
 
-.inside_step, .card {
+.inside_step .card {
   border: none !important;
 }
 

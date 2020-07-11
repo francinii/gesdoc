@@ -23,6 +23,10 @@ class UserController extends Controller
     | in the system.
     |
     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     /**
