@@ -239,6 +239,7 @@ BEGIN
  
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+
 		-- ERROR
     SET res = -1;
     ROLLBACK;
@@ -246,14 +247,15 @@ BEGIN
 
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+
 		-- ERROR
     SET res = -2;
     ROLLBACK;
 	END;
             START TRANSACTION;
                     INSERT INTO `users`(role_id,department_id,name,username,email,password,created_at,updated_at) VALUES (p_role_id,p_department_id,p_name,p_username,p_email,p_password, NOW(),NOW());
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_classification,1, NOW(),NOW());
-                    INSERT INTO `classifications`(username, description, is_Start, created_at, updated_at) VALUES (p_username,p_share_classification,2, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_classification,1, NOW(),NOW());
+                    INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_share_classification,2, NOW(),NOW());
             COMMIT;
             -- SUCCESS
 SET res = 0;
@@ -261,6 +263,7 @@ END
 ;;
 DELIMITER ;
 -- call insert_user(1,1,'Danny','402340421','user@gmail.com','created with ldap','Sin clasificacion',@res);
+-- call insert_user(4,2,'Juan Sanchez','402340421','juanS@gmail.com','$2y$10$cSntRLLcUKwPNE0Jo4ccmuUMNMsRecG0djvwT7KMez5DmNBT3eS1G','Principal','Compartido conmigo',@res)
 -- SELECT @res as res;
 
 -- ----------------------------

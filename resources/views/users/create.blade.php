@@ -14,7 +14,6 @@
             <label for="user_create">{{ __('app.users.create.username') }}</label>
             <?php
             $hola = env("use_LDAP");
-             xdebug_break();
             ?>
             @if (env("use_LDAP"))
               <input type="text" onchange="obtenerDatos()" class="form-control" id="user_create" placeholder="{{ __('app.users.create.username') }}" name="user_create" >
