@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body" id = "modal-body-step">
             <div class="step">
-                <div class="card container inside_step " style="margin-bottom:1%">   
+                <div class=" container inside_step " style="margin-bottom:1%">   
                     <div id = "" class="card-body">
                         <div id = "create">                             
                         <form class="" action="" method="POST">
@@ -46,7 +46,7 @@
 
                          </form>
                          <div class="form-group">
-                            <button class ='btn btn-primary' onclick= "openPermissions({{$actions}}) "   type ='button' >
+                            <button title = "Asociar permisos a usuarios" class ='btn btn-primary' onclick= "openPermissions({{$actions}}) "   type ='button' >
                                 <i class='fas fa-lock-open'>
                                 </i> 
                                 Asociar permisos a usuarios 
@@ -58,11 +58,12 @@
             </div>        
         </div>
         <div class="modal-body" id = "modal-body-step-back" style="display:none">
-            <button class="btn btn-info" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
-            <div class="card container inside_step " style="padding:1%">    
-                <div><h5>Asociar permisos a usuarios</h5></div>            
+            <button title = "Regresar"  class="btn btn-danger" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
+            <div><h5>Asociar permisos a usuarios</h5></div>  
+            <div class=" container inside_step " style="padding:1%">    
+                          
                 <div id = "alertPermission" class="alert alert-dismissable" style="display: none">
-                    <button type="button" class="close" onclick="hideAlert('alertPermission')">&times;</button>
+                    <button  title = "Cerrar"  type="button" class="close" onclick="hideAlert('alertPermission')">&times;</button>
                     <div id="alert-permission-content"> </div>    
                 </div>
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
@@ -77,11 +78,7 @@
                 <tbody class="body_table_line" >                         
                 </tbody>
                 </table>
-                <div class="form-group" id ='btnSavePermissions'>
-                    <button  data-toggle="modal" class=" float-right btn btn-success" onclick="savePermissions()" data-target="">
-                        <i class="fas fa-plus-circle"></i> Guardar los permisos
-                    </button>   
-                </div>  
+                  
             </div>   
             
         </div>
@@ -89,7 +86,7 @@
         <div class="modal-footer">     
             <div id ='hideModalCardSave' class="col-md-9 text-right">
                 <button  data-toggle="modal" class=" float-right btn btn-success" onclick="hideModalCardSave()" data-target="">
-                    <i class="fas fa-plus-circle"></i> Guardar
+                    <i class="fas fa-save"></i> Guardar
                 </button>    
               </div>  
         </div>

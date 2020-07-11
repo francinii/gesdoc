@@ -34,8 +34,6 @@
    }
 }
 
-
-
 .row {
     #drag-container{
      // overflow: scroll;
@@ -46,6 +44,10 @@
       //height: 600px;
       //position: relative;
     }
+}
+
+.inside_step, .card{
+    border:none !important;
 }
 
 .card-step{
@@ -97,9 +99,19 @@
     background-color: $primary_color;
   }
 
+
+  .staticPositionHeader {
+    //position: relative !important;  
+    z-index: 11;  
+   
+  }
+
+
  #drag-container-wrapper{
     padding: 0px;
  }
+
+
   #drag-container-bottom{
       padding-bottom: 5%;
 }

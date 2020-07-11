@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light main_header">
+<nav class="navbar navbar-expand-lg navbar-light main_header ">
     <a class="navbar-brand" href="{{ url('/home') }}">GESDOC</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Administracion de sistema
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{{ url('/roles') }}">Administración de Roles</a>
             <a class="dropdown-item" href="{{ url('/users') }}">Administración de Usuarios</a>
             <a class="dropdown-item" href="{{ url('/departments') }}">Administración de Departamentos</a>
@@ -22,7 +22,7 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Gestión de documentos
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Gestión de documentos en Flujo </a>
           <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos en Flujo  </a>
           <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>  

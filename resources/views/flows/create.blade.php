@@ -11,23 +11,23 @@
           </div> 
         </div>         
         <div class="col-md-10" >      
-          <button  type="button" id="CreateSubmit" onclick="confirm('Todo el progreso se borrará si no ha sido guardado. ¿Desea salir del modo edición?  ')" class="btn btn-success ml-auto">
+          <button  type="button" title = "Regresar" id="CreateSubmit" onclick="confirm('Todo el progreso se borrará si no ha sido guardado. ¿Desea salir del modo edición?  ')" class="btn btn-danger ml-auto">
             <i class="fas fa-arrow-left"></i>
           </button> 
           <span id='button-actions' class="float-right">      
-            <button type="button" class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">
-              <i class="fas fa-plus-circle"> </i>
+            <button type="button"  title = "Guardar flujo"  class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">
+              <i class="fas fa-save"> </i>
               Guardar flujo
             </button>
-            <button type="button" class="btn btn-danger float-right" onclick="createStartEnd('draggable_final','Fin', 'bg-danger')">
+            <button type="button" title = "Agregar elemento final" class="btn btn-danger float-right" onclick="createStartEnd('draggable_final','Fin', 'bg-danger')">
               <i class="fas fa-plus-circle"> </i>
               Agregar final
             </button>
-            <button type="button" class="btn btn-info float-right" onclick="createStep({{$actions}})">
+            <button type="button"  title = "Agregar paso" class="btn btn-info float-right" onclick="createStep({{$actions}})">
               <i class="fas fa-plus-circle"> </i>
-              Agregar departamento
+              Agregar paso
             </button>
-            <button type="button" class="btn btn-success float-right" onclick="createStartEnd('draggable_inicio', 'Inicio', 'bg-success')">
+            <button type="button" title = "Agregar inicio"  class="btn btn-success float-right" onclick="createStartEnd('draggable_inicio', 'Inicio', 'bg-success')">
               <i class="fas fa-plus-circle"> </i>
               Agregar inicio
             </button> 

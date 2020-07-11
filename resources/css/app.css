@@ -83,6 +83,10 @@
   padding: 0rem !important;
 }
 
+.btn-group-vertical button {
+  text-align: left;
+}
+
 .circle {
   width: 80px;
   height: 80px;
@@ -119,6 +123,10 @@
 .row #drag-container {
   background-color: #e4e4e4;
   min-height: 600px;
+}
+
+.inside_step, .card {
+  border: none !important;
 }
 
 .card-step {
@@ -166,6 +174,10 @@
   position: relative !important;
   z-index: 10;
   background-color: white;
+}
+
+.staticPositionHeader {
+  z-index: 11;
 }
 
 #drag-container-wrapper {

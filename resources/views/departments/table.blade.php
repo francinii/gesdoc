@@ -13,7 +13,7 @@
                     <td class="text-center">{{$department->id}}</td>
                     <td class="text-center">{{$department->description}}</td>                           
                     <td class="text-center">
-                        <button onclick = "edit('{{$department->id}}','{{$department->description}}')"  class="btn btn-info"  data-toggle="modal" >
+                        <button onclick = "edit('{{$department->id}}','{{$department->description}}')"  class="btn btn-success"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    

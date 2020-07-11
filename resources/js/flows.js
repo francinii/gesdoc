@@ -708,6 +708,9 @@ function addStep(){
  * 
  */
 function hideModalCardSave(){
+    if(editionMode == 0){
+        savePermissions();
+    }
     addStep();
     if(validateFields()){
         $("#card").modal("hide");
@@ -796,13 +799,13 @@ function createStartEnd(id, text, class1 ){
 function createStepCard(id, description){
     var  buttonLink = '';
     if(editionMode == 0){
-        buttonLink = '<button type="button" class="btn btn-info" onclick="editStep(\`'+id+'\`, \`Editar\`, 0)"> '+
+        buttonLink = '<button type="button" class="btn btn-success" title = "Editar paso" onclick="editStep(\`'+id+'\`, \`Editar\`, 0)"> '+
         '<i class="fas fa-edit"></i> '+
         '</button> '+
-        '<button type="button" class="btn btn-danger" onclick="deleteStep('+id+')">'+
+        '<button type="button" title = "Eliminar paso" class="btn btn-danger" onclick="deleteStep('+id+')">'+
         '<i class="fa fa-trash"></i> '+
         '</button> '+
-        '<button type="button" class="btn btn-warning" onclick="joinStep('+id+')">'+
+        '<button type="button" class="btn btn-warning" title = "Unir pasos" onclick="joinStep('+id+')">'+
         '<i class="fas fa-link"></i> '+
         '</button>';
     }
@@ -810,7 +813,7 @@ function createStepCard(id, description){
     return '<div id = "'+id+'" class="card card_size "> '+
     '<div class="card-step card-header bg-dark justify-content-center">'+
     '<div class = "w-100" ><input id ="text'+id+'" class="textdraggable" type="text" value = "'+description+'" placeholder="Descripcion" disabled>  </div> '+             
-    '<div class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-success" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
+    '<div title = "Ver paso"  class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-info" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
     '<i class="far fa-eye"></i> '+
     '</button> '+ buttonLink +
     '</div> '+

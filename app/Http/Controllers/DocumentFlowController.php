@@ -402,8 +402,9 @@ class DocumentFlowController extends Controller
       $datos = request()->except(['_token']);
       $doc = $datos['idDoc'];
       $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
-      $identifier = $actualVersion->identifier;
-      $flowId = $actualVersion->flow_id;
+      $identifier = $actualVersion != null?   $actualVersion->identifier: null;
+      $flowId = $actualVersion != null?   $actualVersion->flow_id: null;      
+     
       $step = Step::where('flow_id', '=', $flowId)
       ->where('id', '=', $identifier)->first();
 

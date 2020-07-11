@@ -18,33 +18,36 @@
 <div class="page-content" id="content" >
 <div class="container-fluid" >
     <input type="hidden" id = "docType">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-9 text-right">
+            <button  class=" float-right btn btn-link" onclick="showAdvancedSearch(0)">
+            <i class="fas fa-search"></i>  {{ __('app.home.index.advancedSearch') }}
+            </button>
+        </div> 
+    </div>
+    <div class="row" style="margin-bottom: 1%; ">   
+        <div class="col-md-2"></div>            
+        <div class="col-md-9">
+            @include('home.advancedSearch')  
+        </div>
+    </div>
     <div class="row ">
         <div class="col-md-2">
             <div class="">
                 <div class="">
                     <div class="btn-group-vertical">
                         <button type="button" class="btn btn-dark btn-block "><i class="" aria-hidden="true"></i> {{ __('app.home.menu.option4') }} </button>
-                        <button id = "btnCreateDocument" type="button" class="btn btn-light btn-block " onclick="newDocument(this)" ><i class="fa fa-plus" aria-hidden="true"></i> {{ __('app.home.menu.option5') }} </button>
-                        <button type="button" class="btn btn-light btn-bloc " onclick="createDoc(0)" ><i class="fa fa-upload" aria-hidden="true"></i>{{ __('app.home.menu.option6') }}</button>
-                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(1)">{{ __('app.home.menu.option1') }}</button>
-                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(2)">{{ __('app.home.menu.option2') }}</button>
-                        <button type="button" class="btn btn-light btn-block" >{{ __('app.home.menu.option3') }}</button>
+                        <button id = "btnCreateDocument" type="button" class="btn btn-light btn-block " onclick="newDocument(this)" > <i class="fas fa-file-medical" aria-hidden="true"> </i> {{ __('app.home.menu.option5') }} </button>
+                        <button type="button" class="btn btn-light btn-bloc " onclick="createDoc(0)" ><i class="fa fa-upload" aria-hidden="true"> </i> {{ __('app.home.menu.option6') }}</button>
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(1)"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ __('app.home.menu.option1') }}</button>
+                        <button type="button" class="btn btn-light btn-block" onclick="openSheet(2)"><i class="fa fa-file" aria-hidden="true"> </i> {{ __('app.home.menu.option2') }}</button>
+                        <button type="button" class="btn btn-light btn-block" ><i class="fa fa-angle-double-right" aria-hidden="true"> </i> {{ __('app.home.menu.option3') }}</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-9">
-            <div class="row" style="margin-bottom: 1%; ">
-                <div class="col-md-12 text-right">
-                    <button  class=" float-right btn btn-link" onclick="showAdvancedSearch(0)">
-                    <i class="fas fa-search"></i>  {{ __('app.home.index.advancedSearch') }}
-                    </button>
-                </div> 
-                <div class="col-md-12">
-                    @include('home.advancedSearch')  
-                </div>
-            </div>
+        <div class="col-md-9">            
             <div class="row">      
                 <div class="col-md-12"> 
                 @include('partials.alert')
@@ -57,7 +60,6 @@
                 </div>
             </div>
         </div>
-
         <div class="dropdown-menu dropdown-menu-sm"  id="context-menu-create"  >
             <button id="createTxt" class="btn btn-link dropdown-item" onclick="createDoc(1)" ><i class="fas fa-plus-circle"></i> Crear documento</button>
             <button id="createSheet" class="btn btn-link dropdown-item" onclick="createDoc(2)" ><i class="fas fa-plus-circle"></i> Crear hoja de cálculo</button>

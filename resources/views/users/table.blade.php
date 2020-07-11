@@ -23,7 +23,7 @@
                         @endforeach                  
                      
                     <td class=" text-center">
-                        <button onclick = "edit('{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->department_id}}')"  class="btn btn-info"  data-toggle="modal" >
+                        <button onclick = "edit('{{$user->username}}', '{{$user->email}}', '{{$user->name}}', '{{$user->role_id}}','{{$user->department_id}}')"  class="btn btn-success"  data-toggle="modal" >
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>    
