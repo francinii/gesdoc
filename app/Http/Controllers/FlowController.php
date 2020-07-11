@@ -170,7 +170,7 @@ class FlowController extends Controller
      */  
     protected function insert(array $datos, $id_Flow)
     {   
-        $idFlow =  "'". $id_Flow."'";  
+        $idFlow =   (int) $id_Flow;  
         $steps = json_decode(json_encode( $datos['data']), true);
         if($steps != null){
             //insertamos a la tabla de steps Es necesario que se agreguen los 
