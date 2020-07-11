@@ -28,6 +28,10 @@ class FlowController extends Controller
     | flows.
     |
     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     const DRAGGABLE_FINAL = "draggable_final";

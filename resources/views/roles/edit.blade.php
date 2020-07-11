@@ -18,13 +18,14 @@
             <label for="role">{{ __('app.roles.edit.permission') }}</label>
             <div id="editCheckPermissions">           
             @foreach ($permissions as $permission)
-            <div class="checkbox"><label for="check{{$permission->id}}"><input class="input_check_edit" id="editCheck{{$permission->id}}" value="{{$permission->id}}" type="checkbox">{{$permission->description}}</label></div>
+            <div class="checkbox"><label for="editCheck{{$permission->id}}"><input class="input_check_edit" id="editCheck{{$permission->id}}" value="{{$permission->id}}" type="checkbox">{{$permission->description}}</label></div>
             @endforeach              
             </div>   
-           <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button>
+          
          </form>
       </div>
-      <div class="modal-footer">     
+      <div class="modal-footer">    
+        <button type="button" onclick="ajaxUpdate() "id="EditSubmit" class="btn btn-success">{{ __('app.buttons.update') }}</button> 
       </div>
     </div>
  </div>

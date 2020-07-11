@@ -17,6 +17,10 @@ class ActionDocumentUserController extends Controller
     | includes listening, showing, storing, creating and updating
     |
     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     /**
