@@ -34,17 +34,15 @@
           </span>
         </div>
         <div class="col-md-10">&nbsp;</div>
-        <div id = "steps" class="col-10" > </div> 
-        
-        
-        </div>
+        <div id = "steps" class="col-10"  > </div>         
+    </div>
     </div> 
     <!--Inicio del flujo de trabajo -->   
     <div class="row justify-content-center"> 
       <div class="col-1 staticPosition"></div>
       <div class="col-10" id= 'drag-container-wrapper'>
-          <div id = 'drag-container-scrollable' style="width: 100%; height:600px; overflow:scroll"  >  
-              <div class="" id= 'drag-container' style="width: 200%; height:200%"  >         
+          <div id = 'drag-container-scrollable' style="width: 100%; height: 80vh; overflow:scroll"  >  
+              <div class="" id= 'drag-container' style="width: 300%; height:200%"  >         
               </div>
           </div>
       </div> 
