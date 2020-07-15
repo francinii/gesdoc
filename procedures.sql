@@ -1614,6 +1614,47 @@ DELIMITER ;
 
 
 
+-- PROCEDURE update the doc when the next step is the final step
+DROP PROCEDURE IF EXISTS `insert_historial`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_historial`(IN p_action int, IN p_username varchar(500), IN p_user_id varchar(500), IN	p_description text, IN p_document_id int, 	IN p_document_name varchar(500), IN p_version_id int, IN	p_flow_id int, IN	p_flow_name varchar(500), OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;     
+                     
+                INSERT INTO `historials`(action, username, 	user_id, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) VALUES (p_action, p_username, 	p_user_id, 	p_description, 	p_document_id, 	p_document_name, 	p_version_id, 	p_flow_id, 	p_flow_name, NOW(),NOW());
+            COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
