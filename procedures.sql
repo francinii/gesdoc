@@ -1342,19 +1342,20 @@ BEGIN
 
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+
 		-- ERROR
     SET res = -2;
     ROLLBACK;
 	END;
             START TRANSACTION;
-               DELETE FROM `step_step` WHERE flow_id = p_idFlow ;
+               DELETE FROM `step_step` WHERE prev_flow_id = p_idFlow ;
             COMMIT;
           -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
-
+-- call delete_steps_steps(3,@res);
 
 
 -- PROCEDURE delete all of the actions step users by flow
