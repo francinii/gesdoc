@@ -39,7 +39,7 @@ class HomeController extends Controller
     public function index()
     {
 
-        $username = Auth::id();
+        /*$username = Auth::id();
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
         $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
         
@@ -47,8 +47,9 @@ class HomeController extends Controller
         $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
-
         return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
+        */
+        return view('home.wopihost');
     }
 
     /**

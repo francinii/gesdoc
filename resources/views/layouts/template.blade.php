@@ -21,7 +21,7 @@
     @yield('head')
 </head>
 
-<body style = "">    
+<body  style="">    
         @yield('header')
         <div class="container-fluid">
             <div class="row staticPosition">
