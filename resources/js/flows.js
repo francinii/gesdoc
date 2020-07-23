@@ -1535,7 +1535,9 @@ function traslateDrag(id, x,y){
 }
 /**
  * Active or desactive the flow
- * 
+ * @param e event 
+ * @param id  id of the element to be edit
+ * @param flow flow's name  
  */
 actFlow ="";
 function activeFlowModal(e, id, flow){
@@ -1543,7 +1545,9 @@ function activeFlowModal(e, id, flow){
     var select = document.getElementById(id);
     var selectedOption = actFlow.options[select.selectedIndex];
     var active = selectedOption.value;
-    var message = 'Siel flujo todos los archivos adjuntos a los pasos serán eliminados del flujo ¿Desea continuar?'
+    var message = (active == 0)?
+    'Si el flujo tiene documentos adjuntos, estos serán eliminados del flujo ¿Desea continuar?':
+    '¿Desea activar el flujo? El flujo solo puede editarse cuando está inactivo. Sí este se encuentra activo, no podrá ser modificado.';
     $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
     $("#confirmarButton").attr("onClick","activeFlow("+active+","+flow+")");
     $("#hideConfirmButton").attr("onClick","hideConfirmButton("+active+","+flow+","+id+")");
