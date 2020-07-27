@@ -1,8 +1,8 @@
 RewriteEngine On
 
-RewriteBase /WopiHost/
+RewriteBase  /gesdoc/app/HTTP/Controllers/
 
 RewriteCond %{REQUEST_FILENAME} !-f  
 RewriteCond %{REQUEST_FILENAME} !-d 
 
-RewriteRule .* index.php/$0 [PT,L] 
+RewriteRule .* FilesController.php/$0 [PT,L] 

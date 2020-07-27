@@ -107,7 +107,7 @@ class EloquentUserProvider implements UserProvider
     {
         if (empty($credentials) ||
            (count($credentials) === 1 &&
-            array_key_exists('password', $credentials))) {
+            Str::contains($this->firstCredentialKey($credentials), 'password'))) {
             return;
         }
 
@@ -132,6 +132,19 @@ class EloquentUserProvider implements UserProvider
     }
 
     /**
+     * Get the first key from the credential array.
+     *
+     * @param  array  $credentials
+     * @return string|null
+     */
+    protected function firstCredentialKey(array $credentials)
+    {
+        foreach ($credentials as $key => $value) {
+            return $key;
+        }
+    }
+
+    /**
      * Validate a user against the given credentials.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
@@ -145,6 +158,13 @@ class EloquentUserProvider implements UserProvider
         return $this->hasher->check($plain, $user->getAuthPassword());
     }
 
+    /**
+     * Validate a user against the given credentials with LDAP.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  array  $credentials
+     * @return bool
+     */
     public function validateCredentialsLdap(UserContract $user, array $credentials)
     {
         $config = [
@@ -194,6 +214,7 @@ class EloquentUserProvider implements UserProvider
            
         return false;
     }
+
 
     /**
      * Get a new query builder for the model instance.

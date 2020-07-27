@@ -1,3 +1,25 @@
+<p align="center">
+<strong>:wave: Hey there! Looking for something even easier to use for LDAP integration in your Laravel applications?</strong>
+</br>
+<h3 align="center">
+ 🎉 Introducing <a href="https://github.com/DirectoryTree/LdapRecord-Laravel" target="_blank" title="LdapRecord GitHub Repository">LdapRecord</a> 🎉
+</h3>
+</p>
+
+<p align="center">
+    <strong>
+        <a href="https://ldaprecord.com">LdapRecord</a> is the successor to Adldap2 - and comes with a ton of new features.
+    </strong> </br> Adldap2-Laravel will continue to be supported with bug fixes, but will not receive new features.
+</p>
+
+<p align="center">
+ <strong>
+ <a href="https://stevebauman.ca/posts/why-ldap-record/">Read Why</a>
+ </strong>
+</p>
+
+<hr/>
+
 <h1 align="center">Adldap2 - Laravel</h1>
 
 <p align="center">
@@ -18,8 +40,6 @@
     <a href="http://adldap2.github.io/Adldap2-Laravel/#/?id=quick-start">Quickstart</a>
     <span> · </span>
     <a href="http://adldap2.github.io/Adldap2-Laravel/">Documentation</a>
-    <span> · </span>
-    <a href="http://adldap2.github.io/Adldap2/">Adldap2 Documentation (Core)</a>
 </h4>
 
 - **Authenticate LDAP users into your application.** Using the built-in authentication driver, easily allow

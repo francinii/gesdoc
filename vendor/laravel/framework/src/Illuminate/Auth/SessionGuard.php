@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\OtherDeviceLogout;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Auth\SupportsBasicAuth;
@@ -358,8 +359,6 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         // If an implementation of UserInterface was returned, we'll ask the provider
         // to validate the user against the given credentials, and if they are in
         // fact valid we'll log the users into the application and return true.
-
-
         if ($this->hasValidCredentials($user, $credentials)) {
             $this->login($user, $remember);
 
@@ -374,15 +373,6 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         return false;
     }
 
-
-    // funcion de para login con ldadp
-
-    function hasValidCredentialsLdap($user, $credentials){
-
-    
-        
-    }
-
     /**
      * Determine if the user matches the credentials.
      *
@@ -392,13 +382,17 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      */
     protected function hasValidCredentials($user, $credentials)
     {
-        
-       if (env("use_LDAP")){
-        return ! is_null($user) && $this->provider->validateCredentialsLdap($user, $credentials);
+        if (env("use_LDAP")){
+            $validated = ! is_null($user) && $this->provider->validateCredentialsLdap($user, $credentials);
+        }
+        else{
+            $validated = ! is_null($user) && $this->provider->validateCredentials($user, $credentials);
+        }
+        if ($validated) {
+            $this->fireValidatedEvent($user);
+        }
 
-       }
-
-       return ! is_null($user) && $this->provider->validateCredentials($user, $credentials);
+        return $validated;
     }
 
     /**
@@ -635,6 +629,20 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
         if (isset($this->events)) {
             $this->events->dispatch(new Attempting(
                 $this->name, $credentials, $remember
+            ));
+        }
+    }
+
+    /**
+     * Fires the validated event if the dispatcher is set.
+     *
+     * @param $user
+     */
+    protected function fireValidatedEvent($user)
+    {
+        if (isset($this->events)) {
+            $this->events->dispatch(new Validated(
+                $this->name, $user
             ));
         }
     }

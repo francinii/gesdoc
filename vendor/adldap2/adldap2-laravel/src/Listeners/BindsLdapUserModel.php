@@ -2,11 +2,11 @@
 
 namespace Adldap\Laravel\Listeners;
 
-use Adldap\Laravel\Facades\Resolver;
-use Illuminate\Support\Facades\Auth;
-use Adldap\Laravel\Traits\HasLdapUser;
 use Adldap\Laravel\Auth\DatabaseUserProvider;
+use Adldap\Laravel\Facades\Resolver;
+use Adldap\Laravel\Traits\HasLdapUser;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class BindsLdapUserModel
 {
@@ -42,7 +42,7 @@ class BindsLdapUserModel
      *
      * @return bool
      */
-    protected function isUsingAdldapProvider($guard = null) : bool
+    protected function isUsingAdldapProvider($guard = null): bool
     {
         return Auth::guard($guard)->getProvider() instanceof DatabaseUserProvider;
     }
@@ -54,7 +54,7 @@ class BindsLdapUserModel
      *
      * @return bool
      */
-    protected function canBind(Authenticatable $user) : bool
+    protected function canBind(Authenticatable $user): bool
     {
         return array_key_exists(HasLdapUser::class, class_uses_recursive($user)) && is_null($user->ldap);
     }
