@@ -2,9 +2,9 @@
 
 namespace Adldap\Laravel\Resolvers;
 
+use Adldap\AdldapInterface;
 use Adldap\Models\User;
 use Adldap\Query\Builder;
-use Adldap\AdldapInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 interface ResolverInterface
@@ -67,33 +67,33 @@ interface ResolverInterface
      *
      * @return \Adldap\Query\Builder
      */
-    public function query() : Builder;
+    public function query(): Builder;
 
     /**
      * Retrieves the configured LDAP users username attribute.
      *
      * @return string
      */
-    public function getLdapDiscoveryAttribute() : string;
+    public function getLdapDiscoveryAttribute(): string;
 
     /**
      * Retrieves the configured LDAP users authenticatable username attribute.
      *
      * @return string
      */
-    public function getLdapAuthAttribute() : string;
+    public function getLdapAuthAttribute(): string;
 
     /**
      * Retrieves the configured database username attribute.
      *
      * @return string
      */
-    public function getDatabaseUsernameColumn() : string;
+    public function getDatabaseUsernameColumn(): string;
 
     /**
      * Retrieves the configured database identifier attribute.
      *
      * @return string
      */
-    public function getDatabaseIdColumn() : string;
+    public function getDatabaseIdColumn(): string;
 }

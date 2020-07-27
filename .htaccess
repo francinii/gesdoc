@@ -1,0 +1,8 @@
+RewriteEngine On
+
+RewriteBase  /gesdoc/app/HTTP/Controllers/
+
+RewriteCond %{REQUEST_FILENAME} !-f  
+RewriteCond %{REQUEST_FILENAME} !-d 
+
+RewriteRule .* FilesController.php/$0 [PT,L] 

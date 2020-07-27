@@ -2,21 +2,21 @@
 
 namespace Adldap\Laravel\Resolvers;
 
-use RuntimeException;
+use Adldap\AdldapInterface;
+use Adldap\Connections\ProviderInterface;
+use Adldap\Laravel\Auth\NoDatabaseUserProvider;
+use Adldap\Laravel\Events\Authenticated;
+use Adldap\Laravel\Events\Authenticating;
+use Adldap\Laravel\Events\AuthenticationFailed;
 use Adldap\Models\User;
 use Adldap\Query\Builder;
-use Adldap\AdldapInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
-use Adldap\Laravel\Events\Authenticated;
-use Adldap\Connections\ProviderInterface;
-use Adldap\Laravel\Events\Authenticating;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Adldap\Laravel\Auth\NoDatabaseUserProvider;
-use Adldap\Laravel\Events\AuthenticationFailed;
+use Illuminate\Support\Facades\Event;
+use RuntimeException;
 
 class UserResolver implements ResolverInterface
 {
@@ -130,7 +130,7 @@ class UserResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function query() : Builder
+    public function query(): Builder
     {
         $query = $this->getLdapAuthProvider()->search()->users();
 
@@ -151,7 +151,7 @@ class UserResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getLdapDiscoveryAttribute() : string
+    public function getLdapDiscoveryAttribute(): string
     {
         return Config::get('ldap_auth.identifiers.ldap.locate_users_by', 'userprincipalname');
     }
@@ -159,7 +159,7 @@ class UserResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getLdapAuthAttribute() : string
+    public function getLdapAuthAttribute(): string
     {
         return Config::get('ldap_auth.identifiers.ldap.bind_users_by', 'distinguishedname');
     }
@@ -167,7 +167,7 @@ class UserResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getDatabaseUsernameColumn() : string
+    public function getDatabaseUsernameColumn(): string
     {
         return Config::get('ldap_auth.identifiers.database.username_column', 'email');
     }
@@ -175,7 +175,7 @@ class UserResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getDatabaseIdColumn() : string
+    public function getDatabaseIdColumn(): string
     {
         return Config::get('ldap_auth.identifiers.database.guid_column', 'objectguid');
     }
@@ -199,9 +199,17 @@ class UserResolver implements ResolverInterface
      *
      * @return ProviderInterface
      */
-    protected function getLdapAuthProvider() : ProviderInterface
+    protected function getLdapAuthProvider(): ProviderInterface
     {
-        return $this->ldap->getProvider($this->connection ?? $this->getLdapAuthConnectionName());
+        $provider = $this->ldap->getProvider($this->connection ?? $this->getLdapAuthConnectionName());
+
+        if (! $provider->getConnection()->isBound()) {
+            // We'll make sure we have a bound connection before
+            // allowing dynamic calls on the default provider.
+            $provider->connect();
+        }
+
+        return $provider;
     }
 
     /**
@@ -209,7 +217,7 @@ class UserResolver implements ResolverInterface
      *
      * @return UserProvider
      */
-    protected function getAppAuthProvider() : UserProvider
+    protected function getAppAuthProvider(): UserProvider
     {
         return Auth::guard()->getProvider();
     }

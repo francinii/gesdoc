@@ -2,20 +2,19 @@
 
 namespace Adldap\Laravel\Commands\Console;
 
-use Exception;
-use RuntimeException;
-use Adldap\Models\User;
-use Illuminate\Support\Arr;
-use UnexpectedValueException;
-use Illuminate\Console\Command;
-use Adldap\Laravel\Events\Imported;
-use Illuminate\Support\Facades\Bus;
-use Adldap\Laravel\Facades\Resolver;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Eloquent\Model;
-use Adldap\Laravel\Commands\SyncPassword;
 use Adldap\Laravel\Commands\Import as ImportUser;
+use Adldap\Laravel\Commands\SyncPassword;
+use Adldap\Laravel\Events\Imported;
+use Adldap\Laravel\Facades\Resolver;
+use Adldap\Models\User;
+use Exception;
+use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use UnexpectedValueException;
 
 class Import extends Command
 {
@@ -48,7 +47,6 @@ class Import extends Command
     /**
      * Execute the console command.
      *
-     * @throws RuntimeException
      * @throws \Adldap\Models\ModelNotFoundException
      *
      * @return void
@@ -60,7 +58,7 @@ class Import extends Command
         $count = count($users);
 
         if ($count === 0) {
-            throw new RuntimeException('There were no users found to import.');
+            return $this->info('There were no users found to import.');
         } elseif ($count === 1) {
             $this->info("Found user '{$users[0]->getCommonName()}'.");
         } else {
@@ -94,7 +92,7 @@ class Import extends Command
      *
      * @return int
      */
-    public function import(array $users = []) : int
+    public function import(array $users = []): int
     {
         $imported = 0;
 
@@ -166,7 +164,7 @@ class Import extends Command
      *
      * @return bool
      */
-    public function isLogging() : bool
+    public function isLogging(): bool
     {
         return ! $this->option('no-log');
     }
@@ -177,7 +175,7 @@ class Import extends Command
      *
      * @return bool
      */
-    public function isDeleting() : bool
+    public function isDeleting(): bool
     {
         return $this->option('delete') == 'true';
     }
@@ -188,7 +186,7 @@ class Import extends Command
      *
      * @return bool
      */
-    public function isRestoring() : bool
+    public function isRestoring(): bool
     {
         return $this->option('restore') == 'true';
     }
@@ -200,7 +198,7 @@ class Import extends Command
      *
      * @return array
      */
-    public function getUsers() : array
+    public function getUsers(): array
     {
         /** @var \Adldap\Query\Builder $query */
         $query = Resolver::query();
@@ -236,7 +234,7 @@ class Import extends Command
      *
      * @return bool
      */
-    protected function save(User $user, Model $model) : bool
+    protected function save(User $user, Model $model): bool
     {
         if ($model->save() && $model->wasRecentlyCreated) {
             Event::dispatch(new Imported($user, $model));
@@ -315,7 +313,7 @@ class Import extends Command
      *
      * @return Model
      */
-    protected function model() : Model
+    protected function model(): Model
     {
         if (! $this->model) {
             $this->model = $this->option('model') ?? Config::get('ldap_auth.model') ?: $this->determineModel();
@@ -357,7 +355,7 @@ class Import extends Command
      *
      * @return bool
      */
-    protected function isUsingSoftDeletes(Model $model) : bool
+    protected function isUsingSoftDeletes(Model $model): bool
     {
         return method_exists($model, 'trashed');
     }

@@ -2,11 +2,11 @@
 
 namespace Adldap\Laravel\Commands;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SyncPassword
 {
@@ -41,7 +41,7 @@ class SyncPassword
      *
      * @return Model
      */
-    public function handle() : Model
+    public function handle(): Model
     {
         if ($this->hasPasswordColumn()) {
             $password = $this->canSync() ?
@@ -82,7 +82,7 @@ class SyncPassword
      *
      * @return bool
      */
-    protected function passwordNeedsUpdate($password = null) : bool
+    protected function passwordNeedsUpdate($password = null): bool
     {
         $current = $this->currentModelPassword();
 
@@ -98,7 +98,7 @@ class SyncPassword
      *
      * @return bool
      */
-    protected function hasPasswordColumn() : bool
+    protected function hasPasswordColumn(): bool
     {
         return ! is_null($this->column());
     }
@@ -128,7 +128,7 @@ class SyncPassword
      *
      * @return bool
      */
-    protected function canSync() : bool
+    protected function canSync(): bool
     {
         return array_key_exists('password', $this->credentials) && $this->syncing();
     }
@@ -138,7 +138,7 @@ class SyncPassword
      *
      * @return bool
      */
-    protected function syncing() : bool
+    protected function syncing(): bool
     {
         return Config::get('ldap_auth.passwords.sync', false);
     }
