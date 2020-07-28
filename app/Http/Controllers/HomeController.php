@@ -48,7 +48,9 @@ class HomeController extends Controller
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
         return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
-    }
+
+        
+  }
 
     /**
      * Get a validator for an incoming registration request.
