@@ -5,30 +5,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//require 'vendor/autoload.php';
-//use Pux\Mux;
-//use Pux\Executor;
 use Auth;
-
+use App\User;
 
 class FilesController extends Controller
 {
 
     public function __construct()
     {
-       // $this->middleware('auth');
+       //$this->middleware('auth');
     } 
 
-    public function getFileInfoAction($name) {
-     //   $path = "office/$name";
+    public function getFileInfoAction($name,Request $request) {
+
         $route='public/'.$name;
-       // $path = storage_path('app/'.$route);    
+           
         $path = storage_path('app/'.$route);    
-     //   $path = "C:\wamp\www\gesdoc/resources/extensions/WopiHost/office/test.docx";
-     
+        $dato=$request->all();
+        $username=$dato['access_token'];
+        $user=User::where('username',$username) -> first();
+         
 
         if (file_exists($path)) {
-          //  $user = Auth::user()->username;
+          //  $user = 
             $handle = fopen($path, "r");
             $size = filesize($path);
             $contents = fread($handle, $size);
@@ -41,8 +40,8 @@ class FilesController extends Controller
                 'UserId'=> 'Fran',
                 'Size' => $size,
                 'SHA256' => $SHA256,             
-                'UserFriendlyName'=>'Danny',
-                'LastModifiedTime'=>date("Y-m-d\TH:i:s.u\Z"),
+                'UserFriendlyName'=> $user->name,
+               // 'LastModifiedTime'=>date("Y-m-d\TH:i:s.u\Z"),
             );
             echo json_encode($json);
         } else {
@@ -53,10 +52,10 @@ class FilesController extends Controller
     public function getFileAction($name) {
 
 
-       // $path = "office/$name";
+ 
        $route='public/'.$name;
        $path = storage_path('app/'.$route); 
-      // $path = "C:\wamp\www\gesdoc/resources/extensions/WopiHost/office/test.docx";
+
         if (file_exists($path)) {
             $handle = fopen($path, "r");
             $contents = fread($handle, filesize($path));
@@ -67,37 +66,13 @@ class FilesController extends Controller
 
     public function putFile($name) {
 
-      // $path = "office/$name";
        $route='public/'.$name;
        $path = storage_path('app/'.$route); 
-      // $path = "C:\wamp\www\gesdoc/resources/extensions/WopiHost/office/test.docx";
-
-       // $content=fopen('php://input', 'r');
-      // $content = file_get_contents('php://input');
+       $content=fopen('php://input', 'r');
 
         file_put_contents($path, $content);
-
-        if(!($content=fopen('php://input', 'r'))){
-            throw new Exception("Can't get PUT data.");
-
-        }
-
+        $data = array('status' => 'success');
+       // $data['LastModifiedTime'] = date("Y-m-d\TH:i:s.u\Z");
+        return $data;
     }
 }
-/*
-
-$mux = new Mux;
-
-
-$mux->get('/files/:name', ['FilesController','getFileInfoAction']); //CheckFileInfo 
-
-$mux->get('/files/:name/contents', ['FilesController','getFileAction']); // GetFile
-
-$mux->post('/files/:name/contents', ['FilesController','putFile']); // PutFile
-
-//$path = $_SERVER['PATH_INFO'];
-$path = '/files/test.docx';
-$args = explode("&", $path);
-
-$route = $mux->dispatch( $args[0] );
-Executor::execute($route); */

@@ -99,23 +99,4 @@ Route::resource('record', 'HistorialController');
 Route::get('wopi/files/{name}', 'FilesController@getFileInfoAction'); //CheckFileInfo 
 Route::get('wopi/files/{name}/contents', 'FilesController@getFileAction'); // GetFile
 
-Route::put('wopi/files/{name}/contents', 'FilesController@putFile'); // PutFile
-
-/*
-
-$mux = new Mux;
-
- // /gesdoc/app/HTTP/Controllers/
-$mux->get('/files/:name', ['FilesController','getFileInfoAction']); //CheckFileInfo 
-
-$mux->get('/files/:name/contents', ['FilesController','getFileAction']); // GetFile
-
-$mux->post('/files/:name/contents', ['FilesController','putFile']); // PutFile
-
-//$path = $_SERVER['PATH_INFO'];
-$path = '/files/test.docx';
-$args = explode("&", $path);
-
-$route = $mux->dispatch( $args[0] );
-Executor::execute($route);  
-*/
+Route::post('wopi/files/{name}/contents', 'FilesController@putFile'); // PutFile

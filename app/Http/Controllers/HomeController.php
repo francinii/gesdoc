@@ -48,8 +48,6 @@ class HomeController extends Controller
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
         return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
-        
-      /*  return view('home.wopihost'); */
     }
 
     /**
@@ -358,8 +356,7 @@ class HomeController extends Controller
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] != 0) {
             throw new DecryptException('error en la base de datos');
-        }
-     
+        }    
       
     }
 
