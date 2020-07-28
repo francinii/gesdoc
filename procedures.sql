@@ -934,6 +934,21 @@ BEGIN
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _user TEXT DEFAULT NULL;
+
+
+-- Historial
+  DECLARE h_version_id INT DEFAULT NULL;
+  DECLARE h_action int DEFAULT NULL;
+  DECLARE h_username varchar(500) DEFAULT NULL;
+  DECLARE h_description text DEFAULT NULL;
+  DECLARE h_document_id INT DEFAULT NULL;
+  DECLARE h_document_name VARCHAR(500) DEFAULT NULL;
+  DECLARE h_id_flow INT DEFAULT NULL;
+  DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
+  DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
+  
+
+
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
@@ -961,6 +976,28 @@ BEGIN
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
                 INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,1,1, NOW(),NOW());
+                SET h_version_id =  LAST_INSERT_ID();              
+                set h_action = 1;
+                set h_username = p_username;
+                set h_description = 'El siguiente usuario ha creado el documento  con id   correspondiente a la versión  y se encuentra asociado al flujo ';
+                set h_document_id = document_id;
+                 set h_id_flow =NULL;
+                 set h_name_flow = NULL;
+                -- set h_document_name = h_document_name;
+                -- set h_version_id = p_version_id;
+                
+                select description into h_document_name from Documents where id = document_id;
+
+                IF  p_id_flow != -1 THEN                 
+                  select id, description into h_id_flow, h_name_flow from Flows where id = p_id_flow;
+                END IF;
+                 
+                 -- select version into h_version from Versions where id = h_version_id ;
+                select name into h_user_name from Users where username = p_username;
+         --     call insert_historial(1,'116650288','FRANCINI CORRALES GARRO', 'eSTO ES UNA PRUEBA',1,'Tell me', 1,NULL,NULL, @res);     
+                CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name, h_version_id, h_id_flow,	h_name_flow, @res);
+                     
+                 
                 iterator:
                   LOOP
                       IF LENGTH(TRIM(p_users)) = 0 OR p_users IS NULL THEN
@@ -972,7 +1009,7 @@ BEGIN
                       INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,document_id,_user,NOW(),NOW());
                       SET p_users = INSERT(p_users,1,_nextlen + 1,'');
                     END LOOP;
-            
+           
             COMMIT;
           -- SUCCESS
 SET res = 0;
@@ -982,7 +1019,6 @@ DELIMITER ;
 -- call insert_document('1',-1,-1,3,'402340420', 'doc1', 'docx', 'doc1', 'doc1','doc1','','0KB','', @res);
 -- call insert_document('6',6,'draggable1',3,'402340420', 'prueba', 'docx', 'ad', 'doc1','doc1','asd','0KB','', @res);
 -- SELECT @res as res;
-
 
 
 
@@ -1618,7 +1654,7 @@ DELIMITER ;
 -- PROCEDURE update the doc when the next step is the final step
 DROP PROCEDURE IF EXISTS `insert_historial`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_historial`(IN p_action int, IN p_username varchar(500), IN p_user_id varchar(500), IN	p_description text, IN p_document_id int, 	IN p_document_name varchar(500), IN p_version_id int, IN	p_flow_id int, IN	p_flow_name varchar(500), OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_historial`(IN p_action int, IN p_username varchar(500), IN p_name_user varchar(500), IN	p_description text, IN p_document_id int, 	IN p_document_name varchar(500), IN p_version_id int, IN	p_flow_id int, IN	p_flow_name varchar(500), OUT `res` TINYINT  UNSIGNED )
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -1632,15 +1668,16 @@ BEGIN
     SET res = -2;
     ROLLBACK;
 	END;
-            START TRANSACTION;     
-                     
-                INSERT INTO `historials`(action, username, 	user_id, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) VALUES (p_action, p_username, 	p_user_id, 	p_description, 	p_document_id, 	p_document_name, 	p_version_id, 	p_flow_id, 	p_flow_name, NOW(),NOW());
-            COMMIT;
+        START TRANSACTION;                      
+            INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) VALUES (p_action, p_username, 	p_name_user, 	p_description, 	p_document_id, 	p_document_name, 	p_version_id, 	p_flow_id, 	p_flow_name, NOW(),NOW());
+        COMMIT;
           -- SUCCESS
 SET res = 0;
 END
 ;;
 DELIMITER ;
+-- call insert_historial(1,'116650288','FRANCINI CORRALES GARRO', 'eSTO ES UNA PRUEBA',4,'Tell me', 3,NULL,NULL, @res);
+-- select @res as res
 
 
 

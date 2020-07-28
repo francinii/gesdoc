@@ -17,14 +17,14 @@ class CreateHistorialsTable extends Migration
             $table->engine = 'InnoDB'; 
             $table->bigIncrements('id');            
             $table->bigInteger('action');
-            $table->string('username');
-            $table->string('user_id');            
+            $table->string('username',500);
+            $table->string('name_user',500);            
             $table->text('description'); //content or route depends on
             $table->bigInteger('document_id');
-            $table->bigInteger('document_name'); 
+            $table->string('document_name',500); 
             $table->bigInteger('version_id');
-            $table->bigInteger('flow_id');   
-            $table->bigInteger('flow_name');        
+            $table->bigInteger('flow_id')->unsigned()->nullable();  
+            $table->string('flow_name',500)->nullable();        
             $table->timestamps();
         });
     }
