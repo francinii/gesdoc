@@ -12,8 +12,9 @@ use App\Classification;
 use App\User;
 use File;
 use Storage;
-use Illuminate\Support\Facades\Input;
 use DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -116,7 +117,7 @@ class DocumentController extends Controller
         $type =  $file->extension();
         if($type=='')  $type = $document['docType'];
         $name=$file->getClientOriginalName();
-        $hasname=md5($username.$name.uniqid());
+        $hasname=md5($username.$name.uniqid()).uniqid();
         $content="'".$file->storeAS('public',$hasname.'.'.$type)."'";
         $type =  "'". $type ."'";
         $size =  "'". $file->getSize()."'";
@@ -338,14 +339,14 @@ class DocumentController extends Controller
         $currentTable = (int) $array[3];
         
         if($action=="1")
-        $this->DeleteShare($user,$idselect,null,$currentClassification);
+        $this->DeleteShare($user,$idselect,$currentClassification,null);
         else
         $this->remove($user,$idselect,$currentClassification);
 
         return $this->refresh($currentTable, $currentClassification);
     }
 
-    private function DeleteShare($user,$idselect,$Owner,$currentClassification){
+    private function DeleteShare($user,$idselect,$currentClassification,$Owner){
         if($Owner==null) $this->deletefiles($idselect);            
         
         DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',@res)");
@@ -386,11 +387,11 @@ class DocumentController extends Controller
         foreach ($usersShare as $user) {
             $user=(object)$user;
             if($user->type=='delete')
-                $this->DeleteShare($user,$idselect,$Owner);
+                $this->DeleteShare($user,$idselect,$currentClassification,$Owner);
             if($user->type=='new')
-                $this->addShare($user,$idselect,$Owner);
+                $this->addShare($user,$idselect,$currentClassification,$Owner);
             if($user->type=='old')
-                $this->updateShare($user,$idselect,$Owner);
+                $this->updateShare($user,$idselect,$currentClassification,$Owner);
         }
         return $this->refresh($currentTable, $currentClassification);
         
@@ -403,7 +404,7 @@ class DocumentController extends Controller
      * add  the users to share a documents
      */
 
-    private function addShare($user,$idselect,$Owner){
+    private function addShare($user,$idselect,$currentClassification,$Owner){
         
             $actionsString='';
             if(isset($user->actions)){
@@ -412,7 +413,11 @@ class DocumentController extends Controller
                 }
                 $actionsString=substr($actionsString, 0, -1);
             }
-            DB::select("call add_Share_document($idselect,'$user->username','$Owner','$actionsString',@res)");
+
+            $myUsers=DB::table('action_classification_user')->select('username')->where([['classification_id','=', $currentClassification],['username','=',$user->username]])->pluck('username')->toArray();
+            (count($myUsers)>0)?$classification=$currentClassification:$classification=null;
+            
+            DB::select("call add_Share_document($idselect,'$user->username','$classification','$Owner','$actionsString',@res)");
             $res = DB::select("SELECT @res as res;");
             $res = json_decode(json_encode($res), true);
             if ($res[0]['res'] != 0) {
@@ -429,7 +434,7 @@ class DocumentController extends Controller
      * update  the users to share a documents
      */
 
-    private function updateShare($user,$idselect,$Owner){
+    private function updateShare($user,$idselect,$currentClassification,$Owner){
                  
             $actionsString='';
             if(isset($user->actions)){
@@ -438,7 +443,7 @@ class DocumentController extends Controller
                 }
                 $actionsString=substr($actionsString, 0, -1);
             }
-                DB::select("call update_Share_document($idselect,'$user->username','$Owner','$actionsString',@res)");
+                DB::select("call update_Share_document($idselect,'$user->username','$currentClassification','$Owner','$actionsString',@res)");
                 $res = DB::select("SELECT @res as res;");
                 $res = json_decode(json_encode($res), true);
                 if ($res[0]['res'] != 0) {
@@ -471,7 +476,7 @@ class DocumentController extends Controller
         $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);
         $username = Auth::id();
         $name= $content[0];       
-        $name=$hasname=md5($username.$name.uniqid());
+        $name=md5($username.$name.uniqid()).uniqid();
         $route='public/'.$name.'.'.$ext;
         $destination = storage_path('app/'.$route);    
         $success = File::copy($file,$destination);
@@ -484,8 +489,24 @@ class DocumentController extends Controller
         if ($res[0]['res'] != 0) {
             throw new DecryptException('error en la base de datos');
         }
-
         return $this->refresh($currentTable, $currentClassification);
     }
+
+    /**
+     * @param  id of the document
+     * @param  edit 1 mode edition 0 mode view
+     * clone a document for id
+     */
+    public function openDocument($id,Request $request){
+        $username = Auth::id();
+        $user=User::where('username',$username) -> first();
+        $dato = request()->except(['_token']);
+        $documet=$id."-last";
+        $edit=$dato['edit'];
+        $api_token=$user->api_token;
+        return view('documents.wopihost', compact('api_token','documet'));
+    }
+
+
 }
 

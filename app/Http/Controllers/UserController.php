@@ -90,6 +90,7 @@ class UserController extends Controller
         $arryString=$dato['role_id'].",".$dato['department_id'].",'".$dato['name']."','".$dato['username'].
         "','".$dato['email']."','".$dato['password']."'";
         if($create){
+        $arryString.=",'".  Hash::make($dato['username'])."'";
         $arryString.=",'". __('app.home.table.defaultClassification')."'";
         $arryString.=",'". __('app.home.table.defaultShareClassification')."'";
         }else{

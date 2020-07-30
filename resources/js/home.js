@@ -51,7 +51,7 @@ function drawRoute() {
  *
  */
 $("html")
-    .on("contextmenu", "table  td " , function (e) {
+    .on("contextmenu", "#table  td " , function (e) {
         
         currentTd = e.currentTarget;
         typeContextMenu = "";
@@ -487,8 +487,8 @@ function showshare(){
         error: function(request, status, error) {
             me.data("requestRunning", false);
             $("#cargandoDiv").css('display', 'none')
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
-            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            alert(request.responseText);   
             
         }
     });
@@ -632,7 +632,7 @@ function openPermissions(actions){
             if(owner)
             cadena +='<td  ><input type="radio" name="owner" onchange="changeOwner(this,'+usersShare[index].username+')" checked><br></td>'
             actions.forEach(action => {  
-                if((action.id==5 && edit) || (action.id==9 && edit) || (owner && action.id!=4))      
+                if((action.id==5 && edit) || (action.id==9 && deletePermission) || (owner && action.id!=4))      
                 cadena += '<td ><input type ="checkbox" class="form-check-input " onchange="selectAccion('+usersShare[index].username+','+action.id+',this)" id = "'+usersShare[index].username+'-'+action.id+'"  disabled></td>';
                
             });
@@ -776,8 +776,8 @@ var me = $(this);
         error: function(request, status, error) {
             me.data("requestRunning", false);
             $("#cargandoDiv").css('display', 'none')
-            alerts("Ha ocurrido un error inesperado.", "alert-danger");
-            alert(request.responseText);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            alert(request.responseText);   
             
         }
     });

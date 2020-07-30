@@ -67,10 +67,10 @@ trait RefreshHomeTrait{
             $classifications=[];
         else
             $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
-        
-           if($username)
-            
-        return view('home.tableMyDocuments', compact('mainClassification', 'classifications','myActions'));
+
+        $documents =  $mainClassification->documents;
+
+        return view('home.tableMyDocuments', compact('mainClassification', 'documents','classifications','myActions'));
     }
 
     /**
@@ -93,7 +93,6 @@ trait RefreshHomeTrait{
             }
             else{
                 $myActions=DB::select("SELECT `action_id`  FROM `action_classification_user` WHERE `classification_id`=$currentClassification and `username`='$username'");
-
             }
         }
         if($mainClassification->type==3)
@@ -103,7 +102,15 @@ trait RefreshHomeTrait{
             $classifications = json_decode(json_encode($classifications), true);
             $classifications=Classification::whereIn('id', $classifications)->get();
         }
-        return view('home.tableMyDocuments', compact('mainClassification', 'classifications','myActions'));
+
+        
+        $idDocuments = array_column($mainClassification->documents->toarray(), 'id');
+
+        $documents =  DB::table('action_document_user')->select('document_id')->whereIn('document_id', $idDocuments)->where('username', '=', '' . $username . '')->pluck('document_id')->toArray();
+        $documents=Document::whereIn('id', $documents)->get();
+        $mydocuments=$mainClassification->documents->where('username', $username);
+        $documents= $documents->merge($mydocuments);
+        return view('home.tableMyDocuments', compact('mainClassification','documents', 'classifications','myActions'));
     }
 
     /**
@@ -115,19 +122,15 @@ trait RefreshHomeTrait{
     public function refreshDocuments($currentClassification)
     {
         $username = Auth::id();
-        $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->get();
-        $myActions=[4];
-        $ShareClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 2]])->get();
-        $Classifications=$ShareClassification->merge($mainClassification);     
-        $mainClassification=$mainClassification[0];
+        $myClassification = Classification::where('username', '=', '' . $username . '')->get();
         $Shareclassifications=DB::select("SELECT `classification_id`  FROM `action_classification_user` WHERE `username`=$username ");
         $Shareclassifications = json_decode(json_encode($Shareclassifications), true);
-        $Shareclassifications=Classification::whereIn('id', $Shareclassifications)->get();
-        $Classifications=$Classifications->merge($Shareclassifications);
-        $myclassifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
-        $Classifications=$Classifications->merge($myclassifications);
-
-        return view('home.tableDocuments', compact('mainClassification', 'Classifications','myActions'));
+        $Shareclassifications=Classification::whereIn('id', $Shareclassifications)->get();    
+        $Classifications=$myClassification->merge($Shareclassifications);
+        $idDocuments =  DB::table('action_document_user')->select('document_id')->where('username', '=', '' . $username . '')->pluck('document_id')->toArray();
+        $documents=Document::where('username', $username)->pluck('id')->toArray();
+        $idDocuments=array_merge($documents,$idDocuments);
+        return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments'));
     }
 
     public function deletefiles($document)

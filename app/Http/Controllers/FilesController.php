@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Document;
 use Auth;
+use DB;
 use App\User;
 
 class FilesController extends Controller
@@ -16,18 +18,23 @@ class FilesController extends Controller
        //$this->middleware('auth');
     } 
 
-    public function getFileInfoAction($name,Request $request) {
+    public function getFileInfoAction($id,Request $request) {
+        $array = explode('-', $id);
+        $id = (int) $array[0];
+        $version = $array[1];
 
-        $route='public/'.$name;
-           
-        $path = storage_path('app/'.$route);    
+        $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+        $Document = Document::where([['id', '=', $id]])->first();
+        $path = storage_path('app/'.$content[0]); 
+          
         $dato=$request->all();
-        $username=$dato['access_token'];
-        $user=User::where('username',$username) -> first();
-         
+        $api_token=$dato['access_token'];
+        $user=User::where('api_token',$api_token) -> first();
+
 
         if (file_exists($path)) {
-          //  $user = 
+            $name = $Document->description.'.'.$Document->type;
+            $LastModifiedTime = $Document->updated_at;
             $handle = fopen($path, "r");
             $size = filesize($path);
             $contents = fread($handle, $size);
@@ -41,7 +48,7 @@ class FilesController extends Controller
                 'Size' => $size,
                 'SHA256' => $SHA256,             
                 'UserFriendlyName'=> $user->name,
-               // 'LastModifiedTime'=>date("Y-m-d\TH:i:s.u\Z"),
+                'LastModifiedTime'=>$LastModifiedTime,
             );
             echo json_encode($json);
         } else {
@@ -49,12 +56,10 @@ class FilesController extends Controller
         }
     }
 
-    public function getFileAction($name) {
+    public function getFileAction($id) { 
 
-
- 
-       $route='public/'.$name;
-       $path = storage_path('app/'.$route); 
+        $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+        $path = storage_path('app/'.$content[0]); 
 
         if (file_exists($path)) {
             $handle = fopen($path, "r");
@@ -64,15 +69,16 @@ class FilesController extends Controller
         }
     }
 
-    public function putFile($name) {
+    public function putFile($id) {
 
-       $route='public/'.$name;
-       $path = storage_path('app/'.$route); 
+       $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+       $path = storage_path('app/'.$content[0]); 
+       $Document = Document::where([['id', '=', $id]])->first();
        $content=fopen('php://input', 'r');
-
+       $LastModifiedTime = $Document->updated_at;
         file_put_contents($path, $content);
         $data = array('status' => 'success');
-       // $data['LastModifiedTime'] = date("Y-m-d\TH:i:s.u\Z");
+        $data['LastModifiedTime'] = $LastModifiedTime;
         return $data;
     }
 }

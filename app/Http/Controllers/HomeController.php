@@ -47,7 +47,12 @@ class HomeController extends Controller
         $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
         $actions = Action::where('type', '=', 1)->get();
         $myActions=['owner'];
-        return view('home.home', compact('mainClassification','classifications', 'flows','departments', 'actions','myActions'));
+
+      
+        $documents =  $mainClassification->documents;
+
+
+        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions'));
 
         
   }

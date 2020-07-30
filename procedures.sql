@@ -234,7 +234,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `insert_user`;
 DELIMITER ;;
-CREATE   PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` varchar(500),IN `p_email` varchar(500),IN `p_password` varchar(500),IN `p_classification` varchar(500),IN `p_share_classification` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `insert_user`(IN `p_role_id` int,IN `p_department_id` int,IN `p_name` varchar(500),IN `p_username` varchar(500),IN `p_email` varchar(500),IN `p_password` varchar(500),IN `p_api_token` varchar(500),IN `p_classification` varchar(500),IN `p_share_classification` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
  
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -253,7 +253,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;
-                    INSERT INTO `users`(role_id,department_id,name,username,email,password,created_at,updated_at) VALUES (p_role_id,p_department_id,p_name,p_username,p_email,p_password, NOW(),NOW());
+                    INSERT INTO `users`(role_id,department_id,name,username,email,password,api_token,created_at,updated_at) VALUES (p_role_id,p_department_id,p_name,p_username,p_email,p_password,p_api_token, NOW(),NOW());
                     INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_classification,1, NOW(),NOW());
                     INSERT INTO `classifications`(username, description, type, created_at, updated_at) VALUES (p_username,p_share_classification,2, NOW(),NOW());
             COMMIT;
@@ -690,7 +690,7 @@ DELIMITER ;
 -- PROCEDURE update a new flow
 -- return 0 success, 1 or 2 database error, 3 the department already exists
 -- ----------------------------
-DROP PROCEDURE IF EXISTS `update_flow`;
+DROP PROCEDURE IF EXISTS `low`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_flow`(IN `p_idFlow` int, IN `p_username` varchar(500), IN `p_description` varchar(500),IN `p_state` boolean, OUT `res` TINYINT  UNSIGNED, OUT `id_flow` INT  UNSIGNED)
 BEGIN
@@ -1218,7 +1218,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `add_Share_document`;
 DELIMITER ;;
-CREATE  PROCEDURE `add_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `add_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _classification INT DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
@@ -1238,10 +1238,14 @@ BEGIN
     ROLLBACK;
 	END;
 
-            START TRANSACTION;
-                SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
-                INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());
-                IF p_owner!=p_username THEN                
+            START TRANSACTION;                
+                IF p_owner!=p_username THEN
+                  IF p_classification    IS NULL THEN
+                    SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+                    INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
+
+                   END IF;
+                         
                   iterator:
                     LOOP
                         IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
@@ -1253,6 +1257,9 @@ BEGIN
                         INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (_action,p_id,p_username,NOW(),NOW());
                         SET p_actions = INSERT(p_actions,1,_nextlen + 1,'');
                       END LOOP;
+                ELSE
+                  SELECT `id` into _classification FROM `classifications` WHERE `type`=1 and `username`=p_username;
+                  INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
                 END IF;
             COMMIT;
             -- SUCCESS
@@ -1273,14 +1280,17 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_Share_document`;
 DELIMITER ;;
-CREATE  PROCEDURE `update_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `update_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
+  DECLARE _main_classification INT DEFAULT NULL; 
+  DECLARE _share_classification INT DEFAULT NULL; 
   DECLARE _owner varchar(500) DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _action TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+ 
 		-- ERROR
     SET res = -1;
     ROLLBACK;
@@ -1298,7 +1308,15 @@ BEGIN
               SELECT `username` into _owner FROM `documents` WHERE `id`=p_id;
               DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
               IF _owner=p_username and p_owner!=p_username THEN
-                UPDATE `documents` SET `username`=p_Owner,`updated_at`=Now() WHERE `id`=p_id;
+
+                SELECT `id` into _main_classification FROM `classifications` WHERE `type`=1 and `username`=p_username;
+                IF _main_classification=p_classification THEN
+                  SELECT `id` into _share_classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+                  DELETE FROM `classification_document` WHERE `classification_id`=_main_classification and `document_id`=p_id;
+                  INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_share_classification,p_id,NOW(),NOW()); 
+                END IF;
+                UPDATE `documents` SET `username`=p_owner,`updated_at`=Now() WHERE `id`=p_id;
+
               END IF;
               IF p_owner!=p_username THEN
                 iterator:
@@ -1319,8 +1337,8 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call update_Share_document(1,'402340420','116650288','4,5',@res)
--- call update_Share_document(9,'402340420','402340420','',@res)
+-- call update_Share_document(2,'116650288','402340420','4,5,9',@res)
+-- call update_Share_document(1,'402340420','116650288','4,5,9',@res)
 -- SELECT @res as res;
 
 
