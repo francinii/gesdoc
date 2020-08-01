@@ -24,8 +24,8 @@
                       </div>
                       <div>            
                         <span><b class="card-text ">Realizado por:</b></span>
-                        <span id = '' class="card-text">{{ $action->username }} con 
-                          identificación {{ $action->user_id }} 
+                        <span id = '' class="card-text">  {{ $action->name_user }} con 
+                          identificación  {{ $action->username }}
                         </span>
                       </div>                      
                       <div>            

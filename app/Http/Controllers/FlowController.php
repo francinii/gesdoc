@@ -177,6 +177,9 @@ class FlowController extends Controller
             //steps antes de ingresar datos a las otras tablas
             $this->insertStep($steps, $idFlow);
         
+
+            //Delete the steps asociated to a flow
+            DB::select("call delete_steps_steps($idFlow, @res)");  
             foreach ($steps as $step) {                  
             //insertamos a la tabla de steps_steps
             if($step != null){
@@ -257,8 +260,7 @@ class FlowController extends Controller
         $actionid = $actions[0]['id'];
         $res = -1;
 
-         //Delete the steps asociated to a flow
-         DB::select("call delete_steps_steps($id_flow, @res)");  
+         
             //Falta validar los datos que esten que no este vacio etc
         $steps = array_key_exists('steps', $step) ? $step['steps']: null;            
         if($steps != null)
@@ -293,7 +295,7 @@ class FlowController extends Controller
         $res = -1; 
         $step_id = "'". $step['id']."'";
         //Delete the steps asociated to a flow
-        DB::select("call delete_steps_steps($id_flow, @res)"); 
+       // DB::select("call delete_steps_steps($id_flow, @res)"); 
         if($users != null){                   
             foreach ($users as $user) {   
                 $username =  "'".$user['username']."'";   

@@ -17,7 +17,8 @@
   
     <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
-                <h2 class="text-center">Gestión de documentos en flujo</h2>        
+                <h2 class="text-center">Documentos asociados a mis flujos</h2>   
+                     
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
                     <select id='selectDoc' class="form-control selectpicker"  data-live-search="true"  >                

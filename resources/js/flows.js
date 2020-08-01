@@ -1243,20 +1243,71 @@ $( "#CreateDescription" ).focus(function() {
   function validateRepeatAction(item){
     var cont = 0;    
     var steps = item.steps;
-    var arrayAux =steps; 
+    var arrayAux =steps;  
     var bandera = -1;  
     steps.forEach(element => {
         if(element['action'] == '-1')
             bandera = 2;
-        arrayAux = arrayAux.splice(1);
-        arrayAux.forEach(element2 => { 
-            element['action'] == element2['action']? cont++: cont;           
+            arrayAux = arrayAux.splice(1);
+            arrayAux.forEach(element2 => { 
+                element['action'] == element2['action']? cont++: cont;           
+            });
         });
-    });
-    if (bandera == 2) 
-        return 2; // There are lines without valid actions
-    else 
-        return cont >= 1? 1:0; //If is more equal than one means that there are some lines with the same action from the same step
+        if (bandera == 2) 
+            return 2; // There are lines without valid actions
+        else 
+            return cont >= 1? 1:0; //If is more equal than one means that there are some lines with the same action from the same step
+}
+
+
+
+// Por hacer aun antes de seguir con lo del historial
+function validateIsAssociated(item){
+
+    if(item['id'] != DRAGGABLE_INICIO && item['id'] != DRAGGABLE_FINAL){
+    var isFinal = false;
+    var isBeggining = false;    
+    var line = [];
+
+    keys = Object.keys(sessionStorage);           
+        for (let index = 0; index < keys.length; index++) {
+            drag = sessionStorage.getItem(keys[index]);
+            drag = JSON.parse(drag);
+            drag.steps.forEach(element2 => { 
+                line = element2['id'].split('-');
+                    if(line[0] == item['id'])
+                        isBeggining = true;
+                    else if(line[1] ==item['id'])
+                        isFinal = true;
+                          
+            });           
+        }
+        if(!isBeggining || !isFinal)
+                    return false; // El step no tiene un elemento hacia donde ir 
+    }
+    return true;
+}
+
+function validateBeginAssociated(){
+    var keys = Object.keys(sessionStorage); 
+    var validBegin = false;
+    var validEnd = false;
+    for (let index = 0; index < keys.length; index++) {
+        item = sessionStorage.getItem(keys[index]);
+        item = JSON.parse(item);
+    
+        item.steps.forEach(element2 => { 
+                line = element2['id'].split('-');
+                    if(line[0] ==DRAGGABLE_INICIO)
+                        validBegin =  true;                      
+                    if(line[1] == DRAGGABLE_FINAL)
+                        validEnd =  true;        
+                });  
+                    
+    } 
+    if(validBegin && validEnd)
+        return true;
+return false;
 }
 
 /**
@@ -1267,16 +1318,21 @@ $( "#CreateDescription" ).focus(function() {
  * 
  */
 function validateFlow(){
-    stepDescription = $("#CreateDescription").val();
-    flowName = $("#flowName").val();
-    validFlow =validateFields(flowName, 'flowName', 'errFlow', 'Por favor, rellene este campo' )
+   // stepDescription = $("#CreateDescription").val();
+   var flowName = $("#flowName").val();
+    validFlow =validateFields(flowName, 'flowName', 'errFlow', 'Por favor, rellene este campo.' )
    var result = 0; //Todo esta bien
-
-    if(validFlow){
+   var resultIsAssociated = 0;
+   if(!validateBeginAssociated()){
+    description = 'El elemento inicial y final DEBEN estar asociados a almenos un elemento.';
+    alerta('Error',description, false);
+    result = 8;
+}
+    else if(validFlow){
             keys = Object.keys(sessionStorage);           
             hayInicio = false;
             hayFinal = false;
-            validField = true; // valido hasta que se demuestre lo contrario
+            validField = true; // Valid until the opposite is proved
             for (let index = 0; index < keys.length; index++) {
                 item = sessionStorage.getItem(keys[index]);
                 item = JSON.parse(item);
@@ -1294,7 +1350,7 @@ function validateFlow(){
 
                 // Validate if the actions are not repeat it in each step. 
                 result = validateRepeatAction(item);
-
+               
                 if(result == 1){
                     description = 'El elemento ' +item['description']+ ' está asociado con las mismas acciones a varios pasos siguientes. Asegurese que cada línea que sale de un mismo paso tiene diferente acción.';
                     alerta('Error',description, false);
@@ -1313,7 +1369,15 @@ function validateFlow(){
                    // return 3;
                    result = 3;
                    break;
-                }          
+                }else {
+                     resultIsAssociated = validateIsAssociated(item);
+                     if(!resultIsAssociated){
+                        description = 'El flujo no es correcto. Hay elemento que no poseen relación con otros elementos del flujo. Compruebe que todos los elementos están relacionados con un elemento siguiente.';
+                        alerta('Error',description, false);
+                        result = 7;       
+                        break;                                     
+                    }   
+                }
             }
             if(!hayInicio && result == 0){
                 description = 'El flujo no tiene un elemento inicial. Asegurese de agregar un paso inicial.';
@@ -1329,6 +1393,8 @@ function validateFlow(){
         alerta('Error',description, false);
         result = 5;
     }
+    
+
 return result;  
 }
 

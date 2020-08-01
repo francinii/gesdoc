@@ -8,10 +8,10 @@
                         <span class="card-text text-light "> </span>
                         
                         <span  title = "Notas" class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>  
-                        <span  title = "Descargar" class=" float-right"><button onclick="download({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-secondary" > <i class="fas fa-download"></i> </button></span>  
-                        <span  title = "Subir" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>  
-                        <span  title = "Editar" class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-info" > <i class="fas fa-edit"></i> </button></span>
-                        <span  title = "Guardar" class=" float-right"><button onclick="save({{$actualVersion->version}},{{$doc}})" class="btn-sm btn btn-success" > <i class="fas fa-save"></i> </button></span>    
+                       
+                        <span  title = "Subir archivo" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>  
+                        <span  title = "Editar archivo" class=" float-right"><button class="btn-sm btn btn-info" > <i class="fas fa-edit"></i> </button></span>
+                        <span  title = "Ejecutar acción sobre el documento " class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})"  class="btn-sm btn btn-success" > <i class="fa fa-play"></i> Ejecutar acción </button></span>    
                     </div>                                          
                                                                         
                 </div>            

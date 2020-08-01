@@ -40,9 +40,10 @@ class DocumentFlowController extends Controller
         $actions = Action::all();
         $flow = '';
      //   $flows =ViewFlowUser::where('username', '=', $usuario)->get();
+     //Flows the user owened
      $flows =Flow::where('username', '=', $usuario)->get();
         if($flows->isNotEmpty()){
-            $flow = $flows->first()->flow_id;
+            $flow = $flows->first()->id;
         }
        
         $documents = Document::where('flow_id', '=', $flow)->get();
