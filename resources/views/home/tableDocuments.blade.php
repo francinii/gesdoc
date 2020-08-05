@@ -18,34 +18,33 @@
             <tbody >
                 @foreach ($Classifications as $Classification)
                     @foreach ($Classification->documents as $document)
-                    <tr>
-
-                        @if ($document->type=="docx" || $document->type=="doc")
-                        <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
-                        @elseif($document->type=="xlsx" || $document->type=="xls")
-                        <td class="text-center "><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                        @elseif($document->type=="ppt")
-                        <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                        @else
-                        <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                         @if ($Classification->type==1 || $Classification->type==1 || in_array($document->id, $idDocuments) )
+                            <tr>
+                                @if ($document->type=="docx" || $document->type=="doc")
+                                <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
+                                @elseif($document->type=="xlsx" || $document->type=="xls")
+                                <td class="text-center "><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                                @elseif($document->type=="ppt")
+                                <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                                @else
+                                <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                                @endif
+                                <td class="text-center ">{{$document->description}}</td>                           
+                                <td class="text-center ">{{$document->created_at}}</td>  
+                                <td class="text-center ">{{$document->updated_at}}</td>
+                                <td style="display:none;" class="text-center ">{{$document->id}}</td>
+                                <td  class="text-center ">{{$Classification->description}}</td>  
+                                @if($document->flow!=null)
+                                    <td  class="text-center  ">{{$document->flow->description}}</td>
+                                @else
+                                    <td class="text-center  ">{{$document->flow}}</td>
+                                @endif
+                                <td class="text-center ">{{$document->summary}}</td>
+                                <td  class="text-center ">{{$document->code}}</td>
+                                <td  class="text-center ">{{$document->languaje}}</td>
+                                <td  class="text-center ">{{$document->others}}</td>                                       
+                            </tr>
                         @endif
-                        <td class="text-center ">{{$document->description}}</td>                           
-                        <td class="text-center ">{{$document->created_at}}</td>  
-                        <td class="text-center ">{{$document->updated_at}}</td>
-                        <td style="display:none;" class="text-center ">{{$document->id}}</td>
-                        <td  class="text-center ">{{$Classification->description}}</td>  
-                        @if($document->flow!=null)
-                            <td  class="text-center  ">{{$document->flow->description}}</td>
-                        @else
-                            <td class="text-center  ">{{$document->flow}}</td>
-                        @endif
-                        <td class="text-center ">{{$document->summary}}</td>
-                        <td  class="text-center ">{{$document->code}}</td>
-                        <td  class="text-center ">{{$document->languaje}}</td>
-                        <td  class="text-center ">{{$document->others}}</td>
-                                        
-            
-                    </tr>
                     @endforeach
                 @endforeach
             </tbody>

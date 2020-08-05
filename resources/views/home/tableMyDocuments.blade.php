@@ -29,8 +29,8 @@
                     <td style="display:none;" class="text-center "></td>                  
                 </tr>
                 @endforeach
-                @foreach ($mainClassification->documents as $document)
-                <tr  data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
+                @foreach ($documents as $document)
+                <tr  onclick="openDocument({{$document->id}})" data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
 
                      @if ($document->type=="docx" || $document->type=="doc")
                     <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>

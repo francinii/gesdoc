@@ -6,16 +6,16 @@
 @include('layouts.header')
 @stop
 @section('content')
-<div id="#mainContainer" style="width:100%; height:75vh;">
+<div id="#mainContainer" style="width:100%; height:85vh;">
 
-	<form id="loleafletform" name="loleafletform"  target="loleafletframe" action="https://192.168.1.2/loleaflet/dist/loleaflet.html?WOPISrc=https://192.168.1.2/gesdoc/public/wopi/files/test.docx" method="post">
-
-<!--https://192.168.1.2/gesdoc/public/wopi/files/test.docx/contents?access_token=BiThI7Edm6r5dHaydyS59omjisIr4WvNJPcZ2X8i&access_token_ttl=0	-->	
-<!-- https://192.168.1.2/gesdoc/public/wopi/files/test.docx -->	
-		 <input name="access_token" value="<?php echo $username ?>"  type="hidden"/>
-
-		 <input type="submit" value="Load Collabora Online"/>
+	<form id="loleafletform" name="loleafletform"  target="loleafletframe" action="{{ env('APP_URL') }}/loleaflet/dist/loleaflet.html?WOPISrc={{ env('APP_URL') }}/gesdoc/public/wopi/files/{{$documet}}" method="post">
+		 <input name="access_token" value="{{ $api_token}}"  type="hidden"/>
 	</form>
  <iframe id="loleafletframe" name= "loleafletframe"   allowfullscreen style="width:100%; height:100%;"></iframe>
-</div> 
+</div>
+<script>
+    $( document ).ready(function() {
+		$("#loleafletform").submit() 
+    });
+</script> 
 @stop

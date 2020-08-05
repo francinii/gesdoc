@@ -25,15 +25,6 @@ Route::get('/', function () {
 
 
 
-Route::get('documents/textEditor',  function () {
-    return view('documents/textEditor');
-});
-
-Route::get('documents/spreadSheetEditor',  function () {
-    return view('documents/spreadSheetEditor');
-});
-
-
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
 
@@ -44,6 +35,7 @@ Route::get('home/showshare/classification/{id}', 'HomeController@showShare');
 Route::get('documents/showshare/document/{id}', 'DocumentController@showShare');
 Route::get('documents/clone/{id}', 'DocumentController@clone');
 Route::post('documents/share/document/{id}', 'DocumentController@Share');
+Route::get('documents/open/{id}', 'DocumentController@openDocument');
 
 
 

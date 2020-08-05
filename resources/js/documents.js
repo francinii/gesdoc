@@ -323,8 +323,6 @@ function editDoc() {
         $("option[name=classificationEditDoc" + classificationID + "]").prop("selected", true);
     }
    
-   
- 
 
     
     $("#editDocument").modal("show");
@@ -428,7 +426,9 @@ function ajaxUpdateDoc() {
         });
     }
 }
-
+/**
+ * open the context menu in home's menu
+ */
 
 $("html")
     .on("click", "#btnCreateDocument", function (e) {
@@ -453,7 +453,11 @@ $("html")
     });
 
 
-
+/**
+ * 
+ * @param {elemet} e 
+ * open the context menu in home's menu
+ */
 
 function newDocument(e){
    var top = e.pageY - 10;
@@ -491,7 +495,10 @@ function newDocument(e){
         .addClass("show");
 }    
 
-
+/**
+ * 
+ * @param {int} type  create a new document 1 docx 2 xlsx 0 upload 
+ */
 
 function createDoc(type){
     $('#docType').val(type);
@@ -515,9 +522,9 @@ function createDoc(type){
 }
 
 
-function selectDoc(e){
-
-}
+/**
+ * put the name of file in upload file 
+ */
 $("#file").change(function(e){
     var file1 = $('#file')[0]
     var archivo = file1.files[0]; 
@@ -530,6 +537,10 @@ $("#file").change(function(e){
     $('#nameU').val(name)
 });
 
+
+/**
+ * Clonea a document select
+ */
 function clone(){
     var me = $(this);
     if (me.data("requestRunning"))
@@ -571,6 +582,12 @@ function clone(){
     
 }
 
+/**
+ * 
+ * @param {int} colum of the table for filter
+ * @param {string} element fro search
+ */
+
 function advancedSearchfilter(colum,element){
    var dataTable= $("#table").DataTable()
   
@@ -581,5 +598,45 @@ function advancedSearchfilter(colum,element){
             .draw();
     }
 
+
+}
+
+function openDocument(id){
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "documents/open/"+id);
+        form.setAttribute("target", "_blank");
+    
+        //Hidden Field
+      //  var hiddenField = document.createElement("input");
+        var hiddenField1 = document.createElement("input");
+        var hiddenField2 = document.createElement("input");
+    
+        //id
+        /*hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("id", "id");
+        hiddenField.setAttribute("name", "id");
+        hiddenField.setAttribute("value", "1");    */
+
+        //edit
+        hiddenField1.setAttribute("type", "hidden");
+        hiddenField1.setAttribute("id", "edit");
+        hiddenField1.setAttribute("name", "edit");
+        hiddenField1.setAttribute("value", "1");    
+        //token   
+        hiddenField2.setAttribute("type", "hidden");
+        hiddenField2.setAttribute("id", "_token");
+        hiddenField2.setAttribute("name", "_token");
+        hiddenField2.setAttribute("value", $("input[name=_token]").val());  
+
+        //form.appendChild(hiddenField);   
+        form.appendChild(hiddenField1);   
+        form.appendChild(hiddenField2); 
+        document.body.appendChild(form);
+        form.submit();
 
 }
