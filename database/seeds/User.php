@@ -40,7 +40,7 @@ class User extends Seeder
             'password' => Hash::make('12345678'),
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',
-            'api_token'=>'$2y$10$SKpw98ivNqr1AeKd8aFRh.EYwT2GApPNe1eQ9/ELby3vrYNuPeVVS',
+            'api_token'=>'$2y$10$lgDA8F8wspubGjcOFgqZY.7ruGaDBhCUhRaVud9zh79VCfHQtVQI2',
         ));
         
 

@@ -89,6 +89,7 @@ Route::resource('record', 'HistorialController');
 
 //Routes for the Wopi Host
 Route::get('wopi/files/{name}', 'FilesController@getFileInfoAction'); //CheckFileInfo 
+Route::post('wopi/files/{name}/contents', 'FilesController@putFile'); // PutFile
 Route::get('wopi/files/{name}/contents', 'FilesController@getFileAction'); // GetFile
 
-Route::post('wopi/files/{name}/contents', 'FilesController@putFile'); // PutFile
+

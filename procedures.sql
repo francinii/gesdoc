@@ -1106,7 +1106,37 @@ DELIMITER ;
 -- call remove_document(1,'402340421',1,@res);
 -- SELECT @res as res;
 
+-- ----------------------------
+-- PROCEDURE save time of documento  edit
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `save_document`;
+DELIMITER ;;
+CREATE   PROCEDURE `save_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_now` varchar(500),OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
 
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;                   
+                  UPDATE `documents` SET `updated_at`=p_now WHERE `id`=p_id;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call save_document(2,'402340421','2020-08-03 16:02:41',@res);
+-- SELECT @res as res;
 
 -- ----------------------------
 -- PROCEDURE remove a share documento 
