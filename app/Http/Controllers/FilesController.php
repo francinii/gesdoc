@@ -37,7 +37,7 @@ class FilesController extends Controller
         
         $actions=DB::table('action_document_user')->select('action_id')->where([['document_id','=', $id],['username','=',$user->username]])->pluck('action_id')->toArray();
         
-        if(in_array(4,$actions)|| $Document->username==$user->username)
+        if(in_array(5,$actions)|| $Document->username==$user->username)
           $UserCanWrite=true;
         else if(in_array(4,$actions))
            $UserCanWrite=false;

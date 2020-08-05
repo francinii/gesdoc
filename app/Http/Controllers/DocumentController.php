@@ -347,8 +347,7 @@ class DocumentController extends Controller
     }
 
     private function DeleteShare($user,$idselect,$currentClassification,$Owner){
-        if($Owner==null) $this->deletefiles($idselect);            
-        //$mainClassification = Classification::where([['username', '=', '' . $user->username . ''], ['type', '=', 2]])->first();  
+        if($Owner==null) $this->deletefiles($idselect); 
 
         DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',@res)");
         $res = DB::select("SELECT @res as res;");
