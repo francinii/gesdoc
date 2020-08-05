@@ -22,7 +22,7 @@ class CreateHistorialsTable extends Migration
             $table->text('description'); //content or route depends on
             $table->bigInteger('document_id');
             $table->string('document_name',500); 
-            $table->bigInteger('version_id');
+            $table->bigInteger('version_id')->unsigned()->nullable();
             $table->bigInteger('flow_id')->unsigned()->nullable();  
             $table->string('flow_name',500)->nullable();        
             $table->timestamps();

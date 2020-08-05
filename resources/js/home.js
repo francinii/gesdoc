@@ -233,10 +233,9 @@ function ajaxCreate(){
                 alerts('alerts', 'alert-content',
                     "La clasificacion " +
                         description +
-                        " ha sido agregado satisfactoriamente",
+                    " ha sido agregado satisfactoriamente",
                     "alert-success"
-                );
-                
+                );                
             },
             error: function (request, status, error) {
                 me.data("requestRunning", false);

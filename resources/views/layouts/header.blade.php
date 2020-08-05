@@ -23,8 +23,8 @@
           Gestión de documentos
         </a>
         <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Gestión de documentos en Flujo </a>
-          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos en Flujo  </a>
+          <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Documentos asociados a mis flujos </a>
+          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos compartidos en flujo  </a>
           <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>  
         </div>          
     </li>
