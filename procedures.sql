@@ -559,6 +559,7 @@ BEGIN
   DECLARE _document TEXT DEFAULT NULL;
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+
 		-- ERROR
     SET res = -1;
     ROLLBACK;
@@ -566,7 +567,7 @@ BEGIN
       
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
- 
+
 		-- ERROR
     SET res = -2;
     ROLLBACK;
@@ -594,6 +595,7 @@ BEGIN
                     SET _nextDoc = SUBSTRING_INDEX(p_documents,',',1);
                     SET _nextlenDoc = LENGTH(_nextDoc);
                     SET _document = CAST(TRIM(_nextDoc) AS UNSIGNED);
+                    INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,_document,p_username,NOW(),NOW());
                     DELETE FROM `classification_document` WHERE `classification_id`=_classification and `document_id`=_document;                  
                   SET p_documents = INSERT(p_documents,1,_nextlenDoc + 1,'');
                 END LOOP;
@@ -1208,7 +1210,37 @@ DELIMITER ;
 -- call remove_document(25,'116650288',2,'116650288',@res);
 -- SELECT @res as res;
 
+-- ----------------------------
+-- PROCEDURE save time of documento  edit
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `save_document`;
+DELIMITER ;;
+CREATE   PROCEDURE `save_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_now` varchar(500),OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
 
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;                   
+                  UPDATE `documents` SET `updated_at`=p_now WHERE `id`=p_id;
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call save_document(2,'402340421','2020-08-03 16:02:41',@res);
+-- SELECT @res as res;
 
 -- ----------------------------
 -- PROCEDURE remove a share documento 
@@ -1275,7 +1307,7 @@ DELIMITER ;;
 CREATE   PROCEDURE `delete_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_owner` varchar(500), IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _document_owner INT DEFAULT NULL;
-
+  DECLARE _classification INT DEFAULT NULL;
       --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
   DECLARE h_action int DEFAULT NULL;
@@ -1332,9 +1364,11 @@ BEGIN
                   UPDATE `documents` SET `username`=p_owner,`updated_at`=Now() WHERE `id`=p_id;
                 ELSE 
                 IF p_owner!='' THEN
-                    DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
+                    SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+                    DELETE FROM `classification_document` WHERE `classification_id`=_classification and `document_id`=p_id;
                     DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
                   ELSE 
+
                     DELETE FROM `documents` WHERE `id`=p_id and `flow_id` IS NULL;
                     DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
                   END IF;
@@ -1390,6 +1424,9 @@ BEGIN
 
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+  GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 		-- ERROR
     SET res = -1;
     ROLLBACK;
@@ -1397,6 +1434,9 @@ BEGIN
       
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+  GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 		-- ERROR
     SET res = -2;
     ROLLBACK;
@@ -1426,7 +1466,7 @@ BEGIN
             -- END OF NECESARY FOR THE HISTORIAL --   
 
               IF p_owner!=p_username THEN
-                  IF p_classification    IS NULL THEN
+                  IF p_classification='' THEN
                     SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
                     INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
                   END IF;        
@@ -1462,7 +1502,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call add_Share_document(5,'116650288','4',@res);
+-- call add_Share_document(5,'116650288','','402340420','4',@res);
 -- SELECT @res as res;
 
 
