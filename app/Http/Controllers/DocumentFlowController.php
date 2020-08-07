@@ -347,13 +347,14 @@ class DocumentFlowController extends Controller
         $version++;
 
 //If the next step is the final step then
+        $user_logged = Auth::id();
         if($identifier  == 'draggable_final'){
             $flow_id = -1;
             $identifier = '-1';
             
             //estado de la version a finalizado update de la version
             //estado del documento a finalizado update del documento  
-            DB::select("call update_version_final( $document_id, $idVersion, @res)");
+            DB::select("call update_version_final( $document_id, $idVersion,'$user_logged', @res)");
             $res = DB::select("SELECT @res as res;");
             $res = json_decode(json_encode($res), true);
             if ($res[0]['res'] == 3) {
@@ -370,8 +371,9 @@ class DocumentFlowController extends Controller
         else{
             $status = 0;
             $identifier =  "'" . $identifier . "'" ;
+            
             DB::select("call update_version_status($idVersion, $status, @res)");
-            DB::select("call insert_version($document_id, $flow_id, $identifier,$size, $content, $version, $status, @res)");
+            DB::select("call insert_version($document_id, $flow_id, $identifier,$size, $content, $version, $status,'$user_logged', @res)");
             $res = DB::select("SELECT @res as res;");
             $res = json_decode(json_encode($res), true);
             if ($res[0]['res'] == 3) {

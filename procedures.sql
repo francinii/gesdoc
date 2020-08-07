@@ -1153,7 +1153,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `remove_document`;
 DELIMITER ;;
-CREATE   PROCEDURE `remove_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int, OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `remove_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
     --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
@@ -1192,7 +1192,7 @@ BEGIN
           select description into h_document_name from Documents where id = p_id;
           select name into h_user_name from Users where username = p_username;          
 
-        set h_description =   CONCAT_WS(' ','El usuario', h_user_name, 'con identificación', h_username, 'se ha removido los permisos del documento con id',h_document_id,'llamado',h_document_name, 'con todas sus versiones.');
+        set h_description =   CONCAT_WS(' ','El usuario con identificación', p_user_logged, 'ha removido los permisos del documento con id',h_document_id,'llamado',h_document_name, 'al usuario con identificación', p_username);
         INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
         VALUES (9, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(),NOW());
 
@@ -1205,7 +1205,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call remove_document(25,'116650288',2,@res);
+-- call remove_document(25,'116650288',2,'116650288',@res);
 -- SELECT @res as res;
 
 
@@ -1272,7 +1272,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `delete_Share_document`;
 DELIMITER ;;
-CREATE   PROCEDURE `delete_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_owner` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `delete_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_owner` varchar(500), IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _document_owner INT DEFAULT NULL;
 
@@ -1286,6 +1286,7 @@ BEGIN
   DECLARE h_id_flow INT DEFAULT NULL;
   DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
   DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
+   DECLARE h_user_logged VARCHAR(500) DEFAULT NULL;
   DECLARE h_version_num decimal(3,1) DEFAULT NULL;
   -- END OF THE VARIABLES NEEDED IN THE HISTORIAL --
 
@@ -1320,9 +1321,9 @@ BEGIN
 				      IF  h_id_flow != NULL THEN
                			 select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
-               select name into h_user_name from users where username = p_username LIMIT 1;
-   
-              set h_description =   CONCAT_WS(' ',' Se han eliminado los permisos de acceso al usuario ', h_user_name,' sobre el  documento:',h_document_name,'con id',h_document_id );
+              select name into h_user_name from users where username = p_username LIMIT 1;
+              select name into h_user_logged from users where username = p_user_logged LIMIT 1;
+              set h_description =   CONCAT_WS(' ','El usuario ', h_user_logged ,'con identificación',p_user_logged, ' ha eliminado los permisos de acceso al usuario ', h_user_name,' sobre el  documento:',h_document_name,'con id',h_document_id );
                       
             -- END OF NECESARY FOR THE HISTORIAL --     
 
@@ -1339,8 +1340,9 @@ BEGIN
                   END IF;
                 END IF;
                 
-                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
-                VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
+                
+                INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
+                VALUES (h_action, p_user_logged, 	h_user_logged, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
               --  CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id, h_document_name, h_version_id, h_id_flow,h_name_flow, @res);
 
             COMMIT;
@@ -1349,7 +1351,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call delete_Share_document(1,'402340421',1,@res);
+-- call delete_Share_document(1,'402340421',1,'402340421',@res);
 -- SELECT @res as res;
 
 
@@ -1362,7 +1364,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `add_Share_document`;
 DELIMITER ;;
-CREATE  PROCEDURE `add_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `add_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500),IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _classification INT DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
@@ -1379,6 +1381,7 @@ BEGIN
   DECLARE h_id_flow INT DEFAULT NULL;
   DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
   DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
+  DECLARE h_user_logged VARCHAR(500) DEFAULT NULL;  
   DECLARE h_version_num decimal(3,1) DEFAULT NULL;
   DECLARE  h_description_2 text DEFAULT NULL;
   DECLARE  h_action_name text DEFAULT NULL;
@@ -1417,6 +1420,7 @@ BEGIN
                			  select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
                       select name into h_user_name from users where username = p_username LIMIT 1;
+                      select name into h_user_logged from users where username = p_user_logged LIMIT 1;
    
               
             -- END OF NECESARY FOR THE HISTORIAL --   
@@ -1440,16 +1444,17 @@ BEGIN
                         set h_description_2 =   CONCAT_WS(', ', h_description_2, h_action_name);
                       
                   END LOOP;
-                  SET h_description =   CONCAT_WS(' ','Se otorgaron los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
+                  
+                  SET h_description =   CONCAT_WS(' ','El usuario ',h_user_logged, 'con identificación',p_user_logged,' otorgó los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
                     
               ELSE
                   SELECT `id` into _classification FROM `classifications` WHERE `type`=1 and `username`=p_username;
                   INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
-                  SET h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha asociado el documento:',h_document_name,'con id',h_document_id , 'a la clasificación con id', _classification);
+                  SET h_description =   CONCAT_WS(' ','El usuario ', h_user_logged, ' con identificación: ', p_user_logged, 'ha asociado el documento:',h_document_name,'con id',h_document_id , 'a la clasificación con id', _classification);
               END IF;
 
               INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
-              VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
+              VALUES (h_action, p_user_logged, 	h_user_logged, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
 
             COMMIT;
             -- SUCCESS
@@ -1470,7 +1475,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `update_Share_document`;
 DELIMITER ;;
-CREATE  PROCEDURE `update_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `update_Share_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` varchar(500),IN `p_owner` varchar(500),IN `p_actions` varchar(500), IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _main_classification INT DEFAULT NULL; 
   DECLARE _share_classification INT DEFAULT NULL; 
@@ -1489,7 +1494,8 @@ BEGIN
   DECLARE h_id_flow INT DEFAULT NULL;
   DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
   DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
-   DECLARE h_owner_name VARCHAR(500) DEFAULT NULL;
+  DECLARE h_owner_name VARCHAR(500) DEFAULT NULL;
+  DECLARE h_user_logged VARCHAR(500) DEFAULT NULL;   
   DECLARE h_version_num decimal(3,1) DEFAULT NULL;
   DECLARE h_description_2 text DEFAULT NULL;
   DECLARE h_action_name text DEFAULT NULL;
@@ -1526,6 +1532,7 @@ BEGIN
                		select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
               select name into h_user_name from users where username = p_username LIMIT 1;
+              select name into h_user_logged from users where username = p_user_logged LIMIT 1;
           -- END OF NECESARY FOR THE HISTORIAL --   
 
               SELECT `username` into _owner FROM `documents` WHERE `id`=p_id;
@@ -1544,7 +1551,7 @@ BEGIN
                 SELECT name into h_owner_name from users where username = p_owner;
                 SET h_description =  CONCAT_WS(' ','Se actualizó el propietario del documento. El nuevo propietario es: ', h_owner_name,'con identificación', p_owner);
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, flow_id, 	flow_name, 	created_at, 	updated_at) 
-                VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
+                VALUES (h_action, p_user_logged, 	h_user_logged, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
                 
               END IF;
               IF p_owner!=p_username THEN
@@ -1563,9 +1570,9 @@ BEGIN
                       set h_description_2 =   CONCAT_WS(', ', h_description_2, h_action_name);
                   END LOOP;
 
-                SET h_description =   CONCAT_WS(' ','Se otorgaron los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
+                SET h_description =   CONCAT_WS(' ','El usuario ',h_user_logged,'con identificación',p_user_logged,'Otorgó los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
-                VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
+                VALUES (h_action, p_user_logged, 	h_user_logged, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
 
               END IF;
            COMMIT;
@@ -1721,7 +1728,7 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_version`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_version`(IN `p_document_id` int,  IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_size` varchar(500),IN `p_content` LONGTEXT,  IN `p_version` double,  IN `p_status` boolean,  OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_version`(IN `p_document_id` int,  IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_size` varchar(500),IN `p_content` LONGTEXT,  IN `p_version` double,  IN `p_status` boolean, IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED )
 BEGIN                                                                -- document_id, flow_id, identifier, content,size, status, version, created_at, updated_at
   DECLARE idFlow INT DEFAULT NULL;
   DECLARE idIdentifier varchar(500) DEFAULT NULL; 
@@ -1773,7 +1780,7 @@ BEGIN                                                                -- document
               SET h_version_id = LAST_INSERT_ID();
              -- NECESARY FOR THE HISTORIAL --   
               set h_action = 3;
-              set h_user_name = NULL;           
+              select name into h_user_name from users where username = p_user_logged LIMIT 1;        
               set h_document_id = p_document_id; 
               set h_id_flow = NULL;
               set h_name_flow = NULL; 
@@ -1788,9 +1795,9 @@ BEGIN                                                                -- document
               -- Cuando se agregue el usuario logueado habilitar esto
             --  select name into h_user_name from users where username = p_username LIMIT 1;
           
-            SET h_description =   CONCAT_WS(' ','El usuario','h_user_name','con identificación', 'username',',agregó la versión ',h_version_num,'con id ', h_version_id, 'al documento ', h_document_name, 'con id', h_document_id);
+            SET h_description =   CONCAT_WS(' ','El usuario',h_user_name,'con identificación', p_user_logged,',agregó la versión ',h_version_num,'con id ', h_version_id, 'al documento ', h_document_name, 'con id', h_document_id);
             INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
-            VALUES (h_action, 'h_username', 	'h_user_name', 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
+            VALUES (h_action, p_user_logged, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
          --  END OF NECESARY FOR THE HISTORIAL --            
            
             COMMIT;
@@ -1808,7 +1815,7 @@ DELIMITER ;
 -- PROCEDURE update the doc when the next step is the final step
 DROP PROCEDURE IF EXISTS `update_version_final`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_version_final`(IN `p_id_doc` int, IN `p_id_version` int, OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_version_final`(IN `p_id_doc` int, IN `p_id_version` int, IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED )
 BEGIN
   DECLARE idFlow INTEGER ; 
   DECLARE idIdentifier varchar(500);
@@ -1849,7 +1856,7 @@ BEGIN
 
       -- NECESARY FOR THE HISTORIAL --   
               set h_action = 3;
-              set h_user_name = NULL;           
+              select name into h_user_name from users where username = p_user_logged LIMIT 1;              
               set h_document_id = p_id_doc; 
               set h_id_flow = NULL;
               set h_name_flow = NULL; 
@@ -1866,9 +1873,9 @@ BEGIN
               -- Cuando se agregue el usuario logueado habilitar esto
             --  select name into h_user_name from users where username = p_username LIMIT 1;
           
-            SET h_description =   CONCAT_WS(' ','El usuario','h_user_name','con identificación', 'username',', ha sacado del flujo',h_name_flow ,'con id',h_id_flow,,'el documento ', h_document_name, 'con id', h_document_id, '.' );
+            SET h_description =   CONCAT_WS(' ','El usuario',h_user_name,'con identificación', p_user_logged,', ha sacado del flujo',h_name_flow ,'con id',h_id_flow,'el documento ', h_document_name, 'con id', h_document_id, '.' );
             INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
-            VALUES (h_action, 'h_username', 	'h_user_name', 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());      
+            VALUES (h_action, p_user_logged, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());      
 
             COMMIT;
           -- SUCCESS
@@ -1985,6 +1992,9 @@ BEGIN
 	END;
             START TRANSACTION;              
               UPDATE `flows` SET `state`=p_status, `updated_at`=NOW() WHERE `id`=p_id_flow;
+            IF p_status = 0 THEN
+              UPDATE `documents` SET `flow_id`=NULL, `updated_at`=NOW() WHERE `flow_id`=p_id_flow;           
+            END IF;
             COMMIT;
           -- SUCCESS
 SET res = 0;
