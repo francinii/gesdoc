@@ -13,9 +13,9 @@
 @section('title', 'Flujos') 
 
     @section('header')
-    <div class="staticPosition" >  
+   
         @include('layouts.header') 
-    </div>
+    
     @stop
 
 @section('content')

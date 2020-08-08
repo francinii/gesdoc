@@ -24,7 +24,7 @@
 <body  style="">    
         @yield('header')
         <div class="container-fluid">
-            <div class="row staticPosition">
+            <div class="row staticPositionDiv">
                 <div class="col-11" style= "height:60px"></div>
                 <div id="cargandoDiv" style="display:none" class="col-1 justify-content-right">
                     <img   src="../storage/app/cargando.gif" class="justify-content-right" alt="Cargando" width="60px">
