@@ -347,9 +347,9 @@ class DocumentController extends Controller
     }
 
     private function DeleteShare($user,$idselect,$currentClassification,$Owner){
-        if($Owner==null) $this->deletefiles($idselect); 
-
-        DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',@res)");
+        if($Owner==null) $this->deletefiles($idselect);     
+        $user_logged = Auth::id();
+        DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',  '$user_logged', @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] != 0) {
@@ -359,8 +359,8 @@ class DocumentController extends Controller
     }
 
     private function remove($user,$idselect,$currentClassification){
-
-        DB::select("call remove_document($idselect,'$user->username',$currentClassification,@res)");
+        $user_logged = Auth::id();
+        DB::select("call remove_document($idselect,'$user->username',$currentClassification,'$user_logged' ,@res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] != 0) {
@@ -416,8 +416,8 @@ class DocumentController extends Controller
 
             $myUsers=DB::table('action_classification_user')->select('username')->where([['classification_id','=', $currentClassification],['username','=',$user->username]])->pluck('username')->toArray();
             (count($myUsers)>0)?$classification=$currentClassification:$classification=null;
-            
-            DB::select("call add_Share_document($idselect,'$user->username','$classification','$Owner','$actionsString',@res)");
+            $user_logged = Auth::id();
+            DB::select("call add_Share_document($idselect,'$user->username','$classification','$Owner','$actionsString', '$user_logged',@res)");
             $res = DB::select("SELECT @res as res;");
             $res = json_decode(json_encode($res), true);
             if ($res[0]['res'] != 0) {
@@ -443,7 +443,8 @@ class DocumentController extends Controller
                 }
                 $actionsString=substr($actionsString, 0, -1);
             }
-                DB::select("call update_Share_document($idselect,'$user->username','$currentClassification','$Owner','$actionsString',@res)");
+                $user_logged = Auth::id();
+                DB::select("call update_Share_document($idselect,'$user->username','$currentClassification','$Owner','$actionsString', '$user_logged',@res)");
                 $res = DB::select("SELECT @res as res;");
                 $res = json_decode(json_encode($res), true);
                 if ($res[0]['res'] != 0) {
