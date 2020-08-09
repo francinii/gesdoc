@@ -595,7 +595,7 @@ BEGIN
                     SET _nextDoc = SUBSTRING_INDEX(p_documents,',',1);
                     SET _nextlenDoc = LENGTH(_nextDoc);
                     SET _document = CAST(TRIM(_nextDoc) AS UNSIGNED);
-                    INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,_document,p_username,NOW(),NOW());
+                    REPLACE  INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,_document,p_username,NOW(),NOW());
                     DELETE FROM `classification_document` WHERE `classification_id`=_classification and `document_id`=_document;                  
                   SET p_documents = INSERT(p_documents,1,_nextlenDoc + 1,'');
                 END LOOP;

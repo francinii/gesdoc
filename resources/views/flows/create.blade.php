@@ -1,5 +1,5 @@
 <div class="container-fluid" id = "create-wrapper"  style="display:none">    
-    <div class="   staticPosition" >   
+    <div class="   staticPositionDiv" >   
       <div class = "row  justify-content-center" style="background-color: white">
         <div class="col-md-10">
             <div class="float-lg-left">  </div>          
@@ -39,16 +39,16 @@
     </div> 
     <!--Inicio del flujo de trabajo -->   
     <div class="row justify-content-center"> 
-      <div class="col-1 staticPosition"></div>
+      <div class="col-1 staticPositionDiv"></div>
       <div class="col-10" id= 'drag-container-wrapper'>
           <div id = 'drag-container-scrollable' style="width: 100%; height: 80vh; overflow:scroll"  >  
               <div class="" id= 'drag-container' style="width: 300%; height:200%"  >         
               </div>
           </div>
       </div> 
-      <div class="col-1 staticPosition"></div>      
+      <div class="col-1 staticPositionDiv"></div>      
     </div> 
-    <div id="drag-container-bottom" class="row staticPosition"> &nbsp;</div>   
+    <div id="drag-container-bottom" class="row"> &nbsp;</div>   
 </div>
 
 
