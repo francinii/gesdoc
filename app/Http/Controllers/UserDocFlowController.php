@@ -4,25 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Flow;
+//use App\Flow;
 use App\User;
-use App\Department;
+//use App\Department;
 use App\Document;
 use App\Version;
 use App\Action;
-use App\Note;
-use App\Historial;
+//use App\Note;
+//use App\Historial;
 use App\ViewFlowUser;
 use App\ActionStepUser;
-use App\StepStep;
-use App\ViewActionStepStepUser;
-use DB;
-use Auth;
+use App\Http\Controllers\Traits\HomeTrait;
+//use App\StepStep;
+//use App\ViewActionStepStepUser;
+//use DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserDocFlowController extends Controller
 {
+    use HomeTrait;
 
-/*
+    /*
     |--------------------------------------------------------------------------
     | UserDocFlow Controller
     |--------------------------------------------------------------------------
@@ -43,18 +45,35 @@ class UserDocFlowController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;        
-        $users = User::all();        
-        $actions = Action::all();
-        $flow = '';
-        $flows =ViewFlowUser::where('username', '=', $usuario)->get();
-        if($flows->isNotEmpty()){
-            $flow = $flows->first()->flow_id;
+
+        $usuario = Auth::user()->username;
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+
+        if (in_array(6, $permissionsArray)) { // permission to see the documento Flow screen    
+            $usuario = Auth::user()->username;
+            $users = User::all();
+            $actions = Action::all();
+            $flow = '';
+            $flows = ViewFlowUser::where('username', '=', $usuario)->get();
+            if ($flows->isNotEmpty()) {
+                $flow = $flows->first()->flow_id;
+            }
+            $docs = Document::where('flow_id', '=', $flow)->get();
+            $documents = array();
+            foreach ($docs as $doc) {
+                $version = Version::where('document_id', '=', $doc->id)->orderBy('version', 'DESC')->first();
+                $flow = $version->flow_id;
+                $drag = $version->identifier;
+                $asu = ActionStepUser::where('step_id', '=', $drag)->where('flow_id', '=', $flow)
+                    ->where('username', '=', $usuario)->first();
+                if ($asu != NULL) {
+                    array_push($documents, $doc);
+                }
+            }
+            return view('userDocFlow.index', compact('flow', 'flows', 'users', 'documents', 'actions'));
         }
-       
-        $documents = Document::where('flow_id', '=', $flow)->get();
-        return view('userDocFlow.index',compact('flow','flows', 'users','documents','actions'));
-  
+        return $this->home();
     }
 
     /**
@@ -89,10 +108,9 @@ class UserDocFlowController extends Controller
         $datos = request()->except(['_token']);
         $flow = $datos['idFlow'];
         return $this->refresh($flow);
-        
     }
 
-   
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -128,19 +146,30 @@ class UserDocFlowController extends Controller
     }
 
 
-    public function refresh($flow) {
+    public function refresh($flow)
+    {
         $usuario = Auth::user()->username;
-        
-        //$Flows = Flow::all();
         $users = User::all();
-       
         $actions = Action::all();
-       // $flowsUser = ViewFlowUser::all();
-        $flows =ViewFlowUser::where('username', '=', $usuario)
-        ->get();
-        //$flow = $flows->first()->flow_id;
-        $documents = Document::where('flow_id', '=', $flow)->get();
-        return view('userDocFlow.table',compact('flow','flows', 'users','documents','actions'));
-    }
+        $flows = ViewFlowUser::where('username', '=', $usuario)->get();
+        $docs = Document::where('flow_id', '=', $flow)->get();
+        $documents = array();
+        foreach ($docs as $doc) {
+            $version = Version::where('document_id', '=', $doc->id)->orderBy('version', 'DESC')->first();
+            $flow = $version->flow_id;
+            $drag = $version->identifier;
+            $asu = ActionStepUser::where('step_id', '=', $drag)->where('flow_id', '=', $flow)
+                ->where('username', '=', $usuario)->first();
+            if ($asu != NULL) {
+                array_push($documents, $doc);
+            }
+        }
 
+        //1.  obtener la ultima version de cada documento de 
+        // De la version ocupo el flujo el drag asociado
+        // Con el flujo y drag de esa ultima version consutlo en la tabla action step user si 
+        // con el flujo y el drag si me regresa cero no tengo ningun permiso para ver el doc
+
+        return view('userDocFlow.table', compact('flow', 'flows', 'users', 'documents', 'actions'));
+    }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Action;
+//use App\Action;
 use App\Classification;
-use App\Department;
-use App\Document;
-use App\Flow;
+//use App\Department;
+//use App\Document;
+//use App\Flow;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HomeTrait;
 use DB;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class HomeController extends Controller
 {
 
     use RefreshHomeTrait;
+    use HomeTrait; //return the index 
 
     /**
      * Create a new controller instance.
@@ -38,24 +40,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        $username = Auth::id();
-        $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
-        $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
+        return $this->home(); //This method comes from the HomeTrait.php
         
-        $departments = Department::all();
-        $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
-        $actions = Action::where('type', '=', 1)->get();
-        $myActions=['owner'];
-
-      
-        $documents =  $mainClassification->documents;
-
-
-        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions'));
-
-        
-  }
+    }
 
     /**
      * Get a validator for an incoming registration request.

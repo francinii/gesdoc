@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Department;
+use App\Http\Controllers\Traits\HomeTrait;
 use App\Role;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    use HomeTrait;
     /*
     |--------------------------------------------------------------------------
     | User Controller
@@ -36,10 +39,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        $roles = Role::all();
-        $departments = Department::all();
-        return view('users.index', compact('users', 'roles', 'departments'));
+        $usuario = Auth::user()->username;
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+
+        if(in_array(2, $permissionsArray)){ // permission to see the user managment
+            $users = User::all();
+            $roles = Role::all();
+            $departments = Department::all();
+            return view('users.index', compact('users', 'roles', 'departments')); 
+        }
+        return $this->home();
     }
     
 

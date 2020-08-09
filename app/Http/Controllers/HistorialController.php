@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Historial;
-use DB; 
+use App\Http\Controllers\Traits\HomeTrait;
+//use DB; 
 
 class HistorialController extends Controller
 {
+    use HomeTrait;
     /*
     |--------------------------------------------------------------------------
     | Historial Controller
@@ -34,8 +36,15 @@ class HistorialController extends Controller
      */
     public function index()
     {
-        $historial = Historial::all();
-        return view('historial.index', compact('historial'));
+        $usuario = Auth::user()->username;
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+
+        if(in_array(7, $permissionsArray)){ // permission to see the historial
+            $historial = Historial::all();
+            return view('historial.index', compact('historial')); 
+        }
+        return $this->home();
     }
 
     /**

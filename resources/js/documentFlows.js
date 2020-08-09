@@ -55,6 +55,7 @@ if(select2){
     // alert(selectedOption.value + ': ' + selectedOption.text);
         var idFlow = selectedOption.value;
 
+        
         $.ajax({
             url: "userDocFlow/{" + idFlow + "}",
             method: "GET",
