@@ -114,3 +114,12 @@ GET DIAGNOSTICS CONDITION 1
 SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 
   <iframe src="http://docs.google.com/gview?url=http://upgrade.com.mx/_docs/prueba.doc&embedded=true" style="width:600px; height:600px;" frameborder="0"></iframe>
+
+
+
+
+  reset del autoincrement
+  ALTER TABLE permissions AUTO_INCREMENT = 1
+
+
+  

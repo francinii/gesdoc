@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HomeTrait;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
 
+
 class DepartmentController extends Controller
 {
+
+    use HomeTrait;
     /*
     |--------------------------------------------------------------------------
     | Department Controller
@@ -33,9 +38,15 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        // $roles = Role::all();
-        $departments = Department::all();
-        return view('departments.index', compact('departments'));
+        $usuario = Auth::user()->username;
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+
+        if(in_array(3, $permissionsArray)){ // permission to see the department administration
+            $departments = Department::all();
+            return view('departments.index', compact('departments'));
+        }
+        return $this->home();
     }
 
         /**

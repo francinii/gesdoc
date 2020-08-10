@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito");
 .main_header {
-  background-color: #bf0b24;
+  background-color: #bf0b24 !important;
 }
 
 .navbar-light .navbar-nav .nav-link {

@@ -8,8 +8,9 @@ use App\Department;
 use App\Action;
 use App\Step;
 use App\StepStep;
-use App\StepUser;
+//use App\StepUser;
 use App\ActionStepUser;
+use App\Http\Controllers\Traits\HomeTrait;
 use DB;
 use Auth;
 use App\Http\Controllers\Controller;
@@ -33,7 +34,7 @@ class FlowController extends Controller
         $this->middleware('auth');
     }
 
-
+    use HomeTrait; //return the index 
     const DRAGGABLE_FINAL = "draggable_final";
     const DRAGGABLE_INICIO = "draggable_inicio";
 
@@ -45,13 +46,20 @@ class FlowController extends Controller
     public function index()
     {
         $usuario = Auth::user()->username;
-        $flows =Flow::where('username', '=', $usuario)->get();
-        //$Flows = Flow::all();
-        $users = User::all();
-        $departments = Department::all();
-        $actions = Action::all();
-        $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
-        return view('Flows.index',compact('flows', 'users','departments','actions','filterActions'));
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+
+        if(in_array(4, $permissionsArray)){
+            $flows =Flow::where('username', '=', $usuario)->get();
+            //$Flows = Flow::all();
+            $users = User::all();
+            $departments = Department::all();
+            $actions = Action::all();
+            $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+            return view('Flows.index',compact('flows', 'users','departments','actions','filterActions'));
+        } //Permiso para acceder a la pantalla de flujos
+
+        return $this->home();
     }
 
     /**

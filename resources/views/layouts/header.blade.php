@@ -4,35 +4,58 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+       <?php
+      //debug blade.php
+      //    xdebug_break();
+        $permissions = Auth::user()->role->permissions;
+        $permissionsArray = $permissions->pluck('id')->toArray();
+       ?>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+
+      @if(in_array(1, $permissionsArray)   || in_array(2, $permissionsArray)  || in_array(3, $permissionsArray)  || in_array(4, $permissionsArray) )
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Administracion de sistema
           </a>
           <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
+
+        @if(in_array(1, $permissionsArray))
             <a class="dropdown-item" href="{{ url('/roles') }}">Administración de Roles</a>
+        @endif
+        @if(in_array(2, $permissionsArray))
             <a class="dropdown-item" href="{{ url('/users') }}">Administración de Usuarios</a>
+        @endif
+        @if(in_array(3, $permissionsArray))
             <a class="dropdown-item" href="{{ url('/departments') }}">Administración de Departamentos</a>
+        @endif
+        @if(in_array(4, $permissionsArray))
             <a class="dropdown-item" href="{{ url('/flows') }}">Adminsitración de Flujos </a>
+        @endif           
          </div>          
       </li>
-
-      <li class="nav-item dropdown">
+      @endif
+      <li class="nav-item dropdown">      
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Gestión de documentos
-        </a>
+        </a>       
         <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
+        @if(in_array(5, $permissionsArray))
           <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Documentos asociados a mis flujos </a>
+        @endif 
+        @if(in_array(6, $permissionsArray))
           <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos compartidos en flujo  </a>
-          <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>  
+        @endif        
+           <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>           
         </div>          
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/record') }}">
-        Historial
-      </a>      
-  </li>
+    
+
+    @if(in_array(7, $permissionsArray))  
+    <li class="nav-item">    
+        <a class="nav-link" href="{{ url('/record') }}"> Historial </a>           
+    </li>
+    @endif     
         
       </ul>
 
