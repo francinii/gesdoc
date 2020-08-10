@@ -11,6 +11,7 @@ class Role extends Seeder
      */
     public function run()
     {
+        // Id 1 This role can't be edited in the system 
         \DB::table('roles')->insert(array(
             'description' =>"SuperAdmin",
             'created_at'=> '2020-05-02 00:00:00',

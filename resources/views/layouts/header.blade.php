@@ -35,7 +35,6 @@
          </div>          
       </li>
       @endif
-      @if(in_array(5, $permissionsArray)   || in_array(6, $permissionsArray) ) 
       <li class="nav-item dropdown">      
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Gestión de documentos
@@ -50,7 +49,7 @@
            <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>           
         </div>          
     </li>
-    @endif
+    
 
     @if(in_array(7, $permissionsArray))  
     <li class="nav-item">    

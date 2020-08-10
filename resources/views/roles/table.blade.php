@@ -18,10 +18,8 @@
                         
                         
                         <?php
-                            //Listando los permisos de un rol especifico
-                             $rolep = App\Role::find($role->id) ;
-                             $permissionsAsociados = $rolep->permissions;
-                          //   echo $rolp->users;
+                        $rolep = App\Role::find($role->id) ;
+                        $permissionsAsociados = $rolep->permissions;                          
                         ?>
 
                         <button onclick = "list({{ $permissionsAsociados}}, '{{$role->description}}',1)"  class="btn btn-primary"  data-toggle="modal">
@@ -36,17 +34,21 @@
                         </button>
                     </td>
                     <td class="text-center">
+                        @if($role->id != 1)  <!--1 correspond to the super admin role -->
                             <button onclick = "edit('{{$role->id}}', '{{$role->description}}', {{ $permissionsAsociados}} )"  class="btn btn-success"  data-toggle="modal" >
                                 <i class="fas fa-edit"></i>
                             </button>
+                        @endif
                     </td>
                     <td class="text-center">
+                        @if($role->id != 1)  <!--1 correspond to the super admin role -->
                         <form method="POST" action="{{url('/roles/'.$role->id)}}">
                             <button type="button" onclick="confirmDelete({{$role->id}} ,'roles','table', '¿Desea eliminar el rol: {{$role->description}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

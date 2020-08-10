@@ -48,13 +48,13 @@ class RoleController extends Controller
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
-       // if (in_array(1, $permissionsArray)) { // permission to see the department administration
+        if (in_array(1, $permissionsArray)) { // permission to see the department administration
             $roles = Role::all();
             $roles = Role::with('permissions')->get();
             $permissions = Permission::all();
             return view('roles.index', compact('roles', 'permissions'));
-       // }
-      //  return $this->home();
+        }
+        return $this->home();
     }
 
     /**
@@ -117,31 +117,18 @@ class RoleController extends Controller
     {
         // echo  response()->json($request->all());
         // $datos = $request->all();
+     
         $this->validator($request->all(), true)->validate();
         $dato = $request->except('_token');
-        $dato = $this->myArray($dato);
-        DB::select("call insert_role($dato,@res)");
-        $res = DB::select("SELECT @res as res;");
-        $res = json_decode(json_encode($res), true);
-        if ($res[0]['res'] == 3)  throw new DecryptException('el rol  ya existe en la base de datos');
-        if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos');
+         $dato = $this->myArray($dato);
+        if($dato != 1){  //If is differente than superAdmin
+            DB::select("call insert_role($dato,@res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] == 3)  throw new DecryptException('el rol  ya existe en la base de datos');
+            if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos');
+        }      
         return $this->refresh();
-
-
-
-
-        /*  
-        $IdRole = Role::insertGetId($datos);
-        if ($permissions != null) {
-            foreach ($permissions as $permission) {
-                DB::table('permission_role')->insert([
-                    'role_id' => $IdRole,
-                    'permission_id' => $permission,
-                ]);
-            }
-        }
-
-        return RoleController::refresh();*/
     }
 
     /**
@@ -163,8 +150,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $roles = Role::findOrFail($id); //regresa toda la info que tiene ese id
-        return view('roles.edit', compact('roles'));
+        if($id != 1){ //If is differente than superAdmin
+            $roles = Role::findOrFail($id); //regresa toda la info que tiene ese id
+            return view('roles.edit', compact('roles')); 
+        }
     }
 
     /**
@@ -180,10 +169,12 @@ class RoleController extends Controller
         $dato = request()->except(['_token', '_method']);
         $id = $dato['id'];
         $dato = $this->myArray($dato);
-        DB::select("call update_role($id,$dato,@res)");
-        $res = DB::select("SELECT @res as res;");
-        $res = json_decode(json_encode($res), true);
-        if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos');
+        if($id != 1){ //If is differente than superAdmin
+            DB::select("call update_role($id,$dato,@res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos'); 
+        }
         return $this->refresh();
     }
 
@@ -195,10 +186,12 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        DB::select("call delete_role($id,@res)");
-        $res = DB::select("SELECT @res as res;");
-        $res = json_decode(json_encode($res), true);
-        if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos');
+        if($id != 1){ //If is differente than superAdmin
+            DB::select("call delete_role($id,@res)");
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] != 0)  throw new DecryptException('error en la base de datos'); 
+        }
         return $this->refresh();
     }
 
