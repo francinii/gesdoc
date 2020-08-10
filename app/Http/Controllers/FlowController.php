@@ -146,7 +146,26 @@ class FlowController extends Controller
         return FlowController::refresh();
     }
 
-    /**
+  /**
+  * @param  \App\Flow  $id
+  * @param  \Illuminate\Http\Request  $request
+  */
+
+    public function clone($id,Request $request){
+        $data = request()->except(['_token']);  
+        $id=$data['id'];
+
+        $username = Auth::id();
+        DB::select("call clone_flow('$id','$username',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }
+        return FlowController::refresh();
+    } 
+
+      /**
      * Refresh the table on the view.
      *
      * @return \Illuminate\Http\Response

@@ -1243,7 +1243,7 @@ DELIMITER ;
 -- SELECT @res as res;
 
 -- ----------------------------
--- PROCEDURE remove a share documento 
+-- PROCEDURE clone documento 
 -- return 0 success, 1 or 2 error in database
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `clone_document`;
@@ -2042,7 +2042,46 @@ END
 ;;
 DELIMITER ;
 
+-- ----------------------------
+-- PROCEDURE clone a flow
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `clone_flow`;
+DELIMITER ;;
+CREATE   PROCEDURE `clone_flow`(IN `p_id` int,IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED)
+BEGIN
+  DECLARE _flow_id INT DEFAULT NULL;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
 
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION; 
+
+            INSERT INTO `flows`(`username`, `description`, `state`, `created_at`, `updated_at`)
+            SELECT `username`, CONCAT('copy-',`description`), 0,NOW(),NOW() FROM `flows` WHERE `id`=p_id;
+            SET _flow_id =  LAST_INSERT_ID(); 
+
+            INSERT INTO `steps`(`id`, `flow_id`, `description`, `axisX`, `axisY`, `created_at`, `updated_at`)
+            SELECT `id`, _flow_id, `description`, `axisX`, `axisY`, NOW(), NOW() FROM `steps` WHERE `flow_id`=p_id;
+
+            INSERT INTO `step_step`(`prev_step_id`, `next_step_id`, `prev_flow_id`, `next_flow_id`, `id_action`, `created_at`, `updated_at`) 
+            SELECT `prev_step_id`, `next_step_id`, _flow_id, _flow_id, `id_action`, NOW(), NOW() FROM `step_step` WHERE `next_flow_id`=p_id;
+
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
 
 
 

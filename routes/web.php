@@ -55,7 +55,7 @@ Route::get('documentFlow/location/{id}', 'DocumentFlowController@location');
 
 
 //flow/active/
-
+Route::get('flow/clone/{id}', 'FlowController@clone');
 Route::get('flow/active/{id}', 'FlowController@activeFlow');
 //Route::get('flow/refresh/', 'FlowController@refresh');
 Route::get('flow/permission/{id}', 'FlowController@permissionModal');

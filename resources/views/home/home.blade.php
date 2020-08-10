@@ -42,7 +42,7 @@
                         <button type="button" class="btn btn-light btn-bloc " onclick="createDoc(0)" ><i class="fa fa-upload" aria-hidden="true"> </i> {{ __('app.home.menu.option6') }}</button>
                         <button type="button" class="btn btn-light btn-block" onclick="openSheet(1)"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ __('app.home.menu.option1') }}</button>
                         <button type="button" class="btn btn-light btn-block" onclick="openSheet(2)"><i class="fa fa-file" aria-hidden="true"> </i> {{ __('app.home.menu.option2') }}</button>
-                        <button type="button" class="btn btn-light btn-block" ><i class="fa fa-angle-double-right" aria-hidden="true"> </i> {{ __('app.home.menu.option3') }}</button>
+                        <button type="button" class="btn btn-light btn-block" onclick="location.href='{{ url('userDocFlow') }}'" ><i class="fa fa-angle-double-right" aria-hidden="true"> </i> {{ __('app.home.menu.option3') }}</button>
                     </div>
                 </div>
             </div>

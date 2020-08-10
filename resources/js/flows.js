@@ -107,6 +107,48 @@ function openCreate(editMode){
 }
 
 
+
+function ajaxCloneFlow(id){
+
+    var me = $(this);
+    if (me.data("requestRunning"))
+       return;
+
+
+        $.ajax({
+            url: "flow/clone/{" + id + "}",
+            method: "get",
+            data: {
+                _token: $("input[name=_token]").val(),
+                id: id,
+            },
+            beforeSend: function (xhr) { 
+                 
+                $("#cargandoDiv").css('display', 'block')
+            },
+            success: function(result) { 
+                $("#cargandoDiv").css('display', 'none')  
+                me.data("requestRunning", false);  
+                $("#table").html(result);
+                $("#table").DataTable().destroy();
+                createDataTable("table");
+                alerts('alerts', 'alert-content',
+                    "El flujo " +
+                        description +
+                        " ha sido clonado satisfactoriamente",
+                    "alert-success"
+                );                
+            },
+            error: function(request, status, error) {
+                me.data("requestRunning", false);
+                $("#cargandoDiv").css('display', 'none')
+                alert(request.responseText);
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                
+            }   
+        });
+}
+
 /** 
  * 
  * List the flows that you are  owner

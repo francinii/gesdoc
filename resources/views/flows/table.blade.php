@@ -5,7 +5,8 @@
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.description') }}</th>            
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.owner') }}</th>  
             <th style="width: 15%"  class="text-center">Estado</th>       
-            <th style="width: 10%"  class="text-center">Permisos</th>           
+            <th style="width: 10%"  class="text-center">Permisos</th>   
+            <th style="width: 10%"  class="text-center">Clonar</th>        
             <th style="width: 10%"  class="text-center">Ver/Editar Flujo</th>
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.delete') }}</th>
         </tr>
@@ -44,7 +45,12 @@
                    </i>
                </button>
            </td>
-            
+           <td class="text-center">
+
+                    <button title ="Clonar" onclick = "ajaxCloneFlow('{{$flow->id}}')"  class="btn btn-warning"  data-toggle="modal" >
+                        <i class="far fa-clone"></i>
+                    </button>  
+            </td>
 
             <td class="text-center">
                 @if($flow->state == 0)     
