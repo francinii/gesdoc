@@ -1216,7 +1216,7 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `save_document`;
 DELIMITER ;;
-CREATE   PROCEDURE `save_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_now` varchar(500),OUT `res` TINYINT  UNSIGNED)
+CREATE   PROCEDURE `save_document`(IN `p_id` int,IN `p_username` varchar(500),OUT `res` TINYINT  UNSIGNED)
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -1232,7 +1232,7 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;                   
-                  UPDATE `documents` SET `updated_at`=p_now WHERE `id`=p_id;
+                  UPDATE `documents` SET `updated_at`=NOW() WHERE `id`=p_id;
             COMMIT;
             -- SUCCESS
 SET res = 0;

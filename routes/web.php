@@ -50,8 +50,8 @@ Route::get('documentFlow/notesModal/{id}', 'DocumentFlowController@listNotesModa
 //notesModal
 Route::get('documentFlow/modalEditVersion/{id}', 'DocumentFlowController@modalEditVersion');
 Route::get('documentFlow/flowProcess/{id}', 'DocumentFlowController@flowProcess');
-
 Route::get('documentFlow/location/{id}', 'DocumentFlowController@location');
+Route::get('documentFlow/editionMode/{id}', 'DocumentFlowController@editionMode');
 
 
 //flow/active/

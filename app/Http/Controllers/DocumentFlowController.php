@@ -230,6 +230,9 @@ class DocumentFlowController extends Controller
     {
         $datos = request()->except(['_token']);
         $doc = $datos['idDoc'];
+        $version = $datos['version'];
+        $mode=$datos['mode'];
+        $edit=$datos['edit'];
         //retrived just one row the actual version
         $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
         //retrived the version before the actual version
@@ -237,8 +240,15 @@ class DocumentFlowController extends Controller
         if (!$oldVersion) {
             $oldVersion = $actualVersion;
         }
+        $allVersions = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->get()->pluck('id')->toArray();;
         //  $oldVersion = $actualVersion;
-        return view('documentFlow.preview', compact('doc', 'actualVersion', 'oldVersion'));
+
+        $username = Auth::id();
+        $user=User::where('username',$username) -> first();
+        $api_token=$user->api_token;
+        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $api_token=$user->api_token;
+        return view('documentFlow.preview', compact('doc', 'actualVersion', 'allVersions','oldVersion','api_token','documet'));
     }
 
 
@@ -254,25 +264,48 @@ class DocumentFlowController extends Controller
         $datos = request()->except(['_token']);
         $opc = $datos['opc'];
         $version = $datos['version_num'];
+        $mode=$datos['mode'];
         $version = (float) $version;
+        $edit=$datos['edit'];
+        
         $doc = (int)$datos['idDoc'];
-        if ($opc == '1')
-            $version--;
-        else if ($opc == '2')
-            $version++;
 
-        $allVersions = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->get();
         $oldVersion = Version::where('document_id', '=', $doc)->where('version', '=', $version)->first();
-        $tam = $allVersions->count();
-        if ($tam > 0) {
-            if ($version == 0) {
-                $oldVersion =  $allVersions[0];
-            } else if ($version > $allVersions[0]->version) {
-                $oldVersion =  $allVersions[$tam - 1];
-            }
-        }
 
-        return view('documentFlow.oldVersion', compact('doc', 'oldVersion'));
+
+        $username = Auth::id();
+        $user=User::where('username',$username) -> first();
+        $api_token=$user->api_token;
+        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $api_token=$user->api_token;
+        return view('documentFlow.oldVersion', compact('doc', 'oldVersion','api_token','documet'));
+    }
+
+    /**
+     * Show the next or preview version in the left panel of preview mode
+     *
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function editionMode(Request $request)
+    {
+        $datos = request()->except(['_token']);
+        $version = $datos['versionNum'];
+        $mode=$datos['mode'];
+        $version = (float) $version;
+        $edit=$datos['edit'];
+        
+        $doc = (int)$datos['document_id'];
+
+        $actualVersion = Version::where('document_id', '=', $doc)->where('version', '=', $version)->first();
+
+
+        $username = Auth::id();
+        $user=User::where('username',$username) -> first();
+        $api_token=$user->api_token;
+        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $api_token=$user->api_token;
+        return view('documentFlow.actualVersion', compact('actualVersion','api_token','documet'));
     }
 
     /**

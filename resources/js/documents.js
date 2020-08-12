@@ -600,6 +600,10 @@ function advancedSearchfilter(colum,element){
 
 
 }
+/**
+ * 
+ * @param {int} id of de document
+ */
 
 function openDocument(id){
     var me = $(this);
@@ -607,6 +611,7 @@ function openDocument(id){
     if (me.data("requestRunning"))
         return;
         var form = document.createElement("form");
+        form.setAttribute("id", "OpenDocumentForm");
         form.setAttribute("method", "get");
         form.setAttribute("action", "documents/open/"+id);
         form.setAttribute("target", "_blank");
@@ -615,12 +620,8 @@ function openDocument(id){
       //  var hiddenField = document.createElement("input");
         var hiddenField1 = document.createElement("input");
         var hiddenField2 = document.createElement("input");
-    
-        //id
-        /*hiddenField.setAttribute("type", "hidden");
-        hiddenField.setAttribute("id", "id");
-        hiddenField.setAttribute("name", "id");
-        hiddenField.setAttribute("value", "1");    */
+        var hiddenField3 = document.createElement("input");
+        var hiddenField4 = document.createElement("input");
 
         //edit
         hiddenField1.setAttribute("type", "hidden");
@@ -633,10 +634,27 @@ function openDocument(id){
         hiddenField2.setAttribute("name", "_token");
         hiddenField2.setAttribute("value", $("input[name=_token]").val());  
 
+        // mode home   
+        hiddenField3.setAttribute("type", "hidden");
+        hiddenField3.setAttribute("id", "mode");
+        hiddenField3.setAttribute("name", "mode");
+        hiddenField3.setAttribute("value", 1);  
+
+        
+        // version   
+        hiddenField4.setAttribute("type", "hidden");
+        hiddenField4.setAttribute("id", "version");
+        hiddenField4.setAttribute("name", "version");
+        hiddenField4.setAttribute("value", "last"); 
+       
+
         //form.appendChild(hiddenField);   
         form.appendChild(hiddenField1);   
         form.appendChild(hiddenField2); 
+        form.appendChild(hiddenField3); 
+        form.appendChild(hiddenField4); 
         document.body.appendChild(form);
         form.submit();
+        $( "#OpenDocumentForm" ).remove();
 
 }

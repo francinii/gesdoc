@@ -10,4 +10,9 @@
   
 <div class="modal fade" id="modal-edit-version"> 
 </div>    
-
+<script>
+    $( document ).ready(function() {
+        var js_data = '<?php echo json_encode($allVersions); ?>';        
+        allVersions=JSON.parse(js_data );
+    });
+</script>

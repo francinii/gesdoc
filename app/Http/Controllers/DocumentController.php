@@ -502,8 +502,10 @@ class DocumentController extends Controller
         $username = Auth::id();
         $user=User::where('username',$username) -> first();
         $dato = request()->except(['_token']);
-        $documet=$id."-last";
+        $version=$dato['version'];
+        $mode=$dato['mode'];
         $edit=$dato['edit'];
+        $documet=$id."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
         return view('documents.wopihost', compact('api_token','documet'));
     }
