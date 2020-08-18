@@ -182,6 +182,7 @@ return array(
     'App\\Http\\Controllers\\PermissionController' => $baseDir . '/app/Http/Controllers/PermissionController.php',
     'App\\Http\\Controllers\\RoleController' => $baseDir . '/app/Http/Controllers/RoleController.php',
     'App\\Http\\Controllers\\StepStepController' => $baseDir . '/app/Http/Controllers/StepStepController.php',
+    'App\\Http\\Controllers\\Traits\\HomeTrait' => $baseDir . '/app/Http/Controllers/Traits/HomeTrait.php',
     'App\\Http\\Controllers\\Traits\\RefreshHomeTrait' => $baseDir . '/app/Http/Controllers/Traits/RefreshHomeTrait.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Controllers\\UserDocFlowController' => $baseDir . '/app/Http/Controllers/UserDocFlowController.php',
