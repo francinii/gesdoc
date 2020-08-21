@@ -247,7 +247,7 @@ class DocumentFlowController extends Controller
         $username = Auth::id();
         $user=User::where('username',$username) -> first();
         $api_token=$user->api_token;
-        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $document=$doc."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
         return view('documentFlow.preview', compact('doc', 'actualVersion', 'allVersions','oldVersion','api_token','documet', 'screen'));
     }
@@ -277,9 +277,9 @@ class DocumentFlowController extends Controller
         $username = Auth::id();
         $user=User::where('username',$username) -> first();
         $api_token=$user->api_token;
-        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $document=$doc."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        return view('documentFlow.oldVersion', compact('doc', 'oldVersion','api_token','documet'));
+        return view('documentFlow.oldVersion', compact('doc', 'oldVersion','api_token','document'));
     }
 
     /**
@@ -304,9 +304,9 @@ class DocumentFlowController extends Controller
         $username = Auth::id();
         $user=User::where('username',$username) -> first();
         $api_token=$user->api_token;
-        $documet=$doc."-".$version."-".$mode."-".$edit;        
+        $document=$doc."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        return view('documentFlow.actualVersion', compact('actualVersion','api_token','documet'));
+        return view('documentFlow.actualVersion', compact('actualVersion','api_token','document'));
     }
 
     /**
@@ -345,12 +345,22 @@ class DocumentFlowController extends Controller
         $datos = request()->except(['_token']);
         $idVersion = $datos['version'];
         $versionNum = $datos['versionNum'];
+        $document = $datos['document'];
+        $mode=2; // 2 mode flow
+        $edit=2; // 2 prewiew  
 
         //retrived just one row the actual version
         $version = Version::where('id', '=', $idVersion)->first();
         //retrived the version before the actual version
-        return view('documentFlow.previewHistory', compact('version', 'versionNum'));
+        $username = Auth::id();
+        $user=User::where('username',$username) -> first();
+        $api_token=$user->api_token;
+        $document=$document."-".$versionNum."-".$mode."-".$edit;        
+        $api_token=$user->api_token;
+
+        return view('documentFlow.previewHistory', compact('version', 'versionNum','api_token','document'));
     }
+
     public function downloadVersion($datos)
     {
     }
@@ -459,4 +469,40 @@ class DocumentFlowController extends Controller
 
         return view('documentFlow.location', compact('users', 'step'));
     }
+
+    public function updateDocument($doc,Request $request){
+        $datos = request()->except(['_token']);
+        $idVersion = $datos['version'];
+        $version = $datos['versionNum'];
+        $doc = $datos['document_id'];
+        $mode=2; // 2 mode flow
+        $edit=2; // 2 prewiew  
+        $file=$request->file('archivo');
+        $username = Auth::id();
+        $content=DB::table('versions')->select('version','content')->where([['document_id','=', $doc],['version','=',$version]])->pluck('content')->toArray();
+        $array = explode('/', $content[0]);
+        $content=$array[1];
+        $file->storeAS('public',$content);
+    
+        DB::select("call save_document($doc,'$username',@res)");      
+            $res = DB::select("SELECT @res as res;");
+            $res = json_decode(json_encode($res), true);
+            if ($res[0]['res'] != 0) {
+                throw new DecryptException('error en la base de datos');
+            }
+            
+        $actualVersion = Version::where('document_id', '=', $doc)->where('version', '=', $version)->first();
+        $user=User::where('username',$username) -> first();
+        $api_token=$user->api_token;
+        $document=$doc."-".$version."-".$mode."-".$edit;        
+        $api_token=$user->api_token;
+        return view('documentFlow.actualVersion', compact('actualVersion','api_token','document'));
+    }
+
+
+
+
+
+
 }
+

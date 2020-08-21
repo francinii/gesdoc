@@ -505,9 +505,13 @@ class DocumentController extends Controller
         $version=$dato['version'];
         $mode=$dato['mode'];
         $edit=$dato['edit'];
-        $documet=$id."-".$version."-".$mode."-".$edit;        
+        $document=$id."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
+<<<<<<< HEAD
         return view('documents.wopihost', compact('api_token','documet', 'id'));
+=======
+        return view('documents.wopihost', compact('api_token','document'));
+>>>>>>> 3a7228ca183e994e69dc3d58f91e572d85edcb75
     }
 
 

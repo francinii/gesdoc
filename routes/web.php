@@ -40,7 +40,7 @@ Route::get("wopiHost/{id}", 'DocumentController@openDocument');
 Route::get("wopiHost/historial/{id}", 'DocumentFlowController@historial');
 
 
-
+Route::post('documentFlow/updateDocument/{id}', 'DocumentFlowController@updateDocument');
 Route::get('documentFlow/historial/{id}', 'DocumentFlowController@historial');
 Route::get('documentFlow/preview/{id}', 'DocumentFlowController@preview');
 Route::get('documentFlow/historial/panel/{id}', 'DocumentFlowController@openPanel');

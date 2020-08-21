@@ -459,13 +459,6 @@ function editionMode(document_id, versionNum){
 
 }
 
-
-
-
-
-
-
-
 /**
  * Show the version historial
  *  
@@ -508,5 +501,127 @@ function historial(idDoc){
             $("#cargandoDiv").css('display', 'none')
         }
     });
+}
+/**
+ * 
+ */
+function upload(){
+    $("#file").change(function(e){
+        var file1 = $('#file')[0]
+        var archivo = file1.files[0]; 
+        var fullname=archivo.name.split(".");
+        var type=fullname.pop();
+        var name='';
+        fullname.forEach(element => {
+            name+=element;
+        });
+        $('#nameU').val(name)
+    });
+    $('#nameU').val('');
+    $("#nameU").removeClass("is-invalid");
+    $('#uploadDocument').modal('show');
+}
+/**
+ * put the name of file in upload file 
+ */
 
+/**
+ *  This function validates the inputs of the create form in the browser
+ *  
+ */
+function validaUploadDoc() {
+    var validado = true;
+    if ($("#nameU").val() == "") {
+        $("#nameU").addClass("is-invalid");
+        validado = false;
+    } else {
+        $("#nameU").removeClass("is-invalid");
+    }
+    var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png",'xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf']; 
+    var file1 = $('#file')[0]
+    var archivo = file1.files[0];
+    var index;
+    if(typeof archivo !== 'undefined'){
+    var fullname=archivo.name.split(".");
+    var type=fullname.pop();
+    index=_validFileExtensions.findIndex(x => x == type);
+    }else{
+        index=-1;
+    }
+
+    if(index==-1){
+        $("#file").addClass("is-invalid");
+        $("#file_message").html("tipo de archivo invalido");
+        validado = false;
+    }else{
+        $("#file").removeClass("is-invalid");
+        $("#file_message").html("");
+    }
+    return validado;
+}
+
+/**
+ * Send an ajax request in order to upload a file to the server 
+ * 
+ * @param {int} document_id  id of document
+ * @param {int} version  id of version
+ * 
+ */
+function ajaxUploadDoc(document_id,version,versionNum) {
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
+    if (validaUploadDoc()) {
+        var description = $("#nameU").val();
+        var file1 = $('#file')[0]
+        var archivo = file1.files[0]; 
+        
+        var fullname=archivo.name.split(".");
+        var docType=fullname.pop();
+ 
+    
+           
+        var formData = new FormData();
+        formData.append('X-CSRF-TOKEN"',$('meta[name="csrf-token"]').attr("content"));
+        formData.append('_token',$("input[name=_token]").val());
+        formData.append('description',description);
+        formData.append('docType',docType);
+        formData.append('document_id',document_id);
+        formData.append('version',version);
+        formData.append('versionNum',versionNum);
+        formData.append('archivo',archivo);
+
+        $.ajax({
+            url: "documentFlow/updateDocument/{" + document_id + "}",
+            method: "POST",
+            processData: false,
+            contentType: false,
+            data: formData,
+            
+            beforeSend: function (xhr) { 
+                $("#cargandoDiv").css('display', 'block')
+                me.data("requestRunning", false);  
+            },
+            success: function (result) {
+                $("#cargandoDiv").css('display', 'none');
+                me.data("requestRunning", false);  
+                $("#uploadDocument").modal('hide'); 
+                $("#table").DataTable().destroy();
+                $("#divTable").html(result);
+                createDataTableHome("table");                          
+                alerts('alerts', 'alert-content',"El documento " +  description +
+                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");
+                             
+            },
+            error: function (request, status, error) {
+                $("#cargandoDiv").css('display', 'none')
+                me.data("requestRunning", false);
+                alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+                alert(request.responseText);
+               
+                
+            },
+        });
+    }
 }

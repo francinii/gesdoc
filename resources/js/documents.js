@@ -228,7 +228,7 @@ function ajaxUploadDoc(mode) {
            
         var formData = new FormData();
         formData.append('X-CSRF-TOKEN"',$('meta[name="csrf-token"]').attr("content"));
-        formData.append('_token',$("input[name=_token]").val(),   );
+        formData.append('_token',$("input[name=_token]").val());
         formData.append('currentClassification',currentClassification.id);
         formData.append('currentTable',currentTable);
         formData.append('description',description);
