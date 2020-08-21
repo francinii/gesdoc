@@ -2,7 +2,8 @@
 
 @section('head')
 <script src="{{ asset('../resources/js/documents.js') }}" defer></script>
-<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+
+
 @stop
 
 @section('title', 'Documentos')

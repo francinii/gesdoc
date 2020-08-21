@@ -42,4 +42,8 @@ class Document extends Model
         return $this->belongsToMany('App\Action','action_document_user','document_id','action_id');
     }
 
+    public function versions() {
+        return $this->hasMany('App\Version');
+    }
+
 }

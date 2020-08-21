@@ -4,6 +4,7 @@
                 <tr>                   
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
                     <th style="width: 55%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
+                    <th style="width: 55%"  class="text-center" >Estado</th> 
                     <th style="width: 20%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
                     <th  style="width: 20%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
                     <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.id') }}</th>
@@ -18,7 +19,8 @@
                 @foreach ($classifications as $classification)
                 <tr onclick="openClassification({{$classification->id}})" data-toggle="tooltip" data-placement="top" title="{{ __('app.home.table.numberDocuments') }} {{$classification->documents->count()}}">                   
                     <td class="text-center " ><i class="fas fa-folder fa-2x" ></i><span style="display:none;">classification</span></td>
-                    <td class="text-center ">{{$classification->description}}</td>                           
+                    <td class="text-center ">{{$classification->description}}</td> 
+                    <td class="text-center "></td>                              
                     <td class="text-center " >{{$classification->created_at}}</td>  
                     <td class="text-center ">{{$classification->updated_at}}</td>
                     <td style="display:none;" class="text-center ">{{$classification->id}}</td>
@@ -41,7 +43,8 @@
                     @else
                     <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @endif
-                    <td class="text-center ">{{$document->description}}</td>                           
+                    <td class="text-center ">{{$document->description}}</td>  
+                    <td class="text-center "><h5><span class="badge" style= 'background-color:{{$document->action->color}}; color:white'>{{$document->action->state}}</span></h5></td>                            
                     <td class="text-center ">{{$document->created_at}}</td>  
                     <td class="text-center ">{{$document->updated_at}}</td>
                     <td style="display:none;" class="text-center ">{{$document->id}}</td>

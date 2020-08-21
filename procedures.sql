@@ -963,6 +963,7 @@ BEGIN
   DECLARE h_document_id INT DEFAULT NULL;
   DECLARE h_document_name VARCHAR(500) DEFAULT NULL;
   DECLARE h_id_flow INT DEFAULT NULL;
+  DECLARE h_status INT DEFAULT NULL;
   DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
   DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
   -- --
@@ -982,9 +983,11 @@ BEGIN
 
             START TRANSACTION;
             set idFlow = p_id_flow;
+            set h_status = 10;
             set idIdentifier = p_identifier;
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
+                  set h_status = 1;
                 END IF;
                 IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
@@ -993,7 +996,7 @@ BEGIN
                 INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`) VALUES (idFlow, p_action_id, p_username, p_description, p_type, p_summary, p_code, p_languaje, p_others,NOW(),NOW());
                 SET document_id =  LAST_INSERT_ID(); 
                 INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, document_id, NOW(), NOW());
-                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,1,1, NOW(),NOW());
+                INSERT INTO `versions`(document_id, flow_id, identifier, content,size, status, version, created_at, updated_at) VALUES (document_id, idFlow, idIdentifier,p_content,p_size,h_status,1, NOW(),NOW());
                 
                 -- NECESARY FOR THE HISTORIAL -- 
                 SET h_version_id =  LAST_INSERT_ID();              

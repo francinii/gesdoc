@@ -19,8 +19,7 @@ Route::get('/', function () {
     }
     else{
         return view('auth/login');
-    }
-    
+    }    
 });
 
 
@@ -35,7 +34,10 @@ Route::get('home/showshare/classification/{id}', 'HomeController@showShare');
 Route::get('documents/showshare/document/{id}', 'DocumentController@showShare');
 Route::get('documents/clone/{id}', 'DocumentController@clone');
 Route::post('documents/share/document/{id}', 'DocumentController@Share');
-Route::get('documents/open/{id}', 'DocumentController@openDocument');
+// Route::get('documents/open/{id}', 'DocumentController@openDocument');
+//Route::get('open/{id}', 'DocumentController@openDocument');
+Route::get("wopiHost/{id}", 'DocumentController@openDocument');
+Route::get("wopiHost/historial/{id}", 'DocumentFlowController@historial');
 
 
 

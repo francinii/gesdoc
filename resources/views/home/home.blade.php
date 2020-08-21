@@ -2,13 +2,13 @@
 
 @section('head')
 <link rel="stylesheet"    href="{{ asset('../resources/css/advancedSearch.css') }}">
-
 <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
 <script src="{{ asset('../resources/js/home.js') }}" defer></script>
 <script src="{{ asset('../resources/js/documents.js') }}" defer></script>
+
 @stop
 
-@section('title', 'Usuarios')
+@section('title', 'Documentos')
 @section('header')
 @include('layouts.header')
 @stop

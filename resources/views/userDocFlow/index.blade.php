@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('head')
-    <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+    <script src="{{ asset('../resources/js/sharedDocumentFunctions.js') }}" defer></script> 
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
 

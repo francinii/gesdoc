@@ -15,7 +15,7 @@
            <td class="text-center">{{$document->code}}</td>  
             <td class="text-center">{{$document->description}}</td>     
             <td class="text-center">
-                    <button onclick = "preview({{$document->id}})"   class="btn btn-info"  data-toggle="modal" >
+                    <button onclick = "preview({{$document->id}},2)"   class="btn btn-info"  data-toggle="modal" >
                         <i class="fas fa-eye" ></i>
                     </button>
             </td>

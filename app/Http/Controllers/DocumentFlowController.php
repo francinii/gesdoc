@@ -233,6 +233,7 @@ class DocumentFlowController extends Controller
         $version = $datos['version'];
         $mode=$datos['mode'];
         $edit=$datos['edit'];
+        $screen=$datos['screen']; // 1 is documentFlow.preview 2
         //retrived just one row the actual version
         $actualVersion = Version::where('document_id', '=', $doc)->orderBy('version', 'desc')->first();
         //retrived the version before the actual version
@@ -248,7 +249,7 @@ class DocumentFlowController extends Controller
         $api_token=$user->api_token;
         $documet=$doc."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        return view('documentFlow.preview', compact('doc', 'actualVersion', 'allVersions','oldVersion','api_token','documet'));
+        return view('documentFlow.preview', compact('doc', 'actualVersion', 'allVersions','oldVersion','api_token','documet', 'screen'));
     }
 
 
