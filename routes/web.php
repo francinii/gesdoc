@@ -38,6 +38,7 @@ Route::post('documents/share/document/{id}', 'DocumentController@Share');
 //Route::get('open/{id}', 'DocumentController@openDocument');
 Route::get("wopiHost/{id}", 'DocumentController@openDocument');
 Route::get("wopiHost/historial/{id}", 'DocumentFlowController@historial');
+Route::get('wopiHost/historial/panel/{id}', 'DocumentFlowController@openPanel');
 
 
 Route::post('documentFlow/updateDocument/{id}', 'DocumentFlowController@updateDocument');
