@@ -1,14 +1,14 @@
-<table id='table' class="table table-striped">
+<table id='table' class="table table-striped ">
     <thead class="thead-dark">
         <tr class="">
-            <th style="width: 20%"  class="text-center">{{ __('app.record.table.user') }}</th>
-            <th style="width: 20%"  class="text-center">{{ __('app.record.table.action') }}</th>            
-            <th style="width: 20%"  class="text-center">{{ __('app.record.table.document') }}</th> 
-            <th style="width: 10%"  class="text-center">{{ __('app.record.table.version') }}</th>  
-            <th style="width: 20%"  class="text-center">{{ __('app.record.table.description') }}</th>                 
-            <th style="width: 10%"  class="text-center">{{ __('app.record.table.Flow') }}</th>
-            <th style="width: 10%"  class="text-center">{{ __('app.record.table.create') }}</th>
-            <th style="width: 10%"  class="text-center">{{ __('app.record.table.modified') }}</th>
+            <th style="width: 10%"  class="text-center">{{ __('app.record.table.user') }}</th>
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.action') }}</th>            
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.document') }}</th> 
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.version') }}</th>  
+            <th style="width: 60%"  class="text-center">{{ __('app.record.table.description') }}</th>                 
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.Flow') }}</th>
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.create') }}</th>
+            <th style="width: 5%"  class="text-center">{{ __('app.record.table.modified') }}</th>
         </tr>
     </thead>
     <tbody>

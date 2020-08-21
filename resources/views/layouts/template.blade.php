@@ -18,6 +18,17 @@
     <script type="text/javascript"  src="{{ asset('../resources/extensions/DataTables-1.10.20/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('../resources/extensions/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.4.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.4.1/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.4.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.4.1/js/buttons.print.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
+
+    
     @yield('head')
 </head>
 
