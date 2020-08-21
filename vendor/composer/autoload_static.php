@@ -686,6 +686,7 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         'App\\Http\\Controllers\\PermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/PermissionController.php',
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',
         'App\\Http\\Controllers\\StepStepController' => __DIR__ . '/../..' . '/app/Http/Controllers/StepStepController.php',
+        'App\\Http\\Controllers\\Traits\\HomeTrait' => __DIR__ . '/../..' . '/app/Http/Controllers/Traits/HomeTrait.php',
         'App\\Http\\Controllers\\Traits\\RefreshHomeTrait' => __DIR__ . '/../..' . '/app/Http/Controllers/Traits/RefreshHomeTrait.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Controllers\\UserDocFlowController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserDocFlowController.php',
