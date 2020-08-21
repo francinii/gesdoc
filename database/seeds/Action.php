@@ -93,7 +93,7 @@ class Action extends Seeder
         \DB::table('actions')->insert(array(
             'description' =>"En flujo",
             'state' =>"En flujo",
-            'color' =>"#007bff",
+            'color' =>"#218838",
             'type' =>4,
             'created_at'=> '2020-05-02 00:00:00',
             'updated_at'=> '2020-05-02 00:00:00',      

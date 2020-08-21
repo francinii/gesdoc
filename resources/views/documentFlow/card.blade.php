@@ -27,9 +27,7 @@
         <div class="col-12">
             <span><button onclick="openPanel(1,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-info"> <i class="fas fa-eye"></i> Ver</button></span>
             <span><button onclick="openPanel(2,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i>Notas</button></span>
-           
-            <span><button onclick="openPanel(3,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-danger"><i class="fa fa-download"> Descarga</i></button></span>
-            <span><button onclick="openPanel(4,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-primary"> <i class="fas fa-clock">Acciones</i></button></span>  
+            <span><button onclick="openPanel(4,{{ $verdoc->id }}, {{ $verdoc->document_id }},'{{ $verdoc->version }}')" class="btn-sm btn btn-danger"> <i class="fas fa-clock">Acciones</i></button></span>  
         </div>
       </div>
     </div>

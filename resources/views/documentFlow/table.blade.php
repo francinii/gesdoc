@@ -21,7 +21,7 @@
             <td class="text-center"><h5><span class="badge" style= 'background-color:{{$document->action->color}}; color:white'>{{$document->action->state}}</span></h5></td>                                                 
       
             <td class="text-center">
-                    <button onclick = "preview({{$document->id}})"   class="btn btn-info"  data-toggle="modal" >
+                    <button onclick = "preview({{$document->id}},1)"   class="btn btn-info"  data-toggle="modal" >
                         <i class="fas fa-eye" ></i>
                     </button>
             </td>

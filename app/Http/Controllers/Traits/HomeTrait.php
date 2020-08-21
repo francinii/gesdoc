@@ -24,7 +24,7 @@ trait HomeTrait{
         $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();        
         $departments = Department::all();
         $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
-        $actions = Action::where('type', '=', 1)->get();
+        $actions = Action::where('type', '=', 1)->get();        
         $myActions=['owner'];      
         $documents =  $mainClassification->documents;
         return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions'));

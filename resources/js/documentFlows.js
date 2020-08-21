@@ -116,47 +116,15 @@ function isCheckNote(event){
    
 
 
-function historial(idDoc){
-    var me = $(this);
-    if (me.data("requestRunning"))
-    return;
-    $.ajax({
-        url: "documentFlow/historial/{" + idDoc + "}",
-        method: "GET",
-        headers: {
-           
-          },
-        data: {
-           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-           _token: $("input[name=_token]").val(),
-           idDoc: idDoc,
-            
-        },
-        beforeSend: function (xhr) { 
-            me.data("requestRunning", true); 
-            $("#cargandoDiv").css('display', 'block')
-        },
-        success: function(result) {
-            me.data("requestRunning", false); 
-            $("#cargandoDiv").css('display', 'none');
-            $("#content").html(result);
-           // $("#table").DataTable().destroy();
-            
-           // createDataTable("table");            
-           
-        },
 
-        error: function(request, status, error) {
-            me.data("requestRunning", false); 
-            alert(request.responseText);
-            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-            $("#cargandoDiv").css('display', 'none')
-        }
-    });
 
-}
 
-function preview(idDoc){
+/** 
+ *  @param {int} idDoc - document id
+ *  @param {int} screen -  1-vista previa 2-notas
+ * 
+ */
+function preview(idDoc,screen){
     var me = $(this);
     if (me.data("requestRunning"))
     return;
@@ -172,7 +140,8 @@ function preview(idDoc){
            idDoc: idDoc,
            version:"last",
            mode:2,
-           edit:2, // 1 can edit 2 prewiew    
+           edit:2, // 1 can edit 2 prewiew  
+           screen: screen, 
             
         },
         beforeSend: function (xhr) { 
@@ -488,6 +457,50 @@ function editionMode(document_id, versionNum){
         }
     });
 
+}
+
+/**
+ * Show the version historial
+ *  
+ */
+function historial(idDoc){
+    var me = $(this);
+    if (me.data("requestRunning"))
+    return;
+    $.ajax({
+        //url: "historial/{" + idDoc + "}",
+        url: "documentFlow/historial/{" + idDoc + "}",
+        method: "GET",
+        headers: {
+           
+          },
+        data: {
+           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+           _token: $("input[name=_token]").val(),
+           idDoc: idDoc,
+            
+        },
+        beforeSend: function (xhr) { 
+            me.data("requestRunning", true); 
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {
+            me.data("requestRunning", false); 
+            $("#cargandoDiv").css('display', 'none');
+            $("#content").html(result);
+           // $("#table").DataTable().destroy();
+            
+           // createDataTable("table");            
+           
+        },
+
+        error: function(request, status, error) {
+            me.data("requestRunning", false); 
+            alert(error);
+            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
+            $("#cargandoDiv").css('display', 'none')
+        }
+    });
 }
 /**
  * 

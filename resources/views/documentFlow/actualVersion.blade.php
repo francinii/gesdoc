@@ -8,10 +8,12 @@
                         <span class="card-text text-light "> </span>
                         
                         <span  title = "Notas" class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>  
-                       
-                        <span  title = "Subir archivo" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>  
-                        <span  title = "Editar archivo" class=" float-right"><button class="btn-sm btn btn-info" onclick="editionMode({{$actualVersion->document_id }},{{$actualVersion->version}})"> <i class="fas fa-edit"></i> </button></span>
+                       <!-- $screen = 1 is for "Documentos asociados a mis flujos" and 2 is for "Documentos compartidos a mis flujos" -->
+                        @if($screen == 2)
+                        <span  title = "Subir archivo" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>
+                        <span  title = "Editar archivo" class=" float-right"><button class="btn-sm btn btn-info" onclick="editionMode({{$actualVersion->document_id }},{{$actualVersion->version}})"> <i class="fas fa-edit"></i> </button></span>                       
                         <span  title = "Ejecutar acción sobre el documento " class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})"  class="btn-sm btn btn-success" > <i class="fa fa-play"></i> Ejecutar acción </button></span>    
+                        @endif
                     </div>                                                                                         
                 </div>            
             </div>
