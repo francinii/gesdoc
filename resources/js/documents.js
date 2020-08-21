@@ -619,17 +619,23 @@ function openDocument(id,flow){
         var form = document.createElement("form");
         form.setAttribute("id", "OpenDocumentForm");
         form.setAttribute("method", "get");
-        form.setAttribute("action", "wopiHost/"+id);
+        form.setAttribute("action", "wopiHost");
       //  form.setAttribute("action", "documents/open/"+id);
    //     form.setAttribute("action", "documents/open/"+id);
         form.setAttribute("target", "_blank");
     
         //Hidden Field
-      //  var hiddenField = document.createElement("input");
+        var hiddenField = document.createElement("input");      
         var hiddenField1 = document.createElement("input");
         var hiddenField2 = document.createElement("input");
         var hiddenField3 = document.createElement("input");
         var hiddenField4 = document.createElement("input");
+
+        //id
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("id", "id");
+        hiddenField.setAttribute("name", "id");
+        hiddenField.setAttribute("value", id); 
 
         //edit
         hiddenField1.setAttribute("type", "hidden");
@@ -656,7 +662,8 @@ function openDocument(id,flow){
         hiddenField4.setAttribute("value", "last"); 
        
 
-        //form.appendChild(hiddenField);   
+        //form.appendChild(hiddenField);  
+        form.appendChild(hiddenField); 
         form.appendChild(hiddenField1);   
         form.appendChild(hiddenField2); 
         form.appendChild(hiddenField3); 
@@ -667,53 +674,5 @@ function openDocument(id,flow){
 
 }
 
-
-
-
-
-/**
- * Show the version historial in the wopiHost
- *  
- */
-function historial(idDoc){
-    var me = $(this);
-    if (me.data("requestRunning"))
-    return;
-    $.ajax({
-        url: "historial/{" + idDoc + "}",
-      //  url: "documents/historial/{" + idDoc + "}",
-        method: "GET",
-        headers: {
-           
-          },
-        data: {
-           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-           _token: $("input[name=_token]").val(),
-           idDoc: idDoc,
-            
-        },
-        beforeSend: function (xhr) { 
-            me.data("requestRunning", true); 
-            $("#cargandoDiv").css('display', 'block')
-        },
-        success: function(result) {
-            me.data("requestRunning", false); 
-            $("#cargandoDiv").css('display', 'none');
-            $("#mainContainer").html(result);
-           // $("#table").DataTable().destroy();
-            
-           // createDataTable("table");            
-           
-        },
-
-        error: function(request, status, error) {
-            me.data("requestRunning", false); 
-            alert(error);
-            alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-            $("#cargandoDiv").css('display', 'none')
-        }
-    });
-
-}
 
 

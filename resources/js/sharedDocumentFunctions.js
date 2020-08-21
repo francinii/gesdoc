@@ -7,7 +7,7 @@ function historial(idDoc){
     if (me.data("requestRunning"))
     return;
     $.ajax({
-        url: "historial/{" + idDoc + "}",
+        url: "wopiHost/historial/{" + idDoc + "}",
       //  url: "documents/historial/{" + idDoc + "}",
         method: "GET",
         headers: {
@@ -57,7 +57,7 @@ function openPanel(code, version,document,versionNum){
     if (me.data("requestRunning"))
     return;
     $.ajax({
-        url: "historial/panel/{" + code + "}",
+        url: "wopiHost/historial/panel/{" + code + "}",
         method: "GET",
         headers: {
            

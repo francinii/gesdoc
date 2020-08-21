@@ -498,13 +498,14 @@ class DocumentController extends Controller
      * @param  edit 1 mode edition 0 mode view
      * clone a document for id
      */
-    public function openDocument($id,Request $request){
+    public function openDocument(Request $request){
         $username = Auth::id();
         $user=User::where('username',$username) -> first();
         $dato = request()->except(['_token']);
         $version=$dato['version'];
         $mode=$dato['mode'];
         $edit=$dato['edit'];
+        $id=$dato['id'];
         $document=$id."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
         return view('documents.wopihost', compact('api_token','document', 'id'));
