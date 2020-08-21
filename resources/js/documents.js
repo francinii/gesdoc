@@ -605,11 +605,18 @@ function advancedSearchfilter(colum,element){
  * @param {int} id of de document
  */
 
-function openDocument(id){
+function openDocument(id,flow){    
     var me = $(this);
 
     if (me.data("requestRunning"))
         return;
+
+    if(flow!=null){
+        $('#alertModalTitle').html('Documento en flujo');
+        $('#alertModalDescription').html('El documento se encuentra en flujo por lo que no puede ser editado hasta que salga, si tiene permisos puede buscarlo en la sección de documentos en flujo');
+        $('#alertModal').modal('show'); 
+        return
+    }
         var form = document.createElement("form");
         form.setAttribute("id", "OpenDocumentForm");
         form.setAttribute("method", "get");

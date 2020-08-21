@@ -30,7 +30,7 @@
                 </tr>
                 @endforeach
                 @foreach ($documents as $document)
-                <tr  onclick="openDocument({{$document->id}})" data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
+                <tr  onclick="openDocument({{$document->id}},{{$document->flow_id}})" data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
 
                      @if ($document->type=="docx" || $document->type=="doc")
                     <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>

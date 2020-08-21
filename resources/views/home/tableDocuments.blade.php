@@ -19,7 +19,7 @@
                 @foreach ($Classifications as $Classification)
                     @foreach ($Classification->documents as $document)
                          @if ($Classification->type==1 || $Classification->type==1 || in_array($document->id, $idDocuments) )
-                            <tr>
+                            <tr onclick="openDocument({{$document->id}},{{$document->flow_id}})" data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
                                 @if ($document->type=="docx" || $document->type=="doc")
                                 <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
                                 @elseif($document->type=="xlsx" || $document->type=="xls")
