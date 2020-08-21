@@ -942,7 +942,7 @@ DELIMITER ;
 
 
 -- LISTO CON EL HISTORIAL
--- PROCEDURE insert a cretate a nuew documet
+-- PROCEDURE insert a cretate a nuew document
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
