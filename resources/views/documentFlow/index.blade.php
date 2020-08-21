@@ -4,7 +4,8 @@
 
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
-
+    <script src="{{ asset('../resources/js/sharedDocumentFunctions.js') }}" defer></script>   
+    <script src="{{ asset('../resources/js/documentFlows.js') }}" defer></script>
         <!-- Para el select con search -->
 @stop
 
@@ -42,7 +43,6 @@
     </div>
     
     
-    <script src="{{ asset('../resources/js/sharedDocumentFunctions.js') }}" defer></script>   
-    <script src="{{ asset('../resources/js/documentFlows.js') }}" defer></script>
+
 
 @stop

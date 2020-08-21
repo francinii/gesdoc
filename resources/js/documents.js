@@ -290,11 +290,11 @@ function ajaxUploadDoc(mode) {
  *  
  */
 function editDoc() {
-    var flowId=currentTd.parentNode.childNodes[11].innerText;
-    var summaryEditDoc=currentTd.parentNode.childNodes[13].innerText;
-    var codeEditDoc=currentTd.parentNode.childNodes[15].innerText;
-    var languajeEditDoc=currentTd.parentNode.childNodes[17].innerText;    
-    var othersEditDoc=currentTd.parentNode.childNodes[19].innerText;
+    var flowId=currentTd.parentNode.childNodes[13].innerText;
+    var summaryEditDoc=currentTd.parentNode.childNodes[15].innerText;
+    var codeEditDoc=currentTd.parentNode.childNodes[17].innerText;
+    var languajeEditDoc=currentTd.parentNode.childNodes[19].innerText;    
+    var othersEditDoc=currentTd.parentNode.childNodes[21].innerText;
     var classificationID=currentClassification.id;
     
     $("select option:selected").each(function() {
@@ -597,7 +597,6 @@ function advancedSearchfilter(colum,element){
             .search( element.value )
             .draw();
     }
-
 
 }
 /**

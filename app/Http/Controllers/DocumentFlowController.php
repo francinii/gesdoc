@@ -306,7 +306,8 @@ class DocumentFlowController extends Controller
         $api_token=$user->api_token;
         $document=$doc."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        return view('documentFlow.actualVersion', compact('actualVersion','api_token','document'));
+        $screen=2;
+        return view('documentFlow.actualVersion', compact('actualVersion','api_token','document','screen'));
     }
 
     /**

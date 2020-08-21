@@ -59,7 +59,7 @@ $("html")
         descriptionEdit = "";
         if (currentTd.className != "dataTables_empty") {
             typeContextMenu =currentTd.parentNode.childNodes[1].childNodes[1].innerText;
-            idselect = currentTd.parentNode.childNodes[9].innerText;
+            idselect = currentTd.parentNode.childNodes[11].innerText;
             descriptionEdit = currentTd.parentNode.childNodes[3].innerText;
         }
 
@@ -797,10 +797,10 @@ function showAdvancedSearch(action){
         $("#summaryFilter").val("");
         $("#othersFilter").val("");
         var dataTable= $("#table").DataTable()
-        dataTable.column(5).data().sort().unique().each( function ( d, j ) {
+        dataTable.column(6).data().sort().unique().each( function ( d, j ) {
             $("#classificationFilter").append( '<option value="'+d+'">'+d+'</option>' )
         } );
-        dataTable.column(6).data().sort().unique().each( function ( d, j ) {
+        dataTable.column(7).data().sort().unique().each( function ( d, j ) {
             if(d!="")
             $("#flowFilter").append( '<option value="'+d+'">'+d+'</option>' )
         } );
