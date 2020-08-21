@@ -1270,10 +1270,10 @@ BEGIN
             START TRANSACTION; 
 
             INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`)            
-            SELECT  `flow_id`, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =p_id;
+            SELECT  Null, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =p_id;
             SET _document_id =  LAST_INSERT_ID(); 
             INSERT INTO `versions`(`document_id`, `flow_id`, `identifier`, `content`, `size`, `status`, `version`, `created_at`, `updated_at`)
-            SELECT _document_id, `flow_id`, `identifier`, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
+            SELECT _document_id, Null, Null, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
             WHERE `document_id`=p_id and `version`=(SELECT max(`version`) FROM `versions` where `document_id`= p_id );
             INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, _document_id, NOW(), NOW());
             iterator:

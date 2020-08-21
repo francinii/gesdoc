@@ -38,7 +38,7 @@ Route::post('documents/share/document/{id}', 'DocumentController@Share');
 Route::get('documents/open/{id}', 'DocumentController@openDocument');
 
 
-
+Route::post('documentFlow/updateDocument/{id}', 'DocumentFlowController@updateDocument');
 Route::get('documentFlow/historial/{id}', 'DocumentFlowController@historial');
 Route::get('documentFlow/preview/{id}', 'DocumentFlowController@preview');
 Route::get('documentFlow/historial/panel/{id}', 'DocumentFlowController@openPanel');
