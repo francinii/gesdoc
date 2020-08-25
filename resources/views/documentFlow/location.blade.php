@@ -3,7 +3,7 @@
       <div class="modal-content">
         <div class="modal-header">  
           
-              <h2 id= "card-title" class="text-center">Ubicación del documento</h2>
+              <h2 id= "card-title" class="text-center"> {{ __('app.documentFlow.location.title') }} </h2>
           
           <button type="close" class="close" data-dismiss="modal"> 
               X
@@ -11,20 +11,20 @@
       </div>
       <div class="modal-body" id = "modal-body-edit">
         @if ( !empty($step))
-            <p> El documento se encuentra actualmente en el paso:  <b>{{ $step->description }}</b>  </p> 
-            <label for="">Usuarios asociados al paso: <b>{{ $step->description }}</b></label>  
+            <p> {{ __('app.documentFlow.location.actualStep') }}  <b>{{ $step->description }}</b>  </p> 
+            <label for=""> {{ __('app.documentFlow.location.user') }} <b>{{ $step->description }}</b></label>  
             @else 
-            <p> El documento no está asociado a un paso en el flujo.</p>
-            <label for="">Usuarios asociados al paso</label>  
+            <p>  {{ __('app.documentFlow.location.noStep') }} </p>
+            <label for=""></label>  
           @endif   
           
 
          
           <table id='' class="table table-responsive table-striped" style="display:table">
             <thead class="head_table thead-dark ">   
-                <th>Usuario</th>    
-                <th>Nombre</th>      
-                <th>Correo</th>        
+                <th> {{ __('app.documentFlow.location.username') }} </th>    
+                <th> {{ __('app.documentFlow.location.name') }}</th>      
+                <th> {{ __('app.documentFlow.location.email') }}</th>        
             </thead>
             <tbody class="" >        
               @foreach ($users as $user)
@@ -42,7 +42,7 @@
       <div class="modal-footer">     
           <span class=" text-right">
               <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModal('locationModalS')" data-target="">
-                  <i class=""></i>Cerrar
+                  <i class=""></i>{{ __('app.documentFlow.location.close') }}
               </button>       
           </span>           
       </div>

@@ -4,7 +4,7 @@
     <script src="{{ asset('../resources/js/sharedDocumentFunctions.js') }}" defer></script> 
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
-
+    <script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
         <!-- Para el select con search -->
 @stop
 
@@ -17,7 +17,7 @@
   
     <div class="container-fluid" id = "flow-wrapper" style="100%">          
         <div id = 'content' class="row justify-content-center">                
-                <h2 class="text-center">Documentos compartidos en flujo</h2>        
+                <h2 class="text-center">{{ __('app.userDocFlow.index.title') }} </h2>        
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
                     <select id='selectDoc2' class="form-control selectpicker"  data-live-search="true"  >                
@@ -35,7 +35,7 @@
         </div> 
     </div>
     @include('partials.alertModal') 
-    @include('documentFlow.create')
+
        
     <script src="{{ asset('../resources/js/documentFlows.js') }}" defer></script>
 

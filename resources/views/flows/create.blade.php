@@ -17,19 +17,19 @@
           <span id='button-actions' class="float-right">      
             <button type="button"  title = "Guardar flujo"  class="btn btn-primary float-right" onclick="ajaxCall('{{ Auth::user()->username }}')">
               <i class="fas fa-save"> </i>
-              Guardar flujo
+              {{ __('app.flows.create.save') }} 
             </button>
             <button type="button" title = "Agregar elemento final" class="btn btn-danger float-right" onclick="createStartEnd('draggable_final','Fin', 'bg-danger')">
               <i class="fas fa-plus-circle"> </i>
-              Agregar final
+               {{ __('app.flows.create.addFinal') }} 
             </button>
             <button type="button"  title = "Agregar paso" class="btn btn-info float-right" onclick="createStep({{$actions}})">
               <i class="fas fa-plus-circle"> </i>
-              Agregar paso
+              {{ __('app.flows.create.addStep') }} 
             </button>
             <button type="button" title = "Agregar inicio"  class="btn btn-success float-right" onclick="createStartEnd('draggable_inicio', 'Inicio', 'bg-success')">
               <i class="fas fa-plus-circle"> </i>
-              Agregar inicio
+              {{ __('app.flows.create.addBegin') }} 
             </button> 
           </span>
         </div>

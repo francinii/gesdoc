@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-4">
 
-                    <span> <b class="text-light">Versión anterior</b></span> 
+                    <span> <b class="text-light">{{ __('app.documentFlow.oldVersion.title') }}</b></span> 
                 </div>     
                 <div class="col-4 text-center">
                     <div >                     

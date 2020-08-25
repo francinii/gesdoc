@@ -16,11 +16,11 @@
                         <form class="" action="" method="POST">
                             {{csrf_field()}}
                             <div class="form-group ">
-                                <label class="control-label" for="CreateDescription"> Descripción del Departamento</label>
+                                <label class="control-label" for="CreateDescription"> {{ __('app.flows.card.title') }} </label>
                                 <input type="text" class="form-control " id="CreateDescription" placeholder="Descripcion" name="CreateDescription">
                             </div>                         
                             <div class="form-group">
-                                <label class="control-label" for="searchUser">Usuarios asociados</label>                                                        
+                                <label class="control-label" for="searchUser">{{ __('app.flows.card.user') }} </label>                                                        
                                 <select id='select_document' class="form-control selectpicker"  multiple data-selected-text-format="count" data-live-search="true" multiple >                
                                 @foreach ($departments as $department)                                                            
                                 <optgroup label="{{$department->description}}" >      
@@ -35,10 +35,10 @@
                               </div>           
                               <table id='tablelist' class="table table-responsive table-striped" style="display:table">
                                 <thead class="head_table thead-dark ">   
-                                    <th>Usuario</th>    
-                                    <th>Nombre</th>      
-                                    <th>Correo</th>                                     
-                                    <th>Eliminar</th>             
+                                    <th>{{ __('app.flows.card.username') }} </th>    
+                                    <th>{{ __('app.flows.card.name') }} </th>      
+                                    <th>{{ __('app.flows.card.email') }} </th>                                     
+                                    <th>{{ __('app.flows.card.delete') }} </th>             
                                 </thead>
                                 <tbody class="body_table" >              
                                 </tbody>
@@ -49,7 +49,7 @@
                             <button title = "Asociar permisos a usuarios" class ='btn btn-primary' onclick= "openPermissions({{$actions}}) "   type ='button' >
                                 <i class='fas fa-lock-open'>
                                 </i> 
-                                Asociar permisos a usuarios 
+                                {{ __('app.flows.card.userAssociate') }} 
                             </button>
                          </div>
                         </div>
@@ -59,7 +59,7 @@
         </div>
         <div class="modal-body" id = "modal-body-step-back" style="display:none">
             <button title = "Regresar"  class="btn btn-danger" onclick="openStepEdition()" > <i class= "fas fa-arrow-left"></i></button>
-            <div><h5>Asociar permisos a usuarios</h5></div>  
+            <div><h5>{{ __('app.flows.card.userAssociate') }} </h5></div>  
             <div class=" container inside_step " style="padding:1%">    
                           
                 <div id = "alertPermission" class="alert alert-dismissable" style="display: none">
@@ -68,11 +68,11 @@
                 </div>
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
-                        <th>Usuarios</th>    
+                        <th> {{ __('app.flows.card.username') }} </th>    
                         @foreach ($actions as $action)      
-                        @if ($action->type == 0  || $action->type == 1 )                
-                        <th id = "{{$action->id}}" >{{$action->description}}</th>
-                        @endif
+                            @if ($action->type == 0  || $action->type == 1 )                
+                            <th id = "{{$action->id}}" >{{$action->description}}</th>
+                            @endif
                         @endforeach             
                 </thead>
                 <tbody class="body_table_line" >                         
@@ -86,7 +86,7 @@
         <div class="modal-footer">     
             <div id ='hideModalCardSave' class="col-md-9 text-right">
                 <button  data-toggle="modal" class=" float-right btn btn-success" onclick="hideModalCardSave()" data-target="">
-                    <i class="fas fa-save"></i> Guardar
+                    <i class="fas fa-save"></i> {{ __('app.flows.card.save') }} 
                 </button>    
               </div>  
         </div>

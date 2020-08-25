@@ -5,6 +5,7 @@
     <script src="{{ asset('../resources/extensions/leaderline/leader-line.min.js') }}"></script>      
     <script src="{{ asset('../resources/extensions/dragdrop/plain-draggable.min.js') }}"></script>   
     <script src="{{ asset('../resources/js/sharedDocumentFunctions.js') }}" defer></script>   
+    <script src="{{ asset('../resources/js/sharedfunctions.js') }}" defer></script> 
     <script src="{{ asset('../resources/js/documentFlows.js') }}" defer></script>
         <!-- Para el select con search -->
 @stop
@@ -16,9 +17,9 @@
 @stop
 @section('content')
   
-    <div class="container-fluid" id = "flow-wrapper" style="100%">          
+    <div class="container-fluid" id = "flow-wrapper" >          
         <div id = 'content' class="row justify-content-center">                
-                <h2 class="text-center">Documentos asociados a mis flujos</h2>   
+                <h2 class="text-center">{{ __('app.documentFlow.index.title') }}</h2>   
                      
             <div class="col-md-11 text-center">
                 <div class="form-group">                                                                        
@@ -37,7 +38,7 @@
         </div> 
     </div>
     @include('partials.alertModal') 
-    @include('documentFlow.create')
+   
     <div id="locationModal">
        
     </div>

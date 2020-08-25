@@ -21,19 +21,19 @@
         </button> 
         <button type="button" class="btn btn-success float-right" onclick="">
             <i class="fa fa-save" aria-hidden="true"></i>
-          Guardar
+           {{ __('app.documents.textEditor.save') }}
         </button>
         <button type="button" class="btn btn-danger float-right" onclick="">
           <i class="fa fa-download"> </i>
-          Descargar
+           {{ __('app.documents.textEditor.download') }}
         </button>
         <button type="button" class="btn btn-info float-right" onclick="">
           <i class="fa fa-upload"> </i>
-          Importar
+           {{ __('app.documents.textEditor.import') }}
         </button>
         <button type="button" class="btn btn-primary float-right" onclick="">
           <i class="fa fa-share-alt"> </i>
-          Compartir
+           {{ __('app.documents.textEditor.share') }}
         </button> 
     </div>
     </div>         

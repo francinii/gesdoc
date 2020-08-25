@@ -1,3 +1,6 @@
+<div class="col-12">
+    @include('partials.alert')
+</div>
 <div id = "panel-preview" class="col-6" style="height: 80vh">
     @include('documentFlow.oldVersion') 
 </div>

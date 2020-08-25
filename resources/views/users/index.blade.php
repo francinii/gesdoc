@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('head')
-<script src="{{ asset('../resources/js/sharedFunctions.js') }}" defer></script>
+<script src="{{ asset('../resources/js/sharedfunctions.js') }}" defer></script>
 <script src="{{ asset('../resources/js/users.js') }}" defer></script> 
 @stop
 @section('title', 'Usuarios')

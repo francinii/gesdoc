@@ -36,10 +36,7 @@ function createDataTable(table) {
                 previous: "Anterior"
             }
         },
-        dom: 'Bfrtip',
-        buttons: [
-            'excelHtml5', 'print', 'csvHtml5'
-        ]
+       
     });
 }
 

@@ -13,7 +13,7 @@
 		<div class="col-md-12">	
 			<span  title = "Versiones" class=" float-right">
 				<button onclick = "historial({{$id}})"  class="btn btn-warning "  data-toggle="modal" >
-					<i class="fas fa-file"></i> Versiones
+					<i class="fas fa-file"></i> {{ __('app.documents.wopihost.title') }}
 				</button>
 			</span>	
 		</div>		

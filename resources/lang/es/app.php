@@ -19,6 +19,12 @@ return [
         'select'=> 'Seleccione...',             
     ],
 
+    'global'=> [    
+        'draggable_inicio' => 'draggable_inicio',  
+        'draggable_final' => 'draggable_final', 
+          
+    ],
+
     'roles' => [    
         'create' => [  
             'title' => 'Nuevo rol',  
@@ -93,6 +99,130 @@ return [
         ],
 
     ],
+
+    'userDocFlow' => [    
+        'index' => [
+            'title' => 'Documentos compartidos en flujo',
+        ],
+
+        'table' => [
+            'code' => 'Código',
+            'document' => 'Documento',
+            'preview' => 'Vista Previa',
+            'versions' => 'Versiones',
+
+        ],
+
+    ],
+
+    'documentFlow' => [    
+        'index' => [
+            'title' => 'Documentos asociados a mis  flujos',
+        ],
+
+        'table' => [
+            'code' => 'Código',
+            'document' => 'Documento',
+            'state' => 'Estado',
+            'preview' => 'Vista Previa',
+            'versions' => 'Versiones',
+            'location' => 'Ubicación',
+        ],
+        'actionHistory' => [
+            'title' => 'Acciones sobre la versión: ',
+            'dateBegin' => 'Fecha de creación:',
+            'dateUpdate' => 'Fecha de modificación',
+            'responsable' => 'Realizado por:',
+            'id' => 'Identificación',
+            'description' => 'Descripción',
+            'noInformation' => 'No hay acciones asociadas a esta versión.',      
+        ],
+
+        'actualVersion' => [
+            'title' => 'Version actual: ',
+            'notes' => 'Notas',
+            'upload' => 'Subir archivo',
+            'edit' => 'Editar archivo',
+            'executeActionDes' => 'Ejecutar acción sobre el documento ',
+            'executeAction' => 'Ejecutar acción ',
+            'description' => 'Descripción',
+            'noInformation' => 'No hay acciones asociadas a esta versión.',      
+        ],
+
+        'card' => [
+            'title' => 'Acciones sobre la versión: ',
+            'version' => 'Versión:',
+            'dateBegin' => 'Fecha de creación:',
+            'dateUpdate' => 'Fecha de modificación:',
+            'type' => 'Tipo:',
+            'size' => 'Tamaño:', 
+        ],
+
+        'historial' => [
+            'document' => 'Documento:',
+            'code' => 'Código:',
+            'owner' => 'Fecha de modificación:',
+        ],
+
+        'location' => [
+            'title' => 'Ubicación del documento',
+            'actualStep' => 'El documento se encuentra actualmente en el paso:',
+            'user' => 'Usuarios asociados al paso:',
+            'noStep' => 'El documento no está asociado a un paso en el flujo.',
+            'userStep' => 'Usuarios asociados al paso.',
+            'username' => 'Usuario',
+            'name' => 'Nombre',
+            'email' => 'Correo',
+            'close' => 'Cerrar',   
+            
+        ],
+
+        'modalEditVersion' => [
+            'title' => 'Acciones sobre el flujo de la version ',
+            'description1' => 'Al ejecutar "una acción de flujo" sobre el documento actual, se enviará esta versión al siguiente paso del flujo. Al hacer esto,',
+            'description2' => 'NO podrá editar esta versión nuevamente',
+            'description3' => 'únicamente podrá ver dicho documento o las versiones anteriores a este.',
+            'addNote' => 'Agregar notas',
+            'note' => 'Notas',
+            'save' => 'Save',
+            'close' => 'Cerrar',               
+        ],
+
+        'notes' => [
+            'title' => 'Notas de la versión: ',              
+        ],
+
+        'notesContent' => [
+            'dateBegin' => 'Fecha de creación:',
+            'dateUpdate' => 'Fecha de modificación:',
+            'content' => 'Contenido',
+            'noInfo' => 'No hay notas asociadas a esta versión', 
+        ],
+
+        'notesModal' => [
+            'close' => 'Cerrar',   
+            'title' => 'Notas asociadas a la versión:',
+        ],    
+
+        'oldVersion' => [
+            'title' => 'Versión anterior ',   
+        ],
+
+        'oldVersion' => [
+            'title' => 'Versión anterior ',   
+        ],
+
+        'previewHistory' => [
+            'title' => 'Versión',   
+        ],
+
+        'upload' => [
+            'title' => 'Subir documento',
+            'import' => 'Importar documento',
+        ],
+
+    ],
+
     
     'departments' => [    
         'create' => [  
@@ -124,7 +254,11 @@ return [
     'flows' => [    
         'create' => [  
             'title' => 'Nuevo flujo',  
-            'name' => 'Nombre del flujo',             
+            'name' => 'Nombre del flujo', 
+            'save' => 'Guardar flujo', 
+            'addBegin' => 'Agregar inicio',             
+            'addStep' => 'Agregar paso', 
+            'addFinal' => 'Agregar final', 
         ],
 
         'edit' => [
@@ -138,8 +272,22 @@ return [
         ],
 
         'list' => [
-            'title' => '',
+            'title' => 'Departamento',
         ],
+
+        'line' => [
+            'title' => 'Acciones',
+            'action' => 'Acción',
+            'delete' => 'Eliminar linea',
+        ],
+
+        'permission' => [
+            'save' => 'Guardar Paso',
+            'saveClose' => 'Guardar y cerrar',
+            'title' => 'Asociar permisos a usuarios',
+            'step' => 'Paso',        
+        ],
+
 
         'table' => [
             'id' => 'Id',
@@ -147,7 +295,36 @@ return [
             'owner' => 'Creado por',
             'edit' => 'Editar flujo',
             'delete' => 'Eliminar flujo',
+            'state' => 'Estado',
+            'permission' => 'Permisos',
+            'clone' => 'Copiar',
+            'editSee' => 'Ver/Editar Flujo',
+            'stateActive' => 'Activo',
+            'stateInactive' => 'Inactivo',
+            'secureDelete' => '¿Desea eliminar el flujo:',
+            
         ],
+
+        'card' => [
+            'title' => 'Descripción del Departamento',
+            'user' => 'Usuarios asociados',
+            'userAssociate' => 'Asociar permisos a usuarios ',
+            'name' => 'Nombre',
+            'username' => 'Usuario',
+            'email' => 'Correo',
+            'delete' => 'Eliminar',
+            'save' => 'Guardar',
+
+        ],
+
+        'permissionTable' => [
+            'title' => 'Agregar Usuario',
+            'username' => 'Usuario',
+            'name' => 'Nombre',
+            'delete' => 'Quitar permisos',
+
+        ],
+
     ],
 
     'documents' => [ 
@@ -186,6 +363,18 @@ return [
             'flow' => 'Flujo asociado',
             'edit' => 'Editar documento',
             'delete' => 'Eliminar documento',
+        ],
+
+        'textEditor' => [
+            'save' => 'Guardar',  
+            'download' => 'Descargar',
+            'share' => 'Compartir', 
+            'import' => 'Importar',   
+        ],
+
+        'wopihost' => [
+            'title' => 'Versiones',  
+             
         ],
     ],
     'home' => [    

@@ -2,13 +2,13 @@
     <thead class="thead-dark">
         <tr class="">
            <!-- <th style="width:10%"  class="text-center">{{ __('app.flows.table.id') }}</th> -->
-            <th style="width: 10%"  class="text-center">Código</th> 
-            <th style="width: 50%"  class="text-center">Documento</th>  
+            <th style="width: 10%"  class="text-center">{{ __('app.documentFlow.table.code') }} </th> 
+            <th style="width: 50%"  class="text-center">{{ __('app.documentFlow.table.document') }}</th>  
                                
-            <th style="width: 10%"  class="text-center">Estado</th>                       
-            <th style="width:10%"  class="text-center">Vista Previa</th>
-            <th style="width: 10%"  class="text-center">Versiones</th>
-            <th style="width:10%"  class="text-center">Ubicación</th> 
+            <th style="width: 10%"  class="text-center">{{ __('app.documentFlow.table.state') }}</th>                       
+            <th style="width:10%"  class="text-center">{{ __('app.documentFlow.table.preview') }}</th>
+            <th style="width: 10%"  class="text-center">{{ __('app.documentFlow.table.versions') }}</th>
+            <th style="width:10%"  class="text-center">{{ __('app.documentFlow.table.location') }}</th> 
         </tr>
     </thead>
     <tbody>        

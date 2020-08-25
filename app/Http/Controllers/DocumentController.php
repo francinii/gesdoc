@@ -122,10 +122,14 @@ class DocumentController extends Controller
         $type =  "'". $type ."'";
         $size =  "'". $file->getSize()."'";
         $username = Auth::id();
-        $id_flow =  $document['flow_id']== '-1'? -1: $document['flow_id'] ;   //int    
+        $id_flow =  $document['flow_id']== '-1'? -1: (int)$document['flow_id'];   //int    
         $code =   "'".$document['code'] ."'";
         $summary =   "'".$document['summary'] ."'";      
-        $id_state =  3;//$document['state_id']; //int
+        if($id_flow == -1){
+            $id_state =  3; //Si no esta en flujo queda como Creado
+        }else {
+            $id_state =  10; //Estado en Flujo
+        }  
         $description = "'".$document['description']."'";
         $languaje="'".$document['languaje']."'";
         $others="'".$document['others']."'";
@@ -170,7 +174,7 @@ class DocumentController extends Controller
         $summary =   "'".$document['summary'] ."'";
         $type =  "'". $document['docType'] ."'";
         if($id_flow == -1){
-            $id_state =  3; //Si no esta en flujo queda como Nuevo
+            $id_state =  3; //Si no esta en flujo queda como Creado
         }else {
             $id_state =  10; //Estado en Flujo
         }        
