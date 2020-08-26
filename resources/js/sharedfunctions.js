@@ -15,6 +15,11 @@ $(function() {
  */
 function createDataTable(table) {
     $("#" + table).dataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+        
         lengthChange: false,
         language: {
             decimal: "",
@@ -35,7 +40,8 @@ function createDataTable(table) {
                 next: "Siguiente",
                 previous: "Anterior"
             }
-        }
+        },
+ 
     });
 }
 

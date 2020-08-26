@@ -802,7 +802,7 @@ function showAdvancedSearch(action){
         } );
         dataTable.column(7).data().sort().unique().each( function ( d, j ) {
             if(d!="")
-            $("#flowFilter").append( '<option value="'+d+'">'+d+'</option>' )
+            $("#flowFilter").append( "<option value='"+d+"'>"+d+"</option>" )
         } );
         $('#advancedSearch').show();
        }else{

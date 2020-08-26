@@ -4,7 +4,7 @@
                 <tr>                   
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
                     <th style="width: 55%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
-                    <th style="width: 55%"  class="text-center" >Estado</th> 
+                    <th style="width: 55%"  class="text-center" >{{ __('app.home.table.stade') }}</th> 
                     <th style="width: 20%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
                     <th  style="width: 20%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
                     <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.id') }}</th>

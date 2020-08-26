@@ -73,7 +73,9 @@ function ajaxCreateDoc(mode) {
         if(type == 1)
             docType = 'docx';
         else if(type == 2)
-            docType = 'xlsx';                  
+            docType = 'xlsx';
+        else if(type == 3)
+            docType = 'pptx';                 
            
         $.ajax({
             url: "documents",
@@ -220,6 +222,8 @@ function ajaxUploadDoc(mode) {
             docType = 'docx';
         else if(type == 2)
             docType = 'xlsx';
+        else if(type == 3)
+            docType = 'pptx';
         else{
             var fullname=archivo.name.split(".");
             docType=fullname.pop();
@@ -502,7 +506,7 @@ function newDocument(e){
 
 function createDoc(type){
     $('#docType').val(type);
-    if(type == 1 || type == 2){   
+    if(0< type < 4 ){   
         clearDescriptionDoc();
 
         $('#createDocument').modal('show'); 
@@ -513,7 +517,7 @@ function createDoc(type){
 
     $('#uploadDocument').modal('show');    
     }
-    else if(type == 3){
+    else if(type == 4){
 
             typeContextMenu='';
             clearCreate();

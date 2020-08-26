@@ -22,23 +22,30 @@
             <div class="dropdown-menu dropdown-menu-right"  style="width:99%">
                 <form action="{{ action('DocumentController@index') }}" method="POST">
                     {{csrf_field()}}
-                    <div class="form-row">  
-                        <div class="form-group col-md-4">
-                            <label for="dateCreateFilter" class="col-2 col-form-label">{{ __('app.home.table.create') }}</label> 
-                            <input class="form-control" type="date" value="" id="dateCreate"  onchange="advancedSearchfilter(3,this)">
+                    <div class="form-row"> 
+                    <div class="form-group col-md-3"> 
+                            <label for="stadeFilter">{{ __('app.home.table.stade') }}</label>
+                            <input type="text" class="form-control" id="stadeFilter"  onkeyup="advancedSearchfilter(2,this)" placeholder="{{ __('app.home.table.stade') }}" name="stadeFilter">
+                            <option value="" name ="">{{ __('app.buttons.select') }}</option>                   
  
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="dateModificated" class="col-2 col-form-label">{{ __('app.home.table.modified') }}</label> 
-                            <input class="form-control" type="date" value="" id="dateModificated"  onchange="advancedSearchfilter(4,this)">
+                            </select>
                         </div>  
-                        <div class="form-group col-md-4"> 
+                    <div class="form-group col-md-3"> 
                             <label for="flowFilter">{{ __('app.documents.edit.flow') }}</label>
                             <select id="flowFilter"class="form-control" name="flowFilter" onchange="advancedSearchfilter(7,this)">
                             <option value="" name ="">{{ __('app.buttons.select') }}</option>                   
  
                             </select>
-                        </div>                               
+                        </div>  
+                        <div class="form-group col-md-3">
+                            <label for="dateCreateFilter" class="col-2 col-form-label">{{ __('app.home.table.create') }}</label> 
+                            <input class="form-control" type="date" value="" id="dateCreate"  onchange="advancedSearchfilter(3,this)">
+ 
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="dateModificated" class="col-2 col-form-label">{{ __('app.home.table.modified') }}</label> 
+                            <input class="form-control" type="date" value="" id="dateModificated"  onchange="advancedSearchfilter(4,this)">
+                        </div>                             
                     </div> 
                     <div class="form-row">
                         <div class="form-group col-md-4"> 
