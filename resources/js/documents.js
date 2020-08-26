@@ -102,14 +102,13 @@ function ajaxCreateDoc(mode) {
             },
             success: function (result) {
                 $("#cargandoDiv").css('display', 'none');
-                me.data("requestRunning", false);   
-                var type = $("#docType").val();            
-                if(type == 1){
-                    window.location="documents/textEditor";
-                }else {
-                    window.location="documents/spreadSheetEditor";
-                }
-                              
+                me.data("requestRunning", false);  
+                $("#createDocument").modal('hide'); 
+                $("#table").DataTable().destroy();
+                $("#divTable").html(result);
+                createDataTableHome("table");                          
+                alerts('alerts', 'alert-content',"El documento " +  description +
+                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");             
 
             },
             error: function (request, status, error) {
@@ -506,7 +505,7 @@ function newDocument(e){
 
 function createDoc(type){
     $('#docType').val(type);
-    if(0< type < 4 ){   
+    if( type > 0 && type < 4 ){   
         clearDescriptionDoc();
 
         $('#createDocument').modal('show'); 

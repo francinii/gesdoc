@@ -122,4 +122,8 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
   ALTER TABLE permissions AUTO_INCREMENT = 1
 
 
-  
+// crear documentos
+
+composer require phpoffice/phpspreadsheet
+composer require phpoffice/phpword
+composer require phpoffice/phppresentation

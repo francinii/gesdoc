@@ -8,5 +8,5 @@
   <button id="removeContext" class="btn btn-link dropdown-item" onclick="deletefile(0)"><i class="fas fa-trash-alt"></i> {{ __('app.home.contextMenu.remove') }}</button>
   <button id="deleteContext" class="btn btn-link dropdown-item" onclick="deletefile(1)"><i class="fas fa-trash-alt"></i> {{ __('app.home.contextMenu.delete') }}</button>
   <button id="shareContext"data-toggle="modal" class="btn btn-link dropdown-item" onclick="showshare()" ><i class="fas fa-share-alt-square"></i> {{ __('app.home.contextMenu.share') }}</button>
-  <button  class="btn btn-link dropdown-item" id="actionsContextMenu" disable><i class="fas fa-ban"></i> Sin acciones</button>
+  <button  class="btn btn-link dropdown-item" id="actionsContextMenu" disable><i class="fas fa-ban"></i> {{ __('app.home.contextMenu.noActions') }}</button>
 </div>

@@ -38,7 +38,7 @@
                     <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
                     @elseif($document->type=="xlsx" || $document->type=="xls")
                     <td class="text-center "><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                    @elseif($document->type=="ppt")
+                    @elseif($document->type=="ppt" || $document->type=="pptx" )
                     <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @else
                     <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>

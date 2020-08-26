@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\RefreshHomeTrait;
 
+
 class DocumentController extends Controller
 {
 
@@ -164,14 +165,38 @@ class DocumentController extends Controller
 
     private function createDocument( $document){
                
-        $size =  "'0KB'";
+        $size =  "'0'";
         $username = Auth::id();
         $id_flow =  $document['flow_id']== '-1'? -1: $document['flow_id'] ;   //int 
         $currentClassification = $document['currentClassification'];
-        $currentTable = $document['currentTable'];    
-        $content =   "''";
+        $currentTable = $document['currentTable'];
+        $type =  $document['docType'];
+   
+
+        $name=$document['description'];
+        $hasname=md5($username.$name.uniqid()).uniqid();
+        $content='public/'.$hasname.'.'.$type;  
+        $destination = storage_path('app/'.$content);
+
+        if($type == 'docx'){
+            $phpWord = new \PhpOffice\PhpWord\PhpWord();
+            $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+            $writer->save($destination);
+        }
+        else if($type == 'xlsx'){
+            $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save($destination);
+        }
+        else if($type == "pptx"){
+            $PowerPoint = new \PhpOffice\PhpPresentation\PhpPresentation();
+            $writer = \PhpOffice\PhpPresentation\IOFactory::createWriter($PowerPoint, 'PowerPoint2007');
+            $writer->save($destination);
+        }
+
+        $content="'".$content."'";
         $code =   "'".$document['code'] ."'";
-        $summary =   "'".$document['summary'] ."'";
+        $summary =   "'".$document['summary'] ."'"; 
         $type =  "'". $document['docType'] ."'";
         if($id_flow == -1){
             $id_state =  3; //Si no esta en flujo queda como Creado
@@ -262,7 +287,6 @@ class DocumentController extends Controller
         if(count($step) >0){
             $identifier =  "'".$step[0]->next_step_id."'";
         }      
-
         
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
@@ -478,14 +502,14 @@ class DocumentController extends Controller
         $file = storage_path('app/'.$content[0]);
         $exists = File::exists($file);
         if($exists && $content[0]!=''){
-        $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);
-        $username = Auth::id();
-        $name= $content[0];       
-        $name=md5($username.$name.uniqid()).uniqid();
-        $route='public/'.$name.'.'.$ext;
-        $destination = storage_path('app/'.$route);    
-        $success = File::copy($file,$destination);
-        $content=$route;
+            $ext = pathinfo(storage_path('app/'.$content[0]), PATHINFO_EXTENSION);
+            $username = Auth::id();
+            $name= $content[0];       
+            $name=md5($username.$name.uniqid()).uniqid();
+            $route='public/'.$name.'.'.$ext;
+            $destination = storage_path('app/'.$route);    
+            $success = File::copy($file,$destination);
+            $content=$route;
         }else $content=$content[0];
         
         DB::select("call clone_document($idselect,$currentClassification,'$content','$UsersString',@res)");
@@ -500,7 +524,7 @@ class DocumentController extends Controller
     /**
      * @param  id of the document
      * @param  edit 1 mode edition 0 mode view
-     * clone a document for id
+     * open a document for id
      */
     public function openDocument(Request $request){
         $username = Auth::id();

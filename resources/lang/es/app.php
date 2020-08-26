@@ -438,6 +438,7 @@ return [
             'createDocument' => 'Crear documento',
             'createSheet' => 'Crear hoja de cálculo',
             'createPPT' => 'Crear presentación',
+            'noActions' => 'Sin acciones',
             'share' => 'compartir',
             'copy' => 'Hacer una copia',
         ],

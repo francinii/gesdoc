@@ -60,6 +60,7 @@ class FilesController extends Controller
             $LastModifiedTime2=date("Y-m-d\TH:i:s.u\Z");
             $handle = fopen($path, "r");
             $size = filesize($path);
+            if($size==0) $size=1;
             $contents = fread($handle, $size);
             $SHA256 = base64_encode(hash('sha256', $contents, true));
             $json = array(
@@ -86,7 +87,9 @@ class FilesController extends Controller
 
         if (file_exists($path)) {
             $handle = fopen($path, "r");
-            $contents = fread($handle, filesize($path));
+            $size = filesize($path);
+            if($size==0) $size=1;
+            $contents = fread($handle, $size);
             header("Content-type: application/octet-stream");
             echo $contents;
         }
