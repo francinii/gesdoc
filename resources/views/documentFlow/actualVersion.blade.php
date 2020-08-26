@@ -4,15 +4,15 @@
                 <div class="col-12">
                     <div id = "actualVersionButton">
                         <input type="hidden" id="actualVersion" value = '{{$actualVersion->version}}'>
-                        <span> <b class="text-light">Version actual {{$actualVersion->version}} </b></span>
+                        <span> <b class="text-light">{{ __('app.documentFlow.actualVersion.title') }} {{$actualVersion->version}} </b></span>
                         <span class="card-text text-light "> </span>
                         
-                        <span  title = "Notas" class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>  
+                        <span  title = "{{ __('app.documentFlow.actualVersion.notes') }} " class=" float-right"><button onclick="modalNotes({{$actualVersion->id }},{{$actualVersion->version}})" class="btn-sm btn btn-warning" > <i class="fas fa-file"></i> </button></span>  
                        <!-- $screen = 1 is for "Documentos asociados a mis flujos" and 2 is for "Documentos compartidos a mis flujos" -->
                         @if($screen == 2)
-                        <span  title = "Subir archivo" class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>
-                        <span  title = "Editar archivo" class=" float-right"><button class="btn-sm btn btn-info" onclick="editionMode({{$actualVersion->document_id }},{{$actualVersion->version}})"> <i class="fas fa-edit"></i> </button></span>                       
-                        <span  title = "Ejecutar acción sobre el documento " class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})"  class="btn-sm btn btn-success" > <i class="fa fa-play"></i> Ejecutar acción </button></span>    
+                        <span  title = "{{ __('app.documentFlow.actualVersion.upload') }} " class=" float-right"><button onclick="upload()" class="btn-sm btn btn-primary" > <i class="fas fa-upload"></i> </button></span>
+                        <span  title = "{{ __('app.documentFlow.actualVersion.edit') }}" class=" float-right"><button class="btn-sm btn btn-info" onclick="editionMode({{$actualVersion->document_id }},{{$actualVersion->version}})"> <i class="fas fa-edit"></i> </button></span>                       
+                        <span  title = "{{ __('app.documentFlow.actualVersion.executeActionDes') }}" class=" float-right"><button onclick="modalEdit({{$actualVersion->id }},{{$actualVersion->version}})"  class="btn-sm btn btn-success" > <i class="fa fa-play"></i> {{ __('app.documentFlow.actualVersion.executeAction') }}</button></span>    
                         @endif
                     </div>                                                                                         
                 </div>            

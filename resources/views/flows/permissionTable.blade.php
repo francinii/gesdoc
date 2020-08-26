@@ -1,6 +1,6 @@
          
 <div class="form-group">
-  <label class="control-label" for="">Agregar usuario</label>                                                        
+  <label class="control-label" for=""> {{ __('app.flows.permissionTable.title') }}</label>                                                        
   <select id='selectUserPermission' class="form-control"  data-live-search="true" multiple >                
       @foreach ($departments as $department)                                                            
           <optgroup label="{{$department->description}}" >      
@@ -19,15 +19,15 @@
 </div>
 <table id='tablePermission' class="table table-responsive table-striped" style="display:table">
     <thead class="head_table thead-dark ">        
-        <th>Usuario</th> 
-        <th>Nombre</th>   
+        <th> {{ __('app.flows.permissionTable.username') }} </th> 
+        <th> {{ __('app.flows.permissionTable.name') }} </th>   
     
         @foreach ($actions as $action)      
           @if ($action->type == 0  || $action->type == 1 )                
               <th id = "{{$action->id}}" >{{$action->description}}</th>
           @endif           
         @endforeach 
-        <th>Quitar permisos</th>
+        <th> {{ __('app.flows.permissionTable.delete') }} </th>
 
     </thead>
     <tbody id = 'body_table_permission' class="body_table_permission" style="text-align: center">     

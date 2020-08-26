@@ -5,15 +5,15 @@
             <div class="row">
                 <div class="col-12">
                     <div>
-                        <span> <b class="text-light">Documento: </b></span>
+                        <span> <b class="text-light">{{ __('app.documentFlow.historial.document') }} </b></span>
                         <span class="card-text text-light "> {{ $document->description }}</span>
                     </div>                                          
                     <div>
-                        <span><b class="card-text text-light ">Código: </b></span>
+                        <span><b class="card-text text-light ">{{ __('app.documentFlow.historial.code') }} </b></span>
                         <span class="card-text text-light">{{ $document->code }}</span>
                     </div>
                     <div>
-                        <span><b class="card-text text-light">Propietario: </b></span>
+                        <span><b class="card-text text-light">{{ __('app.documentFlow.historial.owner') }} </b></span>
                         <span class="card-text text-light">{{ $document->owner->name }}</span>
                     </div>                            
                 </div>            

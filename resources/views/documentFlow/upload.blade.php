@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document" >
         <div class="modal-content">
         <div class="modal-header">      
-            <h5 class="modal-title">Subir Documento</h5>
+            <h5 class="modal-title">{{ __('app.documentFlow.upload.title') }}</h5>
             <button type="close" class="close" data-dismiss="modal">  X </button>
         </div>
         <div class="modal-body">   
@@ -11,8 +11,8 @@
           {{csrf_field()}}       
 
             <div id= "docUpload" class="form-group">
-              <label for="uploadLabel">Subir documento</label>   
-              <input type="file" id="file" accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" /> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"></i> Importar documento</label>
+              <label for="uploadLabel">{{ __('app.documentFlow.upload.title') }}</label>   
+              <input type="file" id="file" accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" /> <label for="file" class="btn-3 btn-info btn-block"> <i class="fa fa-upload"></i> {{ __('app.documentFlow.upload.import') }}</label>
               <span class="text-danger" role="alert">
                   <strong id="file_message"></strong>
               </span> 
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="modal-footer">
-        <button  type="button" id="CreateSubmit" onclick="ajaxUploadDoc({{$actualVersion->document_id }},{{$actualVersion->id }},{{$actualVersion->version }})" class="btn btn-success">Subir</button>
+        <button  type="button" id="CreateSubmit" onclick="ajaxUploadDoc({{$actualVersion->document_id }},{{$actualVersion->id }},{{$actualVersion->version }})" class="btn btn-success">{{ __('app.documentFlow.upload.title') }}</button>
          </div>
         </div>
     </div>

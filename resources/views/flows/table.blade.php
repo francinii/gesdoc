@@ -4,10 +4,10 @@
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.id') }}</th>
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.description') }}</th>            
             <th style="width: 20%"  class="text-center">{{ __('app.flows.table.owner') }}</th>  
-            <th style="width: 15%"  class="text-center">Estado</th>       
-            <th style="width: 10%"  class="text-center">Permisos</th>   
-            <th style="width: 10%"  class="text-center">Clonar</th>        
-            <th style="width: 10%"  class="text-center">Ver/Editar Flujo</th>
+            <th style="width: 15%"  class="text-center">{{ __('app.flows.table.state') }}</th>       
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.permission') }}</th>   
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.clone') }}</th>        
+            <th style="width: 10%"  class="text-center">{{ __('app.flows.table.editSee') }}</th>
             <th style="width: 10%"  class="text-center">{{ __('app.flows.table.delete') }}</th>
         </tr>
     </thead>
@@ -27,14 +27,14 @@
                 <div class="form-group">                                                                        
                 <select id='selectFlow{{$flow->id}}' onchange="activeFlowModal(this, 'selectFlow{{$flow->id}}', '{{$flow->id}}')" class="form-control"   >                
                     @if($flow->state == 0)   
-                        <option id= "inactive{{$flow->id}}"  value = "0" selected >Inactivo</option>
+                        <option id= "inactive{{$flow->id}}"  value = "0" selected >  {{ __('app.flows.table.stateInactive') }} </option>
                     @else 
-                        <option id= "inactive{{$flow->id}}"  value = "0">Inactivo</option>
+                        <option id= "inactive{{$flow->id}}"  value = "0">{{ __('app.flows.table.stateInactive') }}</option>
                     @endif
                     @if($flow->state == 1)
-                        <option id= "active{{$flow->id}}"  value = "1" selected>Activo</option>
+                        <option id= "active{{$flow->id}}"  value = "1" selected>{{ __('app.flows.table.stateActive') }}</option>
                     @else 
-                        <option id= "active{{$flow->id}}"  value = "1">Activo</option>
+                        <option id= "active{{$flow->id}}"  value = "1">{{ __('app.flows.table.stateActive') }}</option>
                     @endif                                                  
                 </select>                           
             </div>   

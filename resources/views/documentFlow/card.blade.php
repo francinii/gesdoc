@@ -1,26 +1,26 @@
 <div class="card">
     <div class="card-header ">
-      <span><b class="card-text card-title ">Versión</b></span>
+      <span><b class="card-text card-title ">{{ __('app.documentFlow.card.version') }} </b></span>
             <span class="card-text ">{{ $verdoc->version }}</span>       
     </div>
     <div class="card-body">
      <div class="row">
         <div class="col-12">      
           <div>
-            <span><b class="card-text ">Fecha de creación:</b></span>
+            <span><b class="card-text "> {{ __('app.documentFlow.card.dateBegin') }} </b></span>
             <span id = '' class="card-text">{{ $verdoc->created_at }}</span> 
           </div>
           <div>            
-              <span><b class="card-text ">Última modificación:</b></span>
+              <span><b class="card-text "> {{ __('app.documentFlow.card.dateUpdate') }} </b></span>
               <span id = '' class="card-text">{{ $verdoc->updated_at }}</span>
           </div> 
           <div>
-            <span><b class="card-text ">Tipo:</b></span>
+            <span><b class="card-text ">{{ __('app.documentFlow.card.type') }}</b></span>
             <span class="card-text ">{{ $verdoc->type }}</span>
           </div>             
         
           <div>
-            <span><b class="card-text ">Tamaño:</b></span>
+            <span><b class="card-text ">{{ __('app.documentFlow.card.size') }} </b></span>
             <span class="card-text ">{{ $verdoc->size }}</span>
           </div> 
         </div>  

@@ -3,7 +3,7 @@
       <div class="modal-content">
         <div class="modal-header">  
             @if ( !empty($versionNum))
-              <h2 id= "card-title" class="text-center">Acciones sobre el flujo de la version {{$versionNum}}</h2>
+              <h2 id= "card-title" class="text-center">{{ __('app.documentFlow.modalEditVersion.title') }} {{$versionNum}}</h2>
             @endif    
       
           <button type="close" class="close" data-dismiss="modal"> 
@@ -12,11 +12,9 @@
         </div>
         <div class="modal-body" id = "modal-body-edit">
             <p>
-              Al ejecutar "una acción de flujo" sobre el documento actual, se enviará
-              esta versión al siguiente paso del flujo. Al hacer esto,
-                <b>NO podrá editar esta versión nuevamente</b>,
-              únicamente podrá ver dicho documento o las versiones
-              anteriores a este. 
+              {{ __('app.documentFlow.modalEditVersion.description1') }}
+              <b> {{ __('app.documentFlow.modalEditVersion.description2') }} </b>,
+              {{ __('app.documentFlow.modalEditVersion.description3') }}              
             </p>             
         <label for="role_edit"><b>Acción a ejecutar</b></label>
         <div class="form-group">
@@ -27,10 +25,10 @@
           </select>         
         </div>
         <div class="form-group">           
-              <input type="checkbox" id ='checkboxNota' onclick="isCheckNote(this)" > Agregar notas
+              <input type="checkbox" id ='checkboxNota' onclick="isCheckNote(this)" > {{ __('app.documentFlow.modalEditVersion.addNote') }}  
         </div>          
         <div class="form-group" id = 'textNote' style = 'display:none'>
-          <label for=""><b>Notas</b></label>
+          <label for=""><b>{{ __('app.documentFlow.modalEditVersion.notes') }}</b></label>
             <textarea id = "text_notas" class="form-control" ></textarea>
         </div>
          
@@ -38,12 +36,12 @@
         <div class="modal-footer">     
             <span class=" text-right">
                 <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModal('modal-edit-version')" data-target="">
-                    <i class=""></i>Cerrar
+                    <i class=""></i>{{ __('app.documentFlow.modalEditVersion.close') }}
                 </button>       
               </span>  
               <span class=" text-right">
                 <button data-toggle="modal" class=" float-right btn btn-success" onclick="flowProcess({{$version->id}})" data-target="">
-                  <i class=""></i>Guardar
+                  <i class=""></i>{{ __('app.documentFlow.modalEditVersion.save') }}
                 </button>  
               </span>
         </div>

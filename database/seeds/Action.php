@@ -34,7 +34,7 @@ class Action extends Seeder
         ));
         \DB::table('actions')->insert(array(
             'description' =>"Inicio",
-            'state' =>"Nuevo",
+            'state' =>"Creado",
             'color'=> '#007bff', 
             'type' =>2,
             'created_at'=> '2020-05-02 00:00:00',

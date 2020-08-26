@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">            
-          <label for="select_document">Departamento</label>
+          <label for="select_document">{{ __('app.flows.list.title') }}</label>
           
         </div>
         <div class="modal-footer">          

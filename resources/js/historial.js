@@ -1,3 +1,7 @@
+
+
+
+
 function advancedSearchfilter(colum,element){
     var dataTable= $("#table").DataTable()
    
@@ -12,7 +16,15 @@ function advancedSearchfilter(colum,element){
  }
 
  $( document ).ready(function() {
- var dataTable= $("#table").DataTable()
+
+  dataTable = $('#table').DataTable( {
+        destroy: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5', 'print', 'csvHtml5'
+        ]   
+    });
+
         dataTable.column(1).data().sort().unique().each( function ( d, j ) {
             $("#actionHistory").append( '<option value="'+d+'">'+d+'</option>' )
         } );
@@ -20,4 +32,10 @@ function advancedSearchfilter(colum,element){
             if(d!="")
             $("#flowHistory").append( '<option value="'+d+'">'+d+'</option>' )
         } );
+   //     dataTable.dom =  'Bfrtip';
+      //  dataTable.buttons =  ['excelHtml5', 'print', 'csvHtml5'];
+     //   dom: 'Bfrtip',
+     //   buttons: [
+     //       'excelHtml5', 'print', 'csvHtml5'
+     //   ]               
 });

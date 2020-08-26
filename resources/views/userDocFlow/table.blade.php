@@ -2,10 +2,10 @@
     <thead class="thead-dark">
         <tr class="">
            <!-- <th style="width:10%"  class="text-center">{{ __('app.flows.table.id') }}</th> -->
-            <th style="width: 10%"  class="text-center">Código</th> 
-            <th style="width: 50%"  class="text-center">Documento</th>  
-            <th style="width:10%"  class="text-center">Vista Previa</th>
-            <th style="width: 10%"  class="text-center">Versiones</th>
+            <th style="width: 10%"  class="text-center">{{ __('app.userDocFlow.table.code') }} </th> 
+            <th style="width: 50%"  class="text-center">{{ __('app.userDocFlow.table.document') }} </th>  
+            <th style="width:10%"  class="text-center">{{ __('app.userDocFlow.table.preview') }} </th>
+            <th style="width: 10%"  class="text-center">{{ __('app.userDocFlow.table.versions') }} </th>
         </tr>
     </thead>
     <tbody>        

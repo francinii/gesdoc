@@ -1,5 +1,3 @@
-
-
 var select = document.getElementById('selectDoc');
 var allVersions;
 var actualVersionEdit=2
@@ -370,8 +368,10 @@ function flowProcess(version){
         success: function(result) {
             me.data("requestRunning", false); 
             $("#cargandoDiv").css('display', 'none');
-           // $("#modal-edit-version").html(result);
-            $('#modal-edit-version').modal('hide');                 
+            alerts('alerts', 'alert-content',"El documento ha sido enviado correctamente.", "alert-success");
+            $('#modal-edit-version').modal('hide');
+            location.reload();
+          //  location.href="" ;                
         },
         error: function(request, status, error) {    
             me.data("requestRunning", false);       
