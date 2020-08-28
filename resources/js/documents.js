@@ -170,7 +170,7 @@ function validaUploadDoc() {
     } else {
         $("#languajeU").removeClass("is-invalid");
     }
-    var _validFileExtensions = ["jpg", "jpeg", "bmp", "gif", "png",'xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf']; 
+    var _validFileExtensions = ["jfif","jpg", "jpeg", "bmp", "gif", "png",'xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf','odt','ods','odp']; 
     var file1 = $('#file')[0]
     var archivo = file1.files[0];
     var index;

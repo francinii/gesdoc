@@ -13,6 +13,7 @@ use App\User;
 use File;
 use Storage;
 use DB;
+use Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -536,9 +537,26 @@ class DocumentController extends Controller
         $id=$dato['id'];
         $document=$id."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        return view('documents.wopihost', compact('api_token','document', 'id'));
+        $document = Document::where('id', '=', '' . $id . '')->first();
+        $extensions= array('xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf','odt','ods','odp');
+        if(in_array($document->type, $extensions)){
+            return view('documents.wopihost', compact('api_token','document', 'id'));
+        }else{
+            if($version=='last')
+                $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+            else
+                $content=DB::table('versions')->select('version','content')->where([['document_id','=', $id],['version','=',$version]])->pluck('content')->toArray();
+
+            //return Storage::download($content[0], $document->description.'.'.$document->type);  
+            $path = storage_path('app\\'.$content[0]);
+            $ContentType='image/'.$document->type;
+            
+          
+            return Response::make(file_get_contents($path), 200, [
+                'Content-Type' =>$ContentType ,
+                'Content-Disposition' => 'inline; filename="'. $document->description.'.'.$document->type.'"'
+            ]);
+        }        
     }
-
-
 }
 
