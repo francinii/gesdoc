@@ -124,6 +124,8 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 
 // crear documentos
 
+
+// ES NECESARIO CORRER ESTOS COMNADOS 
 composer require phpoffice/phpspreadsheet
 composer require phpoffice/phpword
 composer require phpoffice/phppresentation
