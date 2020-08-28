@@ -471,7 +471,7 @@ BEGIN
                         IF p_classification_owner!='' THEN
                           DELETE FROM `action_document_user` WHERE `document_id`=_value and `username`=p_username;
                         ELSE
-                          DELETE FROM `documents` WHERE `id`=_value and `flow_id` IS NULL;
+                          DELETE FROM `documents` WHERE `id`=_value;
                           DELETE FROM `action_document_user` WHERE `document_id`=_value;                          
                         END IF;  
                         SET p_documents = INSERT(p_documents,1,_nextlen + 1,'');
@@ -1372,7 +1372,7 @@ BEGIN
                     DELETE FROM `action_document_user` WHERE `document_id`=p_id and `username`=p_username;
                   ELSE 
 
-                    DELETE FROM `documents` WHERE `id`=p_id and `flow_id` IS NULL;
+                    DELETE FROM `documents` WHERE `id`=p_id;
                     DELETE FROM `classification_document` WHERE `classification_id`=p_classification and `document_id`=p_id;
                   END IF;
                 END IF;

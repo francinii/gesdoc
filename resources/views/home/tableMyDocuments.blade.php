@@ -34,12 +34,14 @@
                 @foreach ($documents as $document)
                 <tr  onclick="openDocument({{$document->id}},{{$document->flow_id}})" data-toggle="tooltip" data-placement="top" title="{{$document->summary}}">
 
-                     @if ($document->type=="docx" || $document->type=="doc")
+                     @if ($document->type=="docx" || $document->type=="doc" || $document->type=="odt" )
                     <td class="text-center "><i class="far fa-file-word fa-2x "></i><span style="display:none;">{{$document->type}}</span></td>
-                    @elseif($document->type=="xlsx" || $document->type=="xls")
-                    <td class="text-center "><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
-                    @elseif($document->type=="ppt" || $document->type=="pptx" )
+                    @elseif($document->type=="xlsx" || $document->type=="xls" || $document->type=="ods")
+                    <td class="text-center "><i class="far fa-file-excel fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>                    
+                    @elseif($document->type=="ppt" || $document->type=="pptx" || $document->type=="odp")
                     <td class="text-center"><i class="far fa-file-powerpoint fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
+                    @elseif($document->type=="pdf" )
+                    <td class="text-center"><i class="far fa-file-pdf fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @else
                     <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                     @endif

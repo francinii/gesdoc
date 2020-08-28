@@ -80,10 +80,40 @@ class FilesController extends Controller
         }
     }
 
-    public function getFileAction($id) { 
+    public function getFileAction($id,Request $request) { 
+        $dato=$request->all();
+        $api_token=$dato['access_token'];
+        $user=User::where('api_token',$api_token) -> first();
+        $array = explode('-', $id);
+        $id = (int) $array[0];
+        $version = $array[1];
+        $mode = $array[2]; // mode 1 home mode 2 flow
+        $edit=$array[3]; //
 
-        $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
-        $path = storage_path('app/'.$content[0]); 
+
+        if($version=='last')
+            $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+        else
+            $content=DB::table('versions')->select('version','content')->where([['document_id','=', $id],['version','=',$version]])->pluck('content')->toArray();
+
+
+            $Document = Document::where([['id', '=', $id]])->first();
+            $path = storage_path('app/'.$content[0]); 
+            
+            ($mode==1)?
+            $actions=DB::table('action_document_user')->select('action_id')->where([['document_id','=', $id],['username','=',$user->username]])->pluck('action_id')->toArray():
+            $actions=DB::table('action_step_user')->select('action_id')->where('username','=',$user->username)->pluck('action_id')->toArray();
+           
+    
+            if((in_array(5,$actions)|| $Document->username==$user->username)&&$edit==1)
+              $UserCanWrite=true;
+            else if(in_array(4,$actions)||($Document->username==$user->username&&$mode=1))
+               $UserCanWrite=false;
+            else{
+                http_response_code(404);
+                header('X-WOPI-ServerError: Unable to find file / path is invalid');
+                return;
+            }
 
         if (file_exists($path)) {
             $handle = fopen($path, "r");
@@ -111,8 +141,8 @@ class FilesController extends Controller
 
 
         $path = storage_path('app/'.$content[0]);
-        $content=fopen('php://input', 'r');
-        file_put_contents($path, $content);
+       $content=fopen('php://input', 'r');
+       file_put_contents($path, $content);
         DB::select("call save_document($id,'$user->username',@res)");      
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);

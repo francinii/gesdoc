@@ -344,7 +344,8 @@ return [
         ],
 
         'edit' => [
-            'title' => 'Editar documento',  
+            'title' => 'Editar documento',
+            'note'  => 'Nota: al cambiar un documento de flujo, esté detendra al anterior.',
             'flow' => 'Flujo asociado',
             'classification' => 'Classificación asociada',   
         ],
@@ -433,14 +434,16 @@ return [
         'contextMenu' => [
             'delete' => 'Eliminar',
             'remove' => 'Quitar',
+            'create'=>'Crear documento ',
             'createClassification' => 'Crear clasificación',
             'editClassification' => 'Editar',
-            'createDocument' => 'Crear documento',
+            'createDocumentText' => 'Crear documento de texto',
             'createSheet' => 'Crear hoja de cálculo',
             'createPPT' => 'Crear presentación',
             'noActions' => 'Sin acciones',
             'share' => 'compartir',
             'copy' => 'Hacer una copia',
+            'download' => 'Descargar',
         ],
 
         'share' => [

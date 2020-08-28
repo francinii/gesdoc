@@ -116,8 +116,8 @@ class DocumentController extends Controller
     private function uploadFile($document,$file){
         
         $username=Auth::id();
-        $type =  $file->extension();
-        if($type=='')  $type = $document['docType'];
+       // $type =  $file->extension();
+        $type = $document['docType'];
         $name=$file->getClientOriginalName();
         $hasname=md5($username.$name.uniqid()).uniqid();
         $content="'".$file->storeAS('public',$hasname.'.'.$type)."'";
@@ -537,9 +537,9 @@ class DocumentController extends Controller
         $id=$dato['id'];
         $document=$id."-".$version."-".$mode."-".$edit;        
         $api_token=$user->api_token;
-        $document = Document::where('id', '=', '' . $id . '')->first();
-        $extensions= array('xls','xlsx','doc', 'docx','ppt', 'pptx','txt','pdf','odt','ods','odp');
-        if(in_array($document->type, $extensions)){
+        $mydocument = Document::where('id', '=', '' . $id . '')->first();
+        $extensions= array('xls','xlsx','doc', 'docx','ppt', 'pptx','txt','odt','ods','odp');
+        if(in_array($mydocument->type, $extensions)){
             return view('documents.wopihost', compact('api_token','document', 'id'));
         }else{
             if($version=='last')
@@ -547,16 +547,25 @@ class DocumentController extends Controller
             else
                 $content=DB::table('versions')->select('version','content')->where([['document_id','=', $id],['version','=',$version]])->pluck('content')->toArray();
 
-            //return Storage::download($content[0], $document->description.'.'.$document->type);  
+            //return Storage::download($content[0], $mydocument->description.'.'.$mydocument->type);  
             $path = storage_path('app\\'.$content[0]);
-            $ContentType='image/'.$document->type;
+            ($mydocument->type=='pdf')?$ContentType='application/pdf': $ContentType='image/'.$mydocument->type;
             
           
             return Response::make(file_get_contents($path), 200, [
                 'Content-Type' =>$ContentType ,
-                'Content-Disposition' => 'inline; filename="'. $document->description.'.'.$document->type.'"'
+                'Content-Disposition' => 'inline; filename="'. $mydocument->description.'.'.$mydocument->type.'"'
             ]);
         }        
     }
+
+    public function download(Request $request){
+        $dato = request()->except(['_token']);
+        $id=$dato['id'];
+        $content=DB::table('versions')->select('version','content')->where('document_id','=', $id)->orderBy('version', 'desc')->pluck('content')->toArray();
+        $document = Document::where('id', '=', '' . $id . '')->first();
+        return Storage::download($content[0], $document->description.'.'.$document->type);
+    }
+
 }
 
