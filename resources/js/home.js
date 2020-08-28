@@ -420,9 +420,9 @@ function deletefile(action){
     var mensaje='Desea quitar ';
 
     if(typeContextMenu=='classification' && action){
-        mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
+        mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido";
     }else if(typeContextMenu!='classification' ){
-        mensaje+="el documento "+descriptionEdit+ ", seguran en su pestaña de flujos"
+        mensaje+="el documento "+descriptionEdit;
     }else{
         mensaje+="la clasificacion "+descriptionEdit
     }
