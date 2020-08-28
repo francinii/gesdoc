@@ -46,7 +46,7 @@
 
                          </form>
                          <div class="form-group">
-                            <button title = "Asociar permisos a usuarios" class ='btn btn-primary' onclick= "openPermissions({{$actions}}) "   type ='button' >
+                            <button title = "Asociar permisos a usuarios" class ='btn btn-primary' onclick= "openPermissions({{$filterActions}}) "   type ='button' >
                                 <i class='fas fa-lock-open'>
                                 </i> 
                                 {{ __('app.flows.card.userAssociate') }} 
@@ -69,7 +69,7 @@
                 <table id='tableLine' class="table table-responsive table-striped" style="display:table">
                 <thead class="head_table thead-dark ">   
                         <th> {{ __('app.flows.card.username') }} </th>    
-                        @foreach ($actions as $action)      
+                        @foreach ($filterActions as $action)      
                             @if ($action->type == 0  || $action->type == 1 )                
                             <th id = "{{$action->id}}" >{{$action->description}}</th>
                             @endif

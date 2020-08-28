@@ -55,7 +55,7 @@ class FlowController extends Controller
             $users = User::all();
             $departments = Department::all();
             $actions = Action::all();
-            $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+            $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
             return view('Flows.index',compact('flows', 'users','departments','actions','filterActions'));
         } //Permiso para acceder a la pantalla de flujos
 
@@ -185,7 +185,9 @@ class FlowController extends Controller
         $users = User::all();
         $departments = Department::all();
         $actions = Action::all();
-        $filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        //$filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
+         
         return view('flows.table',compact('flows', 'users','departments','actions', 'filterActions'));
     }
 
@@ -363,7 +365,7 @@ class FlowController extends Controller
         $departments = Department::all();
         $steps = Step::where('flow_id', '=', $flowId)->get();                    
         $flow= Flow::where('id', '=', $flowId)->first();
-        $actions = Action::all();
+        $actions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
         //get the flow element
             $step = Step::where('flow_id', '=', $flowId)
             ->where('id', '!=', 'draggable_inicio')
