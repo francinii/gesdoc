@@ -72,7 +72,7 @@ $("html")
             $("#actionsContextMenu").hide();
             $("#removeContext").hide();
             $("#cloneContext").hide();
-            
+            $("#downloadContext").hide();
                  
             if(currentClassification.type==1 && currentTd.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
@@ -83,7 +83,10 @@ $("html")
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
                 $("#editContext").show();
-                if(typeContextMenu!='classification') $("#cloneContext").show();
+                if(typeContextMenu!='classification'){
+                    $("#cloneContext").show();
+                    $("#downloadContext").show();
+                }
                 $("#deleteContext").show();
                 $("#shareContext").show();
             }
@@ -93,7 +96,10 @@ $("html")
             }
             else if(currentClassification.type==3 && currentTd.className != "dataTables_empty" && currentTable!=3 && (isCurrentUserOwner || CanCurrentUserEditar)){
                 $("#editContext").show();
-                if(typeContextMenu!='classification') $("#cloneContext").show();
+                if(typeContextMenu!='classification'){
+                    $("#downloadContext").show();
+                    $("#cloneContext").show();
+                }
                 $("#createDocumentContext").show();
                 $("#createSheetContext").show();
                 if(isCurrentUserOwner || CanCurrentUserDetele) $("#deleteContext").show();               
@@ -122,6 +128,7 @@ $("html")
     })
     .on("click", function () {
         $("#context-menu").removeClass("show").hide();
+     
     });
 
 function openContextMenu(e){
@@ -133,6 +140,7 @@ function openContextMenu(e){
     $("#actionsContextMenu").hide();
     $("#removeContext").hide();
     $("#cloneContext").hide();
+    $("#downloadContext").hide();
     $("#editContext").hide()
     $("#createClassificationContext").hide();
     if(currentClassification.type==1 || currentClassification.type==2){
@@ -420,9 +428,9 @@ function deletefile(action){
     var mensaje='Desea quitar ';
 
     if(typeContextMenu=='classification' && action){
-        mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido (los documentos en un flujo de trabajo, quedan en la pestaña flujos)";
+        mensaje+="la clasificacion "+descriptionEdit+" y todo su contenido ";
     }else if(typeContextMenu!='classification' ){
-        mensaje+="el documento "+descriptionEdit+ ", seguran en su pestaña de flujos"
+        mensaje+="el documento "+descriptionEdit+ "(si esta en flujo este se detendra)"
     }else{
         mensaje+="la clasificacion "+descriptionEdit
     }

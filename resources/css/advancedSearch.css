@@ -15,3 +15,22 @@
     position: static !important;
 }
 
+
+#submenuContext:hover > ul.dropdown-menu {
+    display: block !important;
+    position: absolute; 
+}
+.dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top:-6px;
+}
+
+/* rotate caret on hover */
+#submenuContext > a:hover:after {
+    text-decoration: underline;
+    transform: rotate(-90deg);
+} 

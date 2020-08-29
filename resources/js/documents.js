@@ -677,5 +677,47 @@ function openDocument(id,flow){
 
 }
 
+function download(){
+    var me = $(this);
 
+    if (me.data("requestRunning"))
+        return;
+    var flow=currentTd.parentNode.childNodes[5].childNodes[0].innerText;
 
+    if(flow=='En flujo'){
+        $('#alertModalTitle').html('Documento en flujo');
+        $('#alertModalDescription').html('El documento se encuentra en flujo por lo que no puede ser descargado hasta que salga, si tiene permisos puede buscarlo en la sección de documentos en flujo');
+        $('#alertModal').modal('show'); 
+        return
+    }
+        var form = document.createElement("form");
+        form.setAttribute("id", "downloadDocumentForm");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "documents/download");
+        
+    
+        //Hidden Field
+        var hiddenField = document.createElement("input");   
+        var hiddenField2 = document.createElement("input"); 
+
+        //id
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("id", "id");
+        hiddenField.setAttribute("name", "id");
+        hiddenField.setAttribute("value", idselect); 
+
+        //token   
+        hiddenField2.setAttribute("type", "hidden");
+        hiddenField2.setAttribute("id", "_token");
+        hiddenField2.setAttribute("name", "_token");
+        hiddenField2.setAttribute("value", $("input[name=_token]").val());  
+       
+
+        //form.appendChild(hiddenField);  
+        form.appendChild(hiddenField); 
+        form.appendChild(hiddenField2); 
+        document.body.appendChild(form);
+        form.submit();
+        $( "#downloadDocumentForm" ).remove();
+
+}

@@ -34,8 +34,8 @@ Route::get('home/showshare/classification/{id}', 'HomeController@showShare');
 Route::get('documents/showshare/document/{id}', 'DocumentController@showShare');
 Route::get('documents/clone/{id}', 'DocumentController@clone');
 Route::post('documents/share/document/{id}', 'DocumentController@Share');
-// Route::get('documents/open/{id}', 'DocumentController@openDocument');
-//Route::get('open/{id}', 'DocumentController@openDocument');
+Route::post('documents/download', 'DocumentController@download');
+
 Route::get("wopiHost", 'DocumentController@openDocument');
 Route::get("wopiHost/historial/{id}", 'DocumentFlowController@historial');
 Route::get('wopiHost/historial/panel/{id}', 'DocumentFlowController@openPanel');
