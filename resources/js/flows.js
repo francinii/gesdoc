@@ -1021,6 +1021,15 @@ function storageLine(identificador, divFirst, divSecond,action, usersLine){
     sessionStorage.setItem(divFirst, JSON.stringify(elemento));
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
 
 /**
  * Draw a line between two card steps in the canvas.
@@ -1033,33 +1042,48 @@ function storageLine(identificador, divFirst, divSecond,action, usersLine){
  */
 function createLine(begin, end, idLine, labelName){
 var bandera = false;
-//Global array of lines 
+var gravityBegin= 200;
+var gravityEnd= -200;
+var color = '#FF7F50';
 if(arrayLines)
     arrayLines.forEach(element => {
          arr = element['id'].split('-');  
         var line = idLine.split('-');      
         if( arr[0]== line[0] && line[0] == DRAGGABLE_INICIO)
-            bandera =true;        
+            bandera =true;   
+            
+        if(arr[0]== begin.id && arr[1]== end.id ){
+            gravityBegin = -200;
+            gravityEnd = 200;
+            color = '#55A8DB'
+        }
+            
     });
     if(!bandera){
         line = new LeaderLine( begin , end , {
+            color: color,
             hide:'true',
             startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
             // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
             startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
             middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
             //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})    
+           // startSocket: 'bottom',
+           // endSocket: 'top',
+           startSocketGravity: gravityBegin,
+           endSocketGravity: gravityEnd,
+            //path: 'grid'
+            //startSocket: 'bottom', endSocket: 'top'
               
         });   
-        line.positionByWindowResize =false;
+        //line.positionByWindowResize =false;
+       // line.setOptions({startSocket: 'bottom', endSocket: 'top'});
         movementLine();
        // var containerDrag = document.getElementById("drag-container-scrollable");
 
       //  containerDrag.addEventListener('scroll', AnimEvent.add(function() {          
       //      line.position();      
-      //  }), false);
-     
-              
+      //  }), false);             
        
       //  line.positionByWindowResize = false,
         line.setOptions({startSocket: 'auto', endSocket: 'auto', positionByWindowResize: true});

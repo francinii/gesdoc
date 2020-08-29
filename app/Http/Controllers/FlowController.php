@@ -56,7 +56,7 @@ class FlowController extends Controller
             $departments = Department::all();
             $actions = Action::all();
             $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
-            return view('Flows.index',compact('flows', 'users','departments','actions','filterActions'));
+            return view('Flows.index',compact('flows', 'users','departments','filterActions'));
         } //Permiso para acceder a la pantalla de flujos
 
         return $this->home();
@@ -184,11 +184,11 @@ class FlowController extends Controller
         $flows =Flow::where('username', '=', $usuario)->get();
         $users = User::all();
         $departments = Department::all();
-        $actions = Action::all();
+        //$actions = Action::all();
         //$filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
         $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
          
-        return view('flows.table',compact('flows', 'users','departments','actions', 'filterActions'));
+        return view('flows.table',compact('flows', 'users','departments', 'filterActions'));
     }
 
 

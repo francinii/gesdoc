@@ -274,7 +274,7 @@ function ajaxUploadDoc(mode) {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
+                alert(error);
                
                 
             },

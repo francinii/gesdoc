@@ -23,7 +23,7 @@
               <i class="fas fa-plus-circle"> </i>
                {{ __('app.flows.create.addFinal') }} 
             </button>
-            <button type="button"  title = "Agregar paso" class="btn btn-info float-right" onclick="createStep({{$actions}})">
+            <button type="button"  title = "Agregar paso" class="btn btn-info float-right" onclick="createStep()">
               <i class="fas fa-plus-circle"> </i>
               {{ __('app.flows.create.addStep') }} 
             </button>

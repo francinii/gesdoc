@@ -13,7 +13,7 @@
             <div id ="div-selector-action" class="form-group">
               <label for=""> {{ __('app.flows.line.action') }}</label> 
               <select id="select_action" class="form-control" name="" >
-                  @foreach ($actions as $action)
+                  @foreach ($filterActions as $action)
                     @if($action->type == 0) <!-- Flows actions-->
                       <option value="{{$action->id}}" name ="{{$action->id}}" >{{$action->description}}</option>
                     @endif

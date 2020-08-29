@@ -1072,6 +1072,7 @@ BEGIN
   DECLARE h_document_id INT DEFAULT NULL;
   DECLARE h_document_name VARCHAR(500) DEFAULT NULL;
   DECLARE h_id_flow INT DEFAULT NULL;
+
   DECLARE h_name_flow VARCHAR(500) DEFAULT NULL;
   DECLARE h_user_name VARCHAR(500) DEFAULT NULL;
   DECLARE h_version_num decimal(3,1) DEFAULT NULL;
@@ -1093,15 +1094,17 @@ BEGIN
 
       START TRANSACTION;
             set idFlow = p_id_flow;
+            set h_action = 10;
             set idIdentifier = p_identifier;
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
                 END IF;
                 IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
+                  set h_action = 3;
                 END IF;
                 SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;   
-                UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
+                UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
                 IF _document_owner=p_username THEN
                   DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
                   INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
@@ -1134,7 +1137,7 @@ BEGIN
 
                 set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha actualizado los metadatos del documento con identificación:',h_document_id,'llamado',p_description, 'correspondiente a la versión', h_version_num, '.');
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES (5, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+                    VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 -- CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name,h_version_id, h_id_flow,	h_name_flow, @res);
                 -- END OF NECESARY FOR THE HISTORIAL --
             
