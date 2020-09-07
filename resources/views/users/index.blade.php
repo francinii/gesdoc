@@ -22,8 +22,9 @@
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-9 ">
             @include('partials.alert')
-            @include('users.table')
-            
+            <div id="divTable" class="table-responsive" >
+                @include('users.table')
+            </div>
         </div>
     </div> 
 </div>

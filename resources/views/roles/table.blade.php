@@ -43,7 +43,7 @@
                     <td class="text-center">
                         @if($role->id != 1)  <!--1 correspond to the super admin role -->
                         <form method="POST" action="{{url('/roles/'.$role->id)}}">
-                            <button type="button" onclick="confirmDelete({{$role->id}} ,'roles','table', '¿Desea eliminar el rol: {{$role->description}}?')"  class=" btn btn-danger">
+                            <button type="button" onclick="confirmDelete({{$role->id}} ,'roles','table-divTable', '¿Desea eliminar el rol: {{$role->description}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>
@@ -54,3 +54,10 @@
                 @endforeach
             </tbody>
  </table>
+ <script>
+    $( document ).ready(function() {
+         var js_data = '<?php echo json_encode($notifications); ?>';        
+         var notifications=JSON.parse(js_data );
+         updateNotifications(notifications)
+    });
+</script>

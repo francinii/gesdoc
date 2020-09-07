@@ -20,6 +20,7 @@ use App\Step;
 use App\ViewActionStepStepUser;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use App\Notification;
 
 class DocumentFlowController extends Controller
 {
@@ -37,21 +38,22 @@ class DocumentFlowController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if (in_array(5, $permissionsArray)) { // permission to see the documento Flow screen
-            $usuario = Auth::user()->username;
+           
             $users = User::all();
             $actions = Action::all();
             $flow = '';
-            $flows = Flow::where('username', '=', $usuario)->get();
+            $flows = Flow::where('username', '=', $username)->get();
             if ($flows->isNotEmpty()) {
                 $flow = $flows->first()->id;
             }
             $documents = Document::where('flow_id', '=', $flow)->get();
-            return view('documentFlow.index', compact('flow', 'flows', 'users', 'documents', 'actions'));
+            $notifications = Notification::where('username', '=', $username)->get(); 
+            return view('documentFlow.index', compact('flow', 'flows', 'users', 'documents', 'actions','notifications'));
         }
         return $this->home();
     }
@@ -133,15 +135,16 @@ class DocumentFlowController extends Controller
      */
     public function refresh($flow)
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
 
         $users = User::all();
         $actions = Action::all();
-        $flows = Flow::where('username', '=', $usuario)->get();
+        $flows = Flow::where('username', '=', $username)->get();
 
         //$flow = $flows->first()->flow_id;
         $documents = Document::where('flow_id', '=', $flow)->get();
-        return view('documentFlow.table', compact('flow', 'flows', 'users', 'documents', 'actions'));
+        $notifications = Notification::where('username', '=', $username)->get(); 
+        return view('documentFlow.table', compact('flow', 'flows', 'users', 'documents', 'actions','notifications'));
     }
 
     /**
@@ -399,7 +402,7 @@ class DocumentFlowController extends Controller
         if ($identifier  == 'draggable_final') {
             $flow_id = -1;
             $identifier = '-1';
-
+            $userFlow="''";
             //estado de la version a finalizado update de la version
             //estado del documento a finalizado update del documento  
             DB::select("call update_version_final( $document_id, $idVersion,'$user_logged', @res)");
@@ -416,10 +419,19 @@ class DocumentFlowController extends Controller
             DB::select("call update_document_status($document_id, $status , @res)");
         } else {
             $status = 1;
+
+            $myUsers=DB::table('action_step_user')->select('username')->where([['flow_id','=', $flow_id],['step_id','=', $identifier]])->groupBy('username')->pluck('username')->toArray();   
+            $userFlow='';
+            foreach ($myUsers as $User) {
+                $userFlow.="$User,";
+            }
+            $userFlow=substr($userFlow, 0, -1);
+
+
             $identifier =  "'" . $identifier . "'";
 
             DB::select("call update_version_status($idVersion, $status, @res)");
-            DB::select("call insert_version($document_id, $flow_id, $identifier,$size, $content, $version, $status,'$user_logged', @res)");
+            DB::select("call insert_version($document_id, $flow_id, $identifier,$size, $content, $version, $status,'$user_logged',$userFlow, @res)");
             $res = DB::select("SELECT @res as res;");
             $res = json_decode(json_encode($res), true);
             if ($res[0]['res'] == 3) {

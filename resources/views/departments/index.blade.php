@@ -25,7 +25,9 @@
         <div  class="col-md-12">&nbsp</div>
         <div class="col-md-9">
             @include('partials.alert')
+            <div id="divTable" class="table-responsive" >
             @include('departments.table')
+            </div>
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Action;
 use App\Classification;
 use App\Department;
+use App\Notification;
 use App\Flow;
 
 trait HomeTrait{
@@ -23,10 +24,11 @@ trait HomeTrait{
         $mainClassification = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 1]])->first();
         $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();        
         $departments = Department::all();
+        $notifications = Notification::where('username', '=', $username)->get();  
         $flows  = Flow::where([['username', '=', '' . $username . ''],['state','=',1]])->get();;
         $actions = Action::where('type', '=', 1)->get();        
         $myActions=['owner'];      
         $documents =  $mainClassification->documents;
-        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions'));
+        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions','notifications'));
       }
 }

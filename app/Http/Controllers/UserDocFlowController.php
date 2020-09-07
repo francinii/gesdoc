@@ -4,20 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use App\Flow;
 use App\User;
-//use App\Department;
 use App\Document;
 use App\Version;
 use App\Action;
-//use App\Note;
-//use App\Historial;
 use App\ViewFlowUser;
 use App\ActionStepUser;
 use App\Http\Controllers\Traits\HomeTrait;
-//use App\StepStep;
-//use App\ViewActionStepStepUser;
-//use DB;
+use App\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class UserDocFlowController extends Controller
@@ -46,16 +40,16 @@ class UserDocFlowController extends Controller
     public function index()
     {
 
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if (in_array(6, $permissionsArray)) { // permission to see the documento Flow screen    
-            $usuario = Auth::user()->username;
+            $username = Auth::user()->username;
             $users = User::all();
             $actions = Action::all();
             $flow = '';
-            $flows = ViewFlowUser::where('username', '=', $usuario)->get();
+            $flows = ViewFlowUser::where('username', '=', $username)->get();
             if ($flows->isNotEmpty()) {
                 $flow = $flows->first()->flow_id;
             }
@@ -66,12 +60,13 @@ class UserDocFlowController extends Controller
                 $flow = $version->flow_id;
                 $drag = $version->identifier;
                 $asu = ActionStepUser::where('step_id', '=', $drag)->where('flow_id', '=', $flow)
-                    ->where('username', '=', $usuario)->first();
+                    ->where('username', '=', $username)->first();
                 if ($asu != NULL) {
                     array_push($documents, $doc);
                 }
             }
-            return view('userDocFlow.index', compact('flow', 'flows', 'users', 'documents', 'actions'));
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('userDocFlow.index', compact('flow', 'flows', 'users', 'documents', 'actions','notifications'));
         }
         return $this->home();
     }
@@ -148,10 +143,10 @@ class UserDocFlowController extends Controller
 
     public function refresh($flow)
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $users = User::all();
         $actions = Action::all();
-        $flows = ViewFlowUser::where('username', '=', $usuario)->get();
+        $flows = ViewFlowUser::where('username', '=', $username)->get();
         $docs = Document::where('flow_id', '=', $flow)->get();
         $documents = array();
         foreach ($docs as $doc) {
@@ -159,7 +154,7 @@ class UserDocFlowController extends Controller
             $flow = $version->flow_id;
             $drag = $version->identifier;
             $asu = ActionStepUser::where('step_id', '=', $drag)->where('flow_id', '=', $flow)
-                ->where('username', '=', $usuario)->first();
+                ->where('username', '=', $username)->first();
             if ($asu != NULL) {
                 array_push($documents, $doc);
             }
@@ -169,7 +164,7 @@ class UserDocFlowController extends Controller
         // De la version ocupo el flujo el drag asociado
         // Con el flujo y drag de esa ultima version consutlo en la tabla action step user si 
         // con el flujo y el drag si me regresa cero no tengo ningun permiso para ver el doc
-
-        return view('userDocFlow.table', compact('flow', 'flows', 'users', 'documents', 'actions'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('userDocFlow.table', compact('flow', 'flows', 'users', 'documents', 'actions','notifications'));
     }
 }

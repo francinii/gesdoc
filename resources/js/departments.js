@@ -51,7 +51,7 @@ function ajaxCreate() {
             success: function(result) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table")
                     .DataTable()
                     .destroy();
@@ -139,7 +139,7 @@ function ajaxUpdate() {
             success: function(result) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table")
                     .DataTable()
                     .destroy();

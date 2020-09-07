@@ -27,3 +27,10 @@
         @endforeach
     </tbody>
  </table>
+ <script>
+    $( document ).ready(function() {
+         var js_data = '<?php echo json_encode($notifications); ?>';        
+         var notifications=JSON.parse(js_data );
+         updateNotifications(notifications)
+    });
+</script>

@@ -129,7 +129,7 @@ function ajaxCloneFlow(id){
             success: function(result) { 
                 $("#cargandoDiv").css('display', 'none')  
                 me.data("requestRunning", false);  
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
                 alerts('alerts', 'alert-content',
@@ -272,7 +272,7 @@ function ajaxCall(user){
                alerta('Proceso exitoso', message,false);
                // alerts('alerts', 'alert-content',  "El flujo " +  description + " ha sido creado satisfactoriamente",
                //"alert-success" );
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
                 $("#create").modal("hide");
@@ -330,7 +330,7 @@ function ajaxUpdate() {
             success: function(result) { 
                 $("#cargandoDiv").css('display', 'none')  
                 me.data("requestRunning", false);  
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table")
                     .DataTable()
                     .destroy();
@@ -1725,7 +1725,7 @@ function activeFlow(active, idFlow){
         },
         success: function(result) {
             $("#cargandoDiv").css('display', 'none');
-            $("#table").html(result);
+            $("#divTable").html(result);
             $("#table").DataTable().destroy();
             alerts('alerts', 'alert-content',"La actividad del flujo fue modificada correctamente.", "alert-success");
             createDataTable("table");   

@@ -10,6 +10,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Notification;
 
 class RoleController extends Controller
 {
@@ -44,7 +45,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
@@ -52,7 +53,8 @@ class RoleController extends Controller
             $roles = Role::all();
             $roles = Role::with('permissions')->get();
             $permissions = Permission::all();
-            return view('roles.index', compact('roles', 'permissions'));
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('roles.index', compact('roles', 'permissions','notifications'));
         }
         return $this->home();
     }
@@ -202,8 +204,10 @@ class RoleController extends Controller
      */
     public function refresh()
     {
+        $username = Auth::user()->username;
         $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
-        return view('roles.table', compact('roles', 'permissions'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('roles.table', compact('roles', 'permissions','notifications'));
     }
 }

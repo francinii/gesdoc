@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Classification;
 use App\Document;
-
+use App\Notification;
 trait RefreshHomeTrait{
 
       /**
@@ -69,8 +69,8 @@ trait RefreshHomeTrait{
             $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
 
         $documents =  $mainClassification->documents;
-
-        return view('home.tableMyDocuments', compact('mainClassification', 'documents','classifications','myActions'));
+        $notifications = Notification::where('username', '=', $username)->get();  
+        return view('home.tableMyDocuments', compact('mainClassification', 'documents','classifications','myActions','notifications'));
     }
 
     /**
@@ -103,14 +103,14 @@ trait RefreshHomeTrait{
             $classifications=Classification::whereIn('id', $classifications)->get();
         }
 
-        
+        $notifications = Notification::where('username', '=', $username)->get();
         $idDocuments = array_column($mainClassification->documents->toarray(), 'id');
 
         $documents =  DB::table('action_document_user')->select('document_id')->whereIn('document_id', $idDocuments)->where('username', '=', '' . $username . '')->pluck('document_id')->toArray();
         $documents=Document::whereIn('id', $documents)->get();
         $mydocuments=$mainClassification->documents->where('username', $username);
         $documents= $documents->merge($mydocuments);
-        return view('home.tableMyDocuments', compact('mainClassification','documents', 'classifications','myActions'));
+        return view('home.tableMyDocuments', compact('mainClassification','documents', 'classifications','myActions','notifications'));
     }
 
     /**
@@ -130,7 +130,8 @@ trait RefreshHomeTrait{
         $idDocuments =  DB::table('action_document_user')->select('document_id')->where('username', '=', '' . $username . '')->pluck('document_id')->toArray();
         $documents=Document::where('username', $username)->pluck('id')->toArray();
         $idDocuments=array_merge($documents,$idDocuments);
-        return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments','notifications'));
     }
 
     public function deletefiles($document)

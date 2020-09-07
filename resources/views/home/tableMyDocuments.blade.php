@@ -69,5 +69,9 @@
          var myActions=JSON.parse(js_data );
          definePermmisision(myActions);
          drawRoute();
+
+         var js_data = '<?php echo json_encode($notifications); ?>';        
+         var notifications=JSON.parse(js_data );
+         updateNotifications(notifications)
     });
 </script>

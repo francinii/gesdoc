@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Notification;
 
 class UserController extends Controller
 {
@@ -39,7 +40,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
@@ -47,7 +48,8 @@ class UserController extends Controller
             $users = User::all();
             $roles = Role::all();
             $departments = Department::all();
-            return view('users.index', compact('users', 'roles', 'departments')); 
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('users.index', compact('users', 'roles', 'departments','notifications')); 
         }
         return $this->home();
     }
@@ -280,10 +282,22 @@ class UserController extends Controller
      */
     public function refresh()
     {
+        $username = Auth::user()->username;
         $roles = Role::all();
         $users = User::all();
         $departments = Department::all();
-        return view('users.table', compact('users', 'roles', 'departments'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('users.table', compact('users', 'roles', 'departments','notifications'));
+    }
+
+    public function profile(){
+
+        $username = Auth::id();
+        $user=User::where('username', '=', $username)->get()[0];
+        $departments = Department::all();
+        $notifications = Notification::where('username', '=', $user->username)->get();
+        $roles = Role::all();
+        return view('users.profile', compact('user','notifications','roles','departments'));
     }
 
 

@@ -22,7 +22,7 @@ Route::get('/', function () {
     }    
 });
 
-
+Route::get('profile', 'UserController@profile');
 
 Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 
@@ -30,6 +30,7 @@ Route::get('ldap/obtenerUsuario', 'UserController@ldapGetUser' );
 Route::get('home/{table}/{id}', 'HomeController@refresh');
 Route::post('home/share/classification/{id}', 'HomeController@Share');
 Route::get('home/showshare/classification/{id}', 'HomeController@showShare');
+Route::post('home/clearNotification', 'HomeController@readNotification');
 
 Route::get('documents/showshare/document/{id}', 'DocumentController@showShare');
 Route::get('documents/clone/{id}', 'DocumentController@clone');

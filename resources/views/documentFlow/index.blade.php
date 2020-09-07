@@ -33,7 +33,9 @@
             <div  class="col-md-12">&nbsp</div>
             <div class="col-11">
                 @include('partials.alert')
-                @include('documentFlow.table')                
+                <div id="divTable" class="table-responsive" >
+                @include('documentFlow.table')   
+                </div>             
             </div>
         </div> 
     </div>

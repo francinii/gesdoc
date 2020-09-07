@@ -28,7 +28,7 @@
                         </button>
                     </td>    
                     <td class=" text-center">                        
-                            <button type="button" onclick="confirmDelete({{$user->username }}  ,'users','table','¿Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
+                            <button type="button" onclick="confirmDelete({{$user->username }}  ,'users','table-divTable','¿Desea eliminar a {{$user->name}}?')"  class=" btn btn-danger">
                                 <i class="fas fa-trash-alt">
                                 </i>
                             </button>                      
@@ -36,4 +36,12 @@
                 </tr>
                 @endforeach
             </tbody>
+
  </table>
+ <script>
+    $( document ).ready(function() {
+         var js_data = '<?php echo json_encode($notifications); ?>';        
+         var notifications=JSON.parse(js_data );
+         updateNotifications(notifications)
+    });
+</script>

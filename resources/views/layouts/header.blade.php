@@ -21,16 +21,16 @@
           <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
 
         @if(in_array(1, $permissionsArray))
-            <a class="dropdown-item" href="{{ url('/roles') }}">Administración de Roles</a>
+            <a class="dropdown-item" href="{{ url('/roles') }}">{{ __('app.header.adminRole') }}</a>
         @endif
         @if(in_array(2, $permissionsArray))
-            <a class="dropdown-item" href="{{ url('/users') }}">Administración de Usuarios</a>
+            <a class="dropdown-item" href="{{ url('/users') }}">{{ __('app.header.adminUser') }}</a>
         @endif
         @if(in_array(3, $permissionsArray))
-            <a class="dropdown-item" href="{{ url('/departments') }}">Administración de Departamentos</a>
+            <a class="dropdown-item" href="{{ url('/departments') }}">{{ __('app.header.adminDepartements') }}</a>
         @endif
         @if(in_array(4, $permissionsArray))
-            <a class="dropdown-item" href="{{ url('/flows') }}">Adminsitración de Flujos </a>
+            <a class="dropdown-item" href="{{ url('/flows') }}">{{ __('app.header.adminFlow') }} </a>
         @endif           
          </div>          
       </li>
@@ -41,12 +41,11 @@
         </a>       
         <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
         @if(in_array(5, $permissionsArray))
-          <a class="dropdown-item" href="{{ url('/documentFlow') }}"> Documentos asociados a mis flujos </a>
+          <a class="dropdown-item" href="{{ url('/documentFlow') }}">{{ __('app.header.documentsInMyFlow') }} </a>
         @endif 
         @if(in_array(6, $permissionsArray))
-          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">Documentos compartidos en flujo  </a>
-        @endif        
-           <a class="dropdown-item" href="{{ url('/home') }}">Documentos</a>           
+          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">{{ __('app.header.documentsInShareFlow') }} </a>
+        @endif                  
         </div>          
     </li>
     
@@ -73,17 +72,27 @@
                 @endif
             @else
                 <li class="nav-item dropdown">
+                    <a  class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    {{ __('app.header.notification') }} <span id='notificationsNumber' class="badge badge-light"></span>
+                    </a>
+                    <div id="notifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
+                       
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
-
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('profile') }}">
+                            {{ __('app.header.profile') }}
+                        </a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            {{ __('app.header.logout') }}
                         </a>
-
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>

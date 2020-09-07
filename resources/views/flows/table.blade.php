@@ -66,7 +66,7 @@
             <td class="text-center">
                 @if($flow->state == 0)  
                 <form method="POST" action="{{url('/flows/'.$flow->id)}}">
-                    <button type="button" onclick="confirmDelete({{$flow->id}} ,'flows','table','¿Desea eliminar el flujo: {{$flow->description}}?')"  class=" btn btn-danger">
+                    <button type="button" onclick="confirmDelete({{$flow->id}} ,'flows','table-divTable','¿Desea eliminar el flujo: {{$flow->description}}?')"  class=" btn btn-danger">
                         <i class="fas fa-trash-alt">
                         </i>
                     </button>
@@ -77,3 +77,10 @@
         @endforeach
     </tbody>
  </table>
+ <script>
+    $( document ).ready(function() {
+         var js_data = '<?php echo json_encode($notifications); ?>';        
+         var notifications=JSON.parse(js_data );
+         updateNotifications(notifications)
+    });
+</script>

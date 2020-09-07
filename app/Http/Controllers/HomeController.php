@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\RefreshHomeTrait;
+use App\Notification;
 
 class HomeController extends Controller
 {
@@ -331,6 +332,9 @@ class HomeController extends Controller
 
 
     private function addShare($user,$idselect,$classificationOwner){
+        $Currentuser = Auth::user();
+
+
         $classification = Classification::where([['id', '=', $idselect]])->first();
         $documentInClassificationid=$this->getThingsInClassification($classification);
         $documentsString='';
@@ -345,7 +349,7 @@ class HomeController extends Controller
             }
             $actionsString=substr($actionsString, 0, -1);
         }
-        DB::select("call add_Share_Classification($idselect,'$user->username','$classificationOwner','$documentsString','$actionsString',@res)");
+        DB::select("call add_Share_Classification($idselect,'$user->username','$classificationOwner','$documentsString','$actionsString','$Currentuser->username','$Currentuser->name',@res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] != 0) {
@@ -370,6 +374,18 @@ class HomeController extends Controller
                     throw new DecryptException('error en la base de datos');
                 }
             
-        }
+    }
+        
+    public function readNotification(){
+        $username = Auth::id();
+        DB::select("call clear_notifications('$username',@res)");
+        $res = DB::select("SELECT @res as res;");
+        $res = json_decode(json_encode($res), true);
+        if ($res[0]['res'] != 0) {
+            throw new DecryptException('error en la base de datos');
+        }   
+        $notifications = Notification::where('username', '=', $username)->get();  
+        return $notifications;
+    }
     
 }

@@ -10,7 +10,7 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Validator;
-
+use App\Notification;
 
 class DepartmentController extends Controller
 {
@@ -38,13 +38,14 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if(in_array(3, $permissionsArray)){ // permission to see the department administration
             $departments = Department::all();
-            return view('departments.index', compact('departments'));
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('departments.index', compact('departments','notifications'));
         }
         return $this->home();
     }
@@ -57,8 +58,10 @@ class DepartmentController extends Controller
 
     public function refresh()
     {
+        $username = Auth::user()->username;
         $departments = Department::all();
-        return view('departments.table', compact('departments'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('departments.table', compact('departments','notifications'));
     }
 
     /**

@@ -55,11 +55,23 @@ return [
         ],
 
     ],
-
+    'header' => [
+        'adminRole' => 'Administración de Roles',  
+        'adminUser' => 'Administración de Usuarios',  
+        'adminDepartements' => 'Administración de Departamentos',  
+        'adminFlow' => 'Adminsitración de Flujos',  
+        'documentsInMyFlow' => 'Documentos asociados a mis flujos',  
+        'documentsInShareFlow' => 'Documentos compartidos en flujo',  
+        'notification' => 'Notificaciones',  
+        'withoutNotification' => 'Sin notificaciones',
+        'profile' => 'Perfil',    
+        'logout' => 'Salir',  
+    ],
  
     'users' => [    
         'create' => [  
             'title' => 'Nuevo usuario',  
+             
             'user' => 'Usuario',     
             'username' => 'Nombre de usuario', 
             'name' => 'Nombre',    
@@ -83,6 +95,7 @@ return [
 
         'index' => [
             'title' => 'Usuarios del sistema',
+            'profile' => 'Perfil de usuario', 
         ],
 
         'list' => [

@@ -288,12 +288,17 @@ BEGIN
     ROLLBACK;
 	END;
             START TRANSACTION;                  
-            IF p_update_password then
+            IF p_update_password and p_role_id=-1 then            
+              UPDATE `users` SET `department_id`=p_department_id,`name`=p_name,`email`=p_email,`password`=p_password,`updated_at`=NOW() WHERE `username`=p_username;
             
+            ELSEIF p_update_password then            
               UPDATE `users` SET `role_id`=p_role_id,`department_id`=p_department_id,`name`=p_name,`email`=p_email,`password`=p_password,`updated_at`=NOW() WHERE `username`=p_username;
-            ELSE
-        
-              UPDATE `users` SET `role_id`=p_role_id,`department_id`=p_department_id,`name`=p_name,`email`=p_email,`password`=p_password,`updated_at`=NOW() WHERE `username`=p_username;
+            
+            ELSEIF p_role_id=-1 then 
+              UPDATE `users` SET `department_id`=p_department_id,`name`=p_name,`email`=p_email,`updated_at`=NOW() WHERE `username`=p_username;
+            
+            ELSE        
+              UPDATE `users` SET `role_id`=p_role_id,`department_id`=p_department_id,`name`=p_name,`email`=p_email,`updated_at`=NOW() WHERE `username`=p_username;
             END IF;
            
             COMMIT;
@@ -548,9 +553,10 @@ DELIMITER ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `add_Share_Classification`;
 DELIMITER ;;
-CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_documents` LONGTEXT,IN `p_actions` varchar(500), OUT `res` TINYINT  UNSIGNED)
+CREATE  PROCEDURE `add_Share_Classification`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification_owner` varchar(500),IN `p_documents` LONGTEXT,IN `p_actions` varchar(500), IN `p_current_user` varchar(500),IN `p_current_user_name` varchar(500),OUT `res` TINYINT  UNSIGNED)
 BEGIN
   DECLARE _classification INT DEFAULT NULL;
+  DECLARE _classification_description TEXT DEFAULT NULL;
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _action TEXT DEFAULT NULL;
@@ -575,7 +581,9 @@ BEGIN
 
             START TRANSACTION;
               IF p_classification_owner!=p_username THEN
-              SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;
+              SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;    
+              SELECT `description` into _classification_description FROM `classifications` WHERE `id`=p_id;            
+              INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (p_username, CONCAT('El usuario ', p_current_user ,'con identificación',p_current_user,', te compartio la clasificacion: ',_classification_description),NOW(),NOW());
               iterator:
                 LOOP
                     IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
@@ -1057,12 +1065,15 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `update_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_currentClassification` int,   IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_description` varchar(500),  IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500), OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `update_document`(IN `p_id` int,IN `p_username` varchar(500),IN `p_classification` int,IN `p_currentClassification` int,   IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_description` varchar(500),  IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_user_Flow` Text, OUT `res` TINYINT  UNSIGNED )
 BEGIN
+  DECLARE done INT DEFAULT FALSE;
   DECLARE _document_owner INT DEFAULT NULL;
   DECLARE idFlow INTEGER ; 
   DECLARE idIdentifier varchar(500);
-
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _user TEXT DEFAULT NULL;
 
   --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
@@ -1110,7 +1121,7 @@ BEGIN
                   INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
                 END IF;
                 UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;               
-               
+                  
                 -- NECESARY FOR THE HISTORIAL --   
                 select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 5;
@@ -1125,7 +1136,24 @@ BEGIN
                 -- SELECT THE name OF an user   
                 select name into h_user_name from users where username = p_username;
 
-                IF  p_id_flow != -1 THEN  
+                IF  p_id_flow != -1 THEN 
+
+                    iterator:
+                    LOOP
+                        IF LENGTH(TRIM(p_user_Flow)) = 0 OR p_user_Flow IS NULL THEN
+                        LEAVE iterator;
+                        END IF;
+                        SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
+                        SET _nextlen = LENGTH(_next);
+                        SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                        INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),NOW(),NOW());
+                        SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
+             
+                    END LOOP;
+
+
+
+
                     -- SELECT THE ID AND DESCRIPTION OF THE FLOW IF A FLOW IS NOT NULL               
                     select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
 
@@ -1492,7 +1520,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                   END LOOP;
                   
                   SET h_description =   CONCAT_WS(' ','El usuario ',h_user_logged, 'con identificación',p_user_logged,' otorgó los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
-                    
+                  INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (p_username, CONCAT('El usuario ', h_user_logged ,' con identificación ',p_user_logged,', te compartio el documento: ',h_document_name),NOW(),NOW());
               ELSE
                   SELECT `id` into _classification FROM `classifications` WHERE `type`=1 and `username`=p_username;
                   INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
@@ -1774,12 +1802,15 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_version`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_version`(IN `p_document_id` int,  IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_size` varchar(500),IN `p_content` LONGTEXT,  IN `p_version` double,  IN `p_status` boolean, IN `p_user_logged` varchar(500), OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_version`(IN `p_document_id` int,  IN `p_id_flow` int,IN `p_identifier` varchar(500), IN `p_size` varchar(500),IN `p_content` LONGTEXT,  IN `p_version` double,  IN `p_status` boolean, IN `p_user_logged` varchar(500),IN `p_user_Flow` text, OUT `res` TINYINT  UNSIGNED )
 BEGIN                                                                -- document_id, flow_id, identifier, content,size, status, version, created_at, updated_at
   DECLARE idFlow INT DEFAULT NULL;
   DECLARE idIdentifier varchar(500) DEFAULT NULL; 
   DECLARE document_id INT DEFAULT NULL;
 
+  DECLARE _next TEXT DEFAULT NULL;
+  DECLARE _nextlen INT DEFAULT NULL;
+  DECLARE _user TEXT DEFAULT NULL;
   
   --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
@@ -1841,6 +1872,20 @@ BEGIN                                                                -- document
               -- Cuando se agregue el usuario logueado habilitar esto
             --  select name into h_user_name from users where username = p_username LIMIT 1;
           
+            iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_user_Flow)) = 0 OR p_user_Flow IS NULL THEN
+                    LEAVE iterator;
+                    END IF;
+                    SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
+                    SET _nextlen = LENGTH(_next);
+                    SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                    INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),NOW(),NOW());
+                    SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
+
+                END LOOP;
+
+
             SET h_description =   CONCAT_WS(' ','El usuario',h_user_name,'con identificación', p_user_logged,',agregó la versión ',h_version_num,'con id ', h_version_id, 'al documento ', h_document_name, 'con id', h_document_id);
             INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
             VALUES (h_action, p_user_logged, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
@@ -2119,15 +2164,32 @@ DELIMITER ;
 -- call insert_historial(1,'116650288','FRANCINI CORRALES GARRO', 'eSTO ES UNA PRUEBA',4,'Tell me', 3,NULL,NULL, @res);
 -- select @res as res
 
-
-
-
-
-
-
-
-
-
+DROP PROCEDURE IF EXISTS `clear_notifications`;
+DELIMITER ;; 
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `clear_notifications`(IN p_username varchar(500), OUT `res` TINYINT  UNSIGNED )
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;                                        
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+        START TRANSACTION;     
+            DELETE FROM `notifications` WHERE  `username`=p_username;
+        COMMIT;
+          -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call clear_notifications('116650288', @res);
+-- select @res as res
 
 
 

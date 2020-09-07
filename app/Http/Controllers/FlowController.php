@@ -15,7 +15,7 @@ use DB;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Notification;
 
 class FlowController extends Controller
 {
@@ -45,18 +45,19 @@ class FlowController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if(in_array(4, $permissionsArray)){
-            $flows =Flow::where('username', '=', $usuario)->get();
+            $flows =Flow::where('username', '=', $username)->get();
             //$Flows = Flow::all();
             $users = User::all();
             $departments = Department::all();
             $actions = Action::all();
             $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
-            return view('Flows.index',compact('flows', 'users','departments','filterActions'));
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('Flows.index',compact('flows', 'users','departments','filterActions','notifications'));
         } //Permiso para acceder a la pantalla de flujos
 
         return $this->home();
@@ -180,15 +181,15 @@ class FlowController extends Controller
      */
     private function refresh()
     {
-        $usuario = Auth::user()->username;
-        $flows =Flow::where('username', '=', $usuario)->get();
+        $username = Auth::user()->username;
+        $flows =Flow::where('username', '=', $username)->get();
         $users = User::all();
         $departments = Department::all();
         //$actions = Action::all();
         //$filterActions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
         $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
-         
-        return view('flows.table',compact('flows', 'users','departments', 'filterActions'));
+        $notifications = Notification::where('username', '=', $username)->get();
+        return view('flows.table',compact('flows', 'users','departments', 'filterActions','notifications'));
     }
 
 

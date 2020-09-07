@@ -1,3 +1,5 @@
+
+
 $(function() {
     // Sidebar toggle behavior
     $('#sidebarCollapse').on('click', function() {
@@ -158,6 +160,9 @@ function alerts(idAlert, idContent, contenido, type_class){
    $('#'+idContent).text(contenido);
    $('#'+idAlert).show(1000);
    $('#'+idAlert).removeClass('alert-warning alert-success alert-danger alert-info').addClass(type_class);
+   setTimeout(function() {
+    $('#'+idAlert).fadeOut();
+   }, 10000);
 }
 
 /**
@@ -170,6 +175,63 @@ function hideAlert(id){
 }
 
 
+function updateNotifications(notifications){
+    if(notifications.length>0){
+        $('#notificationsNumber').html(notifications.length);
+        $('#notifications').html('')
+
+        var car='<button id="deleteContext" class="btn btn-link dropdown-item" onclick="readNotification()"><i class="fas fa-trash-alt"></i> Limpiar notificaciones</button>'
+        $('#notifications').append(car)
+
+        notifications.forEach(notification => {
+            var car='<div class="card border-info mb-3" style="max-width: 18rem;">'+
+            '<div class="card-header">'+notification.description+'</div>'+
+         '</div>'
+            $('#notifications').append(car)
+        });
+
+    }else{
+        $('#notificationsNumber').html('');
+        $('#notifications').html('');
+        var car='<a class="dropdown-item" href="#">Sin notificaciones</a>'
+        $('#notifications').append(car)
+    }
+}
+
+function readNotification(){
+    var me = $(this);
+
+    if (me.data("requestRunning"))
+        return;
+
+    $.ajax({
+        url: 'home/clearNotification',
+        method: "POST",
+
+        data: {
+            _token: $("input[name=_token]").val(),
+        },
+        beforeSend: function (xhr) { 
+            me.data("requestRunning", true);
+            $("#cargandoDiv").css('display', 'block')
+        },
+        success: function(result) {  
+            me.data("requestRunning", false);
+            $("#cargandoDiv").css('display', 'none')
+            updateNotifications(result)
+            
+        },
+        error: function (request, status, error) {  
+            me.data("requestRunning", false);  
+            $("#cargandoDiv").css('display', 'none')  
+            $("#confirmar").modal("hide");                  
+            alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
+            alert(request.responseText);
+            
+        }
+    });
+}
+
 /**
  * Create a dataTable
  *  
@@ -181,6 +243,4 @@ $(document).ready(function() {
     }else{
         createDataTable("table");
     }
-
-
 });

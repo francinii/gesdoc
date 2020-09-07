@@ -30,7 +30,7 @@ if(select){
             success: function(result) {
                 me.data("requestRunning", false); 
                 $("#cargandoDiv").css('display', 'none');
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 
                 createDataTable("table");            
@@ -83,7 +83,7 @@ if(select2){
             success: function(result) {
                 me.data("requestRunning", false); 
                 $("#cargandoDiv").css('display', 'none');
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 
                 createDataTable("table");            

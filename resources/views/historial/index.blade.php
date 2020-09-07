@@ -24,7 +24,9 @@
                 </div>
             <div class="col-11">
                 @include('partials.alert')
-                @include('historial.table')                
+                <div id="divTable" class="table-responsive" >
+                    @include('historial.table')       
+                </div>         
             </div>
         </div> 
     </div>

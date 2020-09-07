@@ -1,3 +1,6 @@
+/**
+ * valide the inputs to edit a user
+ */
 function validaEdit() {
     var validado = true;
     if ($("input[name=user_edit]").val() == "") {
@@ -161,7 +164,7 @@ function ajaxUpdate() {
             success: function (result) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
                 $("#edit").modal("hide");
@@ -272,7 +275,7 @@ function ajaxCreate() {
             success: function (result) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                $("#table").html(result);
+                $("#divTable").html(result);
                 $("#table").DataTable().destroy();
                 createDataTable("table");
                 $("#create").modal("hide");
@@ -301,6 +304,10 @@ function ajaxCreate() {
     }
 }
 
+
+/**
+ *  abled and disable de password edit
+ */
 function change_password() {
     if ($("#password_edit").attr("disabled") == "disabled") {
         $("#password_edit").removeAttr("disabled");
@@ -312,41 +319,3 @@ function change_password() {
     }
 }
 
-//Función que lista en una tabla
-//código 1: lista permisos
-//código 2: lista usuarios
-/*function list(arreglo, roleDescripcion, codigo) {
-    $(".body_table").empty(); //elimina los elementos anteriores
-    $(".head_table").empty(); //elimina los elementos anteriores
-    $("#list_role").text(roleDescripcion);
-
-    codigo == 1
-        ? $(".head_table").append(
-              "<tr><th>Id</th><th>Permiso asocidado</th></tr>"
-          )
-        : $(".head_table").append(
-              "<tr><th>Usuario</th><th>Nombre</th><th>Correo</th></tr>"
-          );
-
-    arreglo.forEach(element => {
-        codigo == 1 //Tabla de permisos
-            ? $(".body_table").append(
-                  "<tr><td>" +
-                      element.id +
-                      "</td><td>" +
-                      element.description +
-                      "</td></tr>"
-              )
-            : $(".body_table").append(
-                  "<tr><td>" +
-                      element.username +
-                      "</td><td>" +
-                      element.name +
-                      "</td><td>" +
-                      element.email +
-                      "</td></tr>"
-              );
-    });
-
-    $("#list").modal("show");
-}*/

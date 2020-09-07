@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Historial;
 use App\Http\Controllers\Traits\HomeTrait;
-//use DB; 
+use App\Notification;
 
 class HistorialController extends Controller
 {
@@ -36,13 +36,14 @@ class HistorialController extends Controller
      */
     public function index()
     {
-        $usuario = Auth::user()->username;
+        $username = Auth::user()->username;
         $permissions = Auth::user()->role->permissions;
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if(in_array(7, $permissionsArray)){ // permission to see the historial
             $historial = Historial::all();
-            return view('historial.index', compact('historial')); 
+            $notifications = Notification::where('username', '=', $username)->get();
+            return view('historial.index', compact('historial','notifications')); 
         }
         return $this->home();
     }

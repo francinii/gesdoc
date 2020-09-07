@@ -30,7 +30,9 @@
             <div  class="col-md-12">&nbsp</div>
             <div class="col-11">
                 @include('partials.alert')
-                @include('userDocFlow.table')                
+                <div id="divTable" class="table-responsive" >
+                    @include('userDocFlow.table')  
+                </div>              
             </div>
         </div> 
     </div>
