@@ -56,6 +56,11 @@ return [
 
     ],
     'header' => [
+        'home' => 'GESDOC',  
+        'adminSystem' => 'Administracion de sistema',  
+        'managerDocuments' => ' Gestión de documentos',  
+        'adminRole' => 'Administración de Roles',  
+
         'adminRole' => 'Administración de Roles',  
         'adminUser' => 'Administración de Usuarios',  
         'adminDepartements' => 'Administración de Departamentos',  
@@ -77,7 +82,7 @@ return [
             'name' => 'Nombre',    
             'email' => 'Correo', 
             'role' => 'Rol asociado', 
-            'department' => 'Departmaneto asociado',  
+            'department' => 'Departamento asociado',  
             'password' => 'Contraseña',                         
         ],
 
@@ -88,7 +93,7 @@ return [
             'name' => 'Nombre',    
             'email' => 'Correo', 
             'role' => 'Rol asociado', 
-            'department' => 'Departmaneto asociado',  
+            'department' => 'Departamento asociado',  
             'password' => 'Cambiar contraseña',  
             'passwordnew' => 'Nueva contraseña',  
         ],

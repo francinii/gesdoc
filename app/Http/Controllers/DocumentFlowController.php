@@ -402,7 +402,7 @@ class DocumentFlowController extends Controller
         if ($identifier  == 'draggable_final') {
             $flow_id = -1;
             $identifier = '-1';
-            $userFlow="''";
+           
             //estado de la version a finalizado update de la version
             //estado del documento a finalizado update del documento  
             DB::select("call update_version_final( $document_id, $idVersion,'$user_logged', @res)");

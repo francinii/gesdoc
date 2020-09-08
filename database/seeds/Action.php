@@ -33,7 +33,7 @@ class Action extends Seeder
             'updated_at'=> '2020-05-02 00:00:00',      
         ));
         \DB::table('actions')->insert(array(
-            'description' =>"Inicio",
+            'description' =>"Crear",
             'state' =>"Creado",
             'color'=> '#007bff', 
             'type' =>2,

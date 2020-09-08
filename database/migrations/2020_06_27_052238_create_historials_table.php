@@ -16,7 +16,7 @@ class CreateHistorialsTable extends Migration
         Schema::create('historials', function (Blueprint $table) {
             $table->engine = 'InnoDB'; 
             $table->bigIncrements('id');            
-            $table->bigInteger('action');
+            $table->string('action',500);
             $table->string('username',500);
             $table->string('name_user',500);            
             $table->text('description'); //content or route depends on

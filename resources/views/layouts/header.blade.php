@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light main_header staticPosition ">
-    <a class="navbar-brand" href="{{ url('/home') }}">GESDOC</a>
+    <a class="navbar-brand" href="{{ url('/home') }}">{{ __('app.header.home') }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,7 +16,7 @@
       @if(in_array(1, $permissionsArray)   || in_array(2, $permissionsArray)  || in_array(3, $permissionsArray)  || in_array(4, $permissionsArray) )
       <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Administracion de sistema
+          {{ __('app.header.adminSystem') }}
           </a>
           <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
 
@@ -35,20 +35,21 @@
          </div>          
       </li>
       @endif
-      <li class="nav-item dropdown">      
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Gestión de documentos
-        </a>       
-        <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
-        @if(in_array(5, $permissionsArray))
-          <a class="dropdown-item" href="{{ url('/documentFlow') }}">{{ __('app.header.documentsInMyFlow') }} </a>
-        @endif 
-        @if(in_array(6, $permissionsArray))
-          <a class="dropdown-item" href="{{ url('/userDocFlow') }}">{{ __('app.header.documentsInShareFlow') }} </a>
-        @endif                  
-        </div>          
-    </li>
-    
+      @if(in_array(5, $permissionsArray) || in_array(6, $permissionsArray))
+        <li class="nav-item dropdown">      
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ __('app.header.managerDocuments') }}
+            </a>       
+            <div class="dropdown-menu staticPositionHeader" aria-labelledby="navbarDropdown">
+            @if(in_array(5, $permissionsArray))
+            <a class="dropdown-item" href="{{ url('/documentFlow') }}">{{ __('app.header.documentsInMyFlow') }} </a>
+            @endif 
+            @if(in_array(6, $permissionsArray))
+            <a class="dropdown-item" href="{{ url('/userDocFlow') }}">{{ __('app.header.documentsInShareFlow') }} </a>
+            @endif                  
+            </div>          
+        </li>
+      @endif 
 
     @if(in_array(7, $permissionsArray))  
     <li class="nav-item">    
@@ -71,14 +72,19 @@
                     </li>
                 @endif
             @else
-                <li class="nav-item dropdown">
-                    <a  class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ __('app.header.notification') }} <span id='notificationsNumber' class="badge badge-light"></span>
-                    </a>
-                    <div id="notifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
-                       
-
-                    </div>
+                
+                <li class="nav-item dropdown" >
+                   
+                        <a  class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        {{ __('app.header.notification') }} <span id='notificationsNumber' class="badge badge-light"></span>
+                        </a>
+                        <div class=" dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
+                            <div class="card-header" id="notificationsButton">
+                                <button id="deleteContext" class="btn btn-link dropdown-item" onclick="readNotification()"><i class="fas fa-trash-alt"></i> Limpiar notificaciones</button>
+                            </div>
+                            <div id="notifications" class="card-body"  style="height: auto;  max-height: 200px; overflow-x: hidden;">                     
+                            </div>
+                        </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

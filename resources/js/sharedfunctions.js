@@ -179,21 +179,29 @@ function updateNotifications(notifications){
     if(notifications.length>0){
         $('#notificationsNumber').html(notifications.length);
         $('#notifications').html('')
-
-        var car='<button id="deleteContext" class="btn btn-link dropdown-item" onclick="readNotification()"><i class="fas fa-trash-alt"></i> Limpiar notificaciones</button>'
-        $('#notifications').append(car)
+        
 
         notifications.forEach(notification => {
-            var car='<div class="card border-info mb-3" style="max-width: 18rem;">'+
-            '<div class="card-header">'+notification.description+'</div>'+
-         '</div>'
+            if(notification.source=='flow'){
+                var car='<div class="card border-warning mb-3" style="max-width: 18rem;">'+
+                            '<div class="card-header"><a class="" href="userDocFlow">'+notification.description+'</a></div>'+
+                        '</div>'
+            }else{
+                    var car='<div class="card border-info mb-3" style="max-width: 18rem;">'+
+                                '<div class="card-header"><a class="" href="home">'+notification.description+'</a></div>'+
+                            '</div>'
+                
+            }
             $('#notifications').append(car)
         });
 
     }else{
         $('#notificationsNumber').html('');
         $('#notifications').html('');
-        var car='<a class="dropdown-item" href="#">Sin notificaciones</a>'
+       
+        var car='<div class="card border-dark mb-3" style="max-width: 18rem;">'+
+        '<div class="card-header">Sin notificaciones</div>'+
+        '</div'
         $('#notifications').append(car)
     }
 }

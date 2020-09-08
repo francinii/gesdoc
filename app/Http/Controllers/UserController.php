@@ -45,8 +45,14 @@ class UserController extends Controller
         $permissionsArray = $permissions->pluck('id')->toArray();
 
         if(in_array(2, $permissionsArray)){ // permission to see the user managment
-            $users = User::all();
-            $roles = Role::all();
+            
+            if(Auth::user()->role_id==1){
+                $users = User::all();
+                $roles = Role::all();
+            }else{
+                $users = User::where('role_id', '!=', 1)->get();
+                $roles = Role::where('id', '!=', 1)->get();
+            }
             $departments = Department::all();
             $notifications = Notification::where('username', '=', $username)->get();
             return view('users.index', compact('users', 'roles', 'departments','notifications')); 
@@ -283,8 +289,13 @@ class UserController extends Controller
     public function refresh()
     {
         $username = Auth::user()->username;
-        $roles = Role::all();
-        $users = User::all();
+        if(Auth::user()->role_id==1){
+            $users = User::all();
+            $roles = Role::all();
+        }else{
+            $users = User::where('role_id', '!=', 1)->get();
+            $roles = Role::where('id', '!=', 1)->get();
+        }
         $departments = Department::all();
         $notifications = Notification::where('username', '=', $username)->get();
         return view('users.table', compact('users', 'roles', 'departments','notifications'));

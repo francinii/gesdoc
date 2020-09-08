@@ -18,6 +18,7 @@ class CreateNotificationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('username'); 
             $table->string('description',500);
+            $table->string('source',500);
             $table->timestamps();            
             $table->foreign('username')->references('username')->on('users')->onDelete('cascade');
         });
