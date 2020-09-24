@@ -469,20 +469,25 @@ function newDocument(e){
     $("#createClassification").show();
     $("#createTxt").show();
     $("#createSheet").show();
+    $("#createPPT").show();
+    
     }
     else if(currentTable==1  && currentClassification.type==3){
         $("#createTxt").show();
         $("#createSheet").show();
+        $("#createPPT").show();
         $("#createClassification").hide();
     }
     else if(currentTable==2  && currentClassification.type==3 && (isCurrentUserOwner || CanCurrentUserEditar)){
         $("#createTxt").show();
         $("#createSheet").show();
+        $("#createPPT").show();
         $("#createClassification").hide();
     }
     else{
         $("#createTxt").hide();
         $("#createSheet").hide();
+        $("#createPPT").hide();
         $("#createClassification").hide();
         $("#actionsMenu").show();
     }

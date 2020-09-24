@@ -81,7 +81,7 @@
                         </a>
                         <div class=" dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
                             <div class="card-header" id="notificationsButton">
-                                <button id="deleteContext" class="btn btn-link dropdown-item" onclick="readNotification()"><i class="fas fa-trash-alt"></i> Limpiar notificaciones</button>
+                                <button id="deleteNotifications" class="btn btn-link dropdown-item" onclick="readNotification()"><i class="fas fa-trash-alt"></i> Limpiar notificaciones</button>
                             </div>
                             <div id="notifications" class="card-body"  style="height: auto;  max-height: 200px; overflow-x: hidden;">                     
                             </div>
