@@ -142,7 +142,7 @@ function ajaxCloneFlow(id){
             error: function(request, status, error) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 
             }   
@@ -283,7 +283,7 @@ function ajaxCall(user){
             error: function(request, status, error) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerta("Ha ocurrido un error inesperado.", "alert-danger");
                 openTable();
                 
@@ -347,7 +347,7 @@ function ajaxUpdate() {
             error: function(request, status, error) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 
             }   
@@ -401,7 +401,7 @@ function ajaxEdit(idFlow,flowName, editMode) {
         error: function(request, status, error) {
             me.data("requestRunning", false);
             $("#cargandoDiv").css('display', 'none')
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             
         }
@@ -1735,7 +1735,7 @@ function activeFlow(active, idFlow){
 
         error: function(request, status, error) {
            
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -1776,7 +1776,7 @@ function permissionModal(idFlow, actions){
         },
 
         error: function(request, status, error) {           
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -1816,7 +1816,7 @@ function permissionModalTable(idFlow, actions2){
         },
 
         error: function(request, status, error) {           
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none');
 
@@ -1910,7 +1910,7 @@ function savePermissionsModal(idFlow, saveMode){
             }    
         },
         error: function(request, status, error) {           
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none');
             $("#permissionModalS").modal("hide");

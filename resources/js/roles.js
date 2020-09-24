@@ -94,7 +94,7 @@ function ajaxCreate() {
             error: function(request, status, error) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 
             }
@@ -165,7 +165,7 @@ function ajaxUpdate() {
             error: function(request, status, error) {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 
             }

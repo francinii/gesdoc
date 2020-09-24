@@ -180,7 +180,7 @@ function ajaxUpdate() {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
+                //alert(request.responseText);
                 
             },
         });
@@ -296,7 +296,7 @@ function ajaxCreate() {
                     $("#user_create_message").html("El usuario ya existe");
                 } else {
                     alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                    alert(request.responseText);
+                    //alert(request.responseText);
                 }
                 
             },

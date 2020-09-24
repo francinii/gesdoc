@@ -144,7 +144,7 @@ function ajaxDelete(id, url1,table){
             $("#cargandoDiv").css('display', 'none')  
             $("#confirmar").modal("hide");                  
             alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
-            alert(request.responseText);
+            //alert(request.responseText);
             
         }
     });
@@ -234,7 +234,7 @@ function readNotification(){
             $("#cargandoDiv").css('display', 'none')  
             $("#confirmar").modal("hide");                  
             alerts('alerts', 'alert-content',"Ha ocurrido un error al intentar eliminar el elemento.", "alert-danger");
-            alert(request.responseText);
+            //alert(request.responseText);
             
         }
     });

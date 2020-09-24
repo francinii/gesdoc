@@ -35,7 +35,7 @@ function historial(idDoc){
 
         error: function(request, status, error) {
             me.data("requestRunning", false); 
-            alert(error);
+            //alert(error);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -87,7 +87,7 @@ function openPanel(code, version,document,versionNum){
 
         error: function(request, status, error) {
             me.data("requestRunning", false);
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }

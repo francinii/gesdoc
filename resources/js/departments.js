@@ -64,7 +64,7 @@ function ajaxCreate() {
                     me.data("requestRunning", false);
                     $("#cargandoDiv").css('display', 'none')
                     alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                    alert(request.responseText);
+                    //alert(request.responseText);
                    
                 
             }
@@ -152,7 +152,7 @@ function ajaxUpdate() {
                 me.data("requestRunning", false);
                 $("#cargandoDiv").css('display', 'none')
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
+                //alert(request.responseText);
                 
             }
         });

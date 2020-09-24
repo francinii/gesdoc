@@ -39,7 +39,7 @@ if(select){
 
             error: function(request, status, error) {
                 me.data("requestRunning", false); 
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }
@@ -92,7 +92,7 @@ if(select2){
 
             error: function(request, status, error) {
                 me.data("requestRunning", false); 
-                alert(request.responseText);
+                //alert(request.responseText);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
                 $("#cargandoDiv").css('display', 'none')
             }
@@ -154,7 +154,7 @@ function preview(idDoc,screen){
 
         error: function(request, status, error) {
             me.data("requestRunning", false);
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -205,7 +205,7 @@ function openPanel(code, version,document,versionNum){
 
         error: function(request, status, error) {
             me.data("requestRunning", false);
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -254,7 +254,7 @@ function nextVersion(opc, version_num, idDoc){
 
         error: function(request, status, error) {   
             me.data("requestRunning", false);       
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -291,7 +291,7 @@ function modalNotes(version, versionNum){
         },
         error: function(request, status, error) { 
             me.data("requestRunning", false);           
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -327,7 +327,7 @@ function modalEdit(version, versionNum){
         },
         error: function(request, status, error) {  
             me.data("requestRunning", false);        
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -375,7 +375,7 @@ function flowProcess(version){
         },
         error: function(request, status, error) {    
             me.data("requestRunning", false);       
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -413,7 +413,7 @@ function locationModal(idDoc){
         },
         error: function(request, status, error) {  
             me.data("requestRunning", false);         
-            alert(request.responseText);
+            //alert(request.responseText);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -451,7 +451,7 @@ function editionMode(document_id, versionNum){
         error: function(request, status, error) { 
             (actualVersionEdit==1)?actualVersionEdit++:actualVersionEdit--;
             me.data("requestRunning", false);        
-            alert(request.responseText);            
+            //alert(request.responseText);            
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -496,7 +496,7 @@ function historial(idDoc){
 
         error: function(request, status, error) {
             me.data("requestRunning", false); 
-            alert(error);
+            //alert(error);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
             $("#cargandoDiv").css('display', 'none')
         }
@@ -618,7 +618,7 @@ function ajaxUploadDoc(document_id,version,versionNum) {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
+                //alert(request.responseText);
                
                 
             },

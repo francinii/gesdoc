@@ -108,15 +108,14 @@ function ajaxCreateDoc(mode) {
                 $("#divTable").html(result);
                 createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");             
+                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");            
 
             },
             error: function (request, status, error) {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
-                
+                //alert(request.responseText);               
                 
             },
         });
@@ -274,7 +273,7 @@ function ajaxUploadDoc(mode) {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(error);
+                //alert(error);
                
                 
             },
@@ -422,7 +421,7 @@ function ajaxUpdateDoc() {
                 $("#cargandoDiv").css('display', 'none')
                 me.data("requestRunning", false);
                 alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-                alert(request.responseText);
+                //alert(request.responseText);
                 
                 
             },
@@ -577,7 +576,7 @@ function clone(){
             $("#cargandoDiv").css('display', 'none')
             me.data("requestRunning", false);
             alerts('alerts', 'alert-content',"Ha ocurrido un error inesperado.", "alert-danger");
-            alert(request.responseText);
+            //alert(request.responseText);
             
             
         },
