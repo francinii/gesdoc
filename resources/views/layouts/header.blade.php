@@ -75,8 +75,9 @@
                 
                 <li class="nav-item dropdown" >
                    
-                        <a  class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ __('app.header.notification') }} <span id='notificationsNumber' class="badge badge-light"></span>
+                        <a  class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <i class="fas fa-bell" aria-hidden="true"> </i> 
+                            <span id='notificationsNumber' class="badge badge-light"></span>
                         </a>
                         <div class=" dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
                             <div class="card-header" id="notificationsButton">
