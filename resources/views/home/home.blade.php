@@ -64,7 +64,7 @@
             <button id="createClassification" class="btn btn-link dropdown-item" onclick="createDoc(4)" ><i class="fas fa-folder"></i> {{ __('app.home.contextMenu.createClassification') }}</button>
             <button id="createTxt" class="btn btn-link dropdown-item" onclick="createDoc(1)" ><i class="far fa-file-word"></i> {{ __('app.home.contextMenu.createDocumentText') }}</button>
             <button id="createSheet" class="btn btn-link dropdown-item" onclick="createDoc(2)" ><i class="far fa-file-excel"></i> {{ __('app.home.contextMenu.createSheet') }}</button>            
-            <button id="createClassification" class="btn btn-link dropdown-item" onclick="createDoc(3)" ><i class="far fa-file-powerpoint"></i> {{ __('app.home.contextMenu.createPPT') }}</button>
+            <button id="createPPT" class="btn btn-link dropdown-item" onclick="createDoc(3)" ><i class="far fa-file-powerpoint"></i> {{ __('app.home.contextMenu.createPPT') }}</button>
             <button  class="btn btn-link dropdown-item" id="actionsMenu" disable><i class="fas fa-ban"></i> {{ __('app.home.contextMenu.noActions') }}</button>
         </div>
     </div>

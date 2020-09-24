@@ -67,8 +67,8 @@ $("html")
             $("#editContext").hide();
             $("#deleteContext").hide();
             $("#shareContext").hide();
-            $("#createDocumentContext").hide();
-            $("#createSheetContext").hide();
+            $("#submenuContext").hide();
+           
             $("#actionsContextMenu").hide();
             $("#removeContext").hide();
             $("#cloneContext").hide();
@@ -76,12 +76,11 @@ $("html")
                  
             if(currentClassification.type==1 && currentTd.className == "dataTables_empty" && currentTable==1){    
                 $("#createClassificationContext").show();
-                $("#createDocumentContext").show();     
-                $("#createSheetContext").show();          
+                $("#submenuContext").show();     
+                          
             }else if(currentClassification.type==1 && currentTable==1 ){
                 $("#createClassificationContext").show();
-                $("#createDocumentContext").show();
-                $("#createSheetContext").show();
+                $("#submenuContext").show();
                 $("#editContext").show();
                 if(typeContextMenu!='classification'){
                     $("#cloneContext").show();
@@ -100,13 +99,15 @@ $("html")
                     $("#downloadContext").show();
                     $("#cloneContext").show();
                 }
-                $("#createDocumentContext").show();
-                $("#createSheetContext").show();
-                if(isCurrentUserOwner || CanCurrentUserDetele) $("#deleteContext").show();               
-                $("#shareContext").show();                
-            }else if((isCurrentUserOwner || CanCurrentUserEditar)&& currentTable!=3 ){
-                $("#createDocumentContext").show();
-                $("#createSheetContext").show();
+                $("#submenuContext").show();
+               
+                if(isCurrentUserOwner || CanCurrentUserDetele){
+                     $("#deleteContext").show();               
+                     $("#shareContext").show(); 
+                    }             
+            }else if((isCurrentUserOwner || CanCurrentUserEditar)&& currentTable!=2 ){
+                $("#submenuContext").show();
+                
             }else{
                 $("#actionsContextMenu").show();
             }      
@@ -135,8 +136,8 @@ function openContextMenu(e){
 
     $("#deleteContext").hide();
     $("#shareContext").hide();
-    $("#createDocumentContext").hide();
-    $("#createSheetContext").hide();
+    $("#submenuContext").hide();
+    
     $("#actionsContextMenu").hide();
     $("#removeContext").hide();
     $("#cloneContext").hide();
