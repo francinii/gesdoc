@@ -1380,7 +1380,7 @@ BEGIN
             START TRANSACTION;
             		
                 -- NECESARY FOR THE HISTORIAL --   
-          -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+          -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 9;
                  select description into h_action_name from actions where id = h_action;
                 set h_user_name = NULL; 
@@ -1493,7 +1493,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     START TRANSACTION; 
 
      -- NECESARY FOR THE HISTORIAL --   
-          -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+          -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 3;
                 select description into h_action_name from actions where id = h_action;
                 set h_user_name = NULL; 
@@ -1607,7 +1607,7 @@ BEGIN
 
   START TRANSACTION;
   -- NECESARY FOR THE HISTORIAL --   
-      -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+      -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
               set h_action = 5;
                select description into h_action_name from actions where id = h_action;
               set h_user_name = NULL; 
