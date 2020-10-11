@@ -155,9 +155,13 @@ class DocumentController extends Controller
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
+            $file = storage_path('app/'.$content);
+            File::delete($file);
             throw new DecryptException('El documento ya existe en la base de datos');
         }
         if ($res[0]['res'] != 0) {
+            $file = storage_path('app/'.$content);
+            File::delete($file);
             throw new DecryptException('Error al procesar la petición en la base de datos');
         }
 
@@ -227,9 +231,13 @@ class DocumentController extends Controller
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
+            $file = storage_path('app/'.$content);
+            File::delete($file);
             throw new DecryptException('El documento ya existe en la base de datos');
         }
         if ($res[0]['res'] != 0) {
+            $file = storage_path('app/'.$content);
+            File::delete($file);
             throw new DecryptException('Error al procesar la petición en la base de datos');
         }
     }

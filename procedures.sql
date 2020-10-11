@@ -978,13 +978,17 @@ BEGIN
 
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
-		-- ERROR
+		GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     SET res = -1;
     ROLLBACK;
 	END;                                        
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
-		-- ERROR
+		GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     SET res = -2;
     ROLLBACK;
 	END;
@@ -1012,11 +1016,11 @@ BEGIN
                 set h_document_id = document_id;
                 set h_id_flow =NULL;
                 set h_name_flow = NULL; 
-                select description into h_document_name from Documents where id = document_id;
-                select name into h_user_name from Users where username = p_username;
+                select description into h_document_name from documents where id = document_id;
+                select name into h_user_name from users where username = p_username;
 
                 IF  p_id_flow != -1 THEN                 
-                    select id, description into h_id_flow, h_name_flow from Flows where id = p_id_flow;
+                    select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
                     set h_description =   CONCAT_WS(' ','El usuario', h_user_name, 'con identificación', h_username, 'ha agreado al flujo',h_name_flow, 'con identificación', p_id_flow,', el documento llamado', p_description,'cuya identificación es',h_document_id, 'correspondiente a la versión 1.0' );
                     INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
                     VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(),NOW());
@@ -1126,7 +1130,7 @@ BEGIN
                 UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;               
                   
                 -- NECESARY FOR THE HISTORIAL --   
-                select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+                select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 5;
                  select description into h_action_name from actions where id = h_action;
                 set h_username = p_username;
@@ -1230,8 +1234,8 @@ BEGIN
           set h_document_id = p_id;
           set h_id_flow =NULL;
           set h_name_flow = NULL; 
-          select description into h_document_name from Documents where id = p_id;
-          select name into h_user_name from Users where username = p_username;          
+          select description into h_document_name from documents where id = p_id;
+          select name into h_user_name from users where username = p_username;          
 
         set h_description =   CONCAT_WS(' ','El usuario con identificación', p_user_logged, 'ha removido los permisos del documento con id',h_document_id,'llamado',h_document_name, 'al usuario con identificación', p_username);
         INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
@@ -1380,7 +1384,7 @@ BEGIN
             START TRANSACTION;
             		
                 -- NECESARY FOR THE HISTORIAL --   
-          -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+          -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 9;
                  select description into h_action_name from actions where id = h_action;
                 set h_user_name = NULL; 
@@ -1493,7 +1497,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     START TRANSACTION; 
 
      -- NECESARY FOR THE HISTORIAL --   
-          -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+          -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 3;
                 select description into h_action_name from actions where id = h_action;
                 set h_user_name = NULL; 
@@ -1607,7 +1611,7 @@ BEGIN
 
   START TRANSACTION;
   -- NECESARY FOR THE HISTORIAL --   
-      -- select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+      -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
               set h_action = 5;
                select description into h_action_name from actions where id = h_action;
               set h_user_name = NULL; 
