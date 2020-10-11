@@ -20,6 +20,9 @@
                                 <input type="text" class="form-control " id="CreateDescription" placeholder="Descripcion" name="CreateDescription">
                             </div>                         
                             <div class="form-group">
+                                <div class="alert bg-warning" >
+                                     {{ __('app.flows.card.note') }}
+                                </div>  
                                 <label class="control-label" for="searchUser">{{ __('app.flows.card.user') }} </label>                                                        
                                 <select id='select_document' class="form-control selectpicker"  multiple data-selected-text-format="count" data-live-search="true" multiple >                
                                 @foreach ($departments as $department)                                                            

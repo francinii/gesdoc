@@ -1082,7 +1082,6 @@ BEGIN
   --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
   DECLARE h_action int DEFAULT NULL;
-  DECLARE h_action_name varchar(500) DEFAULT NULL;
   DECLARE h_username varchar(500) DEFAULT NULL;
   DECLARE h_description text DEFAULT NULL;
   DECLARE h_document_id INT DEFAULT NULL;
@@ -1111,7 +1110,6 @@ BEGIN
       START TRANSACTION;
             set idFlow = p_id_flow;
             set h_action = 10;
-            select description into h_action_name from actions where id = h_action;
             set idIdentifier = p_identifier;
                 IF  p_id_flow = -1 THEN
                   set idFlow = NULL;
@@ -1119,7 +1117,6 @@ BEGIN
                 IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
                   set h_action = 3;
-                   select description into h_action_name from actions where id = h_action;
                 END IF;
                 SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;   
                 UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
@@ -1130,9 +1127,8 @@ BEGIN
                 UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;               
                   
                 -- NECESARY FOR THE HISTORIAL --   
-                select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+                select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 5;
-                 select description into h_action_name from actions where id = h_action;
                 set h_username = p_username;
                 set h_document_id = p_id;
                 set h_id_flow = NULL;
@@ -1154,7 +1150,7 @@ BEGIN
                         SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"flow",NOW(),NOW());
+                        INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),NOW(),NOW());
                         SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
              
                     END LOOP;
@@ -1168,12 +1164,12 @@ BEGIN
                     -- INSERT INTO THE HISTORIAL --
                     set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
                     INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+                    VALUES (10, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 END IF;      
 
                 set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha actualizado los metadatos del documento con identificación:',h_document_id,'llamado',p_description, 'correspondiente a la versión', h_version_num, '.');
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES (h_action_name, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+                    VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 -- CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name,h_version_id, h_id_flow,	h_name_flow, @res);
                 -- END OF NECESARY FOR THE HISTORIAL --
             

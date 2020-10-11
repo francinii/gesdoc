@@ -136,10 +136,12 @@ trait RefreshHomeTrait{
 
     public function deletefiles($document)
     {
-        $contents=DB::table('versions')->select('version','content')->where('document_id','=', $document)->whereNull('flow_id')->pluck('content')->toArray();
+        $contents=DB::table('versions')->select('version','content')->where('document_id','=', $document)->pluck('content')->toArray();
         foreach ($contents as  $content) {        
-        $file = storage_path('app/'.$content);
-        File::delete($file);
-      }
+            $file = storage_path('app/'.$content);
+            File::delete($file);
+            return true;
+        }
+        return false;
     }
 }

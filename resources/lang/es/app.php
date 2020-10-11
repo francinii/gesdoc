@@ -332,6 +332,7 @@ return [
             'email' => 'Correo',
             'delete' => 'Eliminar',
             'save' => 'Guardar',
+            'note'=>'Nota: los usuarios sin permisos no se registran',
 
         ],
 

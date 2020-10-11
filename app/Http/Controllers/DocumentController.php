@@ -302,6 +302,7 @@ class DocumentController extends Controller
                 $userFlow.="$User,";
             }
             $userFlow=substr($userFlow, 0, -1);
+            (!$userFlow)?$userFlow="''":$userFlow="'".$userFlow."'";
             $identifier=  "'".$identifier."'";
         }  else{
             $userFlow="''"; 
@@ -394,7 +395,9 @@ class DocumentController extends Controller
     }
 
     private function DeleteShare($user,$idselect,$currentClassification,$Owner){
-        if($Owner==null) $this->deletefiles($idselect);     
+        if($Owner==null) 
+        $delete=$this->deletefiles($idselect);
+        if(!$delete) throw new DecryptException('error al borrar archivo');
         $user_logged = Auth::id();
         DB::select("call delete_Share_document($idselect,'$user->username',$currentClassification,'$Owner',  '$user_logged', @res)");
         $res = DB::select("SELECT @res as res;");
