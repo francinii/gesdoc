@@ -131,6 +131,7 @@ trait RefreshHomeTrait{
         $documents=Document::where('username', $username)->pluck('id')->toArray();
         $idDocuments=array_merge($documents,$idDocuments);
         $notifications = Notification::where('username', '=', $username)->get();
+        $mainClassification=null;
         return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments','notifications'));
     }
 

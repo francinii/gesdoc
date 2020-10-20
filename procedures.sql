@@ -1097,12 +1097,18 @@ BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		-- ERROR
+    GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     SET res = -1;
     ROLLBACK;
 	END;                                        
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
 		-- ERROR
+    GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     SET res = -2;
     ROLLBACK;
 	END;
@@ -1150,7 +1156,7 @@ BEGIN
                         SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `notifications`(`username`, `description`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),NOW(),NOW());
+                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"document",NOW(),NOW());
                         SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
              
                     END LOOP;
@@ -1179,7 +1185,7 @@ SET res = 0;
 END
 ;;
 DELIMITER ;
--- call update_document(1,'1', 1,-1,-1,'doc1', 'doc1', 'doc1','ingles','',@res)
+-- call update_document(1,'402340420','1', 1,1,'draggable1','doc1', 'doc1', 'doc2','doc2','','402340420',@res)
 -- SELECT @res as res;
 
 

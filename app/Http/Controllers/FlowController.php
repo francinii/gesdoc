@@ -57,7 +57,7 @@ class FlowController extends Controller
             $actions = Action::all();
             $filterActions = Action::where('id', '<>', 9)->where('type','=', 1)->orWhere('type','=', 0)->get();
             $notifications = Notification::where('username', '=', $username)->get();
-            return view('Flows.index',compact('flows', 'users','departments','filterActions','notifications'));
+            return view('flows.index',compact('flows', 'users','departments','filterActions','notifications'));
         } //Permiso para acceder a la pantalla de flujos
 
         return $this->home();
