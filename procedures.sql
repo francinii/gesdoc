@@ -1133,7 +1133,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                 UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;               
                   
                 -- NECESARY FOR THE HISTORIAL --   
-                select id, version into h_version_id, h_version_num from Versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+                select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 5;
                 set h_username = p_username;
                 set h_document_id = p_id;

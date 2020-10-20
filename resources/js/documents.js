@@ -108,7 +108,7 @@ function ajaxCreateDoc(mode) {
                 $("#divTable").html(result);
                 createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");            
+                " ha sido agregado satisfactoriamente", "alert-success");            
 
             },
             error: function (request, status, error) {
@@ -264,7 +264,7 @@ function ajaxUploadDoc(mode) {
                 $("#divTable").html(result);
                 createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success");
+                " ha sido agregado satisfactoriamente", "alert-success");
 
                                
 
@@ -414,7 +414,7 @@ function ajaxUpdateDoc() {
                 $("#divTable").html(result);
                 createDataTableHome("table");                          
                 alerts('alerts', 'alert-content',"El documento " +  description +
-                "ha sido agregado satisfactoriamente, espere mientras se redirecciona al nuevo documento", "alert-success")                              
+                " ha sido agregado satisfactoriamente", "alert-success")                              
 
             },
             error: function (request, status, error) {
