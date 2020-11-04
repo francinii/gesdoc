@@ -1958,12 +1958,18 @@ BEGIN
 
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
+  GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 		-- ERROR
     SET res = -1;
     ROLLBACK;
 	END;                                        
   DECLARE EXIT HANDLER FOR SQLWARNING
 	BEGIN
+  GET DIAGNOSTICS CONDITION 1
+@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
 		-- ERROR
     SET res = -2;
     ROLLBACK;
@@ -1993,7 +1999,7 @@ BEGIN
               -- Cuando se agregue el usuario logueado habilitar esto
             --  select name into h_user_name from users where username = p_username LIMIT 1;
           
-            INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (n_owner_doc, CONCAT('el documento ', h_document_name,' a salido del flujo ',h_name_flow  ),"document",NOW(),NOW());
+           INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (n_owner_doc, CONCAT_WS('el documento ', h_document_name,' a salido del flujo ',h_name_flow  ),"document",NOW(),NOW());
             SET h_description =   CONCAT_WS(' ','El usuario',h_user_name,'con identificación', p_user_logged,', ha sacado del flujo',h_name_flow ,'con id',h_id_flow,'el documento ', h_document_name, 'con id', h_document_id, '.' );
             INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
             VALUES (h_action_name, p_user_logged, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());      
