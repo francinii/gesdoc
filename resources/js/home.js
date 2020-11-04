@@ -15,6 +15,7 @@ var CanCurrentUserEditar;
 var CanCurrentUserDetele;
 var currentTd;
 var dataTable;
+var allClassification;
 /**
 * draw the route follow for the user  
 *

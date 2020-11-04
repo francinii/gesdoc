@@ -29,10 +29,7 @@
             <div class="form-group"> 
             <label for="classificationCreate">{{ __('app.documents.create.classification') }}</label>
               <select id="classificationCreate"class="form-control" name="flowCreate" >
-              <option value="-1" name ="">{{ __('app.home.table.defaultClassification') }}</option>                   
-                @foreach ($classifications as $classification)
-                    <option value="{{$classification->id}}" name ="classificationCreate{{$classification->id}}">{{$classification->description}}</option>
-                @endforeach
+
               </select>
             </div>            
             <div class="form-group">

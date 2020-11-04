@@ -12,6 +12,18 @@ function clearDescriptionDoc() {
     $("#languaje").removeClass("is-invalid");
     $("#others").val("");
     $("#others").removeClass("is-invalid");
+    $("#classificationCreate").html("");
+
+    var option='<option value="'+currentClassification.id+'" name ="DefaulclassificationCreateDoc">'+currentClassification.description+'</option>'; 
+    $("#classificationCreate").append(option);
+    $("option[name=DefaulclassificationCreateDoc]").prop("selected", true);
+    allClassification.forEach(classification => {
+        if(classification.id!=currentClassification.id)
+        var option='<option value="'+classification.id+'" name ="DefaulclassificationCreateDoc">'+classification.description+'</option>'; 
+        $("#classificationCreate").append(option);
+    });
+
+
 }
 
 
@@ -136,6 +148,18 @@ function clearUploadDoc() {
     $("#file").val("");
     $("#file").removeClass("is-invalid");
     $("#file_message").html("");
+
+    $("#classificationU").html("");
+
+    var option='<option value="'+currentClassification.id+'" name ="classificationU">'+currentClassification.description+'</option>'; 
+    $("#classificationU").append(option);
+    $("option[name=classificationU]").prop("selected", true);
+    allClassification.forEach(classification => {
+        if(classification.id!=currentClassification.id)
+        var option='<option value="'+classification.id+'" name ="classificationU">'+classification.description+'</option>'; 
+        $("#classificationU").append(option);
+    });
+
 }
 
 
@@ -314,6 +338,15 @@ function editDoc() {
     
     $("#othersEditDoc").val(othersEditDoc);
     $("option[name=flowEditDoc" + flowId + "]").prop("selected", true);
+  
+    $("#classificationEditDoc").html("");
+
+    allClassification.forEach(classification => {
+        
+        var option='<option value="'+classification.id+'" name ="classificationEditDoc'+classification.id+'">'+classification.description+'</option>'; 
+        $("#classificationEditDoc").append(option);
+    });
+
     if(currentTable==2){
      var option='<option value="'+currentClassification.id+'" name ="DefaulclassificationEditDoc">'+currentClassification.description+'</option>'; 
      $("#classificationEditDoc").append(option);

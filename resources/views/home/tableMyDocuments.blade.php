@@ -70,6 +70,9 @@
          definePermmisision(myActions);
          drawRoute();
 
+         js_data = '<?php echo json_encode($allClassification); ?>';        
+         allClassification=JSON.parse(js_data );
+
          var js_data = '<?php echo json_encode($notifications); ?>';        
          var notifications=JSON.parse(js_data );
          updateNotifications(notifications)

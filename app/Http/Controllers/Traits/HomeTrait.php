@@ -29,6 +29,7 @@ trait HomeTrait{
         $actions = Action::where('type', '=', 1)->get();        
         $myActions=['owner'];      
         $documents =  $mainClassification->documents;
-        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions','notifications'));
+        $allClassification= Classification::where([['username', '=', '' . $username . ''], ['type', '!=', 2]])->get();
+        return view('home.home', compact('mainClassification','documents','classifications', 'flows','departments', 'actions','myActions','notifications','allClassification'));
       }
 }

@@ -67,10 +67,11 @@ trait RefreshHomeTrait{
             $classifications=[];
         else
             $classifications = Classification::where([['username', '=', '' . $username . ''], ['type', '=', 3]])->get();
-
+        
+        $allClassification= Classification::where([['username', '=', '' . $username . ''], ['type', '!=', 2]])->get();
         $documents =  $mainClassification->documents;
         $notifications = Notification::where('username', '=', $username)->get();  
-        return view('home.tableMyDocuments', compact('mainClassification', 'documents','classifications','myActions','notifications'));
+        return view('home.tableMyDocuments', compact('mainClassification', 'documents','classifications','myActions','notifications','allClassification'));
     }
 
     /**
@@ -110,7 +111,9 @@ trait RefreshHomeTrait{
         $documents=Document::whereIn('id', $documents)->get();
         $mydocuments=$mainClassification->documents->where('username', $username);
         $documents= $documents->merge($mydocuments);
-        return view('home.tableMyDocuments', compact('mainClassification','documents', 'classifications','myActions','notifications'));
+        $allClassification= Classification::where([['username', '=', '' . $username . ''], ['type', '!=', 2]])->get();
+
+        return view('home.tableMyDocuments', compact('mainClassification','documents', 'classifications','myActions','notifications','allClassification'));
     }
 
     /**
@@ -132,7 +135,8 @@ trait RefreshHomeTrait{
         $idDocuments=array_merge($documents,$idDocuments);
         $notifications = Notification::where('username', '=', $username)->get();
         $mainClassification=null;
-        return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments','notifications'));
+        $allClassification= Classification::where([['username', '=', '' . $username . ''], ['type', '!=', 2]])->get();
+        return view('home.tableDocuments', compact('mainClassification', 'Classifications','idDocuments','notifications','allClassification'));
     }
 
     public function deletefiles($document)

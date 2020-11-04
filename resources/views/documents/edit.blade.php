@@ -31,11 +31,7 @@
               <label for="classificationEditDoc">{{ __('app.documents.edit.classification') }}</label>
               <div class="form-group"> 
                 <select id="classificationEditDoc"class="form-control" name="classificationEditDoc" >
-                  <option value="-1" name ="">{{ __('app.home.table.defaultClassification') }}</option>
-                  
-                  @foreach ($classifications as $classification)
-                      <option value="{{$classification->id}}" name ="classificationEditDoc{{$classification->id}}">{{$classification->description}}</option>
-                  @endforeach
+      
                 </select>
               </div>           
               <div class="form-group">
