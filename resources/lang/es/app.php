@@ -87,7 +87,7 @@ return [
         ],
 
         'edit' => [
-            'title' => 'Nuevo usuario',  
+            'title' => 'Editar usuario',  
             'user' => 'Usuario',     
             'username' => 'Nombre de usuario', 
             'name' => 'Nombre',    

@@ -1065,10 +1065,10 @@ if(arrayLines)
             hide:'true',
             startPlug: 'disc', //Esto hace que el inicio de la linea sea una bolita
             // startLabel: LeaderLine.captionLabel('START', {color: 'blue'}),           
-            startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : ''}),
+            startLabel: LeaderLine.captionLabel(idLine, {color: 'none', outlineColor : '', size:0}),
             middleLabel: LeaderLine.captionLabel(labelName, {color: 'black'}),
             //  endLabel: LeaderLine.captionLabel('END', {color: 'blue'})    
-           // startSocket: 'bottom',
+           startSocket: 'bottom',
            // endSocket: 'top',
            startSocketGravity: gravityBegin,
            endSocketGravity: gravityEnd,
@@ -1088,11 +1088,12 @@ if(arrayLines)
       //  line.positionByWindowResize = false,
         line.setOptions({startSocket: 'auto', endSocket: 'auto', positionByWindowResize: true});
         line.show(); 
+        
         arrayLines.push({id: idLine, line: line});  
          //Give the action click to the svg text
           ///Nuevo
-
-        $("svg text").css("pointer-events","auto");   
+            
+        $("svg text").css("pointer-events","auto");     
         return true;
     }else {
         alerta('Alerta', 'El inicio no puede tener más de dos líneas',false);
@@ -1103,10 +1104,37 @@ if(arrayLines)
 var lineaSeleccionada = null;
 var elementoSeleccionada = null;
 
+
+/* $(document).on("click", "svg.leader-line text", function (e) {  
+    $(".body_table_line").empty();
+    elementoSeleccionada = e.currentTarget;          
+    textoId = elementoSeleccionada.previousElementSibling.innerHTML;     
+    var arr =textoId.split('-');
+    lineaSeleccionada = arr;
+    gravityBegin = -200;
+    gravityEnd = 200;
+    line.setOptions({ startSocketGravity: line.startSocketGravity+10, endSocketGravity: line.endSocketGravity-10});
+    line.show(); 
+    lineaSeleccionada  = (arr.length > 0 )? arr[0]: '' ; 
+   /*elemento  = (arr.length > 0 )? sessionStorage.getItem(arr[0]): null ;
+    elemento = JSON.parse(elemento);
+
+    if(arr[0] == DRAGGABLE_INICIO){
+         $("#div-selector-action").css('display','none');
+         $(".modal-footer #EditSubmit").css('display','none');
+    } else {
+        $("#div-selector-action").css('display','block');
+        $(".modal-footer #EditSubmit").css('display','block');
+    } 
+   
+   $("#line-modal").modal("show"); 
+}); */
+
 /**
  * Draw a line between two card steps in the canvas.
  *
  */
+ 
 $(document).on("click", "svg.leader-line text", function (e) {  
     $(".body_table_line").empty();
     elementoSeleccionada = e.currentTarget;          

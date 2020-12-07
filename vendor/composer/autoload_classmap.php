@@ -211,7 +211,7 @@ return array(
     'App\\User' => $baseDir . '/app/User.php',
     'App\\Version' => $baseDir . '/app/Version.php',
     'App\\ViewFlowUser' => $baseDir . '/app/ViewFlowUser.php',
-    'App\\viewActionStepStepUser' => $baseDir . '/app/viewActionStepStepUser.php',
+    'App\\viewActionStepStepUser' => $baseDir . '/app/ViewActionStepStepUser.php',
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
     'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
     'CLIFramework\\Ansi\\Colors' => $vendorDir . '/corneltek/cliframework/src/CLIFramework/Ansi/Colors.php',

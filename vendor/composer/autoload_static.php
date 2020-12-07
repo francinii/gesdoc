@@ -832,7 +832,7 @@ class ComposerStaticInitd27df860169e9dea218353f674434cd9
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Version' => __DIR__ . '/../..' . '/app/Version.php',
         'App\\ViewFlowUser' => __DIR__ . '/../..' . '/app/ViewFlowUser.php',
-        'App\\viewActionStepStepUser' => __DIR__ . '/../..' . '/app/viewActionStepStepUser.php',
+        'App\\viewActionStepStepUser' => __DIR__ . '/../..' . '/app/ViewActionStepStepUser.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
         'CLIFramework\\Ansi\\Colors' => __DIR__ . '/..' . '/corneltek/cliframework/src/CLIFramework/Ansi/Colors.php',

@@ -28,7 +28,7 @@
               <input type="checkbox" id ='checkboxNota' onclick="isCheckNote(this)" > {{ __('app.documentFlow.modalEditVersion.addNote') }}  
         </div>          
         <div class="form-group" id = 'textNote' style = 'display:none'>
-          <label for=""><b>{{ __('app.documentFlow.modalEditVersion.notes') }}</b></label>
+          <label for=""><b>{{ __('app.documentFlow.modalEditVersion.note') }}</b></label>
             <textarea id = "text_notas" class="form-control" ></textarea>
         </div>
          

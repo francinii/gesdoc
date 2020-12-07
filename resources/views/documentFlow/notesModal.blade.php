@@ -14,7 +14,7 @@
         </div>       
         <div class="modal-footer">     
             <div class="col-md-9 text-right">
-                <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModalCardSave()" data-target="">
+                <button data-toggle="modal" class=" float-right btn btn-danger" onclick="hideModalCardSave()" data-target="" data-dismiss="modal">
                     <i class=""></i> {{ __('app.documentFlow.notesModal.close') }}
                 </button>    
               </div>  

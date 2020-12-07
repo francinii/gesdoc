@@ -1156,7 +1156,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                         SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"document",NOW(),NOW());
+                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"flow",NOW(),NOW());
                         SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
              
                     END LOOP;
@@ -1170,12 +1170,12 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                     -- INSERT INTO THE HISTORIAL --
                     set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
                     INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES (10, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+                    VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 END IF;      
 
                 set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha actualizado los metadatos del documento con identificación:',h_document_id,'llamado',p_description, 'correspondiente a la versión', h_version_num, '.');
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES (h_action, h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+                    VALUES ('Editar', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 -- CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name,h_version_id, h_id_flow,	h_name_flow, @res);
                 -- END OF NECESARY FOR THE HISTORIAL --
             
@@ -1388,7 +1388,7 @@ BEGIN
                 -- NECESARY FOR THE HISTORIAL --   
           -- select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
                 set h_action = 9;
-                 select description into h_action_name from actions where id = h_action;
+                select description into h_action_name from actions where id = h_action;
                 set h_user_name = NULL; 
                 set h_version_id = NULL;
                 set h_document_id = p_id; 
@@ -2269,8 +2269,11 @@ DELIMITER ;
 
 DROP VIEW IF EXISTS view_flow_user ;
 CREATE VIEW view_flow_user AS 
-    SELECT DISTINCT  asu.username, asu.flow_id, f.description, f.state
-    FROM `action_step_user` asu, flows f
+ SELECT DISTINCT  asu.username, asu.flow_id, f.description, f.state,f.num_doc
+    FROM `action_step_user` asu, 
+	 (SELECT id,description,state, num_doc from flows
+		RIGHT JOIN (SELECT flow_id ,COUNT(id) num_doc  FROM documents WHERE flow_id IS NOT NULL GROUP BY flow_id) doc
+		ON doc.flow_id=flows.id) f
     WHERE f.id = asu.flow_id and f.state = 1
 ;;
 DELIMITER ;
