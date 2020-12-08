@@ -56,11 +56,12 @@ return [
 
     ],
     'header' => [
-        'home' => 'GESDOC',  
+        'home' => 'GESDOC', 
+        'Documents' => 'Mis documentos', 
         'adminSystem' => 'Administracion de sistema',  
         'managerDocuments' => ' Gestión de documentos',  
         'adminRole' => 'Administración de Roles',  
-
+        'record' => 'Historial',
         'adminRole' => 'Administración de Roles',  
         'adminUser' => 'Administración de Usuarios',  
         'adminDepartements' => 'Administración de Departamentos',  

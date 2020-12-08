@@ -400,7 +400,7 @@ class FlowController extends Controller
         $departments = Department::all();
         $steps = Step::where('flow_id', '=', $flowId)->get();                    
         $flow= Flow::where('id', '=', $flowId)->first();
-        $actions = Action::where('type','=', 1)->orWhere('type','=', 0)->get();
+        $actions = Action::where([['type','=', 1],['id','<>',9]])->orWhere('type','=', 0)->get();
         $step = Step::where('flow_id', '=', $flowId)->where('id', '=', $identifier)->first();    
         
         $usersArray = ActionStepUser::where('flow_id', '=', $flowId)
@@ -421,59 +421,65 @@ class FlowController extends Controller
         $data = request()->except(['_token']);  
         $flowId = (int) $data['idFlow'];      
         $identifier = $data['identifier'] ; 
-        $actionStepUser =  $data['actionStepUser'];  
-        $count = 0;   
-        
-        foreach ($actionStepUser as $asu) { 
-            $username =   $asu[0] ;         
-            array_push($auxUserArray,$username);
-            $identifier =$data['identifier'] ; 
-
-            //Get an arrat of actions from the DB
-            $actionsArray = ActionStepUser::where('flow_id', '=', $flowId)
-            ->where('step_id', '=', $identifier)
-            ->where('username', '=', $username)
-            ->pluck('action_id')->toArray(); 
+        if(isset($data['actionStepUser'])){
+            $actionStepUser =  $data['actionStepUser'];  
+            $count = 0;   
             
+            foreach ($actionStepUser as $asu) { 
+                $username =   $asu[0] ;         
+                array_push($auxUserArray,$username);
+                $identifier =$data['identifier'] ; 
 
-            //Fin which elements are not in the html table
-            $direfenceArray  =array_diff($actionsArray, $asu);
-            $identifier1 ="'". $data['identifier'] . "'" ; 
-            $username1 = "'".$username . "'";  
+                //Get an arrat of actions from the DB
+                $actionsArray = ActionStepUser::where('flow_id', '=', $flowId)
+                ->where('step_id', '=', $identifier)
+                ->where('username', '=', $username)
+                ->pluck('action_id')->toArray(); 
+                
 
-            //Delete the elements in the database
-            foreach ($direfenceArray as $act) {
-                $action =  $act;                              
-                DB::select("call delete_an_action_step_user($flowId,$identifier1,$username1,$action, @res)");
-                $res=DB::select("SELECT @res as res;");   
-            }
+                //Fin which elements are not in the html table
+                $direfenceArray  =array_diff($actionsArray, $asu);
+                $identifier1 ="'". $data['identifier'] . "'" ; 
+                $username1 = "'".$username . "'";  
 
-            //Add the new elements to the database
-            foreach ($asu as $act) {                  
-                if($count>0){
-                    $action = (int) $act;
-                    DB::select("call insert_update_action_step_user($identifier1, $flowId, $username1,$action, @res)");
+                //Delete the elements in the database
+                foreach ($direfenceArray as $act) {
+                    $action =  $act;                              
+                    DB::select("call delete_an_action_step_user($flowId,$identifier1,$username1,$action, @res)");
                     $res=DB::select("SELECT @res as res;");   
                 }
-                $count++;
+
+                $newArray  =array_diff($asu,$actionsArray);
+                //Add the new elements to the database
+                foreach ($newArray as $act) {                  
+                    if($count>0){
+                        $action = (int) $act;
+                        DB::select("call insert_update_action_step_user($identifier1, $flowId, $username1,$action, @res)");
+                        $res=DB::select("SELECT @res as res;");   
+                    }
+                    $count++;
+                }
+                if(count($actionsArray)==0 & count($newArray)>1){
+                    DB::select("call insert_notification('$newArray[0]','Tienes un documento en flujo pendiente','flow',@res)");
+                    $res=DB::select("SELECT @res as res;"); 
+                }
+                $count =0;
             }
-            $count =0;
-        }
 
-        // IN case of user is delete completly from the html table
-        
-        $usersArray = ActionStepUser::where('flow_id', '=', $flowId)
-        ->where('step_id', '=', $identifier)
-        ->groupBy('username')
-        ->pluck('username')->toArray();  
-        $direfenceArray  =array_diff($usersArray, $auxUserArray);
-        foreach ($direfenceArray as $user) {
-            $username1 =  "'".$user . "'";  
-                                   
-            DB::select("call delete_action_step_user_by_user($flowId,$identifier1,$username1, @res)");
-            $res=DB::select("SELECT @res as res;");   
+            // IN case of user is delete completly from the html table
+            
+            $usersArray = ActionStepUser::where('flow_id', '=', $flowId)
+            ->where('step_id', '=', $identifier)
+            ->groupBy('username')
+            ->pluck('username')->toArray();  
+            $direfenceArray  =array_diff($usersArray, $auxUserArray);
+            foreach ($direfenceArray as $user) {
+                $username1 =  "'".$user . "'";  
+                                    
+                DB::select("call delete_action_step_user_by_user($flowId,$identifier1,$username1, @res)");
+                $res=DB::select("SELECT @res as res;");   
+            }
         }
-
 
         return $this->refreshTablePermission($data);
     }

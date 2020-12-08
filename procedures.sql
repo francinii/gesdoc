@@ -583,7 +583,7 @@ BEGIN
               IF p_classification_owner!=p_username THEN
               SELECT `id` into _classification FROM `classifications` WHERE `type`=2 and `username`=p_username;    
               SELECT `description` into _classification_description FROM `classifications` WHERE `id`=p_id;            
-              INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (p_username, CONCAT('El usuario ', p_current_user ,'con identificación',p_current_user,', le compartio la clasificacion: ',_classification_description),"document",NOW(),NOW());
+              INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (p_username, CONCAT_WS(' ','El usuario', p_current_user ,'con identificación',p_current_user,', le compartio la clasificacion:',_classification_description),"document",NOW(),NOW());
               iterator:
                 LOOP
                     IF LENGTH(TRIM(p_actions)) = 0 OR p_actions IS NULL THEN
@@ -1046,7 +1046,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                         INSERT INTO `action_document_user`(`action_id`, `document_id`, `username`, `created_at`, `updated_at`) VALUES (4,document_id,_user,NOW(),NOW());
                         SET p_users = INSERT(p_users,1,_nextlen + 1,'');
 
-                        SET h_description =   CONCAT_WS('Se asoció la accion ',h_description, 'al usuario', h_user_name, 'con identificación', h_username, 'en el documento con identificación',h_document_id,'llamado',p_description);
+                        SET h_description =   CONCAT_WS(' ','Se asoció la accion ',h_description, 'al usuario', h_user_name, 'con identificación', h_username, 'en el documento con identificación',h_document_id,'llamado',p_description);
              
                     END LOOP;
            
@@ -1156,19 +1156,15 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                         SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
                         SET _nextlen = LENGTH(_next);
                         SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"flow",NOW(),NOW());
+                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user,"Tienes un documento en flujo pendiente","flow",NOW(),NOW());
                         SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
-             
                     END LOOP;
-
-
-
 
                     -- SELECT THE ID AND DESCRIPTION OF THE FLOW IF A FLOW IS NOT NULL               
                     select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
 
                     -- INSERT INTO THE HISTORIAL --
-                    set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
+                    set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación:', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
                     INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
                     VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
                 END IF;      
@@ -1186,6 +1182,7 @@ END
 ;;
 DELIMITER ;
 -- call update_document(1,'402340420','1', 1,1,'draggable1','doc1', 'doc1', 'doc2','doc2','','402340420',@res)
+-- call update_document(1,'402340420','1', 1,2,'draggable1','doc1', 'Español', 'doc1','Español','Español','116650288',@res)"
 -- SELECT @res as res;
 
 
@@ -1315,7 +1312,7 @@ BEGIN
             START TRANSACTION; 
 
             INSERT INTO `documents`(`flow_id`, `action_id`, `username`, `description`, `type`, `summary`, `code`, `languaje`, `others`, `created_at`, `updated_at`)            
-            SELECT  Null, `action_id`, `username`, CONCAT('copy-',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =p_id;
+            SELECT  Null, 3, `username`, CONCAT_WS('-','copy',`description`), `type`, `summary`, `code`, `languaje`, `others`, NOW() , NOW() FROM `documents` WHERE `id` =p_id;
             SET _document_id =  LAST_INSERT_ID(); 
             INSERT INTO `versions`(`document_id`, `flow_id`, `identifier`, `content`, `size`, `status`, `version`, `created_at`, `updated_at`)
             SELECT _document_id, Null, Null, p_content, `size`, `status`,1, now() , NOW() FROM `versions` 
@@ -1398,7 +1395,7 @@ BEGIN
                 set h_username = p_username;
 
                select description, flow_id into h_document_name, h_id_flow from documents where id = p_id LIMIT 1; -- listo
-				      IF  h_id_flow != NULL THEN
+				      IF  h_id_flow IS NOT NULL THEN
                			 select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
               select name into h_user_name from users where username = p_username LIMIT 1;
@@ -1411,7 +1408,7 @@ BEGIN
                 IF _document_owner=p_username and p_owner!='' THEN
                   UPDATE `documents` SET `username`=p_owner,`updated_at`=Now() WHERE `id`=p_id;
                   SELECT name into h_owner_name from users where username = p_owner;
-                  INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Se le entrego la propiedad del documento: ',h_document_name,', por el  usuario ',h_user_logged,' con identificación ',p_user_logged),"document",NOW(),NOW());
+                  INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT_WS(' ','Se le entrego la propiedad del documento: ',h_document_name,', por el  usuario ',h_user_logged,' con identificación ',p_user_logged),"document",NOW(),NOW());
                   SET h_description =  CONCAT_WS(' ','Se actualizó el propietario del documento. El nuevo propietario es: ', h_owner_name,'con identificación', p_owner);
 
 
@@ -1511,7 +1508,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                 set h_username = p_username;
 
                select description, flow_id into h_document_name, h_id_flow from documents where id = p_id LIMIT 1; -- listo
-				      IF  h_id_flow != NULL THEN
+				      IF  h_id_flow IS NOT NULL THEN
                			  select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
                       select name into h_user_name from users where username = p_username LIMIT 1;
@@ -1541,7 +1538,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                   END LOOP;
                   
                   SET h_description =   CONCAT_WS(' ','El usuario ',h_user_logged, 'con identificación',p_user_logged,' otorgó los siguientes permisos',  h_description_2, ' sobre el documento:',h_document_name ,'con id',h_document_id, 'al usuario:',  h_user_name, ' con identificación: ', h_username);
-                  INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (p_username, CONCAT('El usuario ', h_user_logged ,' con identificación ',p_user_logged,', le compartio el documento: ',h_document_name),"document",NOW(),NOW());
+                  INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (p_username, CONCAT_WS(' ','El usuario ', h_user_logged ,' con identificación ',p_user_logged,', le compartio el documento: ',h_document_name),"document",NOW(),NOW());
               ELSE
                   SELECT `id` into _classification FROM `classifications` WHERE `type`=1 and `username`=p_username;
                   INSERT INTO `classification_document`(`classification_id`, `document_id`, `created_at`, `updated_at`) VALUES (_classification,p_id,NOW(),NOW());  
@@ -1625,7 +1622,7 @@ BEGIN
               set h_username = p_username;
 
               select description, flow_id into h_document_name, h_id_flow from documents where id = p_id LIMIT 1; -- listo
-				      IF  h_id_flow != NULL THEN
+				      IF  h_id_flow IS NOT NULL THEN
                		select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
               select name into h_user_name from users where username = p_username LIMIT 1;
@@ -1646,7 +1643,7 @@ BEGIN
                 
                 --  ----- historial actualizar propietario -----
                 SELECT name into h_owner_name from users where username = p_owner;
-                INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT('Se le entrego la propiedad del documento: ',h_document_name,', por el  usuario ',h_user_logged,' con identificación ',p_user_logged),"document",NOW(),NOW());
+                INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user, CONCAT_WS(' ','Se le entrego la propiedad del documento: ',h_document_name,', por el  usuario ',h_user_logged,' con identificación ',p_user_logged),"document",NOW(),NOW());
                 SET h_description =  CONCAT_WS(' ','Se actualizó el propietario del documento. El nuevo propietario es: ', h_owner_name,'con identificación', p_owner);
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, flow_id, 	flow_name, 	created_at, 	updated_at) 
                 VALUES (h_action_name, p_user_logged, 	h_user_logged, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());
@@ -1892,7 +1889,7 @@ BEGIN                                                                -- document
               set h_version_num = p_version;
 
               select description, flow_id into h_document_name, h_id_flow from documents where id = h_document_id LIMIT 1; -- listo
-				      IF  h_id_flow != NULL THEN
+				      IF  h_id_flow IS NOT NULL THEN
                		select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
               -- Cuando se agregue el usuario logueado habilitar esto
@@ -1906,7 +1903,7 @@ BEGIN                                                                -- document
                     SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
                     SET _nextlen = LENGTH(_next);
                     SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                    INSERT INTO `notifications`(`username`, `description`, `source`,`created_at`, `updated_at`) VALUES (_user, CONCAT('Tienes un documento en flujo pendiente'),"flow",NOW(),NOW());
+                    INSERT INTO `notifications`(`username`, `description`, `source`,`created_at`, `updated_at`) VALUES (_user,'Tienes un documento en flujo pendiente',"flow",NOW(),NOW());
                     SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
 
                 END LOOP;
@@ -1975,13 +1972,10 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
     ROLLBACK;
 	END;
           START TRANSACTION;
-              UPDATE `documents` SET `flow_id`=NULL,`updated_at`=NOW() WHERE `id`=p_id_doc;
-              UPDATE `versions` SET `status`=false,`updated_at`=NOW() WHERE `id`=p_id_version;
-
 
       -- NECESARY FOR THE HISTORIAL --   
               set h_action = 3;
-               select description into h_action_name from actions where id = h_action;
+              select description into h_action_name from actions where id = h_action;
               select name into h_user_name from users where username = p_user_logged LIMIT 1;              
               set h_document_id = p_id_doc; 
               set h_id_flow = NULL;
@@ -1992,14 +1986,19 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
               set h_version_id =  p_id_version;
               select version into   h_version_num from versions where id = p_id_version ;
 
-              select description, flow_id,username into h_document_name, h_id_flow,n_owner_doc from documents where id = h_document_id LIMIT 1; -- listo
-				      IF  h_id_flow != NULL THEN
+              select description, flow_id, username into h_document_name, h_id_flow, n_owner_doc from documents where id = h_document_id LIMIT 1; -- listo
+				      IF  h_id_flow IS NOT NULL THEN
                		select description into h_name_flow from flows where id =  h_id_flow;
               END IF;
+
+            -- se saca la version y docuemento del flujo 
+              UPDATE `documents` SET `flow_id`=NULL,`updated_at`=NOW() WHERE `id`=p_id_doc;
+              UPDATE `versions` SET `status`=false,`updated_at`=NOW() WHERE `id`=p_id_version;
+
+
               -- Cuando se agregue el usuario logueado habilitar esto
-            --  select name into h_user_name from users where username = p_username LIMIT 1;
-          
-           INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (n_owner_doc, CONCAT_WS('el documento ', h_document_name,' a salido del flujo ',h_name_flow  ),"document",NOW(),NOW());
+            --  select name into h_user_name from users where username = p_username LIMIT 1;          
+           INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (n_owner_doc, CONCAT_WS(' ','el documento', h_document_name,'a salido del flujo',h_name_flow  ),"document",NOW(),NOW());
             SET h_description =   CONCAT_WS(' ','El usuario',h_user_name,'con identificación', p_user_logged,', ha sacado del flujo',h_name_flow ,'con id',h_id_flow,'el documento ', h_document_name, 'con id', h_document_id, '.' );
             INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
             VALUES (h_action_name, p_user_logged, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, h_id_flow, 	h_name_flow, NOW(),NOW());      
@@ -2120,7 +2119,8 @@ BEGIN
             START TRANSACTION;              
               UPDATE `flows` SET `state`=p_status, `updated_at`=NOW() WHERE `id`=p_id_flow;
             IF p_status = 0 THEN
-              UPDATE `documents` SET `flow_id`=NULL, `updated_at`=NOW() WHERE `flow_id`=p_id_flow;           
+              UPDATE `documents` SET `flow_id`=NULL,`action_id`=3, `updated_at`=NOW() WHERE `flow_id`=p_id_flow;   
+              UPDATE `versions` SET `flow_id`=NULL,`identifier`=NULL, `updated_at`=NOW() WHERE `flow_id`=p_id_flow;        
             END IF;
             COMMIT;
           -- SUCCESS
@@ -2154,7 +2154,7 @@ BEGIN
             START TRANSACTION; 
 
             INSERT INTO `flows`(`username`, `description`, `state`, `created_at`, `updated_at`)
-            SELECT `username`, CONCAT('copy-',`description`), 0,NOW(),NOW() FROM `flows` WHERE `id`=p_id;
+            SELECT `username`, CONCAT_WS('-','copy',`description`), 0,NOW(),NOW() FROM `flows` WHERE `id`=p_id;
             SET _flow_id =  LAST_INSERT_ID(); 
 
             INSERT INTO `steps`(`id`, `flow_id`, `description`, `axisX`, `axisY`, `created_at`, `updated_at`)
@@ -2229,7 +2229,38 @@ DELIMITER ;
 
 
 
+-- ----------------------------
+-- PROCEDURE insert a new notification
+-- return 0 success, 1 or 2 error in database
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `insert_notification`;
+DELIMITER ;;
+CREATE   PROCEDURE `insert_notification`(IN `p_username` varchar(500),IN `p_description` varchar(500),IN `p_source` varchar(500),OUT `res` TINYINT  UNSIGNED)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		-- ERROR
+    SET res = -1;
+    ROLLBACK;
+	END;
 
+  DECLARE EXIT HANDLER FOR SQLWARNING
+	BEGIN
+		-- ERROR
+    SET res = -2;
+    ROLLBACK;
+	END;
+            START TRANSACTION;                   
+                  INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) 
+                  VALUES (p_username, p_description,p_source,NOW(),NOW());
+            COMMIT;
+            -- SUCCESS
+SET res = 0;
+END
+;;
+DELIMITER ;
+-- call insert_notification('402340421','notificacion de prueba','document',@res);
+-- SELECT @res as res;
 
 
 

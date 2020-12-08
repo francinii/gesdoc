@@ -426,7 +426,7 @@ class DocumentFlowController extends Controller
                 $userFlow.="$User,";
             }
             $userFlow=substr($userFlow, 0, -1);
-
+            (!$userFlow)?$userFlow="''":$userFlow="'".$userFlow."'";
 
             $identifier =  "'" . $identifier . "'";
 
