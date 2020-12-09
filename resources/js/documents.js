@@ -719,7 +719,7 @@ function download(){
 
     if (me.data("requestRunning"))
         return;
-    var flow=currentTd.parentNode.childNodes[5].childNodes[0].innerText;
+    var flow=currentTd.parentNode.childNodes[7].childNodes[0].innerText;
 
     if(flow=='En flujo'){
         $('#alertModalTitle').html('Documento en flujo');

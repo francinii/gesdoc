@@ -2,11 +2,11 @@
             <thead class="thead-dark" >
                 <tr>                   
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.type') }}</th>
+                    <th  style="width: 10%" style=""  class="text-center" >{{ __('app.home.table.version') }}</th>
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.description') }}</th>  
                     <th style="width: 10%"  class="text-center" >Estado</th>
                     <th style="width: 10%"  class="text-center" >{{ __('app.home.table.create') }}</th> 
-                    <th  style="width: 10%"  class="text-center" >{{ __('app.home.table.modified') }}</th>
-                    <th  style="display:none;" style=""  class="text-center" >{{ __('app.home.table.id') }}</th>
+                    <th  style="width: 10%"  class="text-center" >{{ __('app.home.table.modified') }}</th>                   
                     <th  style="width: 10%"   class="text-center" >{{ __('app.home.table.classification') }}</th>
                     <th  style="width: 10%" class="text-center" >{{ __('app.home.table.flow_id') }}</th>                    
                     <th  style="width: 10%"   class="text-center" >{{ __('app.home.table.summary') }}</th>
@@ -30,11 +30,11 @@
                                 @else
                                 <td class="text-center"><i class="far fa-file fa-2x"></i><span style="display:none;">{{$document->type}}</span></td>
                                 @endif
+                                <td style="text-center" class="text-center ">{{$document->id}}.{{$document->currentVersion()}}</td>
                                 <td class="text-center ">{{$document->description}}</td>   
                                 <td class="text-center "><h5><span class="badge" style= 'background-color:{{$document->action->color}}; color:white'>{{$document->action->state}}</span></h5></td>                            
                                 <td class="text-center ">{{$document->created_at}}</td>  
-                                <td class="text-center ">{{$document->updated_at}}</td>
-                                <td style="display:none;" class="text-center ">{{$document->id}}</td>
+                                <td class="text-center ">{{$document->updated_at}}</td>                                
                                 <td  class="text-center ">{{$Classification->description}}</td>  
                                 @if($document->flow!=null)
                                     <td  class="text-center  ">{{$document->flow->description}}</td>

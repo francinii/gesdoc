@@ -60,8 +60,9 @@ $("html")
         descriptionEdit = "";
         if (currentTd.className != "dataTables_empty") {
             typeContextMenu =currentTd.parentNode.childNodes[1].childNodes[1].innerText;
-            idselect = currentTd.parentNode.childNodes[11].innerText;
-            descriptionEdit = currentTd.parentNode.childNodes[3].innerText;
+            var idVersion= currentTd.parentNode.childNodes[3].innerText.split('.');
+            idselect= idVersion[0];
+            descriptionEdit = currentTd.parentNode.childNodes[5].innerText;
         }
 
             $("#createClassificationContext").hide();

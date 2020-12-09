@@ -424,6 +424,7 @@ return [
 
         'table' => [
             'id' => 'Id',
+            'version' => 'Version',
             'summary' => 'Resumen',
             'code' => 'Codigo',
             'flow_id' => 'Flujo',

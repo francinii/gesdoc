@@ -1043,8 +1043,9 @@ function getRandomColor() {
 function createLine(begin, end, idLine, labelName){
 var bandera = false;
 var gravityBegin= 200;
-var gravityEnd= -200;
+var gravityEnd=   -200;
 var color = '#FF7F50';
+var path='fluid';
 if(arrayLines)
     arrayLines.forEach(element => {
          arr = element['id'].split('-');  
@@ -1052,10 +1053,18 @@ if(arrayLines)
         if( arr[0]== line[0] && line[0] == DRAGGABLE_INICIO)
             bandera =true;   
             
-        if(arr[0]== begin.id && arr[1]== end.id ){
-            gravityBegin = -200;
-            gravityEnd = 200;
+        if(arr[0]== begin.id && arr[1]== end.id){
+             gravityBegin =  -200;
+            gravityEnd =   200;
+            color = '#62D165'
+          //  path='fluid';         
+        }
+        if(arr[0]== end.id && arr[1]== begin.id ){
+            //gravityBegin = 200;
+           // gravityEnd =   -200;
             color = '#55A8DB'
+          //  path='fluid';
+         
         }
             
     });
@@ -1072,7 +1081,7 @@ if(arrayLines)
            // endSocket: 'top',
            startSocketGravity: gravityBegin,
            endSocketGravity: gravityEnd,
-            //path: 'grid'
+           path: path
             //startSocket: 'bottom', endSocket: 'top'
               
         });   

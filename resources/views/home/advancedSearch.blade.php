@@ -2,11 +2,11 @@
     <div class="form-row" style="width:100%">  
         <div class="form-group col-md-5">
         <label for="descriptionFilter">{{ __('app.documents.general.name') }}</label>
-              <input type="text" class="form-control" id="descriptionFilter"  onkeyup="advancedSearchfilter(1,this)" placeholder="{{ __('app.documents.general.name') }}" name="descriptionFilter">
+              <input type="text" class="form-control" id="descriptionFilter"  onkeyup="advancedSearchfilter(2,this)" placeholder="{{ __('app.documents.general.name') }}" name="descriptionFilter">
         </div>
         <div class="form-group col-md-3">
             <label for="classificationFilter">{{ __('app.documents.edit.classification') }}</label>
-            <select id="classificationFilter"class="form-control" name="classificationFilter" onchange="advancedSearchfilter(6,this)" >
+            <select id="classificationFilter"class="form-control" name="classificationFilter" onchange="advancedSearchfilter(7,this)" >
             <option value="" name ="">{{ __('app.buttons.select') }}</option>  
 
             </select>
@@ -25,7 +25,7 @@
                     <div class="form-row"> 
                     <div class="form-group col-md-3"> 
                             <label for="stadeFilter">{{ __('app.home.table.stade') }}</label>
-                            <input type="text" class="form-control" id="stadeFilter"  onkeyup="advancedSearchfilter(2,this)" placeholder="{{ __('app.home.table.stade') }}" name="stadeFilter">
+                            <input type="text" class="form-control" id="stadeFilter"  onkeyup="advancedSearchfilter(3,this)" placeholder="{{ __('app.home.table.stade') }}" name="stadeFilter">
                             <option value="" name ="">{{ __('app.buttons.select') }}</option>                   
  
                             </select>
@@ -39,12 +39,12 @@
                         </div>  
                         <div class="form-group col-md-3">
                             <label for="dateCreateFilter" class="col-2 col-form-label">{{ __('app.home.table.create') }}</label> 
-                            <input class="form-control" type="date" value="" id="dateCreate"  onchange="advancedSearchfilter(3,this)">
+                            <input class="form-control" type="date" value="" id="dateCreate"  onchange="advancedSearchfilter(4,this)">
  
                         </div>
                         <div class="form-group col-md-3">
                             <label for="dateModificated" class="col-2 col-form-label">{{ __('app.home.table.modified') }}</label> 
-                            <input class="form-control" type="date" value="" id="dateModificated"  onchange="advancedSearchfilter(4,this)">
+                            <input class="form-control" type="date" value="" id="dateModificated"  onchange="advancedSearchfilter(5,this)">
                         </div>                             
                     </div> 
                     <div class="form-row">

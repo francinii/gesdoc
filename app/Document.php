@@ -46,4 +46,13 @@ class Document extends Model
         return $this->hasMany('App\Version');
     }
 
+    public   function  currentVersion(){
+       $versions=$this->versions;
+       $current=1;
+       foreach ($versions as $version) {
+        if($version->version>$current) $current=$version->version;        
+       }
+       return (int)$current;
+    }
+
 }

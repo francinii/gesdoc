@@ -47,7 +47,7 @@ class DocumentFlowController extends Controller
             $users = User::all();
             $actions = Action::all();
             $flow = '';
-            $flows = Flow::where('username', '=', $username)->get();
+            $flows = Flow::where([['username', '=', $username],['state','=','1']])->get();
             if ($flows->isNotEmpty()) {
                 $flow = $flows->first()->id;
             }

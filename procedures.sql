@@ -1122,7 +1122,7 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                 END IF;
                 IF  p_identifier = '-1' THEN
                   set idIdentifier = NULL;
-                  set h_action = 3;
+                  set h_action = 3;  
                 END IF;
                 SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;   
                 UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
