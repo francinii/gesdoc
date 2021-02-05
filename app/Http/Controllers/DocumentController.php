@@ -143,15 +143,29 @@ class DocumentController extends Controller
         foreach ($myUsers as $User) {
             $UsersString.="$User,";
         }
-        $UsersString=substr($UsersString, 0, -1);
+        $UsersString=substr($UsersString, 0, -1);  
+        $UsersString="'".$UsersString."'";
+
         $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
+
         if(count($step) >0){
-            $identifier =  "'".$step[0]->next_step_id."'";
-        }  
+            $identifier =  $step[0]->next_step_id;
+            
+            $myUsers=DB::table('action_step_user')->select('username')->where([['flow_id','=', $id_flow],['step_id','=', $identifier]])->groupBy('username')->pluck('username')->toArray();   
+            $userFlow='';
+            foreach ($myUsers as $User) {
+                $userFlow.="$User,";
+            }
+            $userFlow=substr($userFlow, 0, -1);
+            (!$userFlow)?$userFlow="''":$userFlow="'".$userFlow."'";
+            $identifier=  "'".$identifier."'";
+        }  else{
+            $userFlow="''"; 
+        } 
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,'$UsersString', @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,$UsersString,$userFlow, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {
@@ -220,14 +234,28 @@ class DocumentController extends Controller
             $UsersString.="$User,";
         }
         $UsersString=substr($UsersString, 0, -1);
+        $UsersString="'".$UsersString."'";
+
         $username = "'". $username. "'";
         $step = StepStep::where('prev_flow_id', '=', $id_flow, 'and','prev_step_id', '=', 'draggable_inicio')->get();        
+
         if(count($step) >0){
-            $identifier =  "'".$step[0]->next_step_id."'";
-        }  
+            $identifier =  $step[0]->next_step_id;
+            
+            $myUsers=DB::table('action_step_user')->select('username')->where([['flow_id','=', $id_flow],['step_id','=', $identifier]])->groupBy('username')->pluck('username')->toArray();   
+            $userFlow='';
+            foreach ($myUsers as $User) {
+                $userFlow.="$User,";
+            }
+            $userFlow=substr($userFlow, 0, -1);
+            (!$userFlow)?$userFlow="''":$userFlow="'".$userFlow."'";
+            $identifier=  "'".$identifier."'";
+        }  else{
+            $userFlow="''"; 
+        } 
 
         //  `p_mode` int, `p_route` varchar(500), `p_content` longtext, `p_id_flow` int,  `p_id_state` int, `p_username` varchar(500), IN `p_description` varchar(500), `p_type` varchar(500), `p_summary` varchar(2500) , `p_code` varchar(500), `version` int 
-        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,'$UsersString', @res)");
+        DB::select("call insert_document($classification,$id_flow,$identifier,$id_state,$username, $description, $type, $summary, $code,$languaje,$others,$size,$content,$UsersString,$userFlow, @res)");
         $res = DB::select("SELECT @res as res;");
         $res = json_decode(json_encode($res), true);
         if ($res[0]['res'] == 3) {

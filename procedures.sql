@@ -954,7 +954,7 @@ DELIMITER ;
 -- return 0 success, 1 or 2 database error, 3 the row already exists
 DROP PROCEDURE IF EXISTS `insert_document`;
 DELIMITER ;; 
-CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`varchar(500), IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT, IN `p_users` TEXT ,  OUT `res` TINYINT  UNSIGNED )
+CREATE DEFINER=`root`@`localhost`  PROCEDURE `insert_document`(IN `p_classification` int,  IN `p_id_flow` int,IN `p_identifier`varchar(500), IN `p_action_id` int, IN `p_username` varchar(500), IN `p_description` varchar(500), IN `p_type` varchar(500), IN `p_summary` varchar(2500) , IN `p_code` varchar(500), IN `p_languaje` varchar(500),IN `p_others` varchar(500),IN `p_size` varchar(500),IN `p_content` LONGTEXT, IN `p_users` TEXT ,IN `p_user_Flow` Text,  OUT `res` TINYINT  UNSIGNED )
 BEGIN
   DECLARE idFlow INT DEFAULT NULL;
   DECLARE idIdentifier varchar(500) DEFAULT NULL; 
@@ -1019,7 +1019,24 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
                 select description into h_document_name from documents where id = document_id;
                 select name into h_user_name from users where username = p_username;
 
-                IF  p_id_flow != -1 THEN                 
+                IF  p_id_flow != -1 THEN
+
+                    iterator:
+                    LOOP
+                        IF LENGTH(TRIM(p_user_Flow)) = 0 OR p_user_Flow IS NULL THEN
+                        LEAVE iterator;
+                        END IF;
+                        SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
+                        SET _nextlen = LENGTH(_next);
+                        SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user,"Tienes un documento en flujo pendiente","flow",NOW(),NOW());
+                        SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
+                    END LOOP;
+
+
+
+
+
                     select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
                     set h_description =   CONCAT_WS(' ','El usuario', h_user_name, 'con identificación', h_username, 'ha agreado al flujo',h_name_flow, 'con identificación', p_id_flow,', el documento llamado', p_description,'cuya identificación es',h_document_id, 'correspondiente a la versión 1.0' );
                     INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, 	created_at, 	updated_at) 
@@ -1078,6 +1095,8 @@ BEGIN
   DECLARE _next TEXT DEFAULT NULL;
   DECLARE _nextlen INT DEFAULT NULL;
   DECLARE _user TEXT DEFAULT NULL;
+  DECLARE _old_id_Flow INTEGER;
+  DECLARE _updateFlow INT DEFAULT FALSE;
 
   --  VARIABLES NEEDED FOR THE  HISTORIAL -- 
   DECLARE h_version_id INT DEFAULT NULL;
@@ -1117,66 +1136,76 @@ SELECT @p1 as RETURNED_SQLSTATE  , @p2 as MESSAGE_TEXT;
             set idFlow = p_id_flow;
             set h_action = 10;
             set idIdentifier = p_identifier;
-                IF  p_id_flow = -1 THEN
-                  set idFlow = NULL;
-                END IF;
-                IF  p_identifier = '-1' THEN
-                  set idIdentifier = NULL;
-                  set h_action = 3;  
-                END IF;
-                SELECT `username` into _document_owner FROM `documents` WHERE `id`=p_id;   
-                UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
-                IF _document_owner=p_username THEN
-                  DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
-                  INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
-                END IF;
-                UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1;               
-                  
-                -- NECESARY FOR THE HISTORIAL --   
-                select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
-                set h_action = 5;
-                set h_username = p_username;
-                set h_document_id = p_id;
-                set h_id_flow = NULL;
-                set h_name_flow = NULL; 
+            IF  p_id_flow = -1 THEN
+              set idFlow = NULL;
+            END IF;
+            IF  p_identifier = '-1' THEN
+              set idIdentifier = NULL;
+              set h_action = 3;  
+            END IF;
+            SELECT `username`,`flow_id` into _document_owner,_old_id_Flow FROM `documents` WHERE `id`=p_id;
+            IF  _old_id_Flow IS NULL THEN
+              set _old_id_Flow = -1;
+            END IF;
 
-                -- SELECT THE DESCRIPTION OF a Document              
-                select description into h_document_name from documents where id = p_id;
+            IF _old_id_Flow !=p_id_flow THEN   
+              UPDATE `documents` SET `flow_id`=idFlow,`description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
+              UPDATE `versions` SET `flow_id`=idFlow,`identifier`=idIdentifier,`updated_at`=NOW() WHERE `document_id`=p_id ORDER BY `version` DESC LIMIT 1; 
+            ELSE
+              UPDATE `documents` SET `description`=p_description,`action_id`= h_action, `summary`=p_summary,`code`=p_code,`languaje`=p_languaje,`others`=p_others,`updated_at`=NOW() WHERE `id`=p_id;
+            END IF;
 
-                -- SELECT THE name OF an user   
-                select name into h_user_name from users where username = p_username;
+            IF _document_owner=p_username THEN
+              DELETE FROM `classification_document` WHERE `document_id`=p_id and `classification_id`=p_currentClassification;
+              INSERT INTO `classification_document`(classification_id, document_id, created_at, updated_at ) VALUES (p_classification, p_id, NOW(), NOW());                
+            END IF;
+                         
+              
+            -- NECESARY FOR THE HISTORIAL --   
+            select id, version into h_version_id, h_version_num from versions where document_id = p_id  ORDER BY `version` DESC LIMIT 1;           
+            set h_action = 5;
+            set h_username = p_username;
+            set h_document_id = p_id;
+            set h_id_flow = NULL;
+            set h_name_flow = NULL; 
 
-                IF  p_id_flow != -1 THEN 
+            -- SELECT THE DESCRIPTION OF a Document              
+            select description into h_document_name from documents where id = p_id;
 
-                    iterator:
-                    LOOP
-                        IF LENGTH(TRIM(p_user_Flow)) = 0 OR p_user_Flow IS NULL THEN
-                        LEAVE iterator;
-                        END IF;
-                        SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
-                        SET _nextlen = LENGTH(_next);
-                        SET _user = CAST(TRIM(_next) AS UNSIGNED);
-                        INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user,"Tienes un documento en flujo pendiente","flow",NOW(),NOW());
-                        SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
-                    END LOOP;
+            -- SELECT THE name OF an user   
+            select name into h_user_name from users where username = p_username;
 
-                    -- SELECT THE ID AND DESCRIPTION OF THE FLOW IF A FLOW IS NOT NULL               
-                    select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
+            IF  p_id_flow != -1 AND _old_id_Flow !=p_id_flow THEN 
 
-                    -- INSERT INTO THE HISTORIAL --
-                    set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación:', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
-                    INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
-                END IF;      
+                iterator:
+                LOOP
+                    IF LENGTH(TRIM(p_user_Flow)) = 0 OR p_user_Flow IS NULL THEN
+                    LEAVE iterator;
+                    END IF;
+                    SET _next = SUBSTRING_INDEX(p_user_Flow,',',1);
+                    SET _nextlen = LENGTH(_next);
+                    SET _user = CAST(TRIM(_next) AS UNSIGNED);
+                    INSERT INTO `notifications`(`username`, `description`,`source`, `created_at`, `updated_at`) VALUES (_user,"Tienes un documento en flujo pendiente","flow",NOW(),NOW());
+                    SET p_user_Flow = INSERT(p_user_Flow,1,_nextlen + 1,'');
+                END LOOP;
 
-                set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha actualizado los metadatos del documento con identificación:',h_document_id,'llamado',p_description, 'correspondiente a la versión', h_version_num, '.');
+                -- SELECT THE ID AND DESCRIPTION OF THE FLOW IF A FLOW IS NOT NULL               
+                select id, description into h_id_flow, h_name_flow from flows where id = p_id_flow;
+
+                -- INSERT INTO THE HISTORIAL --
+                set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación:', h_username, ', ha agregado al flujo',h_name_flow,'con id', p_id_flow, 'el documento ',h_document_name,  'con identificación ', h_document_id);
                 INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
-                    VALUES ('Editar', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
-                -- CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name,h_version_id, h_id_flow,	h_name_flow, @res);
-                -- END OF NECESARY FOR THE HISTORIAL --
-            
-            COMMIT;
-          -- SUCCESS
+                VALUES ('En flujo', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+            END IF;      
+
+            set h_description =   CONCAT_WS(' ','El usuario ', h_user_name, ' con identificación: ', h_username, 'ha actualizado los metadatos del documento con identificación:',h_document_id,'llamado',p_description, 'correspondiente a la versión', h_version_num, '.');
+            INSERT INTO `historials`(action, username, 	name_user, 	description, 	document_id, 	document_name, 	version_id, 	flow_id, 	flow_name, updated_at, created_at) 
+                VALUES ('Editar', h_username, 	h_user_name, 	h_description, 	h_document_id, 	h_document_name, 	h_version_id, 	h_id_flow, 	h_name_flow, NOW(), NOW());
+            -- CALL insert_historial(h_action, h_username , h_user_name, h_description , h_document_id ,h_document_name,h_version_id, h_id_flow,	h_name_flow, @res);
+            -- END OF NECESARY FOR THE HISTORIAL --
+        
+        COMMIT;
+      -- SUCCESS
 SET res = 0;
 END
 ;;

@@ -365,7 +365,7 @@ return [
 
         'edit' => [
             'title' => 'Editar documento',
-            'note'  => 'Nota: al cambiar un documento de flujo, esté detendra al anterior.',
+            'note'  => 'Nota: al cambiar de  flujo un documento, detendra el flujo anterior',
             'flow' => 'Flujo asociado',
             'classification' => 'Classificación asociada',   
         ],

@@ -682,6 +682,7 @@ function editStep(step, title, mode) {
         });
     }
    // steps = elemento.steps;
+    hideAlert('alertPermission');
     globalMode == 1 ? formDisable(true):formDisable(false);
     $('#select_document').selectpicker('refresh');
     $("#card").modal("show");
@@ -853,14 +854,14 @@ function createStepCard(id, description){
     }
 
     return '<div id = "'+id+'" class="card card_size "> '+
-    '<div class="card-step card-header bg-dark justify-content-center">'+
-    '<div class = "w-100" ><input id ="text'+id+'" class="textdraggable" type="text" value = "'+description+'" placeholder="Descripcion" disabled>  </div> '+             
-    '<div title = "Ver paso"  class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-info" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
-    '<i class="far fa-eye"></i> '+
-    '</button> '+ buttonLink +
-    '</div> '+
-    '</div>'+
-    '</div>' ; 
+                '<div class="card-step card-header bg-dark justify-content-center">'+
+                    '<div class = "w-100" ><input id ="text'+id+'" class="textdraggable" type="text" value = "'+description+'" placeholder="Descripcion" disabled>  </div> '+             
+                    '<div title = "Ver paso"  class = "btn-group btn-group-justify w-100"><button type="button" class="btn btn-info" onclick="openStep(\`'+id+'\`, \`Ver \`, 1)"> '+
+                        '<i class="far fa-eye"></i> '+
+                        '</button> '+ buttonLink +
+                    '</div> '+
+                '</div>'+
+            '</div>' ; 
 }
 
 /**
@@ -875,7 +876,8 @@ function createStep(){
     stepGlobal += 1;  
     addElementToCanvas(id,contenido); // add the card step to the canvas
     saveInStorage(null, id); // save an empty step in the storage with the id 
-    editStep(id, 'Crear un nuevo paso',0);    //Change the label text of the modal 
+    editStep(id, 'Crear un nuevo paso',0);    //Change the label text of the modal
+    hideAlert('alertPermission');
 }
 
 
@@ -961,7 +963,7 @@ function joinStep(div){
     var bandera =  false;  
     var action = '-1';
     //Verificar que no se creen lineas que tienen el mismo div de inicio y final  
-    var labelName = divFirst == DRAGGABLE_INICIO? 'Inicio': 'Acción siguiente';
+    var labelName = divFirst == DRAGGABLE_INICIO? 'Crear': 'Acción siguiente';
     var action = divFirst == DRAGGABLE_INICIO? '-2': action;
    // action =  divFirst == DRAGGABLE_INICIO? ''
     if(divFirst == ""){   
@@ -1042,10 +1044,11 @@ function getRandomColor() {
  */
 function createLine(begin, end, idLine, labelName){
 var bandera = false;
-var gravityBegin= 200;
-var gravityEnd=   -200;
+var gravityBegin= 0;
+var gravityEnd=   -80;
 var color = '#FF7F50';
 var path='fluid';
+var type=0;
 if(arrayLines)
     arrayLines.forEach(element => {
          arr = element['id'].split('-');  
@@ -1053,17 +1056,21 @@ if(arrayLines)
         if( arr[0]== line[0] && line[0] == DRAGGABLE_INICIO)
             bandera =true;   
             
-        if(arr[0]== begin.id && arr[1]== end.id){
-             gravityBegin =  -200;
-            gravityEnd =   200;
+        if(arr[0]== begin.id && arr[1]== end.id && type==0){
+            type=2;
+             gravityBegin =  0;
+            gravityEnd =   80;
             color = '#62D165'
+            
           //  path='fluid';         
         }
-        if(arr[0]== end.id && arr[1]== begin.id ){
-            //gravityBegin = 200;
-           // gravityEnd =   -200;
+        if(arr[0]== end.id && arr[1]== begin.id && type==0){
+           // gravityBegin = 0;
+           // gravityEnd =   400;
+           type=3;
             color = '#55A8DB'
-          //  path='fluid';
+           // path='fluid';
+            
          
         }
             
@@ -1345,10 +1352,10 @@ $( "#CreateDescription" ).focus(function() {
  */
   function validateRepeatAction(item){
     var cont = 0;    
-    var steps = item.steps;
-    var arrayAux =steps;  
+    var newSteps = item.steps.slice();
+    var arrayAux = newSteps.slice();  
     var bandera = -1;  
-    steps.forEach(element => {
+    newSteps.forEach(element => {
         if(element['action'] == '-1')
             bandera = 2;
             arrayAux = arrayAux.splice(1);
@@ -1460,7 +1467,7 @@ function validateFlow(){
                     //return result;
                     break;
                 } else if(result == 2){
-                    description = 'El elemento ' +item['description']+ 'Tiene líneas sin acciones específicas, asegurese que todas las conexiones posean una acción que pueda ejecutarse.';
+                    description = 'El elemento ' +item['description']+ ' tiene líneas sin acciones específicas, asegurese que todas las conexiones posean una acción que pueda ejecutarse.';
                     alerta('Error',description, false);                    
                     //return result;
                     break;

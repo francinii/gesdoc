@@ -315,14 +315,19 @@ function ajaxUploadDoc(mode) {
  * @param {integer} flowId - flow id
  *  
  */
+
 function editDoc() {
+
+    $("#confirmar").modal("hide");
     var flowId=currentTd.parentNode.childNodes[13].innerText;
     var summaryEditDoc=currentTd.parentNode.childNodes[15].innerText;
     var codeEditDoc=currentTd.parentNode.childNodes[17].innerText;
     var languajeEditDoc=currentTd.parentNode.childNodes[19].innerText;    
     var othersEditDoc=currentTd.parentNode.childNodes[21].innerText;
     var classificationID=currentClassification.id;
-    
+
+
+
     $("select option:selected").each(function() {
         //cada elemento seleccionado
         $(this).prop("selected", false);

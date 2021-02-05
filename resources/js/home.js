@@ -267,7 +267,7 @@ function ajaxCreate(){
  */
 function edit(){
     if(typeContextMenu!='classification')
-    editDoc()
+    editDoc();
     else{
     $("select option:selected").each(function () {
         //cada elemento seleccionado

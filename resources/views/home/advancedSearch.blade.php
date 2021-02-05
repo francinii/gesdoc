@@ -6,7 +6,7 @@
         </div>
         <div class="form-group col-md-3">
             <label for="classificationFilter">{{ __('app.documents.edit.classification') }}</label>
-            <select id="classificationFilter"class="form-control" name="classificationFilter" onchange="advancedSearchfilter(7,this)" >
+            <select id="classificationFilter"class="form-control" name="classificationFilter" onchange="advancedSearchfilter(6,this)" >
             <option value="" name ="">{{ __('app.buttons.select') }}</option>  
 
             </select>

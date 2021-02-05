@@ -87,6 +87,7 @@ function createDataTableHome(table) {
  *  
  */
 function confirmDelete(id, url1,table,message){
+    $("#titelModalConfirm" ).html( "<p>¿Desea eliminar?</p>" );  
     $( "#mensajeConfirmar" ).html( "<p>"+message+"</p>" );  
     $("#confirmarButton").attr("onClick","ajaxDelete('"+id+"','"+url1+"','"+table+"')");
     $("#confirmar").modal("show");
@@ -169,8 +170,7 @@ function alerts(idAlert, idContent, contenido, type_class){
  * Hide an alert div when you click on the x button.
  *  
  */
-function hideAlert(id){
-    
+function hideAlert(id){    
     $('#'+id).hide(1000);
 }
 
